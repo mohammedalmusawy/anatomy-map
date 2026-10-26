@@ -1477,6 +1477,449 @@
      "تظهر القدم من الأصابع إلى عظام الرصغ؛ تراكب خفيف لقواعد الأمشاط 2–5؛ مسافات المفاصل مفتوحة."
     ]
    }
+  },
+  {
+   "id": "cspine-lat",
+   "region": "spine",
+   "img": "img/xray/cspine-lat.jpg",
+   "w": 1280,
+   "h": 2018,
+   "en": "Cervical spine — lateral",
+   "ar": "الفقرات الرقبية — جانبي",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_cervical_spine_of_a_20_year_old_male_-_lateral.jpg"
+   ],
+   "pts": [
+    [
+     369,
+     283,
+     "c1-atlas",
+     "Anterior arch of atlas (C1)",
+     "القوس الأمامي للفهقة (C1)"
+    ],
+    [
+     707,
+     434,
+     "c1-atlas",
+     "Posterior arch of atlas (C1)",
+     "القوس الخلفي للفهقة (C1)"
+    ],
+    [
+     434,
+     525,
+     "c2-axis",
+     "Body of axis (C2)",
+     "جسم المحور (C2)"
+    ],
+    [
+     737,
+     646,
+     "c2-axis",
+     "Spinous process of C2",
+     "الناتئ الشوكي لـC2"
+    ],
+    [
+     404,
+     737,
+     "c3-vertebra",
+     "C3 vertebral body",
+     "جسم الفقرة C3"
+    ],
+    [
+     399,
+     899,
+     "c4-vertebra",
+     "C4 vertebral body",
+     "جسم الفقرة C4"
+    ],
+    [
+     404,
+     980,
+     "intervertebral-disc-c4-c5",
+     "C4–C5 disc space",
+     "مسافة القرص C4–C5"
+    ],
+    [
+     540,
+     900,
+     "c4-vertebra",
+     "Articular pillar (facet joints)",
+     "العمود المفصلي (المفاصل الوجيهية)"
+    ],
+    [
+     414,
+     1071,
+     "c5-vertebra",
+     "C5 vertebral body",
+     "جسم الفقرة C5"
+    ],
+    [
+     444,
+     1263,
+     "c6-vertebra",
+     "C6 vertebral body",
+     "جسم الفقرة C6"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Erect lateral, shoulders relaxed and pulled down (holding weights helps), chin slightly raised.",
+     "وقوف جانبي، والكتفان مرخيّان ومسحوبان للأسفل (حمل أثقال يساعد)، والذقن مرفوع قليلًا."
+    ],
+    "cr": [
+     "Horizontal, to C4 (level of the upper thyroid cartilage).",
+     "أفقي على C4 (مستوى أعلى الغضروف الدرقي)."
+    ],
+    "exp": [
+     "SID 150–180 cm (to reduce magnification) · about 70–80 kVp · suspended expiration.",
+     "مسافة 150–180 سم (لتقليل التكبير) · حوالي 70–80 kVp · حبس النفس بعد الزفير."
+    ],
+    "eval": [
+     "C1 to C7 (ideally the C7–T1 junction) included; no rotation (articular pillars superimposed); disc spaces open; if C7 is hidden by the shoulders a swimmer's view is needed.",
+     "تظهر الفقرات من C1 إلى C7 (والأفضل ملتقى C7–T1)؛ لا دوران (الأعمدة المفصلية متراكبة)؛ مسافات الأقراص مفتوحة؛ وإذا اختفت C7 خلف الكتفين نحتاج وضعية السبّاح."
+    ]
+   }
+  },
+  {
+   "id": "cspine-ap",
+   "region": "spine",
+   "img": "img/xray/cspine-ap.jpg",
+   "w": 1280,
+   "h": 1999,
+   "en": "Cervical spine — AP (axial)",
+   "ar": "الفقرات الرقبية — أمامي خلفي (محوري)",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_cervical_spine_of_a_20_year_old_male_-_anteroposterior.jpg"
+   ],
+   "pts": [
+    [
+     300,
+     150,
+     null,
+     "Mandible (superimposed on C1–C2)",
+     "الفك السفلي (متراكب على C1–C2)"
+    ],
+    [
+     640,
+     700,
+     null,
+     "Cervical vertebral bodies",
+     "أجسام الفقرات الرقبية"
+    ],
+    [
+     650,
+     880,
+     null,
+     "Tracheal air column",
+     "عمود الهواء في الرغامى"
+    ],
+    [
+     655,
+     1050,
+     null,
+     "Spinous process (seen end-on)",
+     "الناتئ الشوكي (منظور من طرفه)"
+    ],
+    [
+     640,
+     1150,
+     null,
+     "Intervertebral disc space",
+     "مسافة القرص بين الفقرات"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Erect or supine, head in neutral position; the line from the lower edge of the upper incisors to the mastoid tip is perpendicular to the IR.",
+     "وقوف أو استلقاء، والرأس بوضع محايد؛ والخط من الحافة السفلية للقواطع العلوية إلى قمة الناتئ الخشّائي عمودي على الكاسيت."
+    ],
+    "cr": [
+     "15–20° cephalic, entering at C4 (thyroid cartilage).",
+     "بزاوية 15–20° نحو الرأس، يدخل عند C4 (الغضروف الدرقي)."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp.",
+     "مسافة 100 سم · حوالي 70–80 kVp."
+    ],
+    "eval": [
+     "C3 to T2 shown; spinous processes in the midline (no rotation); intervertebral disc spaces open; mandible over the upper cervical spine.",
+     "تظهر الفقرات من C3 إلى T2؛ النواتئ الشوكية في الخط الأوسط (لا دوران)؛ مسافات الأقراص مفتوحة؛ والفك السفلي فوق الفقرات الرقبية العلوية."
+    ]
+   }
+  },
+  {
+   "id": "cspine-odont",
+   "region": "spine",
+   "img": "img/xray/cspine-odont.jpg",
+   "w": 1280,
+   "h": 1109,
+   "en": "Odontoid — open-mouth AP",
+   "ar": "السنّ — أمامي خلفي بالفم المفتوح",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_cervical_spine_of_a_20_year_old_male_-_odontoid.jpg"
+   ],
+   "pts": [
+    [
+     620,
+     430,
+     "c2-axis",
+     "Dens (odontoid process)",
+     "السن (الناتئ السِّنّي)"
+    ],
+    [
+     450,
+     410,
+     "c1-atlas",
+     "Lateral mass of atlas (C1)",
+     "الكتلة الجانبية للفهقة (C1)"
+    ],
+    [
+     800,
+     410,
+     "c1-atlas",
+     "Lateral mass of atlas (C1)",
+     "الكتلة الجانبية للفهقة (C1)"
+    ],
+    [
+     450,
+     480,
+     "c2-axis",
+     "Lateral atlanto-axial joint",
+     "المفصل الفهقي المحوري الجانبي"
+    ],
+    [
+     820,
+     480,
+     "c2-axis",
+     "Lateral atlanto-axial joint",
+     "المفصل الفهقي المحوري الجانبي"
+    ],
+    [
+     620,
+     630,
+     "c2-axis",
+     "Body of axis (C2)",
+     "جسم المحور (C2)"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Supine, mouth wide open; the line from the lower edge of the upper incisors to the base of the skull (mastoid tip) is perpendicular to the IR.",
+     "مستلقٍ والفم مفتوح على أوسعه؛ والخط من الحافة السفلية للقواطع العلوية إلى قاعدة الجمجمة (قمة الناتئ الخشّائي) عمودي على الكاسيت."
+    ],
+    "cr": [
+     "Perpendicular, through the centre of the open mouth; ask the patient to say “ah” to keep the tongue down.",
+     "عمودي على منتصف الفم المفتوح؛ ويُطلب من المريض قول «آه» ليبقى اللسان للأسفل."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp.",
+     "مسافة 100 سم · حوالي 70–80 kVp."
+    ],
+    "eval": [
+     "Dens and the C1–C2 lateral masses seen through the open mouth; equal spaces on both sides of the dens (no rotation); upper incisors and occiput superimposed.",
+     "يظهر السن والكتلتان الجانبيتان لـC1–C2 من خلال الفم المفتوح؛ مسافتان متساويتان على جانبي السن (لا دوران)؛ القواطع العلوية والعظم القذالي متراكبان."
+    ]
+   }
+  },
+  {
+   "id": "lumbar-ap",
+   "region": "spine",
+   "img": "img/xray/lumbar-ap.jpg",
+   "w": 521,
+   "h": 924,
+   "en": "Lumbar spine — AP",
+   "ar": "الفقرات القطنية — أمامي خلفي (AP)",
+   "credit": [
+    "Couraco",
+    "CC BY-SA 3.0",
+    "https://commons.wikimedia.org/wiki/File:LWS_ap.jpg"
+   ],
+   "pts": [
+    [
+     250,
+     205,
+     "l1-vertebra",
+     "L1 vertebral body",
+     "جسم الفقرة L1"
+    ],
+    [
+     252,
+     305,
+     "l2-vertebra",
+     "L2 vertebral body",
+     "جسم الفقرة L2"
+    ],
+    [
+     255,
+     405,
+     "l3-vertebra",
+     "L3 vertebral body",
+     "جسم الفقرة L3"
+    ],
+    [
+     212,
+     380,
+     "l3-vertebra",
+     "Pedicle (L3)",
+     "السويقة (L3)"
+    ],
+    [
+     335,
+     395,
+     "l3-vertebra",
+     "Transverse process (L3)",
+     "الناتئ المستعرض (L3)"
+    ],
+    [
+     258,
+     440,
+     "l3-vertebra",
+     "Spinous process (L3)",
+     "الناتئ الشوكي (L3)"
+    ],
+    [
+     258,
+     505,
+     "l4-vertebra",
+     "L4 vertebral body",
+     "جسم الفقرة L4"
+    ],
+    [
+     262,
+     610,
+     "l5-vertebra",
+     "L5 vertebral body",
+     "جسم الفقرة L5"
+    ],
+    [
+     450,
+     540,
+     null,
+     "Iliac crest (≈ L4–L5 level)",
+     "العرف الحرقفي (≈ مستوى L4–L5)"
+    ],
+    [
+     280,
+     700,
+     "sacrum",
+     "Sacrum",
+     "العجز"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Supine with hips and knees flexed to flatten the lumbar curve; spine in the midline of the table.",
+     "مستلقٍ والوركان والركبتان مثنية لتقليل الانحناء القطني؛ والعمود في منتصف الطاولة."
+    ],
+    "cr": [
+     "Perpendicular to L4 (iliac crest level) for a large IR, or L3 (about 4 cm above the crest) for a smaller one.",
+     "عمودي على L4 (مستوى العرف الحرقفي) مع كاسيت كبير، أو على L3 (نحو 4 سم فوق العرف) مع كاسيت أصغر."
+    ],
+    "exp": [
+     "SID 100 cm · about 80–90 kVp · suspended expiration.",
+     "مسافة 100 سم · حوالي 80–90 kVp · حبس النفس بعد الزفير."
+    ],
+    "eval": [
+     "T12 to the sacrum included; no rotation (spinous processes centred, pedicles symmetric, SI joints equidistant); disc spaces open.",
+     "تظهر الفقرات من T12 إلى العجز؛ لا دوران (النواتئ الشوكية في الوسط، والسويقات متناظرة، والمفصلان العجزيان الحرقفيان على مسافة متساوية)؛ مسافات الأقراص مفتوحة."
+    ]
+   }
+  },
+  {
+   "id": "lumbar-lat",
+   "region": "spine",
+   "img": "img/xray/lumbar-lat.jpg",
+   "w": 540,
+   "h": 919,
+   "en": "Lumbar spine — lateral",
+   "ar": "الفقرات القطنية — جانبي",
+   "credit": [
+    "Couraco",
+    "CC BY-SA 3.0",
+    "https://commons.wikimedia.org/wiki/File:LWS_seitlich.jpg"
+   ],
+   "pts": [
+    [
+     260,
+     150,
+     "l1-vertebra",
+     "L1 vertebral body",
+     "جسم الفقرة L1"
+    ],
+    [
+     300,
+     262,
+     "l2-vertebra",
+     "L2 vertebral body",
+     "جسم الفقرة L2"
+    ],
+    [
+     340,
+     370,
+     "l3-vertebra",
+     "L3 vertebral body",
+     "جسم الفقرة L3"
+    ],
+    [
+     360,
+     425,
+     "intervertebral-disc-l3-l4",
+     "L3–L4 disc space",
+     "مسافة القرص L3–L4"
+    ],
+    [
+     275,
+     465,
+     "l3-vertebra",
+     "Intervertebral foramen (L3–L4)",
+     "الثقبة بين الفقرات (L3–L4)"
+    ],
+    [
+     370,
+     475,
+     "l4-vertebra",
+     "L4 vertebral body",
+     "جسم الفقرة L4"
+    ],
+    [
+     370,
+     590,
+     "l5-vertebra",
+     "L5 vertebral body",
+     "جسم الفقرة L5"
+    ],
+    [
+     420,
+     700,
+     "sacrum",
+     "Sacrum (S1)",
+     "العجز (S1)"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Lateral recumbent, hips and knees flexed, spine parallel to the table (a support under the waist if needed).",
+     "مستلقٍ على الجانب، والوركان والركبتان مثنية، والعمود موازٍ للطاولة (مع إسناد تحت الخصر عند الحاجة)."
+    ],
+    "cr": [
+     "Perpendicular to L4 (iliac crest level) or L3 (about 4 cm above the crest).",
+     "عمودي على L4 (مستوى العرف الحرقفي) أو L3 (نحو 4 سم فوق العرف)."
+    ],
+    "exp": [
+     "SID 100 cm · about 85–95 kVp · suspended expiration.",
+     "مسافة 100 سم · حوالي 85–95 kVp · حبس النفس بعد الزفير."
+    ],
+    "eval": [
+     "T12 to the sacrum included; intervertebral foramina open; no rotation (posterior margins of the vertebral bodies superimposed); disc spaces open.",
+     "تظهر الفقرات من T12 إلى العجز؛ الثقوب بين الفقرات مفتوحة؛ لا دوران (الحواف الخلفية لأجسام الفقرات متراكبة)؛ مسافات الأقراص مفتوحة."
+    ]
+   }
   }
  ]
 }

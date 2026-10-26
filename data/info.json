@@ -1685,5 +1685,817 @@
    "Talus (subtalar joint); cuboid",
    "الكاحل (المفصل تحت الكاحلي)؛ النردي"
   ]
+ },
+ "c1-atlas": {
+  "t": [
+   "Ring-shaped first cervical vertebra; no body and no spinous process",
+   "فقرة حلقية الشكل؛ بلا جسم ولا ناتئ شوكي"
+  ],
+  "j": [
+   "Occipital condyles (atlanto-occipital joint, 'yes' movement); axis (atlanto-axial joint)",
+   "لقمتا العظم القذالي (المفصل الفهقي القذالي — حركة «نعم»)؛ المحور (المفصل الفهقي المحوري)"
+  ]
+ },
+ "c2-axis": {
+  "t": [
+   "Has the dens (odontoid process) that projects up into the atlas",
+   "يحمل السن (الناتئ السِّنّي) الذي يبرز للأعلى داخل الفهقة"
+  ],
+  "j": [
+   "Atlas (atlanto-axial joint, 'no' rotation around the dens); C3",
+   "الفهقة (المفصل الفهقي المحوري — دوران «لا» حول السن)؛ الفقرة C3"
+  ]
+ },
+ "c3-vertebra": {
+  "t": [
+   "Cervical vertebra: small body, transverse foramina (vertebral artery), bifid spinous process",
+   "فقرة رقبية: جسم صغير، وثقبة مستعرضة (يمر بها الشريان الفقري)، وناتئ شوكي مشقوق"
+  ],
+  "j": [
+   "C2 and C4 through the disc and facet joints",
+   "C2 وC4 عبر القرص والمفاصل الوجيهية"
+  ]
+ },
+ "c4-vertebra": {
+  "t": [
+   "Cervical vertebra: small body, transverse foramina (vertebral artery), bifid spinous process",
+   "فقرة رقبية: جسم صغير، وثقبة مستعرضة (يمر بها الشريان الفقري)، وناتئ شوكي مشقوق"
+  ],
+  "j": [
+   "C3 and C5 through the disc and facet joints",
+   "C3 وC5 عبر القرص والمفاصل الوجيهية"
+  ]
+ },
+ "c5-vertebra": {
+  "t": [
+   "Cervical vertebra: small body, transverse foramina (vertebral artery), bifid spinous process",
+   "فقرة رقبية: جسم صغير، وثقبة مستعرضة (يمر بها الشريان الفقري)، وناتئ شوكي مشقوق"
+  ],
+  "j": [
+   "C4 and C6 through the disc and facet joints",
+   "C4 وC6 عبر القرص والمفاصل الوجيهية"
+  ]
+ },
+ "c6-vertebra": {
+  "t": [
+   "Cervical vertebra: small body, transverse foramina (vertebral artery), bifid spinous process",
+   "فقرة رقبية: جسم صغير، وثقبة مستعرضة (يمر بها الشريان الفقري)، وناتئ شوكي مشقوق"
+  ],
+  "j": [
+   "C5 and C7 through the disc and facet joints",
+   "C5 وC7 عبر القرص والمفاصل الوجيهية"
+  ]
+ },
+ "c7-vertebra": {
+  "t": [
+   "Cervical vertebra: small body, transverse foramina (vertebral artery), bifid spinous process — C7 has a long non-bifid spinous process (vertebra prominens)",
+   "فقرة رقبية: جسم صغير، وثقبة مستعرضة (يمر بها الشريان الفقري)، وناتئ شوكي مشقوق — وC7 ناتئها الشوكي طويل وغير مشقوق (الفقرة البارزة)"
+  ],
+  "j": [
+   "C6 and T1 through the disc and facet joints",
+   "C6 وT1 عبر القرص والمفاصل الوجيهية"
+  ]
+ },
+ "t1-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "C7 and T2; ribs (costovertebral joints)",
+   "C7 وT2؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t2-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T1 and T3; ribs (costovertebral joints)",
+   "T1 وT3؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t3-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T2 and T4; ribs (costovertebral joints)",
+   "T2 وT4؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t4-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T3 and T5; ribs (costovertebral joints)",
+   "T3 وT5؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t5-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T4 and T6; ribs (costovertebral joints)",
+   "T4 وT6؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t6-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T5 and T7; ribs (costovertebral joints)",
+   "T5 وT7؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t7-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T6 and T8; ribs (costovertebral joints)",
+   "T6 وT8؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t8-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T7 and T9; ribs (costovertebral joints)",
+   "T7 وT9؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t9-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T8 and T10; ribs (costovertebral joints)",
+   "T8 وT10؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t10-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T9 and T11; ribs (costovertebral joints)",
+   "T9 وT11؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t11-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T10 and T12; ribs (costovertebral joints)",
+   "T10 وT12؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "t12-vertebra": {
+  "t": [
+   "Thoracic vertebra: heart-shaped body with costal facets for the ribs; long spinous process pointing downward",
+   "فقرة صدرية: جسم قلبي الشكل بوجيهات ضلعية للأضلاع؛ وناتئ شوكي طويل متجه للأسفل"
+  ],
+  "j": [
+   "T11 and L1; ribs (costovertebral joints)",
+   "T11 وL1؛ والأضلاع (المفاصل الضلعية الفقرية)"
+  ]
+ },
+ "l1-vertebra": {
+  "t": [
+   "Lumbar vertebra: largest kidney-shaped body; short thick spinous process; no costal facets or transverse foramina",
+   "فقرة قطنية: أكبر جسم بشكل الكلية؛ ناتئ شوكي قصير وسميك؛ بلا وجيهات ضلعية ولا ثقوب مستعرضة"
+  ],
+  "j": [
+   "T12 and L2",
+   "T12 وL2"
+  ]
+ },
+ "l2-vertebra": {
+  "t": [
+   "Lumbar vertebra: largest kidney-shaped body; short thick spinous process; no costal facets or transverse foramina",
+   "فقرة قطنية: أكبر جسم بشكل الكلية؛ ناتئ شوكي قصير وسميك؛ بلا وجيهات ضلعية ولا ثقوب مستعرضة"
+  ],
+  "j": [
+   "L1 and L3",
+   "L1 وL3"
+  ]
+ },
+ "l3-vertebra": {
+  "t": [
+   "Lumbar vertebra: largest kidney-shaped body; short thick spinous process; no costal facets or transverse foramina",
+   "فقرة قطنية: أكبر جسم بشكل الكلية؛ ناتئ شوكي قصير وسميك؛ بلا وجيهات ضلعية ولا ثقوب مستعرضة"
+  ],
+  "j": [
+   "L2 and L4",
+   "L2 وL4"
+  ]
+ },
+ "l4-vertebra": {
+  "t": [
+   "Lumbar vertebra: largest kidney-shaped body; short thick spinous process; no costal facets or transverse foramina",
+   "فقرة قطنية: أكبر جسم بشكل الكلية؛ ناتئ شوكي قصير وسميك؛ بلا وجيهات ضلعية ولا ثقوب مستعرضة"
+  ],
+  "j": [
+   "L3 and L5",
+   "L3 وL5"
+  ]
+ },
+ "l5-vertebra": {
+  "t": [
+   "Lumbar vertebra: largest kidney-shaped body; short thick spinous process; no costal facets or transverse foramina",
+   "فقرة قطنية: أكبر جسم بشكل الكلية؛ ناتئ شوكي قصير وسميك؛ بلا وجيهات ضلعية ولا ثقوب مستعرضة"
+  ],
+  "j": [
+   "L4 and the sacrum",
+   "L4 والعجز"
+  ]
+ },
+ "sacrum": {
+  "t": [
+   "Five fused sacral vertebrae forming a triangular bone",
+   "خمس فقرات عجزية ملتحمة تكوّن عظمًا مثلثًا"
+  ],
+  "j": [
+   "L5 (lumbosacral joint); hip bones (sacroiliac joints); coccyx",
+   "L5 (المفصل القطني العجزي)؛ عظما الورك (المفصلان العجزيان الحرقفيان)؛ العصعص"
+  ]
+ },
+ "intervertebral-disc-c2-c3": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-c3-c4": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-c4-c5": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-c5-c6": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-c6-c7": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-c7-t1": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t1-t2": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t2-t3": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t3-t4": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t4-t5": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t5-t6": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t6-t7": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t7-t8": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t8-t9": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t9-t10": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t10-t11": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-t11-t12": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-l1-l2": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-l2-l3": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-l3-l4": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-l4-l5": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "intervertebral-disc-l5-s1": {
+  "t": [
+   "Fibrocartilage pad: outer annulus fibrosus and inner nucleus pulposus; absorbs shock",
+   "وسادة ليفية غضروفية: حلقة ليفية من الخارج ونواة لبّية من الداخل؛ تمتص الصدمات"
+  ],
+  "j": [
+   "Joins the bodies of adjacent vertebrae (symphysis)",
+   "تربط أجسام الفقرات المتجاورة (ارتفاق)"
+  ]
+ },
+ "trapezius-descending-part": {
+  "o": [
+   "External occipital protuberance, superior nuchal line, ligamentum nuchae",
+   "البروز القذالي الظاهر، والخط القفوي العلوي، والرباط القفوي"
+  ],
+  "i": [
+   "Lateral third of the clavicle",
+   "الثلث الوحشي للترقوة"
+  ],
+  "a": [
+   "Elevates the scapula and rotates it upward",
+   "يرفع لوح الكتف ويدوّره للأعلى"
+  ],
+  "n": [
+   "Spinal accessory nerve (CN XI); C3–C4",
+   "العصب الإضافي الشوكي (العصب القحفي XI)؛ C3–C4"
+  ]
+ },
+ "trapezius-transverse-part": {
+  "o": [
+   "Spinous processes of C7–T3",
+   "النواتئ الشوكية C7–T3"
+  ],
+  "i": [
+   "Acromion and spine of the scapula",
+   "الأخرم وشوكة لوح الكتف"
+  ],
+  "a": [
+   "Retracts the scapula",
+   "يسحب لوح الكتف للخلف"
+  ],
+  "n": [
+   "Spinal accessory nerve (CN XI); C3–C4",
+   "العصب الإضافي الشوكي (العصب القحفي XI)؛ C3–C4"
+  ]
+ },
+ "trapezius-ascending-part": {
+  "o": [
+   "Spinous processes of T4–T12",
+   "النواتئ الشوكية T4–T12"
+  ],
+  "i": [
+   "Base of the spine of the scapula",
+   "قاعدة شوكة لوح الكتف"
+  ],
+  "a": [
+   "Depresses the scapula and rotates it upward",
+   "يخفض لوح الكتف ويدوّره للأعلى"
+  ],
+  "n": [
+   "Spinal accessory nerve (CN XI); C3–C4",
+   "العصب الإضافي الشوكي (العصب القحفي XI)؛ C3–C4"
+  ]
+ },
+ "rhomboid-major": {
+  "o": [
+   "Spinous processes of T2–T5",
+   "النواتئ الشوكية T2–T5"
+  ],
+  "i": [
+   "Medial border of the scapula below the spine",
+   "الحافة الإنسية للوح الكتف تحت الشوكة"
+  ],
+  "a": [
+   "Retracts the scapula and rotates it downward",
+   "يسحب لوح الكتف للخلف ويدوّره للأسفل"
+  ],
+  "n": [
+   "Dorsal scapular nerve (C4–C5)",
+   "العصب الظهري للوح الكتف (C4–C5)"
+  ]
+ },
+ "rhomboid-minor": {
+  "o": [
+   "Ligamentum nuchae and spinous processes of C7–T1",
+   "الرباط القفوي والنواتئ الشوكية C7–T1"
+  ],
+  "i": [
+   "Medial border of the scapula at the root of the spine",
+   "الحافة الإنسية للوح الكتف عند جذر الشوكة"
+  ],
+  "a": [
+   "Retracts the scapula and rotates it downward",
+   "يسحب لوح الكتف للخلف ويدوّره للأسفل"
+  ],
+  "n": [
+   "Dorsal scapular nerve (C4–C5)",
+   "العصب الظهري للوح الكتف (C4–C5)"
+  ]
+ },
+ "levator-scapulae": {
+  "o": [
+   "Transverse processes of C1–C4",
+   "النواتئ المستعرضة C1–C4"
+  ],
+  "i": [
+   "Medial border of the scapula above the spine (superior angle)",
+   "الحافة الإنسية للوح الكتف فوق الشوكة (الزاوية العلوية)"
+  ],
+  "a": [
+   "Elevates the scapula and tilts the glenoid downward",
+   "يرفع لوح الكتف ويميل الحقّانية للأسفل"
+  ],
+  "n": [
+   "Dorsal scapular nerve (C5) and C3–C4",
+   "العصب الظهري للوح الكتف (C5) والأعصاب C3–C4"
+  ]
+ },
+ "splenius-capitis": {
+  "o": [
+   "Ligamentum nuchae and spinous processes of C7–T3",
+   "الرباط القفوي والنواتئ الشوكية C7–T3"
+  ],
+  "i": [
+   "Mastoid process and lateral superior nuchal line",
+   "الناتئ الخشّائي والجزء الوحشي للخط القفوي العلوي"
+  ],
+  "a": [
+   "Extends the head; rotates and bends it to the same side",
+   "يبسط الرأس، ويدوّره ويميله للجهة نفسها"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "splenius-cervicis": {
+  "o": [
+   "Spinous processes of T3–T6",
+   "النواتئ الشوكية T3–T6"
+  ],
+  "i": [
+   "Transverse processes of C1–C3",
+   "النواتئ المستعرضة C1–C3"
+  ],
+  "a": [
+   "Extends the neck; rotates it to the same side",
+   "يبسط الرقبة ويدوّرها للجهة نفسها"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "iliocostalis-lumborum": {
+  "o": [
+   "Iliac crest, sacrum and the common erector spinae tendon",
+   "العرف الحرقفي، والعجز، والوتر المشترك للناصبة الفقرية"
+  ],
+  "i": [
+   "Angles of the lower ribs",
+   "زوايا الأضلاع السفلية"
+  ],
+  "a": [
+   "Extends and laterally flexes the vertebral column",
+   "يبسط العمود الفقري ويميله جانبيًا"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "iliocostalis-thoracis": {
+  "o": [
+   "Angles of the lower six ribs",
+   "زوايا الأضلاع الستة السفلية"
+  ],
+  "i": [
+   "Angles of the upper six ribs and transverse process of C7",
+   "زوايا الأضلاع الستة العلوية والناتئ المستعرض لـC7"
+  ],
+  "a": [
+   "Extends and laterally flexes the vertebral column",
+   "يبسط العمود الفقري ويميله جانبيًا"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "iliocostalis-cervicis": {
+  "o": [
+   "Angles of ribs 3–6",
+   "زوايا الأضلاع 3–6"
+  ],
+  "i": [
+   "Transverse processes of C4–C6",
+   "النواتئ المستعرضة C4–C6"
+  ],
+  "a": [
+   "Extends and laterally flexes the neck",
+   "يبسط الرقبة ويميلها جانبيًا"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "longissimus-thoracis": {
+  "o": [
+   "Common erector spinae tendon and transverse processes of lumbar vertebrae",
+   "الوتر المشترك للناصبة الفقرية والنواتئ المستعرضة للفقرات القطنية"
+  ],
+  "i": [
+   "Transverse processes of thoracic vertebrae and the lower ribs",
+   "النواتئ المستعرضة للفقرات الصدرية والأضلاع السفلية"
+  ],
+  "a": [
+   "Extends and laterally flexes the vertebral column",
+   "يبسط العمود الفقري ويميله جانبيًا"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "longissimus-cervicis": {
+  "o": [
+   "Transverse processes of T1–T5",
+   "النواتئ المستعرضة T1–T5"
+  ],
+  "i": [
+   "Transverse processes of C2–C6",
+   "النواتئ المستعرضة C2–C6"
+  ],
+  "a": [
+   "Extends and laterally flexes the neck",
+   "يبسط الرقبة ويميلها جانبيًا"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "longissimus-capitis": {
+  "o": [
+   "Transverse processes of T1–T5 and articular processes of C4–C7",
+   "النواتئ المستعرضة T1–T5 والنواتئ المفصلية C4–C7"
+  ],
+  "i": [
+   "Mastoid process",
+   "الناتئ الخشّائي"
+  ],
+  "a": [
+   "Extends the head; turns it to the same side",
+   "يبسط الرأس ويدوّره للجهة نفسها"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "spinalis-thoracis": {
+  "o": [
+   "Spinous processes of T11–L2",
+   "النواتئ الشوكية T11–L2"
+  ],
+  "i": [
+   "Spinous processes of the upper thoracic vertebrae",
+   "النواتئ الشوكية للفقرات الصدرية العلوية"
+  ],
+  "a": [
+   "Extends the vertebral column",
+   "يبسط العمود الفقري"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "semispinalis-thoracis": {
+  "o": [
+   "Transverse processes of T6–T10",
+   "النواتئ المستعرضة T6–T10"
+  ],
+  "i": [
+   "Spinous processes of C6–T4",
+   "النواتئ الشوكية C6–T4"
+  ],
+  "a": [
+   "Extends the thoracic spine; rotates it to the opposite side",
+   "يبسط العمود الصدري ويدوّره للجهة المعاكسة"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "semispinalis-cervicis": {
+  "o": [
+   "Transverse processes of T1–T6",
+   "النواتئ المستعرضة T1–T6"
+  ],
+  "i": [
+   "Spinous processes of C2–C5",
+   "النواتئ الشوكية C2–C5"
+  ],
+  "a": [
+   "Extends the neck; rotates it to the opposite side",
+   "يبسط الرقبة ويدوّرها للجهة المعاكسة"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "semispinalis-capitis": {
+  "o": [
+   "Transverse processes of C7–T6 and articular processes of C4–C6",
+   "النواتئ المستعرضة C7–T6 والنواتئ المفصلية C4–C6"
+  ],
+  "i": [
+   "Occipital bone between the superior and inferior nuchal lines",
+   "العظم القذالي بين الخطّين القفويين العلوي والسفلي"
+  ],
+  "a": [
+   "Extends the head",
+   "يبسط الرأس"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
+ },
+ "interspinales-thoracic": {
+  "o": [
+   "Spinous process of one vertebra",
+   "الناتئ الشوكي لفقرة"
+  ],
+  "i": [
+   "Spinous process of the vertebra above",
+   "الناتئ الشوكي للفقرة التي فوقها"
+  ],
+  "a": [
+   "Assist extension of the vertebral column",
+   "تساعد ببسط العمود الفقري"
+  ],
+  "n": [
+   "Posterior (dorsal) rami of spinal nerves",
+   "الفروع الخلفية للأعصاب الشوكية"
+  ]
  }
 }

@@ -195,3 +195,8 @@ lower = [(region, "bone" if layer == "bone" else "muscle", names, en, ar, grp, l
          for region, items in LOWER.items() for names, en, ar, grp, layer in items]
 build_limb("upper-limb", upper)
 build_limb("lower-limb", lower)
+
+from parts import SPINE
+spine = [(region, "bone" if layer == "bone" else "muscle", names, en, ar, grp, layer)
+         for region, items in SPINE.items() for names, en, ar, grp, layer in items]
+build_limb("spine", spine)

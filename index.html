@@ -205,7 +205,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
       <svg class="body" viewBox="0 0 200 420" aria-label="خريطة جسم الإنسان">
         <g id="half">
           <path class="rg soon" data-r="head" d="M100 12c14 0 23 11 23 26s-9 28-23 28-23-13-23-28 9-26 23-26z"/>
-          <path class="rg soon" data-r="neck" d="M91 64h18l2 14H89z"/>
+          <path class="rg live pulse" data-r="spine" d="M91 64h18l2 14H89z"/>
           <path class="rg soon" data-r="chest" d="M89 78h22l29 6c4 8 4 24 0 38l-6 30H66l-6-30c-4-14-4-30 0-38z"/>
           <path class="rg soon" data-r="abdomen" d="M66 154h68l-3 46H69z"/>
           <path class="rg soon" data-r="pelvis" d="M69 202h62l5 30H64z"/>
@@ -347,7 +347,9 @@ const CREDIT = {
   "812": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:812_Bones_of_the_Foot.jpg"],
   "1122": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1122_Gluteal_Muscles_that_Move_the_Femur.jpg"],
   "1123": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1123_Muscles_of_the_Leg_that_Move_the_Foot_and_Toes.jpg"],
-  "1124": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1124_Intrinsic_Muscles_of_the_Foot.jpg"]
+  "1124": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1124_Intrinsic_Muscles_of_the_Foot.jpg"],
+  "715": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:715_Vertebral_Column.jpg"],
+  "1117": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1117_Muscles_of_the_Neck_and_Back.jpg"]
 };
 // كل التأشيرات منقولة من الرسم نفسه، والترجمة العربية بجنبها
 const REGIONS = {
@@ -448,14 +450,31 @@ const REGIONS = {
         ["الأخمص — الطبقة الوسطى", [["Quadratus plantae","المربعة الأخمصية"],["Lumbricals","العضلات الدودية"]]],
         ["الأخمص — الطبقة العميقة", [["Flexor hallucis brevis","المثنية القصيرة للإبهام"],["Flexor digiti minimi brevis","المثنية القصيرة للخنصر"]]]
       ]}
+  },
+  spine: { ar: "العمود الفقري", en: "Vertebral column",
+    bones: { img: "img/spine-bones.jpg", src: "715",
+      note: "33 فقرة تقريبًا: 7 رقبية، و12 صدرية، و5 قطنية، ثم العجز (5 ملتحمة) والعصعص. بين أجسام الفقرات أقراص ليفية غضروفية. وللعمود أربعة انحناءات: رقبي وقطني للأمام، وصدري وعجزي للخلف.",
+      groups: [
+        ["المناطق", [["7 Cervical vertebrae (C1–C7)","7 فقرات رقبية"],["12 Thoracic vertebrae (T1–T12)","12 فقرة صدرية"],["5 Lumbar vertebrae (L1–L5)","5 فقرات قطنية"],["Sacrum","العجز"],["Coccyx","العصعص"],["Intervertebral disc","القرص بين الفقرات"]]],
+        ["الانحناءات", [["Cervical curve","الانحناء الرقبي"],["Thoracic curve","الانحناء الصدري"],["Lumbar curve","الانحناء القطني"],["Sacrococcygeal curve","الانحناء العجزي العصعصي"]]]
+      ]},
+    muscles: { img: "img/spine-muscles.jpg", src: "1117",
+      groups: [
+        ["السطحية", [["Trapezius","شبه المنحرفة"],["Sternocleidomastoid","القصية الترقوية الخشّائية"],["Levator scapulae","الرافعة للوح الكتف"],["Rhomboides minor","المعيّنية الصغرى"],["Rhomboides major","المعيّنية الكبرى"]]],
+        ["الطحالية (Splenius)", [["Splenius capitis","الطحالية الرأسية"],["Splenius cervicis","الطحالية العنقية"]]],
+        ["الناصبة الفقرية (Erector spinae)", [["Iliocostalis cervicis","الحرقفية الضلعية العنقية"],["Iliocostalis thoracis","الحرقفية الضلعية الصدرية"],["Iliocostalis lumborum","الحرقفية الضلعية القطنية"],["Longissimus capitis","الطويلة الرأسية"],["Longissimus cervicis","الطويلة العنقية"],["Longissimus thoracis","الطويلة الصدرية"],["Spinalis thoracis","الشوكية الصدرية"]]],
+        ["المستعرضة الشوكية (Transversospinales)", [["Semispinalis capitis","نصف الشوكية الرأسية"],["Semispinalis cervicis","نصف الشوكية العنقية"],["Semispinalis thoracis","نصف الشوكية الصدرية"],["Multifidus","متعددة الأقسام"],["Rotatores (brevis, longus)","العضلات المدوّرة (القصيرة والطويلة)"]]],
+        ["العضلات القصيرة", [["Interspinales","العضلات بين الشوكية"],["Intertransversarii","العضلات بين المستعرضة"]]],
+        ["الرقبة الجانبية", [["Anterior scalene","الأخمعية الأمامية"],["Medial scalene","الأخمعية الوسطى"]]]
+      ]}
   }
 };
-const SOON = {head:"الرأس",neck:"الرقبة",chest:"الصدر",abdomen:"البطن",pelvis:"الحوض"};
+const SOON = {head:"الرأس",chest:"الصدر",abdomen:"البطن",pelvis:"الحوض"};
 
 // النص الثاني من الجسم: نسخة معكوسة من نفس المناطق (حتى يبقى الضغط عليها شغّال)
 (() => { const h=document.getElementById("half"), m=h.cloneNode(true); m.removeAttribute("id");
   m.setAttribute("transform","translate(200 0) scale(-1 1)");
-  m.querySelectorAll('[data-r="head"],[data-r="neck"],[data-r="chest"],[data-r="abdomen"],[data-r="pelvis"]').forEach(e=>e.remove());
+  m.querySelectorAll('[data-r="head"],[data-r="spine"],[data-r="chest"],[data-r="abdomen"],[data-r="pelvis"]').forEach(e=>e.remove());
   h.after(m); })();
 const tg = window.Telegram && Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
@@ -505,11 +524,16 @@ const PHOTOS = {
     ["foot-sup","Bones of the foot — articulated skeleton","عظام القدم — هيكل مركّب","MAKY.OREL · CC0","Ossa_pedis_(sin)_-_superior_view.jpg"],
     ["foot-lat-real","Bones of the foot — lateral view","عظام القدم — منظر وحشي","MAKY.OREL · CC0","Ossa_pedis_(sin)_-_lateral_view.jpg"],
     ["calcaneus","Foot (medial view) with a separate calcaneus","القدم (منظر إنسي) مع عظم عقب منفصل","MAKY.OREL · CC0","Ossa_pedis_(sin)_-_calcaneus_(medial_view).jpg"]
+  ],
+  spine: [
+    ["human-vert","Cervical, thoracic and lumbar vertebrae compared (Arabic legend)","مقارنة الفقرة الرقبية والصدرية والقطنية","علاء · CC BY-SA 3.0","Human_Vertebrae.jpg"],
+    ["thoracic-vert","Thoracic vertebra — superior view, labelled","فقرة صدرية — منظر علوي مؤشّر","Anatomist90 · CC BY-SA 3.0","Thoracic_vertebrae.jpg"],
+    ["lumbar-vert-sup","Lumbar vertebra — superior view","فقرة قطنية — منظر علوي","MAKY.OREL · CC0","Vertebra_-_lumbales_(superior_view).jpg"]
   ]
 };
 const GRP = {bone:"العظام",membrane:"الأغشية","carpal-p":"عظام الرسغ — الصف الداني","carpal-d":"عظام الرسغ — الصف القاصي",
   metacarpal:"عظام المشط (Metacarpals)",phalanx:"السُّلاميات (Phalanges)",sup:"العضلات السطحية",mid:"العضلات الوسطى",deep:"العضلات العميقة",
-  thenar:"بارزة الإبهام (Thenar)",hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى"};
+  thenar:"بارزة الإبهام (Thenar)",cervical:"الفقرات الرقبية",thoracic:"الفقرات الصدرية",lumbar:"الفقرات القطنية",sacral:"العجز",disc:"الأقراص بين الفقرات",hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى"};
 let mode="3d";
 
 function termList(groups, pick){
@@ -665,14 +689,16 @@ import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const $id = id => document.getElementById(id);
 const stage=$id("stage"), linesEl=$id("lines"), labelsEl=$id("labels");
-const BONE={bone:"#ece2cc",membrane:"#b9cfe6",metacarpal:"#ece2cc",metatarsal:"#ece2cc",phalanx:"#e4d8bd",tarsal:"#ead9b8"};
+const BONE={bone:"#ece2cc",membrane:"#b9cfe6",metacarpal:"#ece2cc",metatarsal:"#ece2cc",phalanx:"#e4d8bd",tarsal:"#ead9b8",
+  // مناطق العمود الفقري كل وحدة بلون، والأقراص زرقاء
+  cervical:"#f2d39b",thoracic:"#ece2cc",lumbar:"#e3c8a0",sacral:"#d9c7a6",disc:"#8fb8e3"};
 const CARPAL={scaphoid:"#e8b04a",lunate:"#7fb3d5",triquetrum:"#9ccc65",pisiform:"#f48fb1",trapezium:"#ffb74d",trapezoid:"#4db6ac",capitate:"#ba68c8",hamate:"#e57373",
   // عظام رصغ القدم السبعة كل وحدة بلون
   talus:"#e8b04a",calcaneus:"#7fb3d5",navicular:"#9ccc65",cuboid:"#f48fb1","medial-cuneiform":"#ffb74d","intermediate-cuneiform":"#4db6ac","lateral-cuneiform":"#ba68c8"};
 const MUSCLE={sup:"#c4402f",mid:"#d0623f",deep:"#9e3328"};
 const ORDER=["sup","mid","deep","bone"];               // من الخارج للداخل
 const LNAME={sup:"سطحية",mid:"وسطى",deep:"عميقة",bone:"عظم"};
-const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم"};
+const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم",spine:"العمود الفقري"};
 const colorOf=p=>p.kind==="bone"?(CARPAL[p.key]||BONE[p.grp]||BONE.bone):MUSCLE[p.layer];
 
 // ── المشهد
@@ -769,7 +795,7 @@ function layout(){
   // بالمنطقة بس، ونوع الدرس (عظام أو عضلات) إلا إذا الطالب مختار جزء
   let pool=parts.filter(p=>seen[p.key]&&(!region||p.region===region)&&(isolated||p.kind===kindFocus||kindFocus==="all"));
   if(selected) pool=pool.filter(p=>p.key===selected);
-  if(pool.length>18) pool=pool.filter(p=>p.kind!=="bone"||!/phalanx/.test(p.key));
+  if(pool.length>18) pool=pool.filter(p=>p.kind!=="bone"||!/phalanx|intervertebral/.test(p.key));
   const items=pool.map(p=>{ v3.set(...p.pin).project(camera); return {p,x:(v3.x+1)/2*W,y:(1-v3.y)/2*H,front:v3.z<1}; })
     .filter(i=>i.front&&i.x>0&&i.x<W&&i.y>0&&i.y<H);
   const cx=W/2, gap=Math.max(15,Math.min(24,(H-40)/Math.max(1,Math.ceil(items.length/2))));
@@ -787,7 +813,7 @@ function layout(){
 labelsEl.addEventListener("click",e=>{ const k=e.target.dataset&&e.target.dataset.k; if(k) select(selected===k?null:k); });
 
 // ── التحميل: كل طرف بملف (العلوي والسفلي)، ونحمّل اللي نحتاجه بس ونخزّنه
-const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb"};
+const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb",spine:"spine"};
 const models={}, infoReady=fetch("data/info.json").then(r=>r.json()).then(j=>info=j);
 let current=null;
 async function loadModel(name){
@@ -816,7 +842,8 @@ async function open(r, kind, cb){
   hidden.clear(); faded.clear(); isolated=null; selected=null; endQuiz(); card(null);
   Object.assign(layerOn, kind==="bones"?{sup:false,mid:false,deep:false,bone:true}:{sup:true,mid:true,deep:true,bone:true});
   showLabels=true; $id("t-labels").classList.add("on");
-  paint(); frame(regionKeys(), false);
+  // عضلات الظهر تنشاف من ورا
+  paint(); frame(regionKeys(), r==="spine"&&kindFocus==="muscle");
   return parts.filter(p=>p.region===r&&p.kind===kindFocus);
 }
 

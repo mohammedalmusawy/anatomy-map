@@ -86,5 +86,30 @@
   "file": "File:X-ray of the pelvis of an 18 year old male - case 3 - anteroposterior.jpg",
   "license": "Public domain",
   "artist": "Department of Radiology, UC San Diego Health"
+ },
+ "cspine-lat": {
+  "file": "File:X-ray of the cervical spine of a 20 year old male - lateral.jpg",
+  "artist": "Department of Radiology, UC San Diego Health",
+  "license": "Public domain"
+ },
+ "cspine-ap": {
+  "file": "File:X-ray of the cervical spine of a 20 year old male - anteroposterior.jpg",
+  "artist": "Department of Radiology, UC San Diego Health",
+  "license": "Public domain"
+ },
+ "cspine-odont": {
+  "file": "File:X-ray of the cervical spine of a 20 year old male - odontoid.jpg",
+  "artist": "Department of Radiology, UC San Diego Health",
+  "license": "Public domain"
+ },
+ "lumbar-ap": {
+  "file": "File:LWS ap.jpg",
+  "artist": "Couraco",
+  "license": "CC BY-SA 3.0"
+ },
+ "lumbar-lat": {
+  "file": "File:LWS seitlich.jpg",
+  "artist": "Couraco",
+  "license": "CC BY-SA 3.0"
  }
 }

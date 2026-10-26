@@ -204,3 +204,46 @@ LOWER = {
          "Plantar interossei (foot)", "بين العظام الأخمصية (القدم)", "plantar", "deep"),
     ],
 }
+
+
+# ═════════════ العمود الفقري (27/10/2026) ═════════════
+# (أسماء BodyParts3D، الإنكليزي، العربي، المجموعة، الطبقة) — العضلات من الجهة اليسرى، والعصعص ما موجود بالمصدر
+_ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"]
+_AR = ["الأولى", "الثانية", "الثالثة", "الرابعة", "الخامسة", "السادسة", "السابعة", "الثامنة", "التاسعة", "العاشرة", "الحادية عشرة", "الثانية عشرة"]
+
+def _spine():
+    out = [(["atlas"], "C1 — Atlas", "الفقرة الرقبية الأولى (الفهقة)", "cervical", "bone"),
+           (["axis"], "C2 — Axis", "الفقرة الرقبية الثانية (المحور)", "cervical", "bone")]
+    out += [([f"{_ORD[i]} cervical vertebra"], f"C{i+1} vertebra", f"الفقرة الرقبية {_AR[i]}", "cervical", "bone") for i in range(2, 7)]
+    out += [([f"{_ORD[i]} thoracic vertebra"], f"T{i+1} vertebra", f"الفقرة الصدرية {_AR[i]}", "thoracic", "bone") for i in range(12)]
+    out += [([f"{_ORD[i]} lumbar vertebra"], f"L{i+1} vertebra", f"الفقرة القطنية {_AR[i]}", "lumbar", "bone") for i in range(5)]
+    out += [(["sacrum"], "Sacrum", "العجز", "sacral", "bone")]
+    # الأقراص بين الفقرات: كل قرص يحمل اسم الفقرة اللي فوگه
+    disks = [("axis", "C2–C3")] + [(f"{_ORD[i]} cervical vertebra", f"C{i+1}–C{i+2}") for i in range(2, 6)] + [("seventh cervical vertebra", "C7–T1")] \
+          + [(f"{_ORD[i]} thoracic vertebra", f"T{i+1}–T{i+2}") for i in range(11)] \
+          + [(f"{_ORD[i]} lumbar vertebra", f"L{i+1}–L{i+2}") for i in range(4)] + [("fifth lumbar vertebra", "L5–S1")]
+    out += [([f"intervertebral disk of {n}"], f"Intervertebral disc {lab}", f"القرص بين الفقرات {lab}", "disc", "bone") for n, lab in disks]
+    out += [
+        (["descending part of left trapezius"], "Trapezius — descending part", "شبه المنحرفة — الجزء النازل", "superficial", "sup"),
+        (["transverse part of left trapezius"], "Trapezius — transverse part", "شبه المنحرفة — الجزء المستعرض", "superficial", "sup"),
+        (["ascending part of left trapezius"], "Trapezius — ascending part", "شبه المنحرفة — الجزء الصاعد", "superficial", "sup"),
+        (["left rhomboid major"], "Rhomboid major", "المعيّنية الكبرى", "intermediate", "mid"),
+        (["left rhomboid minor"], "Rhomboid minor", "المعيّنية الصغرى", "intermediate", "mid"),
+        (["left levator scapulae"], "Levator scapulae", "الرافعة للوح الكتف", "intermediate", "mid"),
+        (["left splenius capitis"], "Splenius capitis", "الطِّحالية الرأسية", "intermediate", "mid"),
+        (["left splenius cervicis"], "Splenius cervicis", "الطِّحالية العنقية", "intermediate", "mid"),
+        (["left iliocostalis lumborum"], "Iliocostalis lumborum", "الحرقفية الضلعية القطنية", "erector", "deep"),
+        (["left iliocostalis thoracis"], "Iliocostalis thoracis", "الحرقفية الضلعية الصدرية", "erector", "deep"),
+        (["left iliocostalis cervicis"], "Iliocostalis cervicis", "الحرقفية الضلعية العنقية", "erector", "deep"),
+        (["left longissimus thoracis"], "Longissimus thoracis", "الطويلة الصدرية", "erector", "deep"),
+        (["left longissimus cervicis"], "Longissimus cervicis", "الطويلة العنقية", "erector", "deep"),
+        (["left longissimus capitis"], "Longissimus capitis", "الطويلة الرأسية", "erector", "deep"),
+        (["left spinalis thoracis"], "Spinalis thoracis", "الشوكية الصدرية", "erector", "deep"),
+        (["left semispinalis thoracis"], "Semispinalis thoracis", "نصف الشوكية الصدرية", "transversospinal", "deep"),
+        (["left semispinalis cervicis"], "Semispinalis cervicis", "نصف الشوكية العنقية", "transversospinal", "deep"),
+        (["left semispinalis capitis"], "Semispinalis capitis", "نصف الشوكية الرأسية", "transversospinal", "deep"),
+        (["left interspinalis thoracis"], "Interspinales (thoracic)", "العضلات بين الشوكية (الصدرية)", "transversospinal", "deep"),
+    ]
+    return out
+
+SPINE = {"spine": _spine()}
