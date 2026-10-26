@@ -1540,6 +1540,131 @@
    }
   },
   {
+   "id": "pelvis-ap2",
+   "region": "thigh",
+   "img": "img/xray/hd/pelvis-ap2.jpg",
+   "w": 1600,
+   "h": 1600,
+   "en": "Pelvis and hips — AP (high resolution)",
+   "ar": "الحوض والوركين — أمامي خلفي (دقة عالية)",
+   "credit": [
+    "Case courtesy of Andrew Dixon, Radiopaedia.org, rID: 36680",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/36680"
+   ],
+   "pts": [
+    [
+     800,
+     267,
+     null,
+     "Sacrum",
+     "العجز"
+    ],
+    [
+     604,
+     391,
+     "hip-bone",
+     "Pelvic brim (iliopectineal line)",
+     "حافة الحوض (الخط الحرقفي العاني)"
+    ],
+    [
+     382,
+     382,
+     "hip-bone",
+     "Acetabular roof",
+     "سقف الحُق"
+    ],
+    [
+     418,
+     427,
+     "femur",
+     "Femoral head",
+     "رأس الفخذ"
+    ],
+    [
+     338,
+     516,
+     "femur",
+     "Femoral neck",
+     "عنق الفخذ"
+    ],
+    [
+     196,
+     569,
+     "femur",
+     "Greater trochanter",
+     "المدوَّر الكبير"
+    ],
+    [
+     587,
+     569,
+     "hip-bone",
+     "Superior pubic ramus",
+     "الفرع العلوي للعانة"
+    ],
+    [
+     800,
+     622,
+     "hip-bone",
+     "Pubic symphysis",
+     "الارتفاق العاني"
+    ],
+    [
+     640,
+     640,
+     "hip-bone",
+     "Obturator foramen",
+     "الثقبة السدّادية"
+    ],
+    [
+     373,
+     729,
+     "femur",
+     "Lesser trochanter",
+     "المدوَّر الصغير"
+    ],
+    [
+     551,
+     747,
+     "hip-bone",
+     "Ischial tuberosity",
+     "الحدبة الإسكية"
+    ],
+    [
+     800,
+     924,
+     null,
+     "Scrotum (soft-tissue shadow)",
+     "الصفن (ظل نسيج رخو)"
+    ],
+    [
+     284,
+     1156,
+     "femur",
+     "Femoral shaft",
+     "جسم عظم الفخذ"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Supine, legs extended and internally rotated 15–20° so the femoral necks are elongated; pelvis not rotated (ASISs equidistant from the table).",
+     "مستلقٍ على الظهر، والساقان ممدودتان ومدوّرتان للداخل 15–20° حتى يطول عنقا الفخذ؛ والحوض غير مستدير (الشوكتان الحرقفيتان الأماميتان العلويتان على بُعد متساوٍ من الطاولة)."
+    ],
+    "cr": [
+     "Perpendicular, midway between the level of the ASISs and the pubic symphysis (about 5 cm below the ASIS level).",
+     "عمودي على منتصف المسافة بين مستوى الشوكتين الحرقفيتين الأماميتين العلويتين والارتفاق العاني (نحو 5 سم أسفل مستوى الشوكتين)."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–85 kVp · suspended respiration · gonadal shielding when it does not cover the area of interest.",
+     "مسافة 100 سم · حوالي 75–85 kVp · حبس النفس · واقي الغدد التناسلية إذا لم يغطِّ منطقة الفحص."
+    ],
+    "eval": [
+     "Whole pelvis, L5, sacrum and proximal femurs included; no rotation (symmetric iliac wings and obturator foramina, sacrum centred over the symphysis); greater trochanters in profile and lesser trochanters small or not seen (correct internal rotation).",
+     "يظهر الحوض كاملًا مع L5 والعجز وأعلى الفخذين؛ لا دوران (تناظر جناحي الحرقفة والثقبتين السدّاديتين، والعجز في منتصف الارتفاق)؛ المدوَّران الكبيران في المحيط، والمدوَّران الصغيران صغيران أو غير ظاهرين (دوران داخلي صحيح)."
+    ]
+   }
+  },
+  {
    "id": "pelvis-ap",
    "region": "thigh",
    "img": "img/xray/hd/pelvis-ap.jpg",
