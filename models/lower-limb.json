@@ -1,0 +1,1150 @@
+[
+ {
+  "key": "hip-bone",
+  "en": "Hip bone",
+  "ar": "العظم الحرقفي (عظم الورك)",
+  "kind": "bone",
+  "region": "thigh",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   0.0771,
+   0.6752,
+   0.0467
+  ]
+ },
+ {
+  "key": "femur",
+  "en": "Femur",
+  "ar": "عظم الفخذ",
+  "kind": "bone",
+  "region": "thigh",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   0.0246,
+   -0.2036,
+   0.0095
+  ]
+ },
+ {
+  "key": "patella",
+  "en": "Patella",
+  "ar": "الرَّضفة (صابونة الركبة)",
+  "kind": "bone",
+  "region": "thigh",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   0.0032,
+   -0.2204,
+   0.0245
+  ]
+ },
+ {
+  "key": "gluteus-maximus",
+  "en": "Gluteus maximus",
+  "ar": "الألوية الكبرى",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "gluteal",
+  "layer": "sup",
+  "pin": [
+   0.1056,
+   0.5532,
+   -0.1022
+  ]
+ },
+ {
+  "key": "tensor-fasciae-latae",
+  "en": "Tensor fasciae latae",
+  "ar": "الموتّرة للّفافة العريضة",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "gluteal",
+  "layer": "sup",
+  "pin": [
+   0.082,
+   0.5655,
+   0.0421
+  ]
+ },
+ {
+  "key": "gluteus-medius",
+  "en": "Gluteus medius",
+  "ar": "الألوية الوسطى",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "gluteal",
+  "layer": "mid",
+  "pin": [
+   0.0815,
+   0.6645,
+   -0.0148
+  ]
+ },
+ {
+  "key": "gluteus-minimus",
+  "en": "Gluteus minimus",
+  "ar": "الألوية الصغرى",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "gluteal",
+  "layer": "deep",
+  "pin": [
+   0.0639,
+   0.6534,
+   -0.0089
+  ]
+ },
+ {
+  "key": "piriformis",
+  "en": "Piriformis",
+  "ar": "الكمثرية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "gluteal",
+  "layer": "deep",
+  "pin": [
+   0.0067,
+   0.5648,
+   -0.0951
+  ]
+ },
+ {
+  "key": "gemellus-superior",
+  "en": "Gemellus superior",
+  "ar": "التوأمية العلوية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "gluteal",
+  "layer": "deep",
+  "pin": [
+   0.0259,
+   0.507,
+   -0.0857
+  ]
+ },
+ {
+  "key": "obturator-internus",
+  "en": "Obturator internus",
+  "ar": "السدّادة الباطنة",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "gluteal",
+  "layer": "deep",
+  "pin": [
+   -0.0926,
+   0.4939,
+   -0.0007
+  ]
+ },
+ {
+  "key": "gemellus-inferior",
+  "en": "Gemellus inferior",
+  "ar": "التوأمية السفلية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "gluteal",
+  "layer": "deep",
+  "pin": [
+   0.0706,
+   0.4905,
+   -0.0509
+  ]
+ },
+ {
+  "key": "quadratus-femoris",
+  "en": "Quadratus femoris",
+  "ar": "المربعة الفخذية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "gluteal",
+  "layer": "deep",
+  "pin": [
+   0.0501,
+   0.4259,
+   -0.0879
+  ]
+ },
+ {
+  "key": "iliacus",
+  "en": "Iliacus",
+  "ar": "الحرقفية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "anterior",
+  "layer": "mid",
+  "pin": [
+   0.0746,
+   0.7061,
+   0.0114
+  ]
+ },
+ {
+  "key": "psoas-major",
+  "en": "Psoas major",
+  "ar": "القطنية الكبرى",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "anterior",
+  "layer": "mid",
+  "pin": [
+   -0.0719,
+   0.7222,
+   -0.0076
+  ]
+ },
+ {
+  "key": "sartorius",
+  "en": "Sartorius",
+  "ar": "الخيّاطية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   -0.0433,
+   0.0746,
+   0.0431
+  ]
+ },
+ {
+  "key": "rectus-femoris",
+  "en": "Rectus femoris",
+  "ar": "المستقيمة الفخذية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   0.0528,
+   0.2874,
+   0.0673
+  ]
+ },
+ {
+  "key": "vastus-lateralis",
+  "en": "Vastus lateralis",
+  "ar": "المتّسعة الوحشية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   0.0806,
+   0.0709,
+   0.0498
+  ]
+ },
+ {
+  "key": "vastus-medialis",
+  "en": "Vastus medialis",
+  "ar": "المتّسعة الإنسية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   -0.003,
+   0.009,
+   0.0649
+  ]
+ },
+ {
+  "key": "vastus-intermedius",
+  "en": "Vastus intermedius",
+  "ar": "المتّسعة المتوسطة",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "anterior",
+  "layer": "deep",
+  "pin": [
+   0.0282,
+   0.0417,
+   0.048
+  ]
+ },
+ {
+  "key": "pectineus",
+  "en": "Pectineus",
+  "ar": "العانية (المشطية)",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "medial",
+  "layer": "sup",
+  "pin": [
+   -0.0536,
+   0.4087,
+   0.0425
+  ]
+ },
+ {
+  "key": "adductor-longus",
+  "en": "Adductor longus",
+  "ar": "المقرِّبة الطويلة",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "medial",
+  "layer": "sup",
+  "pin": [
+   -0.0489,
+   0.2413,
+   0.037
+  ]
+ },
+ {
+  "key": "gracilis",
+  "en": "Gracilis",
+  "ar": "الرشيقة",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "medial",
+  "layer": "sup",
+  "pin": [
+   -0.0931,
+   0.1747,
+   0.0116
+  ]
+ },
+ {
+  "key": "adductor-brevis",
+  "en": "Adductor brevis",
+  "ar": "المقرِّبة القصيرة",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "medial",
+  "layer": "mid",
+  "pin": [
+   -0.0471,
+   0.3347,
+   0.0117
+  ]
+ },
+ {
+  "key": "adductor-magnus",
+  "en": "Adductor magnus",
+  "ar": "المقرِّبة الكبرى",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "medial",
+  "layer": "deep",
+  "pin": [
+   -0.0496,
+   0.391,
+   -0.0003
+  ]
+ },
+ {
+  "key": "obturator-externus",
+  "en": "Obturator externus",
+  "ar": "السدّادة الظاهرة",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "medial",
+  "layer": "deep",
+  "pin": [
+   -0.0937,
+   0.4705,
+   0.001
+  ]
+ },
+ {
+  "key": "biceps-femoris-long-head",
+  "en": "Biceps femoris — long head",
+  "ar": "ذات الرأسين الفخذية — الرأس الطويل",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   0.0074,
+   0.1721,
+   -0.0646
+  ]
+ },
+ {
+  "key": "biceps-femoris-short-head",
+  "en": "Biceps femoris — short head",
+  "ar": "ذات الرأسين الفخذية — الرأس القصير",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   -0.0023,
+   -0.0694,
+   -0.0424
+  ]
+ },
+ {
+  "key": "semitendinosus",
+  "en": "Semitendinosus",
+  "ar": "النصف وترية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   -0.0718,
+   0.1825,
+   -0.098
+  ]
+ },
+ {
+  "key": "semimembranosus",
+  "en": "Semimembranosus",
+  "ar": "النصف غشائية",
+  "kind": "muscle",
+  "region": "thigh",
+  "grp": "posterior",
+  "layer": "mid",
+  "pin": [
+   -0.0866,
+   0.035,
+   -0.0359
+  ]
+ },
+ {
+  "key": "tibia",
+  "en": "Tibia",
+  "ar": "الظنبوب (القصبة)",
+  "kind": "bone",
+  "region": "leg",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   0.0042,
+   -0.2877,
+   0.0112
+  ]
+ },
+ {
+  "key": "fibula",
+  "en": "Fibula",
+  "ar": "الشظيّة",
+  "kind": "bone",
+  "region": "leg",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   0.0431,
+   -0.2846,
+   -0.0488
+  ]
+ },
+ {
+  "key": "interosseous-membrane-of-leg",
+  "en": "Interosseous membrane of leg",
+  "ar": "الغشاء بين العظمين للساق",
+  "kind": "bone",
+  "region": "leg",
+  "grp": "membrane",
+  "layer": "bone",
+  "pin": [
+   0.0083,
+   -0.578,
+   -0.0403
+  ]
+ },
+ {
+  "key": "tibialis-anterior",
+  "en": "Tibialis anterior",
+  "ar": "الظنبوبية الأمامية",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   0.0241,
+   -0.4415,
+   0.0054
+  ]
+ },
+ {
+  "key": "extensor-digitorum-longus",
+  "en": "Extensor digitorum longus",
+  "ar": "الباسطة الطويلة للأصابع",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   0.0429,
+   -0.4104,
+   -0.0436
+  ]
+ },
+ {
+  "key": "extensor-hallucis-longus",
+  "en": "Extensor hallucis longus",
+  "ar": "الباسطة الطويلة للإبهام",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "anterior",
+  "layer": "mid",
+  "pin": [
+   0.0251,
+   -0.6395,
+   -0.0542
+  ]
+ },
+ {
+  "key": "fibularis-tertius",
+  "en": "Fibularis tertius",
+  "ar": "الشظوية الثالثة",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "anterior",
+  "layer": "mid",
+  "pin": [
+   0.0186,
+   -0.7839,
+   -0.0601
+  ]
+ },
+ {
+  "key": "fibularis-longus",
+  "en": "Fibularis longus",
+  "ar": "الشظوية الطويلة",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "lateral",
+  "layer": "sup",
+  "pin": [
+   0.0633,
+   -0.4678,
+   -0.0622
+  ]
+ },
+ {
+  "key": "fibularis-brevis",
+  "en": "Fibularis brevis",
+  "ar": "الشظوية القصيرة",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "lateral",
+  "layer": "mid",
+  "pin": [
+   0.0348,
+   -0.7051,
+   -0.0798
+  ]
+ },
+ {
+  "key": "gastrocnemius-medial-head",
+  "en": "Gastrocnemius — medial head",
+  "ar": "التوأمية الساقية — الرأس الإنسي",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   -0.0508,
+   -0.434,
+   -0.0287
+  ]
+ },
+ {
+  "key": "gastrocnemius-lateral-head",
+  "en": "Gastrocnemius — lateral head",
+  "ar": "التوأمية الساقية — الرأس الوحشي",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   0.0516,
+   -0.3781,
+   -0.1052
+  ]
+ },
+ {
+  "key": "soleus",
+  "en": "Soleus",
+  "ar": "النعلية",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "posterior",
+  "layer": "mid",
+  "pin": [
+   -0.039,
+   -0.5104,
+   -0.0268
+  ]
+ },
+ {
+  "key": "plantaris",
+  "en": "Plantaris",
+  "ar": "الأخمصية",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "posterior",
+  "layer": "mid",
+  "pin": [
+   0.0209,
+   -0.1433,
+   -0.0383
+  ]
+ },
+ {
+  "key": "popliteus",
+  "en": "Popliteus",
+  "ar": "المأبضية",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   -0.0056,
+   -0.3007,
+   -0.0401
+  ]
+ },
+ {
+  "key": "tibialis-posterior",
+  "en": "Tibialis posterior",
+  "ar": "الظنبوبية الخلفية",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   0.0119,
+   -0.4736,
+   -0.0384
+  ]
+ },
+ {
+  "key": "flexor-digitorum-longus",
+  "en": "Flexor digitorum longus",
+  "ar": "المثنية الطويلة للأصابع",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   -0.0295,
+   -0.6332,
+   -0.0427
+  ]
+ },
+ {
+  "key": "flexor-hallucis-longus",
+  "en": "Flexor hallucis longus",
+  "ar": "المثنية الطويلة للإبهام",
+  "kind": "muscle",
+  "region": "leg",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   0.0115,
+   -0.6908,
+   -0.0638
+  ]
+ },
+ {
+  "key": "talus",
+  "en": "Talus",
+  "ar": "الكاحل (القعب)",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "tarsal",
+  "layer": "bone",
+  "pin": [
+   -0.0197,
+   -0.9101,
+   -0.004
+  ]
+ },
+ {
+  "key": "calcaneus",
+  "en": "Calcaneus",
+  "ar": "العقب",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "tarsal",
+  "layer": "bone",
+  "pin": [
+   0.0043,
+   -0.9448,
+   -0.0316
+  ]
+ },
+ {
+  "key": "navicular",
+  "en": "Navicular",
+  "ar": "الزورقي",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "tarsal",
+  "layer": "bone",
+  "pin": [
+   -0.0188,
+   -0.9069,
+   0.0241
+  ]
+ },
+ {
+  "key": "cuboid",
+  "en": "Cuboid",
+  "ar": "النردي",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "tarsal",
+  "layer": "bone",
+  "pin": [
+   0.0333,
+   -0.9428,
+   0.0163
+  ]
+ },
+ {
+  "key": "medial-cuneiform",
+  "en": "Medial cuneiform",
+  "ar": "الإسفيني الإنسي",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "tarsal",
+  "layer": "bone",
+  "pin": [
+   -0.0139,
+   -0.9268,
+   0.0557
+  ]
+ },
+ {
+  "key": "intermediate-cuneiform",
+  "en": "Intermediate cuneiform",
+  "ar": "الإسفيني المتوسط",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "tarsal",
+  "layer": "bone",
+  "pin": [
+   0.0176,
+   -0.9083,
+   0.0398
+  ]
+ },
+ {
+  "key": "lateral-cuneiform",
+  "en": "Lateral cuneiform",
+  "ar": "الإسفيني الوحشي",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "tarsal",
+  "layer": "bone",
+  "pin": [
+   0.0326,
+   -0.9208,
+   0.0305
+  ]
+ },
+ {
+  "key": "1st-metatarsal",
+  "en": "1st metatarsal",
+  "ar": "عظم مشط القدم الأول",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "metatarsal",
+  "layer": "bone",
+  "pin": [
+   0.0145,
+   -0.9685,
+   0.1455
+  ]
+ },
+ {
+  "key": "2nd-metatarsal",
+  "en": "2nd metatarsal",
+  "ar": "عظم مشط القدم الثاني",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "metatarsal",
+  "layer": "bone",
+  "pin": [
+   0.0419,
+   -0.94,
+   0.0911
+  ]
+ },
+ {
+  "key": "3rd-metatarsal",
+  "en": "3rd metatarsal",
+  "ar": "عظم مشط القدم الثالث",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "metatarsal",
+  "layer": "bone",
+  "pin": [
+   0.0663,
+   -0.9516,
+   0.0904
+  ]
+ },
+ {
+  "key": "4th-metatarsal",
+  "en": "4th metatarsal",
+  "ar": "عظم مشط القدم الرابع",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "metatarsal",
+  "layer": "bone",
+  "pin": [
+   0.0807,
+   -0.9606,
+   0.0757
+  ]
+ },
+ {
+  "key": "5th-metatarsal",
+  "en": "5th metatarsal",
+  "ar": "عظم مشط القدم الخامس",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "metatarsal",
+  "layer": "bone",
+  "pin": [
+   0.1092,
+   -0.9736,
+   0.076
+  ]
+ },
+ {
+  "key": "proximal-phalanx-big-toe",
+  "en": "Proximal phalanx — big toe",
+  "ar": "السلامى الدانية — الإبهام",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0335,
+   -0.9843,
+   0.1922
+  ]
+ },
+ {
+  "key": "distal-phalanx-big-toe",
+  "en": "Distal phalanx — big toe",
+  "ar": "السلامى القاصية — الإبهام",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0583,
+   -0.9889,
+   0.22
+  ]
+ },
+ {
+  "key": "proximal-phalanx-second-toe",
+  "en": "Proximal phalanx — second toe",
+  "ar": "السلامى الدانية — الإصبع الثاني",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0777,
+   -0.977,
+   0.1756
+  ]
+ },
+ {
+  "key": "middle-phalanx-second-toe",
+  "en": "Middle phalanx — second toe",
+  "ar": "السلامى الوسطى — الإصبع الثاني",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0836,
+   -0.9874,
+   0.2006
+  ]
+ },
+ {
+  "key": "distal-phalanx-second-toe",
+  "en": "Distal phalanx — second toe",
+  "ar": "السلامى القاصية — الإصبع الثاني",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0927,
+   -0.9912,
+   0.217
+  ]
+ },
+ {
+  "key": "proximal-phalanx-third-toe",
+  "en": "Proximal phalanx — third toe",
+  "ar": "السلامى الدانية — الإصبع الثالث",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0968,
+   -0.9864,
+   0.1631
+  ]
+ },
+ {
+  "key": "middle-phalanx-third-toe",
+  "en": "Middle phalanx — third toe",
+  "ar": "السلامى الوسطى — الإصبع الثالث",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1057,
+   -0.9886,
+   0.1865
+  ]
+ },
+ {
+  "key": "distal-phalanx-third-toe",
+  "en": "Distal phalanx — third toe",
+  "ar": "السلامى القاصية — الإصبع الثالث",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1176,
+   -0.9913,
+   0.1994
+  ]
+ },
+ {
+  "key": "proximal-phalanx-fourth-toe",
+  "en": "Proximal phalanx — fourth toe",
+  "ar": "السلامى الدانية — الإصبع الرابع",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1143,
+   -0.9841,
+   0.1396
+  ]
+ },
+ {
+  "key": "middle-phalanx-fourth-toe",
+  "en": "Middle phalanx — fourth toe",
+  "ar": "السلامى الوسطى — الإصبع الرابع",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1224,
+   -0.9892,
+   0.1561
+  ]
+ },
+ {
+  "key": "distal-phalanx-fourth-toe",
+  "en": "Distal phalanx — fourth toe",
+  "ar": "السلامى القاصية — الإصبع الرابع",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1329,
+   -0.9922,
+   0.1697
+  ]
+ },
+ {
+  "key": "proximal-phalanx-little-toe",
+  "en": "Proximal phalanx — little toe",
+  "ar": "السلامى الدانية — الإصبع الخامس",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1273,
+   -0.9885,
+   0.1142
+  ]
+ },
+ {
+  "key": "middle-phalanx-little-toe",
+  "en": "Middle phalanx — little toe",
+  "ar": "السلامى الوسطى — الإصبع الخامس",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1327,
+   -0.9933,
+   0.123
+  ]
+ },
+ {
+  "key": "distal-phalanx-little-toe",
+  "en": "Distal phalanx — little toe",
+  "ar": "السلامى القاصية — الإصبع الخامس",
+  "kind": "bone",
+  "region": "foot",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1408,
+   -0.9917,
+   0.1359
+  ]
+ },
+ {
+  "key": "extensor-hallucis-brevis",
+  "en": "Extensor hallucis brevis",
+  "ar": "الباسطة القصيرة للإبهام",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "dorsal",
+  "layer": "sup",
+  "pin": [
+   0.0201,
+   -0.9035,
+   0.0478
+  ]
+ },
+ {
+  "key": "abductor-hallucis",
+  "en": "Abductor hallucis",
+  "ar": "المبعِدة للإبهام",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "plantar",
+  "layer": "sup",
+  "pin": [
+   -0.0075,
+   -0.9695,
+   0.1105
+  ]
+ },
+ {
+  "key": "flexor-digitorum-brevis",
+  "en": "Flexor digitorum brevis",
+  "ar": "المثنية القصيرة للأصابع",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "plantar",
+  "layer": "sup",
+  "pin": [
+   0.0794,
+   -0.9857,
+   0.1895
+  ]
+ },
+ {
+  "key": "abductor-digiti-minimi-foot",
+  "en": "Abductor digiti minimi (foot)",
+  "ar": "المبعِدة للخنصر (القدم)",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "plantar",
+  "layer": "sup",
+  "pin": [
+   0.0905,
+   -0.9833,
+   0.0357
+  ]
+ },
+ {
+  "key": "quadratus-plantae",
+  "en": "Quadratus plantae",
+  "ar": "المربعة الأخمصية",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "plantar",
+  "layer": "mid",
+  "pin": [
+   0.0352,
+   -0.9707,
+   0.0168
+  ]
+ },
+ {
+  "key": "lumbricals-foot",
+  "en": "Lumbricals (foot)",
+  "ar": "العضلات الدودية (القدم)",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "plantar",
+  "layer": "mid",
+  "pin": [
+   0.0248,
+   -0.978,
+   0.0899
+  ]
+ },
+ {
+  "key": "flexor-hallucis-brevis",
+  "en": "Flexor hallucis brevis",
+  "ar": "المثنية القصيرة للإبهام",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "plantar",
+  "layer": "deep",
+  "pin": [
+   0.0031,
+   -0.9551,
+   0.0861
+  ]
+ },
+ {
+  "key": "adductor-hallucis",
+  "en": "Adductor hallucis",
+  "ar": "المقرِّبة للإبهام",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "plantar",
+  "layer": "deep",
+  "pin": [
+   0.0226,
+   -0.9615,
+   0.0767
+  ]
+ },
+ {
+  "key": "flexor-digiti-minimi-brevis-foot",
+  "en": "Flexor digiti minimi brevis (foot)",
+  "ar": "المثنية القصيرة للخنصر (القدم)",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "plantar",
+  "layer": "deep",
+  "pin": [
+   0.0775,
+   -0.979,
+   0.0346
+  ]
+ },
+ {
+  "key": "plantar-interossei-foot",
+  "en": "Plantar interossei (foot)",
+  "ar": "بين العظام الأخمصية (القدم)",
+  "kind": "muscle",
+  "region": "foot",
+  "grp": "plantar",
+  "layer": "deep",
+  "pin": [
+   0.0589,
+   -0.9683,
+   0.1088
+  ]
+ }
+]

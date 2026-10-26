@@ -1,49 +1,1689 @@
 {
  "_source": "Standard anatomy references (OpenStax Anatomy & Physiology tables 11.x; Gray's/Moore conventions). o=origin, i=insertion, a=action, n=nerve; each [English, Arabic].",
-
- "biceps-brachii-short-head": {"o":["Tip of the coracoid process of the scapula","قمة الناتئ الغرابي للوح الكتف"],"i":["Radial tuberosity and bicipital aponeurosis","الحدبة الكعبرية والسفاق ذو الرأسين"],"a":["Flexes the elbow, supinates the forearm, assists shoulder flexion","يثني المرفق، ويبطح الساعد، ويساعد بثني الكتف"],"n":["Musculocutaneous nerve (C5–C6)","العصب العضلي الجلدي (C5–C6)"]},
- "biceps-brachii-long-head": {"o":["Supraglenoid tubercle of the scapula","الحديبة فوق الحقّانية للوح الكتف"],"i":["Radial tuberosity and bicipital aponeurosis","الحدبة الكعبرية والسفاق ذو الرأسين"],"a":["Flexes the elbow, supinates the forearm","يثني المرفق ويبطح الساعد"],"n":["Musculocutaneous nerve (C5–C6)","العصب العضلي الجلدي (C5–C6)"]},
- "brachialis": {"o":["Distal half of the anterior surface of the humerus","النصف السفلي للوجه الأمامي لعظم العضد"],"i":["Coronoid process and tuberosity of the ulna","الناتئ الإكليلي وحدبة الزند"],"a":["Main flexor of the elbow","المثني الرئيسي للمرفق"],"n":["Musculocutaneous nerve (C5–C6)","العصب العضلي الجلدي (C5–C6)"]},
- "coracobrachialis": {"o":["Tip of the coracoid process of the scapula","قمة الناتئ الغرابي للوح الكتف"],"i":["Middle third of the medial surface of the humerus","الثلث الأوسط للوجه الإنسي لعظم العضد"],"a":["Flexes and adducts the arm","يثني العضد ويقرّبه"],"n":["Musculocutaneous nerve (C5–C7)","العصب العضلي الجلدي (C5–C7)"]},
- "triceps-brachii-long-head": {"o":["Infraglenoid tubercle of the scapula","الحديبة تحت الحقّانية للوح الكتف"],"i":["Olecranon of the ulna","الناتئ الزُّجّي للزند"],"a":["Extends the elbow; also extends and adducts the arm","يبسط المرفق، ويبسط العضد ويقرّبه"],"n":["Radial nerve (C6–C8)","العصب الكعبري (C6–C8)"]},
- "triceps-brachii-lateral-head": {"o":["Posterior humerus, above the radial groove","الوجه الخلفي للعضد فوق الميزاب الكعبري"],"i":["Olecranon of the ulna","الناتئ الزُّجّي للزند"],"a":["Extends the elbow","يبسط المرفق"],"n":["Radial nerve (C6–C8)","العصب الكعبري (C6–C8)"]},
- "triceps-brachii-medial-head": {"o":["Posterior humerus, below the radial groove","الوجه الخلفي للعضد تحت الميزاب الكعبري"],"i":["Olecranon of the ulna","الناتئ الزُّجّي للزند"],"a":["Extends the elbow","يبسط المرفق"],"n":["Radial nerve (C6–C8)","العصب الكعبري (C6–C8)"]},
-
- "pronator-teres": {"o":["Medial epicondyle of the humerus and coronoid process of the ulna","اللقيمة الإنسية للعضد والناتئ الإكليلي للزند"],"i":["Middle of the lateral surface of the radius","منتصف الوجه الوحشي للكعبرة"],"a":["Pronates the forearm; assists elbow flexion","يكبّ الساعد ويساعد بثني المرفق"],"n":["Median nerve (C6–C7)","العصب المتوسط (C6–C7)"]},
- "flexor-carpi-radialis": {"o":["Medial epicondyle of the humerus (common flexor origin)","اللقيمة الإنسية للعضد (المنشأ المشترك للمثنيات)"],"i":["Base of the 2nd metacarpal","قاعدة عظم المشط الثاني"],"a":["Flexes and abducts the wrist","يثني الرسغ ويبعده"],"n":["Median nerve (C6–C7)","العصب المتوسط (C6–C7)"]},
- "palmaris-longus": {"o":["Medial epicondyle of the humerus","اللقيمة الإنسية للعضد"],"i":["Flexor retinaculum and palmar aponeurosis","القيد المثني والسفاق الراحي"],"a":["Flexes the wrist; tenses the palmar aponeurosis","يثني الرسغ ويشدّ السفاق الراحي"],"n":["Median nerve (C7–C8)","العصب المتوسط (C7–C8)"]},
- "flexor-carpi-ulnaris": {"o":["Medial epicondyle (humeral head); olecranon and posterior border of ulna (ulnar head)","اللقيمة الإنسية (الرأس العضدي)؛ والزُّج والحافة الخلفية للزند (الرأس الزندي)"],"i":["Pisiform, hook of hamate and base of 5th metacarpal","العظم الحمّصي وخطّاف الكلّابي وقاعدة المشط الخامس"],"a":["Flexes and adducts the wrist","يثني الرسغ ويقرّبه"],"n":["Ulnar nerve (C7–T1)","العصب الزندي (C7–T1)"]},
- "flexor-digitorum-superficialis": {"o":["Medial epicondyle, coronoid process of ulna and anterior radius","اللقيمة الإنسية، والناتئ الإكليلي للزند، والوجه الأمامي للكعبرة"],"i":["Sides of the middle phalanges of digits 2–5","جانبا السلاميات الوسطى للأصابع ٢–٥"],"a":["Flexes the proximal interphalangeal joints (and MCP joints, wrist)","يثني المفاصل بين السلامية الدانية (والمفاصل المشطية السلامية والرسغ)"],"n":["Median nerve (C8–T1)","العصب المتوسط (C8–T1)"]},
- "flexor-digitorum-profundus": {"o":["Anterior and medial ulna and interosseous membrane","الوجهان الأمامي والإنسي للزند والغشاء بين العظمين"],"i":["Bases of the distal phalanges of digits 2–5","قواعد السلاميات القاصية للأصابع ٢–٥"],"a":["Flexes the distal interphalangeal joints (and the fingers, wrist)","يثني المفاصل بين السلامية القاصية (والأصابع والرسغ)"],"n":["Medial part: ulnar nerve; lateral part: anterior interosseous nerve (median) (C8–T1)","الجزء الإنسي: العصب الزندي؛ الجزء الوحشي: العصب بين العظمين الأمامي (من المتوسط) (C8–T1)"]},
- "flexor-pollicis-longus": {"o":["Anterior surface of the radius and interosseous membrane","الوجه الأمامي للكعبرة والغشاء بين العظمين"],"i":["Base of the distal phalanx of the thumb","قاعدة السلامى القاصية للإبهام"],"a":["Flexes the thumb","يثني الإبهام"],"n":["Anterior interosseous nerve, from median (C8–T1)","العصب بين العظمين الأمامي، من المتوسط (C8–T1)"]},
- "pronator-quadratus": {"o":["Distal quarter of the anterior ulna","الربع السفلي للوجه الأمامي للزند"],"i":["Distal quarter of the anterior radius","الربع السفلي للوجه الأمامي للكعبرة"],"a":["Pronates the forearm (main pronator)","يكبّ الساعد (الكابّ الرئيسي)"],"n":["Anterior interosseous nerve, from median (C8–T1)","العصب بين العظمين الأمامي، من المتوسط (C8–T1)"]},
-
- "brachioradialis": {"o":["Proximal two-thirds of the lateral supracondylar ridge of humerus","الثلثان العلويان للحرف فوق اللقمي الوحشي للعضد"],"i":["Lateral surface of the distal radius, above the styloid","الوجه الوحشي لنهاية الكعبرة فوق الناتئ الإبري"],"a":["Flexes the elbow, strongest in mid-pronation","يثني المرفق، وأقوى ما يكون والساعد بوضع وسطي"],"n":["Radial nerve (C5–C6)","العصب الكعبري (C5–C6)"]},
- "extensor-carpi-radialis-longus": {"o":["Lateral supracondylar ridge of the humerus","الحرف فوق اللقمي الوحشي للعضد"],"i":["Dorsal base of the 2nd metacarpal","الوجه الظهري لقاعدة المشط الثاني"],"a":["Extends and abducts the wrist","يبسط الرسغ ويبعده"],"n":["Radial nerve (C6–C7)","العصب الكعبري (C6–C7)"]},
- "extensor-carpi-radialis-brevis": {"o":["Lateral epicondyle of the humerus (common extensor origin)","اللقيمة الوحشية للعضد (المنشأ المشترك للباسطات)"],"i":["Dorsal base of the 3rd metacarpal","الوجه الظهري لقاعدة المشط الثالث"],"a":["Extends and abducts the wrist","يبسط الرسغ ويبعده"],"n":["Deep branch of radial nerve (C7–C8)","الفرع العميق للعصب الكعبري (C7–C8)"]},
- "extensor-digitorum": {"o":["Lateral epicondyle of the humerus","اللقيمة الوحشية للعضد"],"i":["Extensor expansions of digits 2–5","الامتدادات الباسطة للأصابع ٢–٥"],"a":["Extends the fingers (2–5) and the wrist","يبسط الأصابع (٢–٥) والرسغ"],"n":["Posterior interosseous nerve, from radial (C7–C8)","العصب بين العظمين الخلفي، من الكعبري (C7–C8)"]},
- "extensor-digiti-minimi": {"o":["Lateral epicondyle of the humerus","اللقيمة الوحشية للعضد"],"i":["Extensor expansion of the little finger","الامتداد الباسط للخنصر"],"a":["Extends the little finger","يبسط الخنصر"],"n":["Posterior interosseous nerve (C7–C8)","العصب بين العظمين الخلفي (C7–C8)"]},
- "extensor-carpi-ulnaris": {"o":["Lateral epicondyle and posterior border of the ulna","اللقيمة الوحشية والحافة الخلفية للزند"],"i":["Base of the 5th metacarpal","قاعدة المشط الخامس"],"a":["Extends and adducts the wrist","يبسط الرسغ ويقرّبه"],"n":["Posterior interosseous nerve (C7–C8)","العصب بين العظمين الخلفي (C7–C8)"]},
- "anconeus": {"o":["Lateral epicondyle of the humerus","اللقيمة الوحشية للعضد"],"i":["Lateral olecranon and upper posterior ulna","الوجه الوحشي للزُّج والجزء العلوي الخلفي للزند"],"a":["Assists elbow extension; stabilises the elbow","يساعد ببسط المرفق ويثبّته"],"n":["Radial nerve (C7–C8)","العصب الكعبري (C7–C8)"]},
- "supinator": {"o":["Lateral epicondyle, radial collateral and annular ligaments, supinator crest of ulna","اللقيمة الوحشية، والرباطان الجانبي الكعبري والحلقي، وعرف الباطحة للزند"],"i":["Lateral, posterior and anterior surfaces of the proximal third of the radius","الأوجه الوحشي والخلفي والأمامي للثلث العلوي للكعبرة"],"a":["Supinates the forearm","يبطح الساعد"],"n":["Deep branch of radial nerve (C6–C7)","الفرع العميق للعصب الكعبري (C6–C7)"]},
- "abductor-pollicis-longus": {"o":["Posterior surfaces of the ulna, radius and interosseous membrane","الأوجه الخلفية للزند والكعبرة والغشاء بين العظمين"],"i":["Base of the 1st metacarpal","قاعدة المشط الأول"],"a":["Abducts the thumb and extends it at the carpometacarpal joint","يبعد الإبهام ويبسطه عند المفصل الرسغي المشطي"],"n":["Posterior interosseous nerve (C7–C8)","العصب بين العظمين الخلفي (C7–C8)"]},
- "extensor-pollicis-brevis": {"o":["Posterior surface of the radius and interosseous membrane","الوجه الخلفي للكعبرة والغشاء بين العظمين"],"i":["Base of the proximal phalanx of the thumb","قاعدة السلامى الدانية للإبهام"],"a":["Extends the thumb at the MCP joint","يبسط الإبهام عند المفصل المشطي السلامي"],"n":["Posterior interosseous nerve (C7–C8)","العصب بين العظمين الخلفي (C7–C8)"]},
- "extensor-pollicis-longus": {"o":["Middle third of the posterior ulna and interosseous membrane","الثلث الأوسط للوجه الخلفي للزند والغشاء بين العظمين"],"i":["Base of the distal phalanx of the thumb","قاعدة السلامى القاصية للإبهام"],"a":["Extends the thumb (IP and MCP joints)","يبسط الإبهام (المفصلين بين السلامي والمشطي السلامي)"],"n":["Posterior interosseous nerve (C7–C8)","العصب بين العظمين الخلفي (C7–C8)"]},
- "extensor-indicis": {"o":["Posterior surface of the distal ulna and interosseous membrane","الوجه الخلفي لنهاية الزند والغشاء بين العظمين"],"i":["Extensor expansion of the index finger","الامتداد الباسط للسبابة"],"a":["Extends the index finger","يبسط السبابة"],"n":["Posterior interosseous nerve (C7–C8)","العصب بين العظمين الخلفي (C7–C8)"]},
-
- "abductor-pollicis-brevis": {"o":["Flexor retinaculum, tubercles of scaphoid and trapezium","القيد المثني، وحديبتا الزورقي والمربع المنحرف"],"i":["Lateral base of the proximal phalanx of the thumb","الجهة الوحشية لقاعدة السلامى الدانية للإبهام"],"a":["Abducts the thumb","يبعد الإبهام"],"n":["Recurrent branch of median nerve (C8–T1)","الفرع الراجع للعصب المتوسط (C8–T1)"]},
- "flexor-pollicis-brevis": {"o":["Flexor retinaculum and tubercle of trapezium","القيد المثني وحديبة المربع المنحرف"],"i":["Lateral base of the proximal phalanx of the thumb","الجهة الوحشية لقاعدة السلامى الدانية للإبهام"],"a":["Flexes the thumb at the MCP joint","يثني الإبهام عند المفصل المشطي السلامي"],"n":["Recurrent branch of median nerve (C8–T1)","الفرع الراجع للعصب المتوسط (C8–T1)"]},
- "opponens-pollicis": {"o":["Flexor retinaculum and tubercle of trapezium","القيد المثني وحديبة المربع المنحرف"],"i":["Lateral border of the 1st metacarpal","الحافة الوحشية للمشط الأول"],"a":["Opposes the thumb","يقابل الإبهام"],"n":["Recurrent branch of median nerve (C8–T1)","الفرع الراجع للعصب المتوسط (C8–T1)"]},
- "adductor-pollicis": {"o":["Oblique head: bases of 2nd–3rd metacarpals and capitate; transverse head: anterior 3rd metacarpal","الرأس المائل: قاعدتا المشطين ٢–٣ والكبير؛ الرأس المستعرض: الوجه الأمامي للمشط الثالث"],"i":["Medial base of the proximal phalanx of the thumb","الجهة الإنسية لقاعدة السلامى الدانية للإبهام"],"a":["Adducts the thumb","يقرّب الإبهام"],"n":["Deep branch of ulnar nerve (C8–T1)","الفرع العميق للعصب الزندي (C8–T1)"]},
- "abductor-digiti-minimi": {"o":["Pisiform","العظم الحمّصي"],"i":["Medial base of the proximal phalanx of the little finger","الجهة الإنسية لقاعدة السلامى الدانية للخنصر"],"a":["Abducts the little finger","يبعد الخنصر"],"n":["Deep branch of ulnar nerve (C8–T1)","الفرع العميق للعصب الزندي (C8–T1)"]},
- "flexor-digiti-minimi-brevis": {"o":["Hook of hamate and flexor retinaculum","خطّاف الكلّابي والقيد المثني"],"i":["Medial base of the proximal phalanx of the little finger","الجهة الإنسية لقاعدة السلامى الدانية للخنصر"],"a":["Flexes the little finger at the MCP joint","يثني الخنصر عند المفصل المشطي السلامي"],"n":["Deep branch of ulnar nerve (C8–T1)","الفرع العميق للعصب الزندي (C8–T1)"]},
- "opponens-digiti-minimi": {"o":["Hook of hamate and flexor retinaculum","خطّاف الكلّابي والقيد المثني"],"i":["Medial border of the 5th metacarpal","الحافة الإنسية للمشط الخامس"],"a":["Draws the 5th metacarpal forward (opposition)","يسحب المشط الخامس للأمام (المقابلة)"],"n":["Deep branch of ulnar nerve (C8–T1)","الفرع العميق للعصب الزندي (C8–T1)"]},
- "lumbricals": {"o":["Tendons of flexor digitorum profundus","أوتار المثنية العميقة للأصابع"],"i":["Lateral sides of the extensor expansions of digits 2–5","الجوانب الوحشية للامتدادات الباسطة للأصابع ٢–٥"],"a":["Flex the MCP joints and extend the interphalangeal joints","تثني المفاصل المشطية السلامية وتبسط المفاصل بين السلامية"],"n":["1st–2nd: median nerve; 3rd–4th: deep branch of ulnar (C8–T1)","الأولى والثانية: العصب المتوسط؛ الثالثة والرابعة: الفرع العميق للزندي (C8–T1)"]},
- "palmar-interossei": {"o":["Palmar surfaces of the 2nd, 4th and 5th metacarpals","الأوجه الراحية للأمشاط ٢ و٤ و٥"],"i":["Extensor expansions and proximal phalanges of digits 2, 4, 5","الامتدادات الباسطة والسلاميات الدانية للأصابع ٢ و٤ و٥"],"a":["Adduct the fingers (PAD)","تقرّب الأصابع (PAD)"],"n":["Deep branch of ulnar nerve (C8–T1)","الفرع العميق للعصب الزندي (C8–T1)"]},
- "dorsal-interossei": {"o":["Adjacent sides of metacarpals 1–5","الجوانب المتقابلة للأمشاط ١–٥"],"i":["Bases of proximal phalanges and extensor expansions of digits 2–4","قواعد السلاميات الدانية والامتدادات الباسطة للأصابع ٢–٤"],"a":["Abduct the fingers (DAB)","تبعد الأصابع (DAB)"],"n":["Deep branch of ulnar nerve (C8–T1)","الفرع العميق للعصب الزندي (C8–T1)"]},
-
- "humerus": {"t":["Long bone of the arm","عظم طويل في العضد"],"j":["Scapula (shoulder joint); radius and ulna (elbow joint)","لوح الكتف (مفصل الكتف)؛ الكعبرة والزند (مفصل المرفق)"]},
- "radius": {"t":["Lateral bone of the forearm (thumb side)","العظم الوحشي للساعد (جهة الإبهام)"],"j":["Humerus (elbow); ulna (radioulnar joints); scaphoid and lunate (wrist)","العضد (المرفق)؛ الزند (المفصلان الكعبريان الزنديان)؛ الزورقي والهلالي (الرسغ)"]},
- "ulna": {"t":["Medial bone of the forearm (little-finger side)","العظم الإنسي للساعد (جهة الخنصر)"],"j":["Humerus (elbow); radius (radioulnar joints)","العضد (المرفق)؛ الكعبرة (المفصلان الكعبريان الزنديان)"]},
- "interosseous-membrane": {"t":["Fibrous sheet joining the radius and ulna","صفيحة ليفية تربط الكعبرة بالزند"],"j":["Gives origin to deep forearm muscles","منشأ لعضلات الساعد العميقة"]}
+ "biceps-brachii-short-head": {
+  "o": [
+   "Tip of the coracoid process of the scapula",
+   "قمة الناتئ الغرابي للوح الكتف"
+  ],
+  "i": [
+   "Radial tuberosity and bicipital aponeurosis",
+   "الحدبة الكعبرية والسفاق ذو الرأسين"
+  ],
+  "a": [
+   "Flexes the elbow, supinates the forearm, assists shoulder flexion",
+   "يثني المرفق، ويبطح الساعد، ويساعد بثني الكتف"
+  ],
+  "n": [
+   "Musculocutaneous nerve (C5–C6)",
+   "العصب العضلي الجلدي (C5–C6)"
+  ]
+ },
+ "biceps-brachii-long-head": {
+  "o": [
+   "Supraglenoid tubercle of the scapula",
+   "الحديبة فوق الحقّانية للوح الكتف"
+  ],
+  "i": [
+   "Radial tuberosity and bicipital aponeurosis",
+   "الحدبة الكعبرية والسفاق ذو الرأسين"
+  ],
+  "a": [
+   "Flexes the elbow, supinates the forearm",
+   "يثني المرفق ويبطح الساعد"
+  ],
+  "n": [
+   "Musculocutaneous nerve (C5–C6)",
+   "العصب العضلي الجلدي (C5–C6)"
+  ]
+ },
+ "brachialis": {
+  "o": [
+   "Distal half of the anterior surface of the humerus",
+   "النصف السفلي للوجه الأمامي لعظم العضد"
+  ],
+  "i": [
+   "Coronoid process and tuberosity of the ulna",
+   "الناتئ الإكليلي وحدبة الزند"
+  ],
+  "a": [
+   "Main flexor of the elbow",
+   "المثني الرئيسي للمرفق"
+  ],
+  "n": [
+   "Musculocutaneous nerve (C5–C6)",
+   "العصب العضلي الجلدي (C5–C6)"
+  ]
+ },
+ "coracobrachialis": {
+  "o": [
+   "Tip of the coracoid process of the scapula",
+   "قمة الناتئ الغرابي للوح الكتف"
+  ],
+  "i": [
+   "Middle third of the medial surface of the humerus",
+   "الثلث الأوسط للوجه الإنسي لعظم العضد"
+  ],
+  "a": [
+   "Flexes and adducts the arm",
+   "يثني العضد ويقرّبه"
+  ],
+  "n": [
+   "Musculocutaneous nerve (C5–C7)",
+   "العصب العضلي الجلدي (C5–C7)"
+  ]
+ },
+ "triceps-brachii-long-head": {
+  "o": [
+   "Infraglenoid tubercle of the scapula",
+   "الحديبة تحت الحقّانية للوح الكتف"
+  ],
+  "i": [
+   "Olecranon of the ulna",
+   "الناتئ الزُّجّي للزند"
+  ],
+  "a": [
+   "Extends the elbow; also extends and adducts the arm",
+   "يبسط المرفق، ويبسط العضد ويقرّبه"
+  ],
+  "n": [
+   "Radial nerve (C6–C8)",
+   "العصب الكعبري (C6–C8)"
+  ]
+ },
+ "triceps-brachii-lateral-head": {
+  "o": [
+   "Posterior humerus, above the radial groove",
+   "الوجه الخلفي للعضد فوق الميزاب الكعبري"
+  ],
+  "i": [
+   "Olecranon of the ulna",
+   "الناتئ الزُّجّي للزند"
+  ],
+  "a": [
+   "Extends the elbow",
+   "يبسط المرفق"
+  ],
+  "n": [
+   "Radial nerve (C6–C8)",
+   "العصب الكعبري (C6–C8)"
+  ]
+ },
+ "triceps-brachii-medial-head": {
+  "o": [
+   "Posterior humerus, below the radial groove",
+   "الوجه الخلفي للعضد تحت الميزاب الكعبري"
+  ],
+  "i": [
+   "Olecranon of the ulna",
+   "الناتئ الزُّجّي للزند"
+  ],
+  "a": [
+   "Extends the elbow",
+   "يبسط المرفق"
+  ],
+  "n": [
+   "Radial nerve (C6–C8)",
+   "العصب الكعبري (C6–C8)"
+  ]
+ },
+ "pronator-teres": {
+  "o": [
+   "Medial epicondyle of the humerus and coronoid process of the ulna",
+   "اللقيمة الإنسية للعضد والناتئ الإكليلي للزند"
+  ],
+  "i": [
+   "Middle of the lateral surface of the radius",
+   "منتصف الوجه الوحشي للكعبرة"
+  ],
+  "a": [
+   "Pronates the forearm; assists elbow flexion",
+   "يكبّ الساعد ويساعد بثني المرفق"
+  ],
+  "n": [
+   "Median nerve (C6–C7)",
+   "العصب المتوسط (C6–C7)"
+  ]
+ },
+ "flexor-carpi-radialis": {
+  "o": [
+   "Medial epicondyle of the humerus (common flexor origin)",
+   "اللقيمة الإنسية للعضد (المنشأ المشترك للمثنيات)"
+  ],
+  "i": [
+   "Base of the 2nd metacarpal",
+   "قاعدة عظم المشط الثاني"
+  ],
+  "a": [
+   "Flexes and abducts the wrist",
+   "يثني الرسغ ويبعده"
+  ],
+  "n": [
+   "Median nerve (C6–C7)",
+   "العصب المتوسط (C6–C7)"
+  ]
+ },
+ "palmaris-longus": {
+  "o": [
+   "Medial epicondyle of the humerus",
+   "اللقيمة الإنسية للعضد"
+  ],
+  "i": [
+   "Flexor retinaculum and palmar aponeurosis",
+   "القيد المثني والسفاق الراحي"
+  ],
+  "a": [
+   "Flexes the wrist; tenses the palmar aponeurosis",
+   "يثني الرسغ ويشدّ السفاق الراحي"
+  ],
+  "n": [
+   "Median nerve (C7–C8)",
+   "العصب المتوسط (C7–C8)"
+  ]
+ },
+ "flexor-carpi-ulnaris": {
+  "o": [
+   "Medial epicondyle (humeral head); olecranon and posterior border of ulna (ulnar head)",
+   "اللقيمة الإنسية (الرأس العضدي)؛ والزُّج والحافة الخلفية للزند (الرأس الزندي)"
+  ],
+  "i": [
+   "Pisiform, hook of hamate and base of 5th metacarpal",
+   "العظم الحمّصي وخطّاف الكلّابي وقاعدة المشط الخامس"
+  ],
+  "a": [
+   "Flexes and adducts the wrist",
+   "يثني الرسغ ويقرّبه"
+  ],
+  "n": [
+   "Ulnar nerve (C7–T1)",
+   "العصب الزندي (C7–T1)"
+  ]
+ },
+ "flexor-digitorum-superficialis": {
+  "o": [
+   "Medial epicondyle, coronoid process of ulna and anterior radius",
+   "اللقيمة الإنسية، والناتئ الإكليلي للزند، والوجه الأمامي للكعبرة"
+  ],
+  "i": [
+   "Sides of the middle phalanges of digits 2–5",
+   "جانبا السلاميات الوسطى للأصابع ٢–٥"
+  ],
+  "a": [
+   "Flexes the proximal interphalangeal joints (and MCP joints, wrist)",
+   "يثني المفاصل بين السلامية الدانية (والمفاصل المشطية السلامية والرسغ)"
+  ],
+  "n": [
+   "Median nerve (C8–T1)",
+   "العصب المتوسط (C8–T1)"
+  ]
+ },
+ "flexor-digitorum-profundus": {
+  "o": [
+   "Anterior and medial ulna and interosseous membrane",
+   "الوجهان الأمامي والإنسي للزند والغشاء بين العظمين"
+  ],
+  "i": [
+   "Bases of the distal phalanges of digits 2–5",
+   "قواعد السلاميات القاصية للأصابع ٢–٥"
+  ],
+  "a": [
+   "Flexes the distal interphalangeal joints (and the fingers, wrist)",
+   "يثني المفاصل بين السلامية القاصية (والأصابع والرسغ)"
+  ],
+  "n": [
+   "Medial part: ulnar nerve; lateral part: anterior interosseous nerve (median) (C8–T1)",
+   "الجزء الإنسي: العصب الزندي؛ الجزء الوحشي: العصب بين العظمين الأمامي (من المتوسط) (C8–T1)"
+  ]
+ },
+ "flexor-pollicis-longus": {
+  "o": [
+   "Anterior surface of the radius and interosseous membrane",
+   "الوجه الأمامي للكعبرة والغشاء بين العظمين"
+  ],
+  "i": [
+   "Base of the distal phalanx of the thumb",
+   "قاعدة السلامى القاصية للإبهام"
+  ],
+  "a": [
+   "Flexes the thumb",
+   "يثني الإبهام"
+  ],
+  "n": [
+   "Anterior interosseous nerve, from median (C8–T1)",
+   "العصب بين العظمين الأمامي، من المتوسط (C8–T1)"
+  ]
+ },
+ "pronator-quadratus": {
+  "o": [
+   "Distal quarter of the anterior ulna",
+   "الربع السفلي للوجه الأمامي للزند"
+  ],
+  "i": [
+   "Distal quarter of the anterior radius",
+   "الربع السفلي للوجه الأمامي للكعبرة"
+  ],
+  "a": [
+   "Pronates the forearm (main pronator)",
+   "يكبّ الساعد (الكابّ الرئيسي)"
+  ],
+  "n": [
+   "Anterior interosseous nerve, from median (C8–T1)",
+   "العصب بين العظمين الأمامي، من المتوسط (C8–T1)"
+  ]
+ },
+ "brachioradialis": {
+  "o": [
+   "Proximal two-thirds of the lateral supracondylar ridge of humerus",
+   "الثلثان العلويان للحرف فوق اللقمي الوحشي للعضد"
+  ],
+  "i": [
+   "Lateral surface of the distal radius, above the styloid",
+   "الوجه الوحشي لنهاية الكعبرة فوق الناتئ الإبري"
+  ],
+  "a": [
+   "Flexes the elbow, strongest in mid-pronation",
+   "يثني المرفق، وأقوى ما يكون والساعد بوضع وسطي"
+  ],
+  "n": [
+   "Radial nerve (C5–C6)",
+   "العصب الكعبري (C5–C6)"
+  ]
+ },
+ "extensor-carpi-radialis-longus": {
+  "o": [
+   "Lateral supracondylar ridge of the humerus",
+   "الحرف فوق اللقمي الوحشي للعضد"
+  ],
+  "i": [
+   "Dorsal base of the 2nd metacarpal",
+   "الوجه الظهري لقاعدة المشط الثاني"
+  ],
+  "a": [
+   "Extends and abducts the wrist",
+   "يبسط الرسغ ويبعده"
+  ],
+  "n": [
+   "Radial nerve (C6–C7)",
+   "العصب الكعبري (C6–C7)"
+  ]
+ },
+ "extensor-carpi-radialis-brevis": {
+  "o": [
+   "Lateral epicondyle of the humerus (common extensor origin)",
+   "اللقيمة الوحشية للعضد (المنشأ المشترك للباسطات)"
+  ],
+  "i": [
+   "Dorsal base of the 3rd metacarpal",
+   "الوجه الظهري لقاعدة المشط الثالث"
+  ],
+  "a": [
+   "Extends and abducts the wrist",
+   "يبسط الرسغ ويبعده"
+  ],
+  "n": [
+   "Deep branch of radial nerve (C7–C8)",
+   "الفرع العميق للعصب الكعبري (C7–C8)"
+  ]
+ },
+ "extensor-digitorum": {
+  "o": [
+   "Lateral epicondyle of the humerus",
+   "اللقيمة الوحشية للعضد"
+  ],
+  "i": [
+   "Extensor expansions of digits 2–5",
+   "الامتدادات الباسطة للأصابع ٢–٥"
+  ],
+  "a": [
+   "Extends the fingers (2–5) and the wrist",
+   "يبسط الأصابع (٢–٥) والرسغ"
+  ],
+  "n": [
+   "Posterior interosseous nerve, from radial (C7–C8)",
+   "العصب بين العظمين الخلفي، من الكعبري (C7–C8)"
+  ]
+ },
+ "extensor-digiti-minimi": {
+  "o": [
+   "Lateral epicondyle of the humerus",
+   "اللقيمة الوحشية للعضد"
+  ],
+  "i": [
+   "Extensor expansion of the little finger",
+   "الامتداد الباسط للخنصر"
+  ],
+  "a": [
+   "Extends the little finger",
+   "يبسط الخنصر"
+  ],
+  "n": [
+   "Posterior interosseous nerve (C7–C8)",
+   "العصب بين العظمين الخلفي (C7–C8)"
+  ]
+ },
+ "extensor-carpi-ulnaris": {
+  "o": [
+   "Lateral epicondyle and posterior border of the ulna",
+   "اللقيمة الوحشية والحافة الخلفية للزند"
+  ],
+  "i": [
+   "Base of the 5th metacarpal",
+   "قاعدة المشط الخامس"
+  ],
+  "a": [
+   "Extends and adducts the wrist",
+   "يبسط الرسغ ويقرّبه"
+  ],
+  "n": [
+   "Posterior interosseous nerve (C7–C8)",
+   "العصب بين العظمين الخلفي (C7–C8)"
+  ]
+ },
+ "anconeus": {
+  "o": [
+   "Lateral epicondyle of the humerus",
+   "اللقيمة الوحشية للعضد"
+  ],
+  "i": [
+   "Lateral olecranon and upper posterior ulna",
+   "الوجه الوحشي للزُّج والجزء العلوي الخلفي للزند"
+  ],
+  "a": [
+   "Assists elbow extension; stabilises the elbow",
+   "يساعد ببسط المرفق ويثبّته"
+  ],
+  "n": [
+   "Radial nerve (C7–C8)",
+   "العصب الكعبري (C7–C8)"
+  ]
+ },
+ "supinator": {
+  "o": [
+   "Lateral epicondyle, radial collateral and annular ligaments, supinator crest of ulna",
+   "اللقيمة الوحشية، والرباطان الجانبي الكعبري والحلقي، وعرف الباطحة للزند"
+  ],
+  "i": [
+   "Lateral, posterior and anterior surfaces of the proximal third of the radius",
+   "الأوجه الوحشي والخلفي والأمامي للثلث العلوي للكعبرة"
+  ],
+  "a": [
+   "Supinates the forearm",
+   "يبطح الساعد"
+  ],
+  "n": [
+   "Deep branch of radial nerve (C6–C7)",
+   "الفرع العميق للعصب الكعبري (C6–C7)"
+  ]
+ },
+ "abductor-pollicis-longus": {
+  "o": [
+   "Posterior surfaces of the ulna, radius and interosseous membrane",
+   "الأوجه الخلفية للزند والكعبرة والغشاء بين العظمين"
+  ],
+  "i": [
+   "Base of the 1st metacarpal",
+   "قاعدة المشط الأول"
+  ],
+  "a": [
+   "Abducts the thumb and extends it at the carpometacarpal joint",
+   "يبعد الإبهام ويبسطه عند المفصل الرسغي المشطي"
+  ],
+  "n": [
+   "Posterior interosseous nerve (C7–C8)",
+   "العصب بين العظمين الخلفي (C7–C8)"
+  ]
+ },
+ "extensor-pollicis-brevis": {
+  "o": [
+   "Posterior surface of the radius and interosseous membrane",
+   "الوجه الخلفي للكعبرة والغشاء بين العظمين"
+  ],
+  "i": [
+   "Base of the proximal phalanx of the thumb",
+   "قاعدة السلامى الدانية للإبهام"
+  ],
+  "a": [
+   "Extends the thumb at the MCP joint",
+   "يبسط الإبهام عند المفصل المشطي السلامي"
+  ],
+  "n": [
+   "Posterior interosseous nerve (C7–C8)",
+   "العصب بين العظمين الخلفي (C7–C8)"
+  ]
+ },
+ "extensor-pollicis-longus": {
+  "o": [
+   "Middle third of the posterior ulna and interosseous membrane",
+   "الثلث الأوسط للوجه الخلفي للزند والغشاء بين العظمين"
+  ],
+  "i": [
+   "Base of the distal phalanx of the thumb",
+   "قاعدة السلامى القاصية للإبهام"
+  ],
+  "a": [
+   "Extends the thumb (IP and MCP joints)",
+   "يبسط الإبهام (المفصلين بين السلامي والمشطي السلامي)"
+  ],
+  "n": [
+   "Posterior interosseous nerve (C7–C8)",
+   "العصب بين العظمين الخلفي (C7–C8)"
+  ]
+ },
+ "extensor-indicis": {
+  "o": [
+   "Posterior surface of the distal ulna and interosseous membrane",
+   "الوجه الخلفي لنهاية الزند والغشاء بين العظمين"
+  ],
+  "i": [
+   "Extensor expansion of the index finger",
+   "الامتداد الباسط للسبابة"
+  ],
+  "a": [
+   "Extends the index finger",
+   "يبسط السبابة"
+  ],
+  "n": [
+   "Posterior interosseous nerve (C7–C8)",
+   "العصب بين العظمين الخلفي (C7–C8)"
+  ]
+ },
+ "abductor-pollicis-brevis": {
+  "o": [
+   "Flexor retinaculum, tubercles of scaphoid and trapezium",
+   "القيد المثني، وحديبتا الزورقي والمربع المنحرف"
+  ],
+  "i": [
+   "Lateral base of the proximal phalanx of the thumb",
+   "الجهة الوحشية لقاعدة السلامى الدانية للإبهام"
+  ],
+  "a": [
+   "Abducts the thumb",
+   "يبعد الإبهام"
+  ],
+  "n": [
+   "Recurrent branch of median nerve (C8–T1)",
+   "الفرع الراجع للعصب المتوسط (C8–T1)"
+  ]
+ },
+ "flexor-pollicis-brevis": {
+  "o": [
+   "Flexor retinaculum and tubercle of trapezium",
+   "القيد المثني وحديبة المربع المنحرف"
+  ],
+  "i": [
+   "Lateral base of the proximal phalanx of the thumb",
+   "الجهة الوحشية لقاعدة السلامى الدانية للإبهام"
+  ],
+  "a": [
+   "Flexes the thumb at the MCP joint",
+   "يثني الإبهام عند المفصل المشطي السلامي"
+  ],
+  "n": [
+   "Recurrent branch of median nerve (C8–T1)",
+   "الفرع الراجع للعصب المتوسط (C8–T1)"
+  ]
+ },
+ "opponens-pollicis": {
+  "o": [
+   "Flexor retinaculum and tubercle of trapezium",
+   "القيد المثني وحديبة المربع المنحرف"
+  ],
+  "i": [
+   "Lateral border of the 1st metacarpal",
+   "الحافة الوحشية للمشط الأول"
+  ],
+  "a": [
+   "Opposes the thumb",
+   "يقابل الإبهام"
+  ],
+  "n": [
+   "Recurrent branch of median nerve (C8–T1)",
+   "الفرع الراجع للعصب المتوسط (C8–T1)"
+  ]
+ },
+ "adductor-pollicis": {
+  "o": [
+   "Oblique head: bases of 2nd–3rd metacarpals and capitate; transverse head: anterior 3rd metacarpal",
+   "الرأس المائل: قاعدتا المشطين ٢–٣ والكبير؛ الرأس المستعرض: الوجه الأمامي للمشط الثالث"
+  ],
+  "i": [
+   "Medial base of the proximal phalanx of the thumb",
+   "الجهة الإنسية لقاعدة السلامى الدانية للإبهام"
+  ],
+  "a": [
+   "Adducts the thumb",
+   "يقرّب الإبهام"
+  ],
+  "n": [
+   "Deep branch of ulnar nerve (C8–T1)",
+   "الفرع العميق للعصب الزندي (C8–T1)"
+  ]
+ },
+ "abductor-digiti-minimi": {
+  "o": [
+   "Pisiform",
+   "العظم الحمّصي"
+  ],
+  "i": [
+   "Medial base of the proximal phalanx of the little finger",
+   "الجهة الإنسية لقاعدة السلامى الدانية للخنصر"
+  ],
+  "a": [
+   "Abducts the little finger",
+   "يبعد الخنصر"
+  ],
+  "n": [
+   "Deep branch of ulnar nerve (C8–T1)",
+   "الفرع العميق للعصب الزندي (C8–T1)"
+  ]
+ },
+ "flexor-digiti-minimi-brevis": {
+  "o": [
+   "Hook of hamate and flexor retinaculum",
+   "خطّاف الكلّابي والقيد المثني"
+  ],
+  "i": [
+   "Medial base of the proximal phalanx of the little finger",
+   "الجهة الإنسية لقاعدة السلامى الدانية للخنصر"
+  ],
+  "a": [
+   "Flexes the little finger at the MCP joint",
+   "يثني الخنصر عند المفصل المشطي السلامي"
+  ],
+  "n": [
+   "Deep branch of ulnar nerve (C8–T1)",
+   "الفرع العميق للعصب الزندي (C8–T1)"
+  ]
+ },
+ "opponens-digiti-minimi": {
+  "o": [
+   "Hook of hamate and flexor retinaculum",
+   "خطّاف الكلّابي والقيد المثني"
+  ],
+  "i": [
+   "Medial border of the 5th metacarpal",
+   "الحافة الإنسية للمشط الخامس"
+  ],
+  "a": [
+   "Draws the 5th metacarpal forward (opposition)",
+   "يسحب المشط الخامس للأمام (المقابلة)"
+  ],
+  "n": [
+   "Deep branch of ulnar nerve (C8–T1)",
+   "الفرع العميق للعصب الزندي (C8–T1)"
+  ]
+ },
+ "lumbricals": {
+  "o": [
+   "Tendons of flexor digitorum profundus",
+   "أوتار المثنية العميقة للأصابع"
+  ],
+  "i": [
+   "Lateral sides of the extensor expansions of digits 2–5",
+   "الجوانب الوحشية للامتدادات الباسطة للأصابع ٢–٥"
+  ],
+  "a": [
+   "Flex the MCP joints and extend the interphalangeal joints",
+   "تثني المفاصل المشطية السلامية وتبسط المفاصل بين السلامية"
+  ],
+  "n": [
+   "1st–2nd: median nerve; 3rd–4th: deep branch of ulnar (C8–T1)",
+   "الأولى والثانية: العصب المتوسط؛ الثالثة والرابعة: الفرع العميق للزندي (C8–T1)"
+  ]
+ },
+ "palmar-interossei": {
+  "o": [
+   "Palmar surfaces of the 2nd, 4th and 5th metacarpals",
+   "الأوجه الراحية للأمشاط ٢ و٤ و٥"
+  ],
+  "i": [
+   "Extensor expansions and proximal phalanges of digits 2, 4, 5",
+   "الامتدادات الباسطة والسلاميات الدانية للأصابع ٢ و٤ و٥"
+  ],
+  "a": [
+   "Adduct the fingers (PAD)",
+   "تقرّب الأصابع (PAD)"
+  ],
+  "n": [
+   "Deep branch of ulnar nerve (C8–T1)",
+   "الفرع العميق للعصب الزندي (C8–T1)"
+  ]
+ },
+ "dorsal-interossei": {
+  "o": [
+   "Adjacent sides of metacarpals 1–5",
+   "الجوانب المتقابلة للأمشاط ١–٥"
+  ],
+  "i": [
+   "Bases of proximal phalanges and extensor expansions of digits 2–4",
+   "قواعد السلاميات الدانية والامتدادات الباسطة للأصابع ٢–٤"
+  ],
+  "a": [
+   "Abduct the fingers (DAB)",
+   "تبعد الأصابع (DAB)"
+  ],
+  "n": [
+   "Deep branch of ulnar nerve (C8–T1)",
+   "الفرع العميق للعصب الزندي (C8–T1)"
+  ]
+ },
+ "humerus": {
+  "t": [
+   "Long bone of the arm",
+   "عظم طويل في العضد"
+  ],
+  "j": [
+   "Scapula (shoulder joint); radius and ulna (elbow joint)",
+   "لوح الكتف (مفصل الكتف)؛ الكعبرة والزند (مفصل المرفق)"
+  ]
+ },
+ "radius": {
+  "t": [
+   "Lateral bone of the forearm (thumb side)",
+   "العظم الوحشي للساعد (جهة الإبهام)"
+  ],
+  "j": [
+   "Humerus (elbow); ulna (radioulnar joints); scaphoid and lunate (wrist)",
+   "العضد (المرفق)؛ الزند (المفصلان الكعبريان الزنديان)؛ الزورقي والهلالي (الرسغ)"
+  ]
+ },
+ "ulna": {
+  "t": [
+   "Medial bone of the forearm (little-finger side)",
+   "العظم الإنسي للساعد (جهة الخنصر)"
+  ],
+  "j": [
+   "Humerus (elbow); radius (radioulnar joints)",
+   "العضد (المرفق)؛ الكعبرة (المفصلان الكعبريان الزنديان)"
+  ]
+ },
+ "interosseous-membrane": {
+  "t": [
+   "Fibrous sheet joining the radius and ulna",
+   "صفيحة ليفية تربط الكعبرة بالزند"
+  ],
+  "j": [
+   "Gives origin to deep forearm muscles",
+   "منشأ لعضلات الساعد العميقة"
+  ]
+ },
+ "gluteus-maximus": {
+  "o": [
+   "Posterior ilium, dorsal sacrum and coccyx, sacrotuberous ligament",
+   "الوجه الخلفي للحرقفة، والوجه الظهري للعجز والعصعص، والرباط العجزي الحدبي"
+  ],
+  "i": [
+   "Iliotibial tract and gluteal tuberosity of femur",
+   "السبيل الحرقفي الظنبوبي والحدبة الألوية للفخذ"
+  ],
+  "a": [
+   "Extends and laterally rotates the hip",
+   "يبسط الورك ويدوّره للخارج"
+  ],
+  "n": [
+   "Inferior gluteal nerve (L5–S2)",
+   "العصب الألوي السفلي (L5–S2)"
+  ]
+ },
+ "tensor-fasciae-latae": {
+  "o": [
+   "Anterior superior iliac spine and iliac crest",
+   "الشوكة الحرقفية الأمامية العلوية والعرف الحرقفي"
+  ],
+  "i": [
+   "Iliotibial tract",
+   "السبيل الحرقفي الظنبوبي"
+  ],
+  "a": [
+   "Abducts and medially rotates the hip; stabilises the knee",
+   "يبعد الورك ويدوّره للداخل؛ ويثبّت الركبة"
+  ],
+  "n": [
+   "Superior gluteal nerve (L4–S1)",
+   "العصب الألوي العلوي (L4–S1)"
+  ]
+ },
+ "gluteus-medius": {
+  "o": [
+   "External surface of the ilium",
+   "الوجه الخارجي للحرقفة"
+  ],
+  "i": [
+   "Lateral surface of the greater trochanter",
+   "الوجه الوحشي للمدوَّر الكبير"
+  ],
+  "a": [
+   "Abducts and medially rotates the hip; keeps the pelvis level when walking",
+   "يبعد الورك ويدوّره للداخل؛ ويحفظ استواء الحوض أثناء المشي"
+  ],
+  "n": [
+   "Superior gluteal nerve (L4–S1)",
+   "العصب الألوي العلوي (L4–S1)"
+  ]
+ },
+ "gluteus-minimus": {
+  "o": [
+   "External surface of the ilium (below gluteus medius)",
+   "الوجه الخارجي للحرقفة (تحت الألوية الوسطى)"
+  ],
+  "i": [
+   "Anterior surface of the greater trochanter",
+   "الوجه الأمامي للمدوَّر الكبير"
+  ],
+  "a": [
+   "Abducts and medially rotates the hip",
+   "يبعد الورك ويدوّره للداخل"
+  ],
+  "n": [
+   "Superior gluteal nerve (L4–S1)",
+   "العصب الألوي العلوي (L4–S1)"
+  ]
+ },
+ "piriformis": {
+  "o": [
+   "Anterior surface of the sacrum",
+   "الوجه الأمامي للعجز"
+  ],
+  "i": [
+   "Superior border of the greater trochanter",
+   "الحافة العلوية للمدوَّر الكبير"
+  ],
+  "a": [
+   "Laterally rotates the extended hip; abducts the flexed hip",
+   "يدوّر الورك الممدود للخارج ويبعد الورك المثني"
+  ],
+  "n": [
+   "Nerve to piriformis (S1–S2)",
+   "العصب الكمثري (S1–S2)"
+  ]
+ },
+ "gemellus-superior": {
+  "o": [
+   "Ischial spine",
+   "الشوكة الإسكية"
+  ],
+  "i": [
+   "Greater trochanter (with obturator internus tendon)",
+   "المدوَّر الكبير (مع وتر السدّادة الباطنة)"
+  ],
+  "a": [
+   "Laterally rotates the hip",
+   "يدوّر الورك للخارج"
+  ],
+  "n": [
+   "Nerve to obturator internus (L5–S1)",
+   "عصب السدّادة الباطنة (L5–S1)"
+  ]
+ },
+ "obturator-internus": {
+  "o": [
+   "Internal surface of the obturator membrane and surrounding bone",
+   "الوجه الداخلي للغشاء السدّادي والعظم المحيط به"
+  ],
+  "i": [
+   "Medial surface of the greater trochanter",
+   "الوجه الإنسي للمدوَّر الكبير"
+  ],
+  "a": [
+   "Laterally rotates the hip",
+   "يدوّر الورك للخارج"
+  ],
+  "n": [
+   "Nerve to obturator internus (L5–S1)",
+   "عصب السدّادة الباطنة (L5–S1)"
+  ]
+ },
+ "gemellus-inferior": {
+  "o": [
+   "Ischial tuberosity",
+   "الحدبة الإسكية"
+  ],
+  "i": [
+   "Greater trochanter (with obturator internus tendon)",
+   "المدوَّر الكبير (مع وتر السدّادة الباطنة)"
+  ],
+  "a": [
+   "Laterally rotates the hip",
+   "يدوّر الورك للخارج"
+  ],
+  "n": [
+   "Nerve to quadratus femoris (L4–S1)",
+   "عصب المربعة الفخذية (L4–S1)"
+  ]
+ },
+ "quadratus-femoris": {
+  "o": [
+   "Lateral border of the ischial tuberosity",
+   "الحافة الوحشية للحدبة الإسكية"
+  ],
+  "i": [
+   "Quadrate tubercle on the intertrochanteric crest",
+   "الحديبة المربعة على العرف بين المدوّرين"
+  ],
+  "a": [
+   "Laterally rotates the hip",
+   "يدوّر الورك للخارج"
+  ],
+  "n": [
+   "Nerve to quadratus femoris (L4–S1)",
+   "عصب المربعة الفخذية (L4–S1)"
+  ]
+ },
+ "iliacus": {
+  "o": [
+   "Iliac fossa",
+   "الحفرة الحرقفية"
+  ],
+  "i": [
+   "Lesser trochanter (with psoas major)",
+   "المدوَّر الصغير (مع القطنية الكبرى)"
+  ],
+  "a": [
+   "Flexes the hip",
+   "يثني الورك"
+  ],
+  "n": [
+   "Femoral nerve (L2–L3)",
+   "العصب الفخذي (L2–L3)"
+  ]
+ },
+ "psoas-major": {
+  "o": [
+   "Bodies and transverse processes of T12–L5",
+   "أجسام الفقرات T12–L5 ونواتئها المستعرضة"
+  ],
+  "i": [
+   "Lesser trochanter of the femur",
+   "المدوَّر الصغير للفخذ"
+  ],
+  "a": [
+   "Flexes the hip; flexes the trunk",
+   "يثني الورك والجذع"
+  ],
+  "n": [
+   "Anterior rami of L1–L3",
+   "الفروع الأمامية للأعصاب L1–L3"
+  ]
+ },
+ "sartorius": {
+  "o": [
+   "Anterior superior iliac spine",
+   "الشوكة الحرقفية الأمامية العلوية"
+  ],
+  "i": [
+   "Upper medial tibia (pes anserinus)",
+   "الجزء العلوي الإنسي للظنبوب (رجل الإوزة)"
+  ],
+  "a": [
+   "Flexes, abducts and laterally rotates the hip; flexes the knee",
+   "يثني الورك ويبعده ويدوّره للخارج؛ ويثني الركبة"
+  ],
+  "n": [
+   "Femoral nerve (L2–L3)",
+   "العصب الفخذي (L2–L3)"
+  ]
+ },
+ "rectus-femoris": {
+  "o": [
+   "Anterior inferior iliac spine and above the acetabulum",
+   "الشوكة الحرقفية الأمامية السفلية وفوق الحُقّ"
+  ],
+  "i": [
+   "Patella and tibial tuberosity (via patellar ligament)",
+   "الرضفة وحدبة الظنبوب (عبر الرباط الرضفي)"
+  ],
+  "a": [
+   "Extends the knee; flexes the hip",
+   "يبسط الركبة ويثني الورك"
+  ],
+  "n": [
+   "Femoral nerve (L2–L4)",
+   "العصب الفخذي (L2–L4)"
+  ]
+ },
+ "vastus-lateralis": {
+  "o": [
+   "Greater trochanter and lateral lip of linea aspera",
+   "المدوَّر الكبير والشفة الوحشية للخط الخشن"
+  ],
+  "i": [
+   "Patella and tibial tuberosity (via patellar ligament)",
+   "الرضفة وحدبة الظنبوب (عبر الرباط الرضفي)"
+  ],
+  "a": [
+   "Extends the knee",
+   "يبسط الركبة"
+  ],
+  "n": [
+   "Femoral nerve (L2–L4)",
+   "العصب الفخذي (L2–L4)"
+  ]
+ },
+ "vastus-medialis": {
+  "o": [
+   "Intertrochanteric line and medial lip of linea aspera",
+   "الخط بين المدوّرين والشفة الإنسية للخط الخشن"
+  ],
+  "i": [
+   "Patella and tibial tuberosity (via patellar ligament)",
+   "الرضفة وحدبة الظنبوب (عبر الرباط الرضفي)"
+  ],
+  "a": [
+   "Extends the knee; stabilises the patella",
+   "يبسط الركبة ويثبّت الرضفة"
+  ],
+  "n": [
+   "Femoral nerve (L2–L4)",
+   "العصب الفخذي (L2–L4)"
+  ]
+ },
+ "vastus-intermedius": {
+  "o": [
+   "Anterior and lateral surfaces of the femoral shaft",
+   "الوجهان الأمامي والوحشي لجسم الفخذ"
+  ],
+  "i": [
+   "Patella and tibial tuberosity (via patellar ligament)",
+   "الرضفة وحدبة الظنبوب (عبر الرباط الرضفي)"
+  ],
+  "a": [
+   "Extends the knee",
+   "يبسط الركبة"
+  ],
+  "n": [
+   "Femoral nerve (L2–L4)",
+   "العصب الفخذي (L2–L4)"
+  ]
+ },
+ "pectineus": {
+  "o": [
+   "Pectineal line of the pubis",
+   "الخط العاني (المشطي) للعانة"
+  ],
+  "i": [
+   "Pectineal line of the femur",
+   "الخط المشطي للفخذ"
+  ],
+  "a": [
+   "Adducts and flexes the hip",
+   "يقرّب الورك ويثنيه"
+  ],
+  "n": [
+   "Femoral nerve (± obturator) (L2–L3)",
+   "العصب الفخذي (وأحيانًا السدّادي) (L2–L3)"
+  ]
+ },
+ "adductor-longus": {
+  "o": [
+   "Body of the pubis",
+   "جسم العانة"
+  ],
+  "i": [
+   "Middle third of linea aspera",
+   "الثلث الأوسط للخط الخشن"
+  ],
+  "a": [
+   "Adducts the hip",
+   "يقرّب الورك"
+  ],
+  "n": [
+   "Obturator nerve (L2–L4)",
+   "العصب السدّادي (L2–L4)"
+  ]
+ },
+ "gracilis": {
+  "o": [
+   "Body and inferior ramus of the pubis",
+   "جسم العانة وفرعها السفلي"
+  ],
+  "i": [
+   "Upper medial tibia (pes anserinus)",
+   "الجزء العلوي الإنسي للظنبوب (رجل الإوزة)"
+  ],
+  "a": [
+   "Adducts the hip; flexes and medially rotates the knee",
+   "يقرّب الورك؛ ويثني الركبة ويدوّرها للداخل"
+  ],
+  "n": [
+   "Obturator nerve (L2–L3)",
+   "العصب السدّادي (L2–L3)"
+  ]
+ },
+ "adductor-brevis": {
+  "o": [
+   "Body and inferior ramus of the pubis",
+   "جسم العانة وفرعها السفلي"
+  ],
+  "i": [
+   "Pectineal line and upper linea aspera",
+   "الخط المشطي والجزء العلوي للخط الخشن"
+  ],
+  "a": [
+   "Adducts the hip",
+   "يقرّب الورك"
+  ],
+  "n": [
+   "Obturator nerve (L2–L4)",
+   "العصب السدّادي (L2–L4)"
+  ]
+ },
+ "adductor-magnus": {
+  "o": [
+   "Inferior pubic ramus, ischial ramus and ischial tuberosity",
+   "الفرع السفلي للعانة، وفرع الإسك، والحدبة الإسكية"
+  ],
+  "i": [
+   "Linea aspera and adductor tubercle",
+   "الخط الخشن والحديبة المقرِّبة"
+  ],
+  "a": [
+   "Adducts the hip; hamstring part extends the hip",
+   "يقرّب الورك؛ والجزء الخلفي يبسطه"
+  ],
+  "n": [
+   "Obturator nerve (adductor part) and tibial part of sciatic nerve (hamstring part) (L2–L4)",
+   "العصب السدّادي (الجزء المقرِّب) والجزء الظنبوبي للعصب الوركي (الجزء الخلفي) (L2–L4)"
+  ]
+ },
+ "obturator-externus": {
+  "o": [
+   "External surface of the obturator membrane and surrounding bone",
+   "الوجه الخارجي للغشاء السدّادي والعظم المحيط به"
+  ],
+  "i": [
+   "Trochanteric fossa of the femur",
+   "الحفرة المدوّرية للفخذ"
+  ],
+  "a": [
+   "Laterally rotates the hip",
+   "يدوّر الورك للخارج"
+  ],
+  "n": [
+   "Obturator nerve (L3–L4)",
+   "العصب السدّادي (L3–L4)"
+  ]
+ },
+ "biceps-femoris-long-head": {
+  "o": [
+   "Ischial tuberosity",
+   "الحدبة الإسكية"
+  ],
+  "i": [
+   "Head of the fibula",
+   "رأس الشظيّة"
+  ],
+  "a": [
+   "Flexes the knee and extends the hip; laterally rotates the flexed knee",
+   "يثني الركبة ويبسط الورك؛ ويدوّر الركبة المثنية للخارج"
+  ],
+  "n": [
+   "Tibial part of sciatic nerve (L5–S2)",
+   "الجزء الظنبوبي للعصب الوركي (L5–S2)"
+  ]
+ },
+ "biceps-femoris-short-head": {
+  "o": [
+   "Lateral lip of linea aspera",
+   "الشفة الوحشية للخط الخشن"
+  ],
+  "i": [
+   "Head of the fibula",
+   "رأس الشظيّة"
+  ],
+  "a": [
+   "Flexes the knee",
+   "يثني الركبة"
+  ],
+  "n": [
+   "Common fibular part of sciatic nerve (L5–S2)",
+   "الجزء الشظوي المشترك للعصب الوركي (L5–S2)"
+  ]
+ },
+ "semitendinosus": {
+  "o": [
+   "Ischial tuberosity",
+   "الحدبة الإسكية"
+  ],
+  "i": [
+   "Upper medial tibia (pes anserinus)",
+   "الجزء العلوي الإنسي للظنبوب (رجل الإوزة)"
+  ],
+  "a": [
+   "Flexes the knee and extends the hip",
+   "يثني الركبة ويبسط الورك"
+  ],
+  "n": [
+   "Tibial part of sciatic nerve (L5–S2)",
+   "الجزء الظنبوبي للعصب الوركي (L5–S2)"
+  ]
+ },
+ "semimembranosus": {
+  "o": [
+   "Ischial tuberosity",
+   "الحدبة الإسكية"
+  ],
+  "i": [
+   "Posterior medial condyle of the tibia",
+   "الوجه الخلفي للّقمة الإنسية للظنبوب"
+  ],
+  "a": [
+   "Flexes the knee and extends the hip",
+   "يثني الركبة ويبسط الورك"
+  ],
+  "n": [
+   "Tibial part of sciatic nerve (L5–S2)",
+   "الجزء الظنبوبي للعصب الوركي (L5–S2)"
+  ]
+ },
+ "tibialis-anterior": {
+  "o": [
+   "Lateral condyle and upper lateral tibia, interosseous membrane",
+   "اللقمة الوحشية والجزء العلوي الوحشي للظنبوب، والغشاء بين العظمين"
+  ],
+  "i": [
+   "Medial cuneiform and base of 1st metatarsal",
+   "الإسفيني الإنسي وقاعدة المشط الأول"
+  ],
+  "a": [
+   "Dorsiflexes and inverts the foot",
+   "يبسط القدم للأعلى (عطف ظهري) ويقلبها للداخل"
+  ],
+  "n": [
+   "Deep fibular nerve (L4–L5)",
+   "العصب الشظوي العميق (L4–L5)"
+  ]
+ },
+ "extensor-digitorum-longus": {
+  "o": [
+   "Lateral condyle of tibia, upper fibula, interosseous membrane",
+   "اللقمة الوحشية للظنبوب، وأعلى الشظيّة، والغشاء بين العظمين"
+  ],
+  "i": [
+   "Middle and distal phalanges of toes 2–5",
+   "السلاميات الوسطى والقاصية للأصابع ٢–٥"
+  ],
+  "a": [
+   "Extends toes 2–5; dorsiflexes the foot",
+   "يبسط الأصابع ٢–٥ ويعطف القدم ظهريًا"
+  ],
+  "n": [
+   "Deep fibular nerve (L5–S1)",
+   "العصب الشظوي العميق (L5–S1)"
+  ]
+ },
+ "extensor-hallucis-longus": {
+  "o": [
+   "Middle anterior fibula and interosseous membrane",
+   "الوجه الأمامي الأوسط للشظيّة والغشاء بين العظمين"
+  ],
+  "i": [
+   "Base of the distal phalanx of the big toe",
+   "قاعدة السلامى القاصية للإبهام"
+  ],
+  "a": [
+   "Extends the big toe; dorsiflexes the foot",
+   "يبسط الإبهام ويعطف القدم ظهريًا"
+  ],
+  "n": [
+   "Deep fibular nerve (L5–S1)",
+   "العصب الشظوي العميق (L5–S1)"
+  ]
+ },
+ "fibularis-tertius": {
+  "o": [
+   "Lower anterior fibula",
+   "الجزء السفلي الأمامي للشظيّة"
+  ],
+  "i": [
+   "Dorsum of the base of the 5th metatarsal",
+   "الوجه الظهري لقاعدة المشط الخامس"
+  ],
+  "a": [
+   "Dorsiflexes and everts the foot",
+   "يعطف القدم ظهريًا ويقلبها للخارج"
+  ],
+  "n": [
+   "Deep fibular nerve (L5–S1)",
+   "العصب الشظوي العميق (L5–S1)"
+  ]
+ },
+ "fibularis-longus": {
+  "o": [
+   "Head and upper lateral fibula",
+   "رأس الشظيّة والجزء العلوي الوحشي منها"
+  ],
+  "i": [
+   "Medial cuneiform and base of 1st metatarsal (plantar side)",
+   "الإسفيني الإنسي وقاعدة المشط الأول (من جهة الأخمص)"
+  ],
+  "a": [
+   "Everts and plantarflexes the foot; supports the arches",
+   "يقلب القدم للخارج ويعطفها أخمصيًا؛ ويدعم أقواس القدم"
+  ],
+  "n": [
+   "Superficial fibular nerve (L5–S2)",
+   "العصب الشظوي السطحي (L5–S2)"
+  ]
+ },
+ "fibularis-brevis": {
+  "o": [
+   "Lower lateral fibula",
+   "الجزء السفلي الوحشي للشظيّة"
+  ],
+  "i": [
+   "Tuberosity of the base of the 5th metatarsal",
+   "حدبة قاعدة المشط الخامس"
+  ],
+  "a": [
+   "Everts and plantarflexes the foot",
+   "يقلب القدم للخارج ويعطفها أخمصيًا"
+  ],
+  "n": [
+   "Superficial fibular nerve (L5–S2)",
+   "العصب الشظوي السطحي (L5–S2)"
+  ]
+ },
+ "gastrocnemius-medial-head": {
+  "o": [
+   "Above the medial condyle of the femur",
+   "فوق اللقمة الإنسية للفخذ"
+  ],
+  "i": [
+   "Calcaneus via the calcaneal (Achilles) tendon",
+   "العقب عبر الوتر العقبي (وتر أخيل)"
+  ],
+  "a": [
+   "Plantarflexes the foot; flexes the knee",
+   "يعطف القدم أخمصيًا ويثني الركبة"
+  ],
+  "n": [
+   "Tibial nerve (S1–S2)",
+   "العصب الظنبوبي (S1–S2)"
+  ]
+ },
+ "gastrocnemius-lateral-head": {
+  "o": [
+   "Lateral condyle of the femur",
+   "اللقمة الوحشية للفخذ"
+  ],
+  "i": [
+   "Calcaneus via the calcaneal (Achilles) tendon",
+   "العقب عبر الوتر العقبي (وتر أخيل)"
+  ],
+  "a": [
+   "Plantarflexes the foot; flexes the knee",
+   "يعطف القدم أخمصيًا ويثني الركبة"
+  ],
+  "n": [
+   "Tibial nerve (S1–S2)",
+   "العصب الظنبوبي (S1–S2)"
+  ]
+ },
+ "soleus": {
+  "o": [
+   "Head and upper fibula, soleal line of the tibia",
+   "رأس الشظيّة وأعلاها، والخط النعلي للظنبوب"
+  ],
+  "i": [
+   "Calcaneus via the calcaneal (Achilles) tendon",
+   "العقب عبر الوتر العقبي (وتر أخيل)"
+  ],
+  "a": [
+   "Plantarflexes the foot (key for standing posture)",
+   "يعطف القدم أخمصيًا (مهم للوقوف)"
+  ],
+  "n": [
+   "Tibial nerve (S1–S2)",
+   "العصب الظنبوبي (S1–S2)"
+  ]
+ },
+ "plantaris": {
+  "o": [
+   "Lateral supracondylar line of the femur",
+   "الخط فوق اللقمي الوحشي للفخذ"
+  ],
+  "i": [
+   "Calcaneus (with the calcaneal tendon)",
+   "العقب (مع الوتر العقبي)"
+  ],
+  "a": [
+   "Weakly assists plantarflexion and knee flexion",
+   "يساعد بشكل ضعيف بالعطف الأخمصي وثني الركبة"
+  ],
+  "n": [
+   "Tibial nerve (S1–S2)",
+   "العصب الظنبوبي (S1–S2)"
+  ]
+ },
+ "popliteus": {
+  "o": [
+   "Lateral condyle of the femur",
+   "اللقمة الوحشية للفخذ"
+  ],
+  "i": [
+   "Posterior tibia above the soleal line",
+   "الوجه الخلفي للظنبوب فوق الخط النعلي"
+  ],
+  "a": [
+   "Unlocks the extended knee (laterally rotates femur on tibia)",
+   "يفك قفل الركبة الممدودة (يدوّر الفخذ للخارج على الظنبوب)"
+  ],
+  "n": [
+   "Tibial nerve (L4–S1)",
+   "العصب الظنبوبي (L4–S1)"
+  ]
+ },
+ "tibialis-posterior": {
+  "o": [
+   "Posterior tibia, fibula and interosseous membrane",
+   "الأوجه الخلفية للظنبوب والشظيّة والغشاء بين العظمين"
+  ],
+  "i": [
+   "Navicular tuberosity, cuneiforms and bases of metatarsals 2–4",
+   "حدبة الزورقي، والإسفينيات، وقواعد الأمشاط ٢–٤"
+  ],
+  "a": [
+   "Inverts and plantarflexes the foot; supports the medial arch",
+   "يقلب القدم للداخل ويعطفها أخمصيًا؛ ويدعم القوس الإنسي"
+  ],
+  "n": [
+   "Tibial nerve (L4–L5)",
+   "العصب الظنبوبي (L4–L5)"
+  ]
+ },
+ "flexor-digitorum-longus": {
+  "o": [
+   "Posterior surface of the tibia",
+   "الوجه الخلفي للظنبوب"
+  ],
+  "i": [
+   "Bases of distal phalanges of toes 2–5",
+   "قواعد السلاميات القاصية للأصابع ٢–٥"
+  ],
+  "a": [
+   "Flexes toes 2–5; plantarflexes the foot",
+   "يثني الأصابع ٢–٥ ويعطف القدم أخمصيًا"
+  ],
+  "n": [
+   "Tibial nerve (S2–S3)",
+   "العصب الظنبوبي (S2–S3)"
+  ]
+ },
+ "flexor-hallucis-longus": {
+  "o": [
+   "Lower posterior fibula and interosseous membrane",
+   "الجزء السفلي الخلفي للشظيّة والغشاء بين العظمين"
+  ],
+  "i": [
+   "Base of the distal phalanx of the big toe",
+   "قاعدة السلامى القاصية للإبهام"
+  ],
+  "a": [
+   "Flexes the big toe; plantarflexes the foot",
+   "يثني الإبهام ويعطف القدم أخمصيًا"
+  ],
+  "n": [
+   "Tibial nerve (S2–S3)",
+   "العصب الظنبوبي (S2–S3)"
+  ]
+ },
+ "extensor-hallucis-brevis": {
+  "o": [
+   "Dorsal surface of the calcaneus",
+   "الوجه الظهري للعقب"
+  ],
+  "i": [
+   "Base of the proximal phalanx of the big toe",
+   "قاعدة السلامى الدانية للإبهام"
+  ],
+  "a": [
+   "Extends the big toe at the MTP joint",
+   "يبسط الإبهام عند المفصل المشطي السلامي"
+  ],
+  "n": [
+   "Deep fibular nerve (L5–S1)",
+   "العصب الشظوي العميق (L5–S1)"
+  ]
+ },
+ "abductor-hallucis": {
+  "o": [
+   "Medial process of the calcaneal tuberosity",
+   "الناتئ الإنسي لحدبة العقب"
+  ],
+  "i": [
+   "Medial base of the proximal phalanx of the big toe",
+   "الجهة الإنسية لقاعدة السلامى الدانية للإبهام"
+  ],
+  "a": [
+   "Abducts and flexes the big toe",
+   "يبعد الإبهام ويثنيه"
+  ],
+  "n": [
+   "Medial plantar nerve (S1–S2)",
+   "العصب الأخمصي الإنسي (S1–S2)"
+  ]
+ },
+ "flexor-digitorum-brevis": {
+  "o": [
+   "Medial process of the calcaneal tuberosity",
+   "الناتئ الإنسي لحدبة العقب"
+  ],
+  "i": [
+   "Middle phalanges of toes 2–5",
+   "السلاميات الوسطى للأصابع ٢–٥"
+  ],
+  "a": [
+   "Flexes toes 2–5",
+   "يثني الأصابع ٢–٥"
+  ],
+  "n": [
+   "Medial plantar nerve (S1–S2)",
+   "العصب الأخمصي الإنسي (S1–S2)"
+  ]
+ },
+ "abductor-digiti-minimi-foot": {
+  "o": [
+   "Calcaneal tuberosity",
+   "حدبة العقب"
+  ],
+  "i": [
+   "Lateral base of the proximal phalanx of the 5th toe",
+   "الجهة الوحشية لقاعدة السلامى الدانية للإصبع الخامس"
+  ],
+  "a": [
+   "Abducts and flexes the 5th toe",
+   "يبعد الإصبع الخامس ويثنيه"
+  ],
+  "n": [
+   "Lateral plantar nerve (S2–S3)",
+   "العصب الأخمصي الوحشي (S2–S3)"
+  ]
+ },
+ "quadratus-plantae": {
+  "o": [
+   "Medial and lateral plantar surface of the calcaneus",
+   "الوجهان الأخمصيان الإنسي والوحشي للعقب"
+  ],
+  "i": [
+   "Tendons of flexor digitorum longus",
+   "أوتار المثنية الطويلة للأصابع"
+  ],
+  "a": [
+   "Assists flexor digitorum longus to flex toes 2–5",
+   "يساعد المثنية الطويلة للأصابع بثني الأصابع ٢–٥"
+  ],
+  "n": [
+   "Lateral plantar nerve (S2–S3)",
+   "العصب الأخمصي الوحشي (S2–S3)"
+  ]
+ },
+ "lumbricals-foot": {
+  "o": [
+   "Tendons of flexor digitorum longus",
+   "أوتار المثنية الطويلة للأصابع"
+  ],
+  "i": [
+   "Medial sides of extensor expansions of toes 2–5",
+   "الجوانب الإنسية للامتدادات الباسطة للأصابع ٢–٥"
+  ],
+  "a": [
+   "Flex the MTP joints and extend the interphalangeal joints",
+   "تثني المفاصل المشطية السلامية وتبسط المفاصل بين السلامية"
+  ],
+  "n": [
+   "1st: medial plantar; 2nd–4th: lateral plantar nerve",
+   "الأولى: الأخمصي الإنسي؛ الثانية إلى الرابعة: الأخمصي الوحشي"
+  ]
+ },
+ "flexor-hallucis-brevis": {
+  "o": [
+   "Cuboid and lateral cuneiform (plantar surfaces)",
+   "النردي والإسفيني الوحشي (الأوجه الأخمصية)"
+  ],
+  "i": [
+   "Both sides of the base of the proximal phalanx of the big toe",
+   "جانبا قاعدة السلامى الدانية للإبهام"
+  ],
+  "a": [
+   "Flexes the big toe at the MTP joint",
+   "يثني الإبهام عند المفصل المشطي السلامي"
+  ],
+  "n": [
+   "Medial plantar nerve (S1–S2)",
+   "العصب الأخمصي الإنسي (S1–S2)"
+  ]
+ },
+ "adductor-hallucis": {
+  "o": [
+   "Oblique head: bases of metatarsals 2–4; transverse head: plantar ligaments of MTP joints 3–5",
+   "الرأس المائل: قواعد الأمشاط ٢–٤؛ الرأس المستعرض: الأربطة الأخمصية للمفاصل المشطية السلامية ٣–٥"
+  ],
+  "i": [
+   "Lateral base of the proximal phalanx of the big toe",
+   "الجهة الوحشية لقاعدة السلامى الدانية للإبهام"
+  ],
+  "a": [
+   "Adducts the big toe; supports the transverse arch",
+   "يقرّب الإبهام ويدعم القوس المستعرض"
+  ],
+  "n": [
+   "Lateral plantar nerve (S2–S3)",
+   "العصب الأخمصي الوحشي (S2–S3)"
+  ]
+ },
+ "flexor-digiti-minimi-brevis-foot": {
+  "o": [
+   "Base of the 5th metatarsal",
+   "قاعدة المشط الخامس"
+  ],
+  "i": [
+   "Base of the proximal phalanx of the 5th toe",
+   "قاعدة السلامى الدانية للإصبع الخامس"
+  ],
+  "a": [
+   "Flexes the 5th toe at the MTP joint",
+   "يثني الإصبع الخامس عند المفصل المشطي السلامي"
+  ],
+  "n": [
+   "Lateral plantar nerve (S2–S3)",
+   "العصب الأخمصي الوحشي (S2–S3)"
+  ]
+ },
+ "plantar-interossei-foot": {
+  "o": [
+   "Medial sides of metatarsals 3–5",
+   "الجوانب الإنسية للأمشاط ٣–٥"
+  ],
+  "i": [
+   "Medial bases of proximal phalanges of toes 3–5",
+   "الجهات الإنسية لقواعد السلاميات الدانية للأصابع ٣–٥"
+  ],
+  "a": [
+   "Adduct toes 3–5 (toward the 2nd toe)",
+   "تقرّب الأصابع ٣–٥ (نحو الإصبع الثاني)"
+  ],
+  "n": [
+   "Lateral plantar nerve (S2–S3)",
+   "العصب الأخمصي الوحشي (S2–S3)"
+  ]
+ },
+ "hip-bone": {
+  "t": [
+   "Flat bone formed by ilium, ischium and pubis",
+   "عظم مسطّح يتكوّن من الحرقفة والإسك والعانة"
+  ],
+  "j": [
+   "Sacrum (sacroiliac joint); femur (hip joint); other hip bone (pubic symphysis)",
+   "العجز (المفصل العجزي الحرقفي)؛ الفخذ (مفصل الورك)؛ عظم الورك الآخر (الارتفاق العاني)"
+  ]
+ },
+ "femur": {
+  "t": [
+   "Longest and strongest bone of the body",
+   "أطول وأقوى عظم في الجسم"
+  ],
+  "j": [
+   "Hip bone (hip joint); tibia and patella (knee joint)",
+   "عظم الورك (مفصل الورك)؛ الظنبوب والرضفة (مفصل الركبة)"
+  ]
+ },
+ "patella": {
+  "t": [
+   "Largest sesamoid bone, in the quadriceps tendon",
+   "أكبر عظم سمسمي، داخل وتر رباعية الرؤوس"
+  ],
+  "j": [
+   "Femur (patellofemoral joint)",
+   "الفخذ (المفصل الرضفي الفخذي)"
+  ]
+ },
+ "tibia": {
+  "t": [
+   "Medial, weight-bearing bone of the leg",
+   "العظم الإنسي الحامل للوزن في الساق"
+  ],
+  "j": [
+   "Femur (knee); fibula (tibiofibular joints); talus (ankle)",
+   "الفخذ (الركبة)؛ الشظيّة (المفاصل الظنبوبية الشظوية)؛ الكاحل (مفصل الكاحل)"
+  ]
+ },
+ "fibula": {
+  "t": [
+   "Slender lateral bone of the leg",
+   "عظم الساق الوحشي النحيف"
+  ],
+  "j": [
+   "Tibia (tibiofibular joints); talus (ankle, lateral malleolus)",
+   "الظنبوب (المفاصل الظنبوبية الشظوية)؛ الكاحل (مفصل الكاحل، الكعب الوحشي)"
+  ]
+ },
+ "interosseous-membrane-of-leg": {
+  "t": [
+   "Fibrous sheet joining the tibia and fibula",
+   "صفيحة ليفية تربط الظنبوب بالشظيّة"
+  ],
+  "j": [
+   "Gives origin to leg muscles",
+   "منشأ لعضلات الساق"
+  ]
+ },
+ "talus": {
+  "t": [
+   "Tarsal bone that forms the ankle joint",
+   "عظم رصغي يكوّن مفصل الكاحل"
+  ],
+  "j": [
+   "Tibia and fibula (ankle); calcaneus (subtalar); navicular",
+   "الظنبوب والشظيّة (الكاحل)؛ العقب (تحت الكاحلي)؛ الزورقي"
+  ]
+ },
+ "calcaneus": {
+  "t": [
+   "Heel bone, largest tarsal bone",
+   "عظم العقب، أكبر عظام الرصغ"
+  ],
+  "j": [
+   "Talus (subtalar joint); cuboid",
+   "الكاحل (المفصل تحت الكاحلي)؛ النردي"
+  ]
+ }
 }

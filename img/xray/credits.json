@@ -58,5 +58,30 @@
   "page": "https://commons.wikimedia.org/wiki/File:X-ray_of_the_thumb_of_an_18_year_old_male_-_posteroanterior.jpg",
   "license": "Public domain",
   "artist": "Staff at the Department of Radiology, UC San Diego Health."
+ },
+ "knee-ap": {
+  "file": "File:X-ray of a normal knee by anteroposterior projection.jpg",
+  "license": "CC0",
+  "artist": "Mikael Häggström, M.D."
+ },
+ "knee-lat": {
+  "file": "File:X-ray of a normal knee by lateral projection.jpg",
+  "license": "CC0",
+  "artist": "Mikael Häggström, M.D."
+ },
+ "ankle-ap": {
+  "file": "File:X-ray of normal ankle - frontal.jpg",
+  "license": "CC0",
+  "artist": "Mikael Häggström, M.D."
+ },
+ "ankle-lat": {
+  "file": "File:X-ray of normal ankle - lateral.jpg",
+  "license": "CC0",
+  "artist": "Mikael Häggström, M.D."
+ },
+ "foot-dp": {
+  "file": "File:X-ray of normal right foot by dorsoplantar projection.jpg",
+  "license": "CC0",
+  "artist": "Mikael Häggström, M.D."
  }
 }

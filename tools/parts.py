@@ -160,7 +160,7 @@ LOWER = {
     "leg": [
         (["left tibia"], "Tibia", "الظنبوب (القصبة)", "bone", "bone"),
         (["left fibula"], "Fibula", "الشظيّة", "bone", "bone"),
-        (["interosseous membrane of left leg"], "Interosseous membrane", "الغشاء بين العظمين", "membrane", "bone"),
+        (["interosseous membrane of left leg"], "Interosseous membrane of leg", "الغشاء بين العظمين للساق", "membrane", "bone"),
         (["left tibialis anterior"], "Tibialis anterior", "الظنبوبية الأمامية", "anterior", "sup"),
         (["left extensor digitorum longus"], "Extensor digitorum longus", "الباسطة الطويلة للأصابع", "anterior", "sup"),
         (["left extensor hallucis longus"], "Extensor hallucis longus", "الباسطة الطويلة للإبهام", "anterior", "mid"),

@@ -170,19 +170,28 @@ from parts import LAYER
 def slug(t):
     return re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")
 
-parts, meta = [], []
-for kind, D in (("bone", BONES), ("muscle", MUSCLES)):
-    for region, items in D.items():
-        for names, en, ar, grp in items:
-            key = slug(en)
-            v, f = part_mesh(names)  # نسخة 4.0 للكل حتى تتطابق الإحداثيات
-            if len(f) < 2500:  # الأجزاء الصغيرة بس تنقسم، حتى يبقى الملف خفيف
-                v, f = subdivide(v, f); v = taubin(v, f, it=4)
-            parts.append((key, v, f))
-            meta.append({"key": key, "en": en, "ar": ar, "kind": kind, "region": region, "grp": grp,
-                         "layer": "bone" if kind == "bone" else LAYER[en]})
-center, scale = write_glb(OUT / "upper-limb.glb", parts, quantize=True)
-for m, (_, v, _f) in zip(meta, parts):
-    m["pin"] = [round(float(x), 4) for x in (anchor(v, m["kind"] == "muscle") - center) * scale]
-(OUT / "upper-limb.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
-print("upper-limb.glb", f"{(OUT / 'upper-limb.glb').stat().st_size / 1e6:.2f} MB", len(meta), "parts")
+def build_limb(name, items):
+    """items: [(region, kind, names, en, ar, grp, layer)] → models/<name>.glb + models/<name>.json"""
+    parts, meta = [], []
+    for region, kind, names, en, ar, grp, layer in items:
+        key = slug(en)
+        v, f = part_mesh(names)  # نسخة 4.0 للكل حتى تتطابق الإحداثيات
+        if len(f) < 2500:  # الأجزاء الصغيرة بس تنقسم، حتى يبقى الملف خفيف
+            v, f = subdivide(v, f); v = taubin(v, f, it=4)
+        parts.append((key, v, f))
+        meta.append({"key": key, "en": en, "ar": ar, "kind": kind, "region": region, "grp": grp, "layer": layer})
+    assert len({m["key"] for m in meta}) == len(meta), "مفتاح مكرر"
+    center, scale = write_glb(OUT / f"{name}.glb", parts, quantize=True)
+    for m, (_, v, _f) in zip(meta, parts):
+        m["pin"] = [round(float(x), 4) for x in (anchor(v, m["kind"] == "muscle") - center) * scale]
+    (OUT / f"{name}.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"{name}.glb", f"{(OUT / f'{name}.glb').stat().st_size / 1e6:.2f} MB", len(meta), "parts")
+
+
+from parts import LOWER
+upper = [(region, kind, names, en, ar, grp, "bone" if kind == "bone" else LAYER[en])
+         for kind, D in (("bone", BONES), ("muscle", MUSCLES)) for region, items in D.items() for names, en, ar, grp in items]
+lower = [(region, "bone" if layer == "bone" else "muscle", names, en, ar, grp, layer)
+         for region, items in LOWER.items() for names, en, ar, grp, layer in items]
+build_limb("upper-limb", upper)
+build_limb("lower-limb", lower)

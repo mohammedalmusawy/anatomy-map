@@ -694,6 +694,491 @@
      "الحديبة الكبرى ظاهرة في المحيط الوحشي (دوران خارجي)؛ رأس العضد متراكب قليلًا على الحقّانية؛ يظهر أعلى العضد والطرف الوحشي للترقوة."
     ]
    }
+  },
+  {
+   "id": "knee-ap",
+   "region": "thigh",
+   "img": "img/xray/knee-ap.jpg",
+   "w": 1067,
+   "h": 1913,
+   "en": "Knee — AP",
+   "ar": "الركبة — أمامي خلفي (AP)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_a_normal_knee_by_anteroposterior_projection.jpg"
+   ],
+   "pts": [
+    [
+     520,
+     250,
+     "femur",
+     "Femur",
+     "عظم الفخذ"
+    ],
+    [
+     540,
+     600,
+     "patella",
+     "Patella (superimposed on femur)",
+     "الرضفة (متراكبة على الفخذ)"
+    ],
+    [
+     200,
+     700,
+     "femur",
+     "Lateral epicondyle",
+     "اللُّقَيمة الوحشية"
+    ],
+    [
+     880,
+     680,
+     "femur",
+     "Medial epicondyle",
+     "اللُّقَيمة الإنسية"
+    ],
+    [
+     290,
+     800,
+     "femur",
+     "Lateral condyle of femur",
+     "اللقمة الوحشية للفخذ"
+    ],
+    [
+     760,
+     820,
+     "femur",
+     "Medial condyle of femur",
+     "اللقمة الإنسية للفخذ"
+    ],
+    [
+     520,
+     915,
+     "tibia",
+     "Intercondylar eminence (tibial spines)",
+     "البارزة بين اللقمتين (شوكتا الظنبوب)"
+    ],
+    [
+     310,
+     1000,
+     "tibia",
+     "Lateral tibial plateau",
+     "الهضبة الظنبوبية الوحشية"
+    ],
+    [
+     700,
+     1010,
+     "tibia",
+     "Medial tibial plateau",
+     "الهضبة الظنبوبية الإنسية"
+    ],
+    [
+     190,
+     1290,
+     "fibula",
+     "Head of fibula",
+     "رأس الشظيّة"
+    ],
+    [
+     520,
+     1600,
+     "tibia",
+     "Tibia",
+     "الظنبوب"
+    ],
+    [
+     220,
+     1650,
+     "fibula",
+     "Fibula",
+     "الشظيّة"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Supine, leg extended and rotated about 3–5° internally so the femoral epicondyles are parallel to the IR.",
+     "مستلقٍ على الظهر، والساق ممدودة ومدوّرة للداخل نحو 3–5° حتى تكون لقيمتا الفخذ موازيتين للكاسيت."
+    ],
+    "cr": [
+     "About 1.25 cm distal to the apex of the patella; 0–5° cephalic or caudal depending on the ASIS-to-table distance.",
+     "نحو 1.25 سم أسفل قمة الرضفة؛ بزاوية 0–5° نحو الرأس أو نحو القدم حسب سُمك الحوض."
+    ],
+    "exp": [
+     "SID 100 cm · about 65–75 kVp.",
+     "مسافة 100 سم · حوالي 65–75 kVp."
+    ],
+    "eval": [
+     "No rotation: femoral and tibial condyles symmetric, tibia partly overlapping the fibular head; joint space open; patella over the femur.",
+     "لا دوران: لقمتا الفخذ والظنبوب متناظرتان، والظنبوب متراكب جزئيًا على رأس الشظيّة؛ مسافة المفصل مفتوحة؛ الرضفة فوق الفخذ."
+    ]
+   }
+  },
+  {
+   "id": "knee-lat",
+   "region": "thigh",
+   "img": "img/xray/knee-lat.jpg",
+   "w": 1133,
+   "h": 1939,
+   "en": "Knee — lateral",
+   "ar": "الركبة — جانبي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_a_normal_knee_by_lateral_projection.jpg"
+   ],
+   "pts": [
+    [
+     650,
+     250,
+     "femur",
+     "Femur",
+     "عظم الفخذ"
+    ],
+    [
+     200,
+     720,
+     "patella",
+     "Patella",
+     "الرضفة"
+    ],
+    [
+     560,
+     700,
+     "femur",
+     "Femoral condyles (superimposed)",
+     "لقمتا الفخذ (متراكبتان)"
+    ],
+    [
+     650,
+     960,
+     "tibia",
+     "Tibial plateau",
+     "الهضبة الظنبوبية"
+    ],
+    [
+     430,
+     1110,
+     "tibia",
+     "Tibial tuberosity",
+     "حدبة الظنبوب"
+    ],
+    [
+     870,
+     1100,
+     "fibula",
+     "Head of fibula",
+     "رأس الشظيّة"
+    ],
+    [
+     650,
+     1500,
+     "tibia",
+     "Tibia",
+     "الظنبوب"
+    ],
+    [
+     1010,
+     1500,
+     "fibula",
+     "Fibula",
+     "الشظيّة"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Lateral recumbent on the affected side; knee flexed 20–30°.",
+     "مستلقٍ على الجانب المصاب؛ والركبة مثنية 20–30°."
+    ],
+    "cr": [
+     "5–7° cephalic, to about 2.5 cm distal to the medial epicondyle.",
+     "بزاوية 5–7° نحو الرأس، على نقطة نحو 2.5 سم أسفل اللقيمة الإنسية."
+    ],
+    "exp": [
+     "SID 100 cm · about 65–75 kVp.",
+     "مسافة 100 سم · حوالي 65–75 kVp."
+    ],
+    "eval": [
+     "Femoral condyles superimposed; patellofemoral joint space open; fibular head slightly overlapped by the tibia.",
+     "لقمتا الفخذ متراكبتان؛ المسافة الرضفية الفخذية مفتوحة؛ رأس الشظيّة متراكب قليلًا مع الظنبوب."
+    ]
+   }
+  },
+  {
+   "id": "ankle-ap",
+   "region": "leg",
+   "img": "img/xray/ankle-ap.jpg",
+   "w": 728,
+   "h": 1631,
+   "en": "Ankle — AP",
+   "ar": "الكاحل — أمامي خلفي (AP)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_ankle_-_frontal.jpg"
+   ],
+   "pts": [
+    [
+     329,
+     520,
+     "tibia",
+     "Tibia",
+     "الظنبوب"
+    ],
+    [
+     520,
+     520,
+     "fibula",
+     "Fibula",
+     "الشظيّة"
+    ],
+    [
+     113,
+     1126,
+     "tibia",
+     "Medial malleolus",
+     "الكعب الإنسي"
+    ],
+    [
+     589,
+     1196,
+     "fibula",
+     "Lateral malleolus",
+     "الكعب الوحشي"
+    ],
+    [
+     312,
+     1248,
+     "talus",
+     "Talus",
+     "الكاحل (القعب)"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Supine, leg extended; foot dorsiflexed so its long axis is vertical.",
+     "مستلقٍ والساق ممدودة؛ والقدم معطوفة ظهريًا ومحورها الطولي عمودي."
+    ],
+    "cr": [
+     "Perpendicular, midway between the malleoli.",
+     "عمودي على منتصف المسافة بين الكعبين."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–70 kVp.",
+     "مسافة 100 سم · حوالي 60–70 kVp."
+    ],
+    "eval": [
+     "Medial mortise open; lateral mortise not fully open (normal fibula–talus overlap); distal tibia and fibula, malleoli and talus included.",
+     "المسافة الإنسية للنقرة مفتوحة؛ والوحشية غير مفتوحة بالكامل (تراكب طبيعي للشظيّة مع الكاحل)؛ يظهر أسفل الظنبوب والشظيّة والكعبان والكاحل."
+    ]
+   }
+  },
+  {
+   "id": "ankle-lat",
+   "region": "leg",
+   "img": "img/xray/ankle-lat.jpg",
+   "w": 932,
+   "h": 1678,
+   "en": "Ankle — lateral",
+   "ar": "الكاحل — جانبي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_ankle_-_lateral.jpg"
+   ],
+   "pts": [
+    [
+     399,
+     444,
+     "tibia",
+     "Tibia",
+     "الظنبوب"
+    ],
+    [
+     377,
+     999,
+     "talus",
+     "Talus",
+     "الكاحل (القعب)"
+    ],
+    [
+     111,
+     1087,
+     "navicular",
+     "Navicular",
+     "الزورقي"
+    ],
+    [
+     599,
+     1287,
+     "calcaneus",
+     "Calcaneus",
+     "العقب"
+    ],
+    [
+     799,
+     1376,
+     "calcaneus",
+     "Calcaneal tuberosity",
+     "حدبة العقب"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Lateral recumbent; lateral side of the ankle on the IR, foot dorsiflexed.",
+     "مستلقٍ على الجانب؛ والجهة الوحشية للكاحل على الكاسيت، والقدم معطوفة ظهريًا."
+    ],
+    "cr": [
+     "Perpendicular to the medial malleolus.",
+     "عمودي على الكعب الإنسي."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–70 kVp.",
+     "مسافة 100 سم · حوالي 60–70 kVp."
+    ],
+    "eval": [
+     "Fibula over the posterior half of the tibia; talar dome superimposed; distal tibia/fibula, talus, calcaneus and base of 5th metatarsal included.",
+     "الشظيّة فوق النصف الخلفي للظنبوب؛ قبّة الكاحل متراكبة؛ يظهر أسفل الظنبوب والشظيّة والكاحل والعقب وقاعدة المشط الخامس."
+    ]
+   }
+  },
+  {
+   "id": "foot-dp",
+   "region": "foot",
+   "img": "img/xray/foot-dp.jpg",
+   "w": 1061,
+   "h": 2431,
+   "en": "Foot — AP (dorsoplantar)",
+   "ar": "القدم — أمامي خلفي (ظهري أخمصي)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_right_foot_by_dorsoplantar_projection.jpg"
+   ],
+   "pts": [
+    [
+     230,
+     192,
+     "distal-phalanx-big-toe",
+     "Distal phalanx — big toe",
+     "السلامى القاصية — الإبهام"
+    ],
+    [
+     217,
+     460,
+     "proximal-phalanx-big-toe",
+     "Proximal phalanx — big toe",
+     "السلامى الدانية — الإبهام"
+    ],
+    [
+     435,
+     460,
+     "proximal-phalanx-second-toe",
+     "Proximal phalanx — 2nd toe",
+     "السلامى الدانية — الإصبع الثاني"
+    ],
+    [
+     281,
+     997,
+     "1st-metatarsal",
+     "1st metatarsal",
+     "المشط الأول"
+    ],
+    [
+     460,
+     972,
+     "2nd-metatarsal",
+     "2nd metatarsal",
+     "المشط الثاني"
+    ],
+    [
+     588,
+     997,
+     "3rd-metatarsal",
+     "3rd metatarsal",
+     "المشط الثالث"
+    ],
+    [
+     703,
+     1023,
+     "4th-metatarsal",
+     "4th metatarsal",
+     "المشط الرابع"
+    ],
+    [
+     844,
+     1074,
+     "5th-metatarsal",
+     "5th metatarsal",
+     "المشط الخامس"
+    ],
+    [
+     320,
+     1432,
+     "medial-cuneiform",
+     "Medial cuneiform",
+     "الإسفيني الإنسي"
+    ],
+    [
+     473,
+     1445,
+     "intermediate-cuneiform",
+     "Intermediate cuneiform",
+     "الإسفيني المتوسط"
+    ],
+    [
+     588,
+     1470,
+     "lateral-cuneiform",
+     "Lateral cuneiform",
+     "الإسفيني الوحشي"
+    ],
+    [
+     690,
+     1585,
+     "cuboid",
+     "Cuboid",
+     "النردي"
+    ],
+    [
+     332,
+     1662,
+     "navicular",
+     "Navicular",
+     "الزورقي"
+    ],
+    [
+     409,
+     1994,
+     "talus",
+     "Talus (head)",
+     "الكاحل (رأسه)"
+    ],
+    [
+     563,
+     2199,
+     "calcaneus",
+     "Calcaneus",
+     "العقب"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Supine with the knee flexed; plantar surface flat on the IR.",
+     "مستلقٍ والركبة مثنية؛ وباطن القدم مسطّح على الكاسيت."
+    ],
+    "cr": [
+     "10° toward the heel, to the base of the 3rd metatarsal.",
+     "بزاوية 10° نحو العقب، على قاعدة المشط الثالث."
+    ],
+    "exp": [
+     "SID 100 cm · about 55–65 kVp.",
+     "مسافة 100 سم · حوالي 55–65 kVp."
+    ],
+    "eval": [
+     "Whole foot from toes to tarsals included; slight overlap of the bases of metatarsals 2–5; joint spaces open.",
+     "تظهر القدم من الأصابع إلى عظام الرصغ؛ تراكب خفيف لقواعد الأمشاط 2–5؛ مسافات المفاصل مفتوحة."
+    ]
+   }
   }
  ]
 }

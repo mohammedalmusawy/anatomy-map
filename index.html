@@ -212,9 +212,9 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
           <path class="rg live pulse" data-r="arm" d="M59 85c-11 3-17 12-19 25l-5 50 16 2 7-42z"/>
           <path class="rg live pulse" data-r="forearm" d="M35 164l16 2-4 60-15-1z"/>
           <path class="rg live pulse" data-r="hand" d="M31 228l16 1 3 18c1 8-1 16-5 19-3 3-9 3-12 0-4-4-5-12-4-20z"/>
-          <path class="rg soon" data-r="thigh" d="M64 234h35l-2 88H75z"/>
-          <path class="rg soon" data-r="leg" d="M75 326h22l-2 66H80z"/>
-          <path class="rg soon" data-r="foot" d="M79 395h17l5 13c0 3-2 4-5 4H76c-3 0-4-2-3-5z"/>
+          <path class="rg live pulse" data-r="thigh" d="M64 234h35l-2 88H75z"/>
+          <path class="rg live pulse" data-r="leg" d="M75 326h22l-2 66H80z"/>
+          <path class="rg live pulse" data-r="foot" d="M79 395h17l5 13c0 3-2 4-5 4H76c-3 0-4-2-3-5z"/>
         </g>
       </svg>
       <div class="legend"><span><i style="background:var(--accent)"></i>متاح الآن</span><span><i style="background:var(--body)"></i>قريبًا</span></div>
@@ -341,7 +341,13 @@ const CREDIT = {
   "805": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:805_Ulna_and_Radius.jpg"],
   "806": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:806_Hand_and_Wrist.jpg"],
   "1120": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1120_Muscles_that_Move_the_Forearm.jpg"],
-  "1121": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1121_Intrinsic_Muscles_of_the_Hand.jpg"]
+  "1121": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1121_Intrinsic_Muscles_of_the_Hand.jpg"],
+  "810": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:810_Femur_and_Patella.jpg"],
+  "811": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:811_Tibia_and_fibula.jpg"],
+  "812": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:812_Bones_of_the_Foot.jpg"],
+  "1122": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1122_Gluteal_Muscles_that_Move_the_Femur.jpg"],
+  "1123": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1123_Muscles_of_the_Leg_that_Move_the_Foot_and_Toes.jpg"],
+  "1124": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1124_Intrinsic_Muscles_of_the_Foot.jpg"]
 };
 // كل التأشيرات منقولة من الرسم نفسه، والترجمة العربية بجنبها
 const REGIONS = {
@@ -393,8 +399,58 @@ const REGIONS = {
         ["أربطة", [["Pisometacarpal ligament","الرباط الحِمَّصي المشطي"]]]
       ]}
   }
+  ,thigh: { ar: "الفخذ", en: "Thigh (Femoral region)",
+    bones: { img: "img/thigh-bones.jpg", src: "810",
+      note: "عظم واحد: <b class='en'>Femur</b> (عظم الفخذ)، أطول عظم في الجسم. يتمفصل في الأعلى مع عظم الورك، وفي الأسفل مع الظنبوب والرضفة في مفصل الركبة.",
+      groups: [
+        ["الطرف العلوي (Proximal)", [["Head","رأس الفخذ"],["Neck","عنق الفخذ"],["Greater trochanter","المدوَّر الكبير"],["Lesser trochanter","المدوَّر الصغير"],["Intertrochanteric line","الخط بين المدوّرين"],["Intertrochanteric crest","العرف بين المدوّرين"]]],
+        ["الجسم (Shaft)", [["Body (shaft)","جسم العظم"],["Gluteal tuberosity","الحدبة الألوية"],["Linea aspera","الخط الخشن"]]],
+        ["الطرف السفلي (Distal)", [["Medial condyle","اللقمة الإنسية"],["Lateral condyle","اللقمة الوحشية"],["Medial epicondyle","اللُّقَيمة الإنسية"],["Lateral epicondyle","اللُّقَيمة الوحشية"],["Adductor tubercle","الحديبة المقرِّبة"],["Intercondylar fossa","الحفرة بين اللقمتين"]]],
+        ["عظام مجاورة", [["Hip bone","عظم الورك"],["Patella","الرضفة"],["Tibia","الظنبوب"],["Fibula","الشظيّة"]]]
+      ]},
+    muscles: { img: "img/thigh-muscles.jpg", src: "1122",
+      groups: [
+        ["أمامية (Anterior)", [["Iliacus","الحرقفية"],["Psoas major","القطنية الكبرى"],["Tensor fascia latae","الموتّرة للّفافة العريضة"],["Sartorius","الخيّاطية"],["Rectus femoris","المستقيمة الفخذية"],["Vastus lateralis","المتّسعة الوحشية"],["Vastus medialis","المتّسعة الإنسية"],["Quadriceps tendon","وتر رباعية الرؤوس"],["Patellar ligament","الرباط الرضفي"]]],
+        ["إنسية (Medial — adductors)", [["Pectineus","العانية (المشطية)"],["Adductor longus","المقرِّبة الطويلة"],["Adductor brevis","المقرِّبة القصيرة"],["Adductor magnus","المقرِّبة الكبرى"],["Gracilis","الرشيقة"],["Obturator externus","السدّادة الظاهرة"]]],
+        ["الألوية والدوّارات (Gluteal)", [["Gluteus maximus (cut)","الألوية الكبرى (مقطوعة)"],["Gluteus medius (cut)","الألوية الوسطى (مقطوعة)"],["Gluteus minimus","الألوية الصغرى"],["Piriformis","الكمثرية"],["Superior gemellus","التوأمية العلوية"],["Obturator internus","السدّادة الباطنة"],["Inferior gemellus","التوأمية السفلية"],["Quadratus femoris","المربعة الفخذية"]]],
+        ["خلفية (Posterior — hamstrings)", [["Biceps femoris","ذات الرأسين الفخذية"],["Semitendinosus","النصف وترية"],["Semimembranosus","النصف غشائية"]]]
+      ]}
+  },
+  leg: { ar: "الساق", en: "Leg (Crural region)",
+    bones: { img: "img/leg-bones.jpg", src: "811",
+      note: "عظمان: <b class='en'>Tibia</b> (الظنبوب) في الجهة الإنسية ويحمل الوزن، و<b class='en'>Fibula</b> (الشظيّة) في الجهة الوحشية، ويربط بينهما الغشاء بين العظمين.",
+      groups: [
+        ["الظنبوب (Tibia)", [["Medial condyle","اللقمة الإنسية"],["Lateral condyle","اللقمة الوحشية"],["Articular surface of medial condyle","السطح المفصلي للّقمة الإنسية"],["Articular surface of lateral condyle","السطح المفصلي للّقمة الوحشية"],["Tibial tuberosity","حدبة الظنبوب"],["Anterior border","الحافة الأمامية"],["Soleal line","الخط النعلي"],["Medial malleolus","الكعب الإنسي"],["Articular surface (distal)","السطح المفصلي السفلي"]]],
+        ["الشظيّة (Fibula)", [["Head of fibula","رأس الشظيّة"],["Lateral malleolus","الكعب الوحشي"]]],
+        ["بينهما", [["Interosseous membrane","الغشاء بين العظمين"]]]
+      ]},
+    muscles: { img: "img/leg-muscles.jpg", src: "1123",
+      groups: [
+        ["أمامية (Anterior)", [["Tibialis anterior","الظنبوبية الأمامية"],["Extensor digitorum longus","الباسطة الطويلة للأصابع"],["Extensor hallucis longus","الباسطة الطويلة للإبهام"],["Fibularis tertius","الشظوية الثالثة"],["Superior extensor retinaculum","القيد الباسط العلوي"],["Inferior extensor retinaculum","القيد الباسط السفلي"]]],
+        ["وحشية (Lateral)", [["Fibularis longus","الشظوية الطويلة"],["Fibularis brevis","الشظوية القصيرة"]]],
+        ["خلفية سطحية (Posterior — superficial)", [["Gastrocnemius (lateral head)","التوأمية الساقية (الرأس الوحشي)"],["Gastrocnemius (medial head)","التوأمية الساقية (الرأس الإنسي)"],["Plantaris","الأخمصية"],["Soleus","النعلية"],["Calcaneal (Achilles) tendon","الوتر العقبي (وتر أخيل)"],["Calcaneus (heel)","العقب"]]],
+        ["خلفية عميقة (Posterior — deep)", [["Popliteus","المأبضية"],["Tibialis posterior","الظنبوبية الخلفية"],["Flexor digitorum longus","المثنية الطويلة للأصابع"],["Flexor hallucis longus","المثنية الطويلة للإبهام"]]]
+      ]}
+  },
+  foot: { ar: "القدم", en: "Foot (Pes)",
+    bones: { img: "img/foot-bones.jpg", src: "812",
+      note: "26 عظمًا: 7 رصغية، و5 مشطية، و14 سلامى. للإبهام سلاميتان فقط.",
+      groups: [
+        ["عظام الرصغ (Tarsals)", [["Talus","الكاحل (القعب)"],["Trochlea of talus","بكرة الكاحل"],["Calcaneus","العقب"],["Calcaneal tuberosity","حدبة العقب"],["Sustentaculum tali (talar shelf)","حامل الكاحل"],["Navicular","الزورقي"],["Cuboid","النردي"],["Medial cuneiform","الإسفيني الإنسي"],["Intermediate cuneiform","الإسفيني المتوسط"],["Lateral cuneiform","الإسفيني الوحشي"]]],
+        ["عظام المشط (Metatarsals 1–5)", [["First metatarsal","المشط الأول"],["Fifth metatarsal","المشط الخامس"]]],
+        ["السُّلاميات (Phalanges)", [["Proximal phalanx","السلامى الدانية"],["Middle phalanx","السلامى الوسطى"],["Distal phalanx","السلامى القاصية"]]],
+        ["سطوح مفصلية", [["Facet for medial malleolus","السطح المفصلي للكعب الإنسي"],["Facet for lateral malleolus","السطح المفصلي للكعب الوحشي"]]]
+      ]},
+    muscles: { img: "img/foot-muscles.jpg", src: "1124",
+      groups: [
+        ["ظهر القدم (Dorsum)", [["Extensor digitorum brevis","الباسطة القصيرة للأصابع"],["Tibialis anterior (tendon)","الظنبوبية الأمامية (الوتر)"],["Extensor digitorum longus (tendons)","الباسطة الطويلة للأصابع (الأوتار)"],["Extensor hallucis longus (tendon)","الباسطة الطويلة للإبهام (الوتر)"],["Fibularis longus, brevis, tertius","الشظويات الطويلة والقصيرة والثالثة"],["Tendocalcaneus","الوتر العقبي"]]],
+        ["الأخمص — الطبقة السطحية", [["Plantar aponeurosis","السفاق الأخمصي"],["Abductor hallucis","المبعِدة للإبهام"],["Flexor digitorum brevis","المثنية القصيرة للأصابع"],["Abductor digiti minimi","المبعِدة للخنصر"]]],
+        ["الأخمص — الطبقة الوسطى", [["Quadratus plantae","المربعة الأخمصية"],["Lumbricals","العضلات الدودية"]]],
+        ["الأخمص — الطبقة العميقة", [["Flexor hallucis brevis","المثنية القصيرة للإبهام"],["Flexor digiti minimi brevis","المثنية القصيرة للخنصر"]]]
+      ]}
+  }
 };
-const SOON = {head:"الرأس",neck:"الرقبة",chest:"الصدر",abdomen:"البطن",pelvis:"الحوض",thigh:"الفخذ",leg:"الساق",foot:"القدم"};
+const SOON = {head:"الرأس",neck:"الرقبة",chest:"الصدر",abdomen:"البطن",pelvis:"الحوض"};
 
 // النص الثاني من الجسم: نسخة معكوسة من نفس المناطق (حتى يبقى الضغط عليها شغّال)
 (() => { const h=document.getElementById("half"), m=h.cloneNode(true); m.removeAttribute("id");
@@ -436,6 +492,19 @@ const PHOTOS = {
   hand: [
     ["hand-skeleton","Bones of the hand — real skeleton","عظام اليد — هيكل حقيقي","Raul654 · CC BY-SA 3.0","Hand-bones.jpg"],
     ["wrist-carpals","Wrist: carpals with distal radius and ulna","الرسغ: عظام الرسغ مع نهايتي الكعبرة والزند","Brian C. Goss · Public domain","RightHumanAnteriorDistalRadiusUlnaCarpals.jpg"]
+  ],
+  thigh: [
+    ["femur","Femur — anterior and posterior views","عظم الفخذ — منظر أمامي وخلفي","MAKY.OREL · CC0","Femur_-_anterior,_posterior.jpg"],
+    ["patella","Patella — anterior and posterior surfaces","الرضفة — الوجهان الأمامي والخلفي","MAKY.OREL · CC0","Patella_-_facies_anterior_et_posterior_patellae.jpg"]
+  ],
+  leg: [
+    ["tibia-fibula","Tibia and fibula — anterior view","الظنبوب والشظيّة — منظر أمامي","MAKY.OREL · CC0","Tibia,_fibula_(anterior).jpg"],
+    ["fibula","Fibula — anterior and posterior views","الشظيّة — منظر أمامي وخلفي","MAKY.OREL · CC0","Fibula_(anterior,_posterior).jpg"]
+  ],
+  foot: [
+    ["foot-sup","Bones of the foot — articulated skeleton","عظام القدم — هيكل مركّب","MAKY.OREL · CC0","Ossa_pedis_(sin)_-_superior_view.jpg"],
+    ["foot-lat-real","Bones of the foot — lateral view","عظام القدم — منظر وحشي","MAKY.OREL · CC0","Ossa_pedis_(sin)_-_lateral_view.jpg"],
+    ["calcaneus","Foot (medial view) with a separate calcaneus","القدم (منظر إنسي) مع عظم عقب منفصل","MAKY.OREL · CC0","Ossa_pedis_(sin)_-_calcaneus_(medial_view).jpg"]
   ]
 };
 const GRP = {bone:"العظام",membrane:"الأغشية","carpal-p":"عظام الرسغ — الصف الداني","carpal-d":"عظام الرسغ — الصف القاصي",
@@ -596,12 +665,14 @@ import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const $id = id => document.getElementById(id);
 const stage=$id("stage"), linesEl=$id("lines"), labelsEl=$id("labels");
-const BONE={bone:"#ece2cc",membrane:"#b9cfe6",metacarpal:"#ece2cc",phalanx:"#e4d8bd"};
-const CARPAL={scaphoid:"#e8b04a",lunate:"#7fb3d5",triquetrum:"#9ccc65",pisiform:"#f48fb1",trapezium:"#ffb74d",trapezoid:"#4db6ac",capitate:"#ba68c8",hamate:"#e57373"};
+const BONE={bone:"#ece2cc",membrane:"#b9cfe6",metacarpal:"#ece2cc",metatarsal:"#ece2cc",phalanx:"#e4d8bd",tarsal:"#ead9b8"};
+const CARPAL={scaphoid:"#e8b04a",lunate:"#7fb3d5",triquetrum:"#9ccc65",pisiform:"#f48fb1",trapezium:"#ffb74d",trapezoid:"#4db6ac",capitate:"#ba68c8",hamate:"#e57373",
+  // عظام رصغ القدم السبعة كل وحدة بلون
+  talus:"#e8b04a",calcaneus:"#7fb3d5",navicular:"#9ccc65",cuboid:"#f48fb1","medial-cuneiform":"#ffb74d","intermediate-cuneiform":"#4db6ac","lateral-cuneiform":"#ba68c8"};
 const MUSCLE={sup:"#c4402f",mid:"#d0623f",deep:"#9e3328"};
 const ORDER=["sup","mid","deep","bone"];               // من الخارج للداخل
 const LNAME={sup:"سطحية",mid:"وسطى",deep:"عميقة",bone:"عظم"};
-const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد"};
+const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم"};
 const colorOf=p=>p.kind==="bone"?(CARPAL[p.key]||BONE[p.grp]||BONE.bone):MUSCLE[p.layer];
 
 // ── المشهد
@@ -649,8 +720,12 @@ function frame(keys, isBack=back){
   if(box.isEmpty()) parts.forEach(p=>box.expandByObject(meshes[p.key]));
   const size=box.getSize(new THREE.Vector3()), c=box.getCenter(new THREE.Vector3()), t=Math.tan(THREE.MathUtils.degToRad(camera.fov/2));
   const d=Math.max(size.y/(2*t), size.x/(2*t)/camera.aspect*(showLabels&&!quiz?2.1:1.1))*1.12+size.z/2;
-  controls.target.copy(c); camera.position.set(c.x,c.y,c.z+(back?-d:d)); controls.update();
-  $id("view-name").textContent=back?"Posterior view · منظر خلفي":"Anterior view · منظر أمامي";
+  // القدم تنشاف من فوگ (ظهر القدم) ومن تحت (الأخمص) مثل الأطالس، والباقي من گدّام ومن ورا
+  const top=region==="foot";
+  const dir=top?new THREE.Vector3(0,back?-1:1,0.25).normalize():new THREE.Vector3(0,0,back?-1:1);
+  const dd=top?Math.max(size.z/(2*t), size.x/(2*t)/camera.aspect*(showLabels&&!quiz?2.1:1.1))*1.12+size.y/2:d;
+  controls.target.copy(c); camera.position.copy(c).addScaledVector(dir,dd); controls.update();
+  $id("view-name").textContent=top?(back?"Plantar view · منظر أخمصي":"Dorsal view · منظر ظهري"):(back?"Posterior view · منظر خلفي":"Anterior view · منظر أمامي");
 }
 const regionKeys=()=>parts.filter(p=>!region||p.region===region).map(p=>p.key);
 
@@ -711,23 +786,33 @@ function layout(){
 }
 labelsEl.addEventListener("click",e=>{ const k=e.target.dataset&&e.target.dataset.k; if(k) select(selected===k?null:k); });
 
-// ── التحميل
-async function load(){
-  const [gltf,meta,inf]=await Promise.all([new GLTFLoader().loadAsync("models/upper-limb.glb"),
-    fetch("models/upper-limb.json").then(r=>r.json()), fetch("data/info.json").then(r=>r.json())]);
-  parts=meta; info=inf; byKey=Object.fromEntries(parts.map(p=>[p.key,p]));
-  gltf.scene.traverse(o=>{ if(!o.isMesh) return; const p=byKey[o.name]; meshes[o.name]=o;
-    const bone=p.kind==="bone";
-    o.material=new THREE.MeshPhysicalMaterial({color:colorOf(p),roughness:bone?0.62:0.42,metalness:0,clearcoat:bone?0.08:0.35,
-      clearcoatRoughness:0.5,sheen:bone?0.3:0.6,sheenColor:new THREE.Color(bone?"#fff6e0":"#ff9a8a"),envMapIntensity:0.55}); });
-  scene.add(gltf.scene); gltf.scene.updateMatrixWorld(true);  // حتى يصير حساب الإطار صح من أول مرة
+// ── التحميل: كل طرف بملف (العلوي والسفلي)، ونحمّل اللي نحتاجه بس ونخزّنه
+const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb"};
+const models={}, infoReady=fetch("data/info.json").then(r=>r.json()).then(j=>info=j);
+let current=null;
+async function loadModel(name){
+  if(!models[name]) models[name]=(async()=>{
+    const [gltf,meta]=await Promise.all([new GLTFLoader().loadAsync(`models/${name}.glb`), fetch(`models/${name}.json`).then(r=>r.json())]);
+    const by=Object.fromEntries(meta.map(p=>[p.key,p])), ms={};
+    gltf.scene.traverse(o=>{ if(!o.isMesh) return; const p=by[o.name]; ms[o.name]=o; const bone=p.kind==="bone";
+      o.material=new THREE.MeshPhysicalMaterial({color:colorOf(p),roughness:bone?0.62:0.42,metalness:0,clearcoat:bone?0.08:0.35,
+        clearcoatRoughness:0.5,sheen:bone?0.3:0.6,sheenColor:new THREE.Color(bone?"#fff6e0":"#ff9a8a"),envMapIntensity:0.55}); });
+    return {scene:gltf.scene, parts:meta, byKey:by, meshes:ms};
+  })();
+  return models[name];
+}
+async function use(name){
+  $id("loading").style.display="grid";
+  const m=await loadModel(name); await infoReady;
+  if(current!==m){ if(current) scene.remove(current.scene); scene.add(m.scene); m.scene.updateMatrixWorld(true); current=m;
+    parts=m.parts; byKey=m.byKey; meshes=m.meshes; lastCam=""; }
   $id("loading").style.display="none";
 }
 
 // ── فتح الاستوديو على منطقة: العظام = طبقة العظم بس، العضلات = كل الطبقات
 async function open(r, kind, cb){
   onPick=cb; region=r; kindFocus=kind==="bones"?"bone":"muscle";
-  ready=ready||load(); await ready; fit();
+  await use(MODEL_OF[r]); fit();
   hidden.clear(); faded.clear(); isolated=null; selected=null; endQuiz(); card(null);
   Object.assign(layerOn, kind==="bones"?{sup:false,mid:false,deep:false,bone:true}:{sup:true,mid:true,deep:true,bone:true});
   showLabels=true; $id("t-labels").classList.add("on");
