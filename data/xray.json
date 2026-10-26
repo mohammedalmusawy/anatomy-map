@@ -241,7 +241,7 @@
   {
    "id": "wrist-pa",
    "region": "hand",
-   "img": "img/xray/wrist-pa.jpg",
+   "img": "img/xray/wrist-pa.jpg?v=2",
    "w": 690,
    "h": 1000,
    "en": "Wrist — PA",
