@@ -1,0 +1,17 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>الصفحة غير موجودة</title>
+<script>
+(function () {
+  try {
+    var p = decodeURIComponent(location.pathname);
+    if (/[À-ÿ]/.test(p)) {
+      var bytes = new Uint8Array([].map.call(p, function (c) { return c.charCodeAt(0) & 255; }));
+      var fixed = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+      if (fixed !== p) { location.replace(encodeURI(fixed) + location.search + location.hash); return; }
+    }
+  } catch (e) {}
+})();
+</script>
+<style>body{font:17px/1.7 system-ui,sans-serif;text-align:center;padding:60px 16px;color:#1E2433;background:#F5F6FA}
+a{color:#3B4A8C;font-weight:600}@media(prefers-color-scheme:dark){body{background:#10141F;color:#E8EAF2}a{color:#8E9CF0}}</style>
+</head><body><h1>الصفحة غير موجودة</h1><p><a href="https://mohammedalmusawy.github.io/anatomy-map/دروس/">الذهاب إلى الصفحة الرئيسية</a></p></body></html>
