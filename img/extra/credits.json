@@ -1,0 +1,38 @@
+{
+ "pelvis-bones": {
+  "file": "File:808 Hip Bone.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:808_Hip_Bone.jpg",
+  "license": "CC BY 3.0",
+  "artist": "OpenStax College"
+ },
+ "pelvis-muscles": {
+  "file": "File:1115 Muscles of the Pelvic Floor.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1115_Muscles_of_the_Pelvic_Floor.jpg",
+  "license": "CC BY 4.0",
+  "artist": "OpenStax"
+ },
+ "chest-bones": {
+  "file": "File:Gray115.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Gray115.png",
+  "license": "Public domain",
+  "artist": "Henry Vandyke Carter (Gray's Anatomy, 1918)"
+ },
+ "chest-muscles": {
+  "file": "File:1119 Muscles that Move the Humerus.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg",
+  "license": "CC BY 4.0",
+  "artist": "OpenStax"
+ },
+ "head-bones": {
+  "file": "File:705 Lateral View of Skull-01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:705_Lateral_View_of_Skull-01.jpg",
+  "license": "CC BY 3.0",
+  "artist": "OpenStax College"
+ },
+ "head-muscles": {
+  "file": "File:1106 Front and Side Views of the Muscles of Facial Expressions.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1106_Front_and_Side_Views_of_the_Muscles_of_Facial_Expressions.jpg",
+  "license": "CC BY 4.0",
+  "artist": "OpenStax"
+ }
+}

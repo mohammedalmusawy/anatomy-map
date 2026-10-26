@@ -1,0 +1,429 @@
+{
+ "_note": "Extra labelled radiographs for خريطة-جديدة.html (same format as data/xray.json). The pelvis lesson also shows the existing views listed in \"reuse\" (pelvis-ap, pelvis-ap2, hip-lat) from data/xray.json. On AP films the image's left is the patient's right, so points on the image's left use the \"-right\" 3D keys.",
+ "reuse": {
+  "pelvis": [
+   "pelvis-ap2",
+   "pelvis-ap",
+   "hip-lat"
+  ]
+ },
+ "views": [
+  {
+   "id": "pelvis-ap3",
+   "region": "pelvis",
+   "img": "img/xray/extra/pelvis-ap3.jpg",
+   "w": 1905,
+   "h": 1496,
+   "en": "Pelvis — AP (both sides labelled)",
+   "ar": "الحوض — أمامي خلفي (مؤشّر بالجهتين)",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_pelvis_of_an_18_year_old_male_-_case_1_-_anteroposterior.jpg"
+   ],
+   "pos": {
+    "patient": [
+     "Supine, legs extended and internally rotated 15–20° so the femoral necks are elongated; pelvis not rotated (ASISs equidistant from the table).",
+     "مستلقٍ على الظهر، والساقان ممدودتان ومدوّرتان للداخل 15–20° حتى يطول عنقا الفخذ؛ والحوض غير مستدير (الشوكتان الحرقفيتان الأماميتان العلويتان على بُعد متساوٍ من الطاولة)."
+    ],
+    "cr": [
+     "Perpendicular, midway between the level of the ASISs and the pubic symphysis (about 5 cm below the ASIS level).",
+     "عمودي على منتصف المسافة بين مستوى الشوكتين الحرقفيتين الأماميتين العلويتين والارتفاق العاني (نحو 5 سم أسفل مستوى الشوكتين)."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–85 kVp · suspended respiration · gonadal shielding when it does not cover the area of interest.",
+     "مسافة 100 سم · حوالي 75–85 kVp · حبس النفس · واقي الغدد التناسلية إذا لم يغطِّ منطقة الفحص."
+    ],
+    "eval": [
+     "Whole pelvis, L5, sacrum and proximal femurs included; no rotation (symmetric iliac wings and obturator foramina, sacrum centred over the symphysis); greater trochanters in profile and lesser trochanters small or not seen (correct internal rotation).",
+     "يظهر الحوض كاملًا مع L5 والعجز وأعلى الفخذين؛ لا دوران (تناظر جناحي الحرقفة والثقبتين السدّاديتين، والعجز في منتصف الارتفاق)؛ المدوَّران الكبيران في المحيط، والمدوَّران الصغيران صغيران أو غير ظاهرين (دوران داخلي صحيح)."
+    ]
+   },
+   "pts": [
+    [
+     1000,
+     190,
+     "l5-vertebra",
+     "L5 vertebra",
+     "الفقرة القطنية الخامسة"
+    ],
+    [
+     1000,
+     560,
+     "sacrum",
+     "Sacrum",
+     "العجز"
+    ],
+    [
+     1140,
+     420,
+     "sacrum",
+     "Sacral ala",
+     "جناح العجز"
+    ],
+    [
+     745,
+     470,
+     "hip-bone-right",
+     "Sacroiliac joint",
+     "المفصل العجزي الحرقفي"
+    ],
+    [
+     330,
+     135,
+     "hip-bone-right",
+     "Iliac crest",
+     "العرف الحرقفي"
+    ],
+    [
+     1650,
+     420,
+     "hip-bone",
+     "Ilium (iliac wing)",
+     "الحرقفة (جناح الحرقفة)"
+    ],
+    [
+     1850,
+     390,
+     "hip-bone",
+     "Anterior superior iliac spine (ASIS)",
+     "الشوكة الحرقفية الأمامية العلوية"
+    ],
+    [
+     1368,
+     790,
+     "hip-bone",
+     "Pelvic brim (iliopectineal line)",
+     "حافة الحوض (الخط الحرقفي العاني)"
+    ],
+    [
+     430,
+     880,
+     "hip-bone-right",
+     "Acetabular roof",
+     "سقف الحُقّ"
+    ],
+    [
+     455,
+     975,
+     "femur-right",
+     "Femoral head",
+     "رأس عظم الفخذ"
+    ],
+    [
+     1660,
+     1120,
+     "femur",
+     "Femoral neck",
+     "عنق الفخذ"
+    ],
+    [
+     110,
+     1085,
+     "femur-right",
+     "Greater trochanter",
+     "المدوَّر الكبير"
+    ],
+    [
+     1555,
+     1430,
+     "femur",
+     "Lesser trochanter",
+     "المدوَّر الصغير"
+    ],
+    [
+     1285,
+     1140,
+     "hip-bone",
+     "Teardrop (floor of acetabular fossa)",
+     "علامة الدمعة (أرضية حفرة الحُقّ)"
+    ],
+    [
+     760,
+     1180,
+     "hip-bone-right",
+     "Superior pubic ramus",
+     "الفرع العلوي للعانة"
+    ],
+    [
+     1175,
+     1255,
+     "hip-bone",
+     "Obturator foramen",
+     "الثقبة السدّادية"
+    ],
+    [
+     960,
+     1265,
+     "hip-bone",
+     "Pubic symphysis",
+     "الارتفاق العاني"
+    ],
+    [
+     880,
+     1400,
+     "hip-bone-right",
+     "Ischiopubic ramus",
+     "الفرع الإسكي العاني"
+    ],
+    [
+     1260,
+     1400,
+     "hip-bone",
+     "Ischial tuberosity",
+     "الحدبة الإسكية"
+    ]
+   ]
+  },
+  {
+   "id": "hip-ap",
+   "region": "pelvis",
+   "img": "img/xray/extra/hip-ap.jpg",
+   "w": 1263,
+   "h": 1071,
+   "en": "Hip (right) — AP",
+   "ar": "الورك الأيمن — أمامي خلفي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_a_normal_hip.jpg"
+   ],
+   "pos": {
+    "patient": [
+     "Supine; leg extended and internally rotated 15–20° so the femoral neck is parallel to the IR; pelvis not rotated.",
+     "مستلقٍ على الظهر؛ الساق ممدودة ومدوّرة للداخل 15–20° حتى يصير عنق الفخذ موازي للكاسيت؛ والحوض غير مستدير."
+    ],
+    "cr": [
+     "Perpendicular to the femoral neck: about 2.5–5 cm distal to the midpoint of a line joining the ASIS and the pubic symphysis.",
+     "عمودي على عنق الفخذ: حوالي 2.5–5 سم تحت منتصف الخط الواصل بين الشوكة الحرقفية الأمامية العلوية والارتفاق العاني."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–85 kVp · gonadal shielding when it does not cover the hip.",
+     "مسافة 100 سم · حوالي 75–85 kVp · واقي الغدد التناسلية إذا ما يغطي الورك."
+    ],
+    "eval": [
+     "Acetabulum, femoral head, neck and greater trochanter and the proximal third of the femur included; femoral neck seen in full length (not foreshortened); greater trochanter in profile and lesser trochanter small or hidden.",
+     "يظهر الحُقّ ورأس الفخذ وعنقه والمدوَّر الكبير والثلث العلوي من الفخذ؛ عنق الفخذ بطوله الكامل (غير مقصّر)؛ المدوَّر الكبير بالمحيط والصغير صغير أو مخفي."
+    ]
+   },
+   "pts": [
+    [
+     600,
+     100,
+     "hip-bone-right",
+     "Acetabular roof (sourcil)",
+     "سقف الحُقّ"
+    ],
+    [
+     640,
+     200,
+     "femur-right",
+     "Femoral head",
+     "رأس عظم الفخذ"
+    ],
+    [
+     470,
+     330,
+     "femur-right",
+     "Femoral neck",
+     "عنق الفخذ"
+    ],
+    [
+     180,
+     330,
+     "femur-right",
+     "Greater trochanter",
+     "المدوَّر الكبير"
+    ],
+    [
+     515,
+     705,
+     "femur-right",
+     "Lesser trochanter",
+     "المدوَّر الصغير"
+    ],
+    [
+     290,
+     950,
+     "femur-right",
+     "Femoral shaft",
+     "جسم عظم الفخذ"
+    ],
+    [
+     770,
+     400,
+     "hip-bone-right",
+     "Teardrop",
+     "علامة الدمعة"
+    ],
+    [
+     875,
+     290,
+     "hip-bone-right",
+     "Ilioischial line",
+     "الخط الحرقفي الإسكي"
+    ],
+    [
+     980,
+     265,
+     "hip-bone-right",
+     "Iliopectineal line (pelvic brim)",
+     "الخط الحرقفي العاني (حافة الحوض)"
+    ],
+    [
+     1100,
+     380,
+     "hip-bone-right",
+     "Superior pubic ramus",
+     "الفرع العلوي للعانة"
+    ],
+    [
+     990,
+     520,
+     "hip-bone-right",
+     "Obturator foramen",
+     "الثقبة السدّادية"
+    ],
+    [
+     930,
+     720,
+     "hip-bone-right",
+     "Ischial tuberosity",
+     "الحدبة الإسكية"
+    ]
+   ]
+  },
+  {
+   "id": "chest-pa2",
+   "region": "chest",
+   "img": "img/xray/extra/chest-pa-bones.jpg",
+   "w": 1748,
+   "h": 2000,
+   "en": "Chest — PA (second case)",
+   "ar": "الصدر — خلفي أمامي (حالة ثانية)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:Normal_posteroanterior_(PA)_chest_radiograph_(X-ray).jpg"
+   ],
+   "pos": {
+    "patient": [
+     "Erect, chest against the IR, chin up, hands on the hips and shoulders rolled forward (to move the scapulae off the lungs).",
+     "واقف، الصدر على الكاسيت، الذقن مرفوعة، اليدين على الورك والأكتاف مدفوعة لقدام (حتى يطلع لوح الكتف من الرئة)."
+    ],
+    "cr": [
+     "Perpendicular to T7 (about the inferior angle of the scapula).",
+     "عمودي على T7 (حوالي الزاوية السفلى للوح الكتف)."
+    ],
+    "exp": [
+     "SID 180 cm · about 110–125 kVp · full inspiration (second breath).",
+     "مسافة 180 سم · حوالي 110–125 kVp · شهيق كامل (بالنفس الثاني)."
+    ],
+    "eval": [
+     "10 posterior ribs above the diaphragm; medial ends of the clavicles equidistant from the spinous processes; scapulae outside the lungs; both costophrenic angles included.",
+     "10 أضلاع خلفية فوق الحجاب؛ نهايتا الترقوتين على بعد متساوي من النواتئ الشوكية؛ لوح الكتف برا الرئة؛ الزاويتين الضلعيتين الحجابيتين ظاهرتين."
+    ]
+   },
+   "pts": [
+    [
+     200,
+     250,
+     "clavicle-right",
+     "Clavicle",
+     "الترقوة"
+    ],
+    [
+     1450,
+     262,
+     "clavicle-left",
+     "Clavicle",
+     "الترقوة"
+    ],
+    [
+     840,
+     250,
+     null,
+     "Spinous processes (upper thoracic)",
+     "النواتئ الشوكية (الفقرات الصدرية العليا)"
+    ],
+    [
+     870,
+     450,
+     null,
+     "Trachea",
+     "القصبة الهوائية"
+    ],
+    [
+     1700,
+     350,
+     null,
+     "Humeral head (outside the lung field)",
+     "رأس عظم العضد (خارج حقل الرئة)"
+    ],
+    [
+     1010,
+     660,
+     null,
+     "Aortic knob",
+     "قوس الأبهر"
+    ],
+    [
+     600,
+     1300,
+     null,
+     "Right heart border (right atrium)",
+     "الحافة اليمنى للقلب (الأذين الأيمن)"
+    ],
+    [
+     1270,
+     1350,
+     null,
+     "Left heart border (left ventricle)",
+     "الحافة اليسرى للقلب (البطين الأيسر)"
+    ],
+    [
+     1720,
+     1100,
+     null,
+     "Lateral arcs of the ribs",
+     "الأقواس الجانبية للأضلاع"
+    ],
+    [
+     450,
+     1595,
+     "diaphragm",
+     "Right hemidiaphragm (dome)",
+     "قبة الحجاب الحاجز اليمنى"
+    ],
+    [
+     1400,
+     1655,
+     "diaphragm",
+     "Left hemidiaphragm (dome)",
+     "قبة الحجاب الحاجز اليسرى"
+    ],
+    [
+     165,
+     1710,
+     null,
+     "Right costophrenic angle",
+     "الزاوية الضلعية الحجابية اليمنى"
+    ],
+    [
+     1640,
+     1820,
+     null,
+     "Left costophrenic angle",
+     "الزاوية الضلعية الحجابية اليسرى"
+    ],
+    [
+     1200,
+     1800,
+     null,
+     "Gastric air bubble",
+     "فقاعة هواء المعدة"
+    ]
+   ]
+  }
+ ]
+}

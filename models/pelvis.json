@@ -1,0 +1,450 @@
+[
+ {
+  "key": "hip-bone",
+  "en": "Hip bone (left)",
+  "ar": "عظم الورك الأيسر (الحرقفة + الإسك + العانة)",
+  "kind": "bone",
+  "region": "pelvis",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   0.3522,
+   0.4792,
+   0.1869
+  ]
+ },
+ {
+  "key": "hip-bone-right",
+  "en": "Hip bone (right)",
+  "ar": "عظم الورك الأيمن (الحرقفة + الإسك + العانة)",
+  "kind": "bone",
+  "region": "pelvis",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   -0.3515,
+   0.4763,
+   0.1878
+  ]
+ },
+ {
+  "key": "sacrum",
+  "en": "Sacrum",
+  "ar": "العجز",
+  "kind": "bone",
+  "region": "pelvis",
+  "grp": "sacral",
+  "layer": "bone",
+  "pin": [
+   -0.1534,
+   0.3999,
+   0.0094
+  ]
+ },
+ {
+  "key": "l1-vertebra",
+  "en": "L1 vertebra",
+  "ar": "الفقرة القطنية الأولى",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   0.0036,
+   0.8813,
+   0.1128
+  ]
+ },
+ {
+  "key": "l2-vertebra",
+  "en": "L2 vertebra",
+  "ar": "الفقرة القطنية الثانية",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   -0.0022,
+   0.8169,
+   0.1231
+  ]
+ },
+ {
+  "key": "l3-vertebra",
+  "en": "L3 vertebra",
+  "ar": "الفقرة القطنية الثالثة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   0.0023,
+   0.7161,
+   0.1323
+  ]
+ },
+ {
+  "key": "l4-vertebra",
+  "en": "L4 vertebra",
+  "ar": "الفقرة القطنية الرابعة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   -0.009,
+   0.6362,
+   0.1219
+  ]
+ },
+ {
+  "key": "l5-vertebra",
+  "en": "L5 vertebra",
+  "ar": "الفقرة القطنية الخامسة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   -0.006,
+   0.5458,
+   0.0911
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l1-l2",
+  "en": "Intervertebral disc L1–L2",
+  "ar": "القرص بين الفقرات L1–L2",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   -0.0022,
+   0.839,
+   0.1263
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l2-l3",
+  "en": "Intervertebral disc L2–L3",
+  "ar": "القرص بين الفقرات L2–L3",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   -0.0026,
+   0.7529,
+   0.1365
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l3-l4",
+  "en": "Intervertebral disc L3–L4",
+  "ar": "القرص بين الفقرات L3–L4",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   -0.0004,
+   0.6633,
+   0.1281
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l4-l5",
+  "en": "Intervertebral disc L4–L5",
+  "ar": "القرص بين الفقرات L4–L5",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   0.0163,
+   0.5673,
+   0.0975
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l5-s1",
+  "en": "Intervertebral disc L5–S1",
+  "ar": "القرص بين الفقرات L5–S1",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   -0.0039,
+   0.4707,
+   0.0685
+  ]
+ },
+ {
+  "key": "femur",
+  "en": "Femur (left)",
+  "ar": "عظم الفخذ الأيسر",
+  "kind": "bone",
+  "region": "thigh",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   0.2681,
+   -0.9301,
+   0.1271
+  ]
+ },
+ {
+  "key": "femur-right",
+  "en": "Femur (right)",
+  "ar": "عظم الفخذ الأيمن",
+  "kind": "bone",
+  "region": "thigh",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   -0.2666,
+   -0.9405,
+   0.1272
+  ]
+ },
+ {
+  "key": "psoas-major",
+  "en": "Psoas major (left)",
+  "ar": "القطنية الكبرى (يسار)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "iliopsoas",
+  "layer": "sup",
+  "pin": [
+   0.1133,
+   0.5545,
+   0.0998
+  ]
+ },
+ {
+  "key": "psoas-major-right",
+  "en": "Psoas major (right)",
+  "ar": "القطنية الكبرى (يمين)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "iliopsoas",
+  "layer": "sup",
+  "pin": [
+   -0.114,
+   0.5545,
+   0.0998
+  ]
+ },
+ {
+  "key": "iliacus",
+  "en": "Iliacus (left)",
+  "ar": "الحرقفية (يسار)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "iliopsoas",
+  "layer": "sup",
+  "pin": [
+   0.3483,
+   0.5287,
+   0.1302
+  ]
+ },
+ {
+  "key": "iliacus-right",
+  "en": "Iliacus (right)",
+  "ar": "الحرقفية (يمين)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "iliopsoas",
+  "layer": "sup",
+  "pin": [
+   -0.349,
+   0.5287,
+   0.1302
+  ]
+ },
+ {
+  "key": "pubococcygeus",
+  "en": "Pubococcygeus (left)",
+  "ar": "العانية العصعصية (يسار)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-floor",
+  "layer": "mid",
+  "pin": [
+   0.0934,
+   0.1654,
+   0.0304
+  ]
+ },
+ {
+  "key": "pubococcygeus-right",
+  "en": "Pubococcygeus (right)",
+  "ar": "العانية العصعصية (يمين)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-floor",
+  "layer": "mid",
+  "pin": [
+   -0.0719,
+   0.1517,
+   0.0886
+  ]
+ },
+ {
+  "key": "puborectalis",
+  "en": "Puborectalis (left)",
+  "ar": "العانية المستقيمية (يسار)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-floor",
+  "layer": "mid",
+  "pin": [
+   0.0519,
+   0.1412,
+   0.0862
+  ]
+ },
+ {
+  "key": "puborectalis-right",
+  "en": "Puborectalis (right)",
+  "ar": "العانية المستقيمية (يمين)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-floor",
+  "layer": "mid",
+  "pin": [
+   -0.0382,
+   0.1339,
+   0.0913
+  ]
+ },
+ {
+  "key": "iliococcygeus",
+  "en": "Iliococcygeus (left)",
+  "ar": "الحرقفية العصعصية (يسار)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-floor",
+  "layer": "mid",
+  "pin": [
+   0.0995,
+   0.1684,
+   0.0158
+  ]
+ },
+ {
+  "key": "iliococcygeus-right",
+  "en": "Iliococcygeus (right)",
+  "ar": "الحرقفية العصعصية (يمين)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-floor",
+  "layer": "mid",
+  "pin": [
+   -0.1043,
+   0.1762,
+   0.0017
+  ]
+ },
+ {
+  "key": "coccygeus",
+  "en": "Coccygeus (left)",
+  "ar": "العصعصية (يسار)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-floor",
+  "layer": "mid",
+  "pin": [
+   0.1241,
+   0.2449,
+   -0.0768
+  ]
+ },
+ {
+  "key": "coccygeus-right",
+  "en": "Coccygeus (right)",
+  "ar": "العصعصية (يمين)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-floor",
+  "layer": "mid",
+  "pin": [
+   -0.1248,
+   0.2448,
+   -0.0766
+  ]
+ },
+ {
+  "key": "external-anal-sphincter",
+  "en": "External anal sphincter",
+  "ar": "المصرّة الشرجية الظاهرة",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-floor",
+  "layer": "mid",
+  "pin": [
+   -0.0285,
+   0.0799,
+   -0.0896
+  ]
+ },
+ {
+  "key": "piriformis",
+  "en": "Piriformis (left)",
+  "ar": "الكمثرية (يسار)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-wall",
+  "layer": "deep",
+  "pin": [
+   0.2393,
+   0.3021,
+   -0.0405
+  ]
+ },
+ {
+  "key": "piriformis-right",
+  "en": "Piriformis (right)",
+  "ar": "الكمثرية (يمين)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-wall",
+  "layer": "deep",
+  "pin": [
+   -0.24,
+   0.3021,
+   -0.0405
+  ]
+ },
+ {
+  "key": "obturator-internus",
+  "en": "Obturator internus (left)",
+  "ar": "السدّادة الباطنة (يسار)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-wall",
+  "layer": "deep",
+  "pin": [
+   0.0801,
+   0.1884,
+   0.1108
+  ]
+ },
+ {
+  "key": "obturator-internus-right",
+  "en": "Obturator internus (right)",
+  "ar": "السدّادة الباطنة (يمين)",
+  "kind": "muscle",
+  "region": "pelvis",
+  "grp": "pelvic-wall",
+  "layer": "deep",
+  "pin": [
+   -0.0809,
+   0.1884,
+   0.1108
+  ]
+ }
+]

@@ -1,0 +1,1261 @@
+{
+ "_note": "بطاقات إضافية لخريطة-جديدة.html (الحوض). تندمج فوق data/info.json بدون ما تغيّر أي مفتاح قديم؛ مفاتيح «-right» نسخة الجهة اليمنى.",
+ "hip-bone-right": {
+  "t": [
+   "Flat bone formed by ilium, ischium and pubis",
+   "عظم مسطّح يتكوّن من الحرقفة والإسك والعانة"
+  ],
+  "j": [
+   "Sacrum (sacroiliac joint); femur (hip joint); other hip bone (pubic symphysis)",
+   "العجز (المفصل العجزي الحرقفي)؛ الفخذ (مفصل الورك)؛ عظم الورك الآخر (الارتفاق العاني)"
+  ]
+ },
+ "femur-right": {
+  "t": [
+   "Longest and strongest bone of the body",
+   "أطول وأقوى عظم في الجسم"
+  ],
+  "j": [
+   "Hip bone (hip joint); tibia and patella (knee joint)",
+   "عظم الورك (مفصل الورك)؛ الظنبوب والرضفة (مفصل الركبة)"
+  ]
+ },
+ "psoas-major-right": {
+  "o": [
+   "Bodies and transverse processes of T12–L5",
+   "أجسام الفقرات T12–L5 ونواتئها المستعرضة"
+  ],
+  "i": [
+   "Lesser trochanter of the femur",
+   "المدوَّر الصغير للفخذ"
+  ],
+  "a": [
+   "Flexes the hip; flexes the trunk",
+   "يثني الورك والجذع"
+  ],
+  "n": [
+   "Anterior rami of L1–L3",
+   "الفروع الأمامية للأعصاب L1–L3"
+  ]
+ },
+ "iliacus-right": {
+  "o": [
+   "Iliac fossa",
+   "الحفرة الحرقفية"
+  ],
+  "i": [
+   "Lesser trochanter (with psoas major)",
+   "المدوَّر الصغير (مع القطنية الكبرى)"
+  ],
+  "a": [
+   "Flexes the hip",
+   "يثني الورك"
+  ],
+  "n": [
+   "Femoral nerve (L2–L3)",
+   "العصب الفخذي (L2–L3)"
+  ]
+ },
+ "piriformis-right": {
+  "o": [
+   "Anterior surface of the sacrum",
+   "الوجه الأمامي للعجز"
+  ],
+  "i": [
+   "Superior border of the greater trochanter",
+   "الحافة العلوية للمدوَّر الكبير"
+  ],
+  "a": [
+   "Laterally rotates the extended hip; abducts the flexed hip",
+   "يدوّر الورك الممدود للخارج ويبعد الورك المثني"
+  ],
+  "n": [
+   "Nerve to piriformis (S1–S2)",
+   "العصب الكمثري (S1–S2)"
+  ]
+ },
+ "obturator-internus-right": {
+  "o": [
+   "Internal surface of the obturator membrane and surrounding bone",
+   "الوجه الداخلي للغشاء السدّادي والعظم المحيط به"
+  ],
+  "i": [
+   "Medial surface of the greater trochanter",
+   "الوجه الإنسي للمدوَّر الكبير"
+  ],
+  "a": [
+   "Laterally rotates the hip",
+   "يدوّر الورك للخارج"
+  ],
+  "n": [
+   "Nerve to obturator internus (L5–S1)",
+   "عصب السدّادة الباطنة (L5–S1)"
+  ]
+ },
+ "pubococcygeus": {
+  "o": [
+   "Posterior surface of the body of the pubis and the front of the tendinous arch of levator ani",
+   "الوجه الخلفي لجسم العانة ومقدمة القوس الوترية للرافعة الشرجية"
+  ],
+  "i": [
+   "Anococcygeal body and coccyx",
+   "الجسم الشرجي العصعصي والعصعص"
+  ],
+  "a": [
+   "Part of levator ani: supports the pelvic organs and resists rises in abdominal pressure",
+   "جزء من الرافعة الشرجية: تسند أعضاء الحوض وتقاوم ارتفاع ضغط البطن"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "pubococcygeus-right": {
+  "o": [
+   "Posterior surface of the body of the pubis and the front of the tendinous arch of levator ani",
+   "الوجه الخلفي لجسم العانة ومقدمة القوس الوترية للرافعة الشرجية"
+  ],
+  "i": [
+   "Anococcygeal body and coccyx",
+   "الجسم الشرجي العصعصي والعصعص"
+  ],
+  "a": [
+   "Part of levator ani: supports the pelvic organs and resists rises in abdominal pressure",
+   "جزء من الرافعة الشرجية: تسند أعضاء الحوض وتقاوم ارتفاع ضغط البطن"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "puborectalis": {
+  "o": [
+   "Posterior surface of the body of the pubis (both sides)",
+   "الوجه الخلفي لجسم العانة (من الجهتين)"
+  ],
+  "i": [
+   "Loops behind the anorectal junction as a U-shaped sling, joining the muscle of the other side",
+   "تلتف خلف الملتقى الشرجي المستقيمي كحمّالة على شكل U وتتصل بعضلة الجهة الثانية"
+  ],
+  "a": [
+   "Pulls the anorectal junction forward and keeps the anorectal angle (faecal continence); relaxes during defecation",
+   "تسحب الملتقى الشرجي المستقيمي للأمام وتحافظ على الزاوية الشرجية المستقيمية (التحكم بالبراز)؛ ترتخي وقت التغوّط"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "puborectalis-right": {
+  "o": [
+   "Posterior surface of the body of the pubis (both sides)",
+   "الوجه الخلفي لجسم العانة (من الجهتين)"
+  ],
+  "i": [
+   "Loops behind the anorectal junction as a U-shaped sling, joining the muscle of the other side",
+   "تلتف خلف الملتقى الشرجي المستقيمي كحمّالة على شكل U وتتصل بعضلة الجهة الثانية"
+  ],
+  "a": [
+   "Pulls the anorectal junction forward and keeps the anorectal angle (faecal continence); relaxes during defecation",
+   "تسحب الملتقى الشرجي المستقيمي للأمام وتحافظ على الزاوية الشرجية المستقيمية (التحكم بالبراز)؛ ترتخي وقت التغوّط"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "iliococcygeus": {
+  "o": [
+   "Tendinous arch of levator ani (thickened obturator fascia) and the ischial spine",
+   "القوس الوترية للرافعة الشرجية (لفافة السدّادة المتثخنة) والشوكة الإسكية"
+  ],
+  "i": [
+   "Anococcygeal body and the last two segments of the coccyx",
+   "الجسم الشرجي العصعصي وآخر قطعتين من العصعص"
+  ],
+  "a": [
+   "Part of levator ani: raises and supports the pelvic floor",
+   "جزء من الرافعة الشرجية: ترفع قاع الحوض وتسنده"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "iliococcygeus-right": {
+  "o": [
+   "Tendinous arch of levator ani (thickened obturator fascia) and the ischial spine",
+   "القوس الوترية للرافعة الشرجية (لفافة السدّادة المتثخنة) والشوكة الإسكية"
+  ],
+  "i": [
+   "Anococcygeal body and the last two segments of the coccyx",
+   "الجسم الشرجي العصعصي وآخر قطعتين من العصعص"
+  ],
+  "a": [
+   "Part of levator ani: raises and supports the pelvic floor",
+   "جزء من الرافعة الشرجية: ترفع قاع الحوض وتسنده"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "coccygeus": {
+  "o": [
+   "Ischial spine (lies on the sacrospinous ligament)",
+   "الشوكة الإسكية (تستلقي على الرباط العجزي الشوكي)"
+  ],
+  "i": [
+   "Lateral margins of the lower sacrum and the coccyx",
+   "الحافتان الجانبيتان لأسفل العجز والعصعص"
+  ],
+  "a": [
+   "Completes the back of the pelvic floor; supports the pelvic organs and flexes the coccyx",
+   "تكمّل الجزء الخلفي من قاع الحوض؛ تسند أعضاء الحوض وتثني العصعص"
+  ],
+  "n": [
+   "Anterior rami of S4–S5",
+   "الفروع الأمامية لـ S4–S5"
+  ]
+ },
+ "coccygeus-right": {
+  "o": [
+   "Ischial spine (lies on the sacrospinous ligament)",
+   "الشوكة الإسكية (تستلقي على الرباط العجزي الشوكي)"
+  ],
+  "i": [
+   "Lateral margins of the lower sacrum and the coccyx",
+   "الحافتان الجانبيتان لأسفل العجز والعصعص"
+  ],
+  "a": [
+   "Completes the back of the pelvic floor; supports the pelvic organs and flexes the coccyx",
+   "تكمّل الجزء الخلفي من قاع الحوض؛ تسند أعضاء الحوض وتثني العصعص"
+  ],
+  "n": [
+   "Anterior rami of S4–S5",
+   "الفروع الأمامية لـ S4–S5"
+  ]
+ },
+ "external-anal-sphincter": {
+  "o": [
+   "Perineal body and anococcygeal body (subcutaneous, superficial and deep parts)",
+   "الجسم العجاني والجسم الشرجي العصعصي (أجزاء تحت الجلد وسطحية وعميقة)"
+  ],
+  "i": [
+   "Encircles the lower anal canal; the deep part blends with puborectalis",
+   "تحيط بأسفل القناة الشرجية؛ الجزء العميق يندمج مع العانية المستقيمية"
+  ],
+  "a": [
+   "Voluntary closure of the anal canal",
+   "غلق القناة الشرجية إراديًا"
+  ],
+  "n": [
+   "Inferior rectal nerve (pudendal, S2–S4) and the perineal branch of S4",
+   "العصب المستقيمي السفلي (من الفرجي، S2–S4) والفرع العجاني لـ S4"
+  ]
+ },
+ "external-anal-sphincter-right": {
+  "o": [
+   "Perineal body and anococcygeal body (subcutaneous, superficial and deep parts)",
+   "الجسم العجاني والجسم الشرجي العصعصي (أجزاء تحت الجلد وسطحية وعميقة)"
+  ],
+  "i": [
+   "Encircles the lower anal canal; the deep part blends with puborectalis",
+   "تحيط بأسفل القناة الشرجية؛ الجزء العميق يندمج مع العانية المستقيمية"
+  ],
+  "a": [
+   "Voluntary closure of the anal canal",
+   "غلق القناة الشرجية إراديًا"
+  ],
+  "n": [
+   "Inferior rectal nerve (pudendal, S2–S4) and the perineal branch of S4",
+   "العصب المستقيمي السفلي (من الفرجي، S2–S4) والفرع العجاني لـ S4"
+  ]
+ },
+ "1st-rib-left": {
+  "t": [
+   "True rib (1–7); atypical: shortest, broadest and most curved, with a single head facet, a scalene tubercle and grooves for the subclavian vessels",
+   "ضلع حقيقي (1–7)؛ غير نموذجي: الأقصر والأعرض والأكثر انحناءً، بوجيه واحد للرأس وحديبة الأخمعية وأخدودين للأوعية تحت الترقوة"
+  ],
+  "j": [
+   "T1 vertebra (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T1 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "2nd-rib-left": {
+  "t": [
+   "True rib; atypical: thinner and longer than the 1st, with a rough tuberosity for serratus anterior",
+   "ضلع حقيقي؛ غير نموذجي: أرفع وأطول من الأول، وعليه حدبة خشنة للمسنّنة الأمامية"
+  ],
+  "j": [
+   "T2 vertebra and T1 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T2 وT1 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "3rd-rib-left": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T3 vertebra and T2 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T3 وT2 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "4th-rib-left": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T4 vertebra and T3 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T4 وT3 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "5th-rib-left": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T5 vertebra and T4 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T5 وT4 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "6th-rib-left": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T6 vertebra and T5 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T6 وT5 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "7th-rib-left": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T7 vertebra and T6 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T7 وT6 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "8th-rib-left": {
+  "t": [
+   "False (vertebrochondral) rib: its cartilage joins the cartilage above, forming the costal margin",
+   "ضلع كاذب (فقري غضروفي): غضروفه يتصل بالغضروف اللي فوگه ويكوّن الحافة الضلعية"
+  ],
+  "j": [
+   "T8 vertebra and T7 (costovertebral and costotransverse joints); costal cartilage above via its cartilage",
+   "الفقرة T8 وT7 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والغضروف اللي فوگه عن طريق غضروفه"
+  ]
+ },
+ "9th-rib-left": {
+  "t": [
+   "False (vertebrochondral) rib: its cartilage joins the cartilage above, forming the costal margin",
+   "ضلع كاذب (فقري غضروفي): غضروفه يتصل بالغضروف اللي فوگه ويكوّن الحافة الضلعية"
+  ],
+  "j": [
+   "T9 vertebra and T8 (costovertebral and costotransverse joints); costal cartilage above via its cartilage",
+   "الفقرة T9 وT8 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والغضروف اللي فوگه عن طريق غضروفه"
+  ]
+ },
+ "10th-rib-left": {
+  "t": [
+   "False (vertebrochondral) rib: its cartilage joins the cartilage above, forming the costal margin",
+   "ضلع كاذب (فقري غضروفي): غضروفه يتصل بالغضروف اللي فوگه ويكوّن الحافة الضلعية"
+  ],
+  "j": [
+   "T10 vertebra and T9 (costovertebral and costotransverse joints); costal cartilage above via its cartilage",
+   "الفقرة T10 وT9 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والغضروف اللي فوگه عن طريق غضروفه"
+  ]
+ },
+ "11th-rib-left": {
+  "t": [
+   "Floating (vertebral) rib: short, with no anterior attachment; its tip ends in the abdominal wall",
+   "ضلع عائم (فقري): قصير وبلا اتصال أمامي؛ ينتهي طرفه بجدار البطن"
+  ],
+  "j": [
+   "T11 vertebra (costovertebral joint)",
+   "الفقرة T11 (المفصل الضلعي الفقري)"
+  ]
+ },
+ "12th-rib-left": {
+  "t": [
+   "Floating (vertebral) rib: short, with no anterior attachment; its tip ends in the abdominal wall",
+   "ضلع عائم (فقري): قصير وبلا اتصال أمامي؛ ينتهي طرفه بجدار البطن"
+  ],
+  "j": [
+   "T12 vertebra (costovertebral joint)",
+   "الفقرة T12 (المفصل الضلعي الفقري)"
+  ]
+ },
+ "1st-costal-cartilage-left": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Manubrium (1st: synchondrosis)",
+   "قبضة القص (الأول: اتصال غضروفي)"
+  ]
+ },
+ "2nd-costal-cartilage-left": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Manubrium and body of sternum at the sternal angle (2nd)",
+   "قبضة القص وجسم القص عند الزاوية القصية (الثاني)"
+  ]
+ },
+ "3rd-costal-cartilage-left": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum (sternocostal joints)",
+   "جسم القص (المفاصل القصية الضلعية)"
+  ]
+ },
+ "4th-costal-cartilage-left": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum (sternocostal joints)",
+   "جسم القص (المفاصل القصية الضلعية)"
+  ]
+ },
+ "5th-costal-cartilage-left": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum (sternocostal joints)",
+   "جسم القص (المفاصل القصية الضلعية)"
+  ]
+ },
+ "6th-costal-cartilage-left": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum (sternocostal joints)",
+   "جسم القص (المفاصل القصية الضلعية)"
+  ]
+ },
+ "7th-costal-cartilage-left": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum and xiphisternal junction (sternocostal joints)",
+   "جسم القص والملتقى القصي الرهابي (المفاصل القصية الضلعية)"
+  ]
+ },
+ "clavicle-left": {
+  "t": [
+   "Long bone lying horizontally, S-shaped; the only bony link between the upper limb and the trunk; first bone to ossify",
+   "عظم طويل أفقي بشكل حرف S؛ الصلة العظمية الوحيدة بين الطرف العلوي والجذع؛ أول عظم يتعظّم"
+  ],
+  "j": [
+   "Manubrium (sternoclavicular joint); acromion of scapula (acromioclavicular joint)",
+   "قبضة القص (المفصل القصي الترقوي)؛ أخرم لوح الكتف (المفصل الأخرمي الترقوي)"
+  ]
+ },
+ "scapula-left": {
+  "t": [
+   "Flat triangular bone on the posterolateral chest wall (over ribs 2–7), with spine, acromion, coracoid process and glenoid cavity",
+   "عظم مسطّح مثلث على جدار الصدر الخلفي الجانبي (فوق الأضلاع 2–7)، فيه الشوكة والأخرم والناتئ الغرابي والتجويف الحقّاني"
+  ],
+  "j": [
+   "Humerus (glenohumeral joint); clavicle (acromioclavicular joint)",
+   "عظم العضد (مفصل الكتف)؛ الترقوة (المفصل الأخرمي الترقوي)"
+  ]
+ },
+ "1st-rib-right": {
+  "t": [
+   "True rib (1–7); atypical: shortest, broadest and most curved, with a single head facet, a scalene tubercle and grooves for the subclavian vessels",
+   "ضلع حقيقي (1–7)؛ غير نموذجي: الأقصر والأعرض والأكثر انحناءً، بوجيه واحد للرأس وحديبة الأخمعية وأخدودين للأوعية تحت الترقوة"
+  ],
+  "j": [
+   "T1 vertebra (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T1 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "2nd-rib-right": {
+  "t": [
+   "True rib; atypical: thinner and longer than the 1st, with a rough tuberosity for serratus anterior",
+   "ضلع حقيقي؛ غير نموذجي: أرفع وأطول من الأول، وعليه حدبة خشنة للمسنّنة الأمامية"
+  ],
+  "j": [
+   "T2 vertebra and T1 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T2 وT1 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "3rd-rib-right": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T3 vertebra and T2 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T3 وT2 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "4th-rib-right": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T4 vertebra and T3 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T4 وT3 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "5th-rib-right": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T5 vertebra and T4 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T5 وT4 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "6th-rib-right": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T6 vertebra and T5 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T6 وT5 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "7th-rib-right": {
+  "t": [
+   "True (vertebrosternal) rib: its own costal cartilage joins the sternum directly; typical rib with head, neck, tubercle, angle and shaft with a costal groove",
+   "ضلع حقيقي (فقري قصي): غضروفه يتصل بالقص مباشرة؛ ضلع نموذجي له رأس وعنق وحديبة وزاوية وجسم فيه أخدود ضلعي"
+  ],
+  "j": [
+   "T7 vertebra and T6 (costovertebral and costotransverse joints); sternum via its costal cartilage",
+   "الفقرة T7 وT6 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والقص عن طريق غضروفه الضلعي"
+  ]
+ },
+ "8th-rib-right": {
+  "t": [
+   "False (vertebrochondral) rib: its cartilage joins the cartilage above, forming the costal margin",
+   "ضلع كاذب (فقري غضروفي): غضروفه يتصل بالغضروف اللي فوگه ويكوّن الحافة الضلعية"
+  ],
+  "j": [
+   "T8 vertebra and T7 (costovertebral and costotransverse joints); costal cartilage above via its cartilage",
+   "الفقرة T8 وT7 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والغضروف اللي فوگه عن طريق غضروفه"
+  ]
+ },
+ "9th-rib-right": {
+  "t": [
+   "False (vertebrochondral) rib: its cartilage joins the cartilage above, forming the costal margin",
+   "ضلع كاذب (فقري غضروفي): غضروفه يتصل بالغضروف اللي فوگه ويكوّن الحافة الضلعية"
+  ],
+  "j": [
+   "T9 vertebra and T8 (costovertebral and costotransverse joints); costal cartilage above via its cartilage",
+   "الفقرة T9 وT8 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والغضروف اللي فوگه عن طريق غضروفه"
+  ]
+ },
+ "10th-rib-right": {
+  "t": [
+   "False (vertebrochondral) rib: its cartilage joins the cartilage above, forming the costal margin",
+   "ضلع كاذب (فقري غضروفي): غضروفه يتصل بالغضروف اللي فوگه ويكوّن الحافة الضلعية"
+  ],
+  "j": [
+   "T10 vertebra and T9 (costovertebral and costotransverse joints); costal cartilage above via its cartilage",
+   "الفقرة T10 وT9 (المفصلان الضلعي الفقري والضلعي المستعرض)؛ والغضروف اللي فوگه عن طريق غضروفه"
+  ]
+ },
+ "11th-rib-right": {
+  "t": [
+   "Floating (vertebral) rib: short, with no anterior attachment; its tip ends in the abdominal wall",
+   "ضلع عائم (فقري): قصير وبلا اتصال أمامي؛ ينتهي طرفه بجدار البطن"
+  ],
+  "j": [
+   "T11 vertebra (costovertebral joint)",
+   "الفقرة T11 (المفصل الضلعي الفقري)"
+  ]
+ },
+ "12th-rib-right": {
+  "t": [
+   "Floating (vertebral) rib: short, with no anterior attachment; its tip ends in the abdominal wall",
+   "ضلع عائم (فقري): قصير وبلا اتصال أمامي؛ ينتهي طرفه بجدار البطن"
+  ],
+  "j": [
+   "T12 vertebra (costovertebral joint)",
+   "الفقرة T12 (المفصل الضلعي الفقري)"
+  ]
+ },
+ "1st-costal-cartilage-right": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Manubrium (1st: synchondrosis)",
+   "قبضة القص (الأول: اتصال غضروفي)"
+  ]
+ },
+ "2nd-costal-cartilage-right": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Manubrium and body of sternum at the sternal angle (2nd)",
+   "قبضة القص وجسم القص عند الزاوية القصية (الثاني)"
+  ]
+ },
+ "3rd-costal-cartilage-right": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum (sternocostal joints)",
+   "جسم القص (المفاصل القصية الضلعية)"
+  ]
+ },
+ "4th-costal-cartilage-right": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum (sternocostal joints)",
+   "جسم القص (المفاصل القصية الضلعية)"
+  ]
+ },
+ "5th-costal-cartilage-right": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum (sternocostal joints)",
+   "جسم القص (المفاصل القصية الضلعية)"
+  ]
+ },
+ "6th-costal-cartilage-right": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum (sternocostal joints)",
+   "جسم القص (المفاصل القصية الضلعية)"
+  ]
+ },
+ "7th-costal-cartilage-right": {
+  "t": [
+   "Hyaline cartilage continuing the rib forward; gives the thoracic wall its elasticity",
+   "غضروف زجاجي يكمّل الضلع للأمام؛ يعطي جدار الصدر مرونته"
+  ],
+  "j": [
+   "Body of sternum and xiphisternal junction (sternocostal joints)",
+   "جسم القص والملتقى القصي الرهابي (المفاصل القصية الضلعية)"
+  ]
+ },
+ "clavicle-right": {
+  "t": [
+   "Long bone lying horizontally, S-shaped; the only bony link between the upper limb and the trunk; first bone to ossify",
+   "عظم طويل أفقي بشكل حرف S؛ الصلة العظمية الوحيدة بين الطرف العلوي والجذع؛ أول عظم يتعظّم"
+  ],
+  "j": [
+   "Manubrium (sternoclavicular joint); acromion of scapula (acromioclavicular joint)",
+   "قبضة القص (المفصل القصي الترقوي)؛ أخرم لوح الكتف (المفصل الأخرمي الترقوي)"
+  ]
+ },
+ "scapula-right": {
+  "t": [
+   "Flat triangular bone on the posterolateral chest wall (over ribs 2–7), with spine, acromion, coracoid process and glenoid cavity",
+   "عظم مسطّح مثلث على جدار الصدر الخلفي الجانبي (فوق الأضلاع 2–7)، فيه الشوكة والأخرم والناتئ الغرابي والتجويف الحقّاني"
+  ],
+  "j": [
+   "Humerus (glenohumeral joint); clavicle (acromioclavicular joint)",
+   "عظم العضد (مفصل الكتف)؛ الترقوة (المفصل الأخرمي الترقوي)"
+  ]
+ },
+ "manubrium": {
+  "t": [
+   "Upper part of the sternum; jugular (suprasternal) notch on its upper border",
+   "الجزء العلوي من القص؛ على حافته العليا الثلمة الوِدجية (فوق القص)"
+  ],
+  "j": [
+   "Clavicles (sternoclavicular joints); 1st and upper part of 2nd costal cartilages; body of sternum (manubriosternal joint = sternal angle, level of T4/T5)",
+   "الترقوتان (المفصلان القصيان الترقويان)؛ الغضروف الأول وأعلى الثاني؛ جسم القص (المفصل القبضي القصي = الزاوية القصية بمستوى T4/T5)"
+  ]
+ },
+ "body-of-sternum": {
+  "t": [
+   "Middle and longest part of the sternum, formed by four fused sternebrae",
+   "الجزء الأوسط والأطول من القص، يتكوّن من أربع قطع ملتحمة"
+  ],
+  "j": [
+   "Manubrium (sternal angle); costal cartilages 2–7; xiphoid process (xiphisternal joint, level of T9)",
+   "قبضة القص (الزاوية القصية)؛ الغضاريف الضلعية 2–7؛ الناتئ الرهابي (المفصل القصي الرهابي بمستوى T9)"
+  ]
+ },
+ "xiphoid-process": {
+  "t": [
+   "Small lowest part of the sternum; cartilaginous in youth and ossifies with age",
+   "أصغر وأسفل جزء من القص؛ غضروفي بالصغر ويتعظّم مع العمر"
+  ],
+  "j": [
+   "Body of sternum (xiphisternal joint)",
+   "جسم القص (المفصل القصي الرهابي)"
+  ]
+ },
+ "pectoralis-major-clavicular-left": {
+  "o": [
+   "Anterior surface of the medial half of the clavicle",
+   "الوجه الأمامي للنصف الإنسي من الترقوة"
+  ],
+  "i": [
+   "Lateral lip of the intertubercular sulcus of the humerus",
+   "الشفة الوحشية للأخدود بين الحديبتين بعظم العضد"
+  ],
+  "a": [
+   "Flexes the extended arm; adducts and medially rotates the arm",
+   "تثني العضد الممدود؛ وتقرّب العضد وتدوّره للداخل"
+  ],
+  "n": [
+   "Medial and lateral pectoral nerves (C5–T1)",
+   "العصبان الصدريان الإنسي والوحشي (C5–T1)"
+  ]
+ },
+ "pectoralis-major-sternocostal-left": {
+  "o": [
+   "Anterior surface of the sternum and the upper six costal cartilages",
+   "الوجه الأمامي للقص والغضاريف الضلعية الستة العليا"
+  ],
+  "i": [
+   "Lateral lip of the intertubercular sulcus of the humerus",
+   "الشفة الوحشية للأخدود بين الحديبتين بعظم العضد"
+  ],
+  "a": [
+   "Adducts and medially rotates the arm; extends the flexed arm",
+   "تقرّب العضد وتدوّره للداخل؛ وتمدّ العضد المثني"
+  ],
+  "n": [
+   "Medial and lateral pectoral nerves (C5–T1)",
+   "العصبان الصدريان الإنسي والوحشي (C5–T1)"
+  ]
+ },
+ "pectoralis-major-abdominal-left": {
+  "o": [
+   "Aponeurosis of the external oblique muscle",
+   "سفاق العضلة المائلة الظاهرة"
+  ],
+  "i": [
+   "Lateral lip of the intertubercular sulcus of the humerus",
+   "الشفة الوحشية للأخدود بين الحديبتين بعظم العضد"
+  ],
+  "a": [
+   "Adducts the arm and pulls it downward",
+   "تقرّب العضد وتسحبه للأسفل"
+  ],
+  "n": [
+   "Medial and lateral pectoral nerves (C5–T1)",
+   "العصبان الصدريان الإنسي والوحشي (C5–T1)"
+  ]
+ },
+ "pectoralis-minor-left": {
+  "o": [
+   "Ribs 3–5 near their costal cartilages",
+   "الأضلاع 3–5 قرب غضاريفها"
+  ],
+  "i": [
+   "Coracoid process of the scapula",
+   "الناتئ الغرابي للوح الكتف"
+  ],
+  "a": [
+   "Pulls the scapula forward and downward; raises the ribs in forced inspiration",
+   "تسحب لوح الكتف للأمام والأسفل؛ وترفع الأضلاع بالشهيق القوي"
+  ],
+  "n": [
+   "Medial pectoral nerve (C8–T1)",
+   "العصب الصدري الإنسي (C8–T1)"
+  ]
+ },
+ "subclavius-left": {
+  "o": [
+   "Junction of the 1st rib and its costal cartilage",
+   "ملتقى الضلع الأول مع غضروفه"
+  ],
+  "i": [
+   "Inferior surface of the middle third of the clavicle",
+   "الوجه السفلي للثلث الأوسط من الترقوة"
+  ],
+  "a": [
+   "Anchors and depresses the clavicle",
+   "تثبّت الترقوة وتخفضها"
+  ],
+  "n": [
+   "Nerve to subclavius (C5–C6)",
+   "عصب تحت الترقوة (C5–C6)"
+  ]
+ },
+ "serratus-anterior-left": {
+  "o": [
+   "Outer surfaces of the upper 8–9 ribs",
+   "الوجوه الخارجية للأضلاع 8–9 العليا"
+  ],
+  "i": [
+   "Costal surface of the medial border of the scapula",
+   "الوجه الضلعي للحافة الإنسية للوح الكتف"
+  ],
+  "a": [
+   "Protracts the scapula and rotates it upward; holds it against the chest wall (weakness → winged scapula)",
+   "تسحب لوح الكتف للأمام وتدوّره للأعلى؛ وتثبّته على جدار الصدر (ضعفها ← لوح كتف مجنّح)"
+  ],
+  "n": [
+   "Long thoracic nerve (C5–C7)",
+   "العصب الصدري الطويل (C5–C7)"
+  ]
+ },
+ "pectoralis-major-clavicular-right": {
+  "o": [
+   "Anterior surface of the medial half of the clavicle",
+   "الوجه الأمامي للنصف الإنسي من الترقوة"
+  ],
+  "i": [
+   "Lateral lip of the intertubercular sulcus of the humerus",
+   "الشفة الوحشية للأخدود بين الحديبتين بعظم العضد"
+  ],
+  "a": [
+   "Flexes the extended arm; adducts and medially rotates the arm",
+   "تثني العضد الممدود؛ وتقرّب العضد وتدوّره للداخل"
+  ],
+  "n": [
+   "Medial and lateral pectoral nerves (C5–T1)",
+   "العصبان الصدريان الإنسي والوحشي (C5–T1)"
+  ]
+ },
+ "pectoralis-major-sternocostal-right": {
+  "o": [
+   "Anterior surface of the sternum and the upper six costal cartilages",
+   "الوجه الأمامي للقص والغضاريف الضلعية الستة العليا"
+  ],
+  "i": [
+   "Lateral lip of the intertubercular sulcus of the humerus",
+   "الشفة الوحشية للأخدود بين الحديبتين بعظم العضد"
+  ],
+  "a": [
+   "Adducts and medially rotates the arm; extends the flexed arm",
+   "تقرّب العضد وتدوّره للداخل؛ وتمدّ العضد المثني"
+  ],
+  "n": [
+   "Medial and lateral pectoral nerves (C5–T1)",
+   "العصبان الصدريان الإنسي والوحشي (C5–T1)"
+  ]
+ },
+ "pectoralis-major-abdominal-right": {
+  "o": [
+   "Aponeurosis of the external oblique muscle",
+   "سفاق العضلة المائلة الظاهرة"
+  ],
+  "i": [
+   "Lateral lip of the intertubercular sulcus of the humerus",
+   "الشفة الوحشية للأخدود بين الحديبتين بعظم العضد"
+  ],
+  "a": [
+   "Adducts the arm and pulls it downward",
+   "تقرّب العضد وتسحبه للأسفل"
+  ],
+  "n": [
+   "Medial and lateral pectoral nerves (C5–T1)",
+   "العصبان الصدريان الإنسي والوحشي (C5–T1)"
+  ]
+ },
+ "pectoralis-minor-right": {
+  "o": [
+   "Ribs 3–5 near their costal cartilages",
+   "الأضلاع 3–5 قرب غضاريفها"
+  ],
+  "i": [
+   "Coracoid process of the scapula",
+   "الناتئ الغرابي للوح الكتف"
+  ],
+  "a": [
+   "Pulls the scapula forward and downward; raises the ribs in forced inspiration",
+   "تسحب لوح الكتف للأمام والأسفل؛ وترفع الأضلاع بالشهيق القوي"
+  ],
+  "n": [
+   "Medial pectoral nerve (C8–T1)",
+   "العصب الصدري الإنسي (C8–T1)"
+  ]
+ },
+ "subclavius-right": {
+  "o": [
+   "Junction of the 1st rib and its costal cartilage",
+   "ملتقى الضلع الأول مع غضروفه"
+  ],
+  "i": [
+   "Inferior surface of the middle third of the clavicle",
+   "الوجه السفلي للثلث الأوسط من الترقوة"
+  ],
+  "a": [
+   "Anchors and depresses the clavicle",
+   "تثبّت الترقوة وتخفضها"
+  ],
+  "n": [
+   "Nerve to subclavius (C5–C6)",
+   "عصب تحت الترقوة (C5–C6)"
+  ]
+ },
+ "serratus-anterior-right": {
+  "o": [
+   "Outer surfaces of the upper 8–9 ribs",
+   "الوجوه الخارجية للأضلاع 8–9 العليا"
+  ],
+  "i": [
+   "Costal surface of the medial border of the scapula",
+   "الوجه الضلعي للحافة الإنسية للوح الكتف"
+  ],
+  "a": [
+   "Protracts the scapula and rotates it upward; holds it against the chest wall (weakness → winged scapula)",
+   "تسحب لوح الكتف للأمام وتدوّره للأعلى؛ وتثبّته على جدار الصدر (ضعفها ← لوح كتف مجنّح)"
+  ],
+  "n": [
+   "Long thoracic nerve (C5–C7)",
+   "العصب الصدري الطويل (C5–C7)"
+  ]
+ },
+ "diaphragm": {
+  "o": [
+   "Xiphoid process, inner surfaces of the lower six costal cartilages and ribs, lumbar vertebrae L1–L3 (crura) and the arcuate ligaments",
+   "الناتئ الرهابي، والوجوه الداخلية للغضاريف والأضلاع الستة السفلى، والفقرات القطنية L1–L3 (الساقان) والأربطة المقوّسة"
+  ],
+  "i": [
+   "Central tendon",
+   "الوتر المركزي"
+  ],
+  "a": [
+   "Main muscle of inspiration: contracts and flattens, enlarging the thoracic cavity; the right dome sits slightly higher than the left on a chest X-ray",
+   "العضلة الرئيسية للشهيق: تنقبض وتنبسط فتكبر جوف الصدر؛ القبة اليمنى أعلى شوية من اليسرى بأشعة الصدر"
+  ],
+  "n": [
+   "Phrenic nerve (C3–C5)",
+   "العصب الحجابي (C3–C5)"
+  ]
+ },
+ "frontal-bone": {
+  "t": [
+   "Cranial (neurocranium) bone forming the forehead, roofs of the orbits and contains the frontal sinuses",
+   "عظم قحفي يكوّن الجبهة وسقف المحجرين وفيه الجيوب الجبهية"
+  ],
+  "j": [
+   "Parietal bones (coronal suture); sphenoid, ethmoid, nasal, maxillae, lacrimal and zygomatic bones",
+   "العظمان الجداريان (الدرز الإكليلي)؛ والوتدي والغربالي والأنفيان والفكان العلويان والدمعيان والوجنيان"
+  ]
+ },
+ "parietal-bone-left": {
+  "t": [
+   "Paired cranial bone forming the roof and sides of the skull",
+   "عظم قحفي مزدوج يكوّن سقف الجمجمة وجانبيها"
+  ],
+  "j": [
+   "Other parietal (sagittal suture); frontal (coronal); occipital (lambdoid); temporal (squamous suture); sphenoid (at pterion)",
+   "الجداري الآخر (الدرز السهمي)؛ الجبهي (الإكليلي)؛ القذالي (اللامي)؛ الصدغي (الدرز الحرشفي)؛ الوتدي (عند الجناح/البتيريون)"
+  ]
+ },
+ "parietal-bone-right": {
+  "t": [
+   "Paired cranial bone forming the roof and sides of the skull",
+   "عظم قحفي مزدوج يكوّن سقف الجمجمة وجانبيها"
+  ],
+  "j": [
+   "Other parietal (sagittal suture); frontal (coronal); occipital (lambdoid); temporal (squamous suture); sphenoid (at pterion)",
+   "الجداري الآخر (الدرز السهمي)؛ الجبهي (الإكليلي)؛ القذالي (اللامي)؛ الصدغي (الدرز الحرشفي)؛ الوتدي (عند الجناح/البتيريون)"
+  ]
+ },
+ "occipital-bone": {
+  "t": [
+   "Cranial bone forming the back and base of the skull; contains the foramen magnum and the occipital condyles",
+   "عظم قحفي يكوّن مؤخرة الجمجمة وقاعدتها؛ فيه الثقبة العظمى واللقمتان القذاليتان"
+  ],
+  "j": [
+   "Parietals (lambdoid suture); temporals; sphenoid; atlas C1 (atlanto-occipital joint)",
+   "الجداريان (الدرز اللامي)؛ الصدغيان؛ الوتدي؛ الفهقة C1 (المفصل الفهقي القذالي)"
+  ]
+ },
+ "temporal-bone-left": {
+  "t": [
+   "Paired cranial bone at the side and base of the skull: squamous, petrous (houses the middle and inner ear), mastoid and tympanic parts; styloid and zygomatic processes",
+   "عظم قحفي مزدوج بجانب وقاعدة الجمجمة: الجزء الحرشفي، والصخري (فيه الأذن الوسطى والداخلية)، والخشّائي، والطبلي؛ وفيه الناتئ الإبري والوجني"
+  ],
+  "j": [
+   "Parietal (squamous suture); occipital; sphenoid; zygomatic (zygomatic arch); mandible (temporomandibular joint)",
+   "الجداري (الدرز الحرشفي)؛ القذالي؛ الوتدي؛ الوجني (القوس الوجنية)؛ الفك السفلي (المفصل الصدغي الفكي)"
+  ]
+ },
+ "temporal-bone-right": {
+  "t": [
+   "Paired cranial bone at the side and base of the skull: squamous, petrous (houses the middle and inner ear), mastoid and tympanic parts; styloid and zygomatic processes",
+   "عظم قحفي مزدوج بجانب وقاعدة الجمجمة: الجزء الحرشفي، والصخري (فيه الأذن الوسطى والداخلية)، والخشّائي، والطبلي؛ وفيه الناتئ الإبري والوجني"
+  ],
+  "j": [
+   "Parietal (squamous suture); occipital; sphenoid; zygomatic (zygomatic arch); mandible (temporomandibular joint)",
+   "الجداري (الدرز الحرشفي)؛ القذالي؛ الوتدي؛ الوجني (القوس الوجنية)؛ الفك السفلي (المفصل الصدغي الفكي)"
+  ]
+ },
+ "sphenoid-bone": {
+  "t": [
+   "Butterfly-shaped bone in the middle of the skull base; its body contains the sphenoid sinus and the sella turcica (pituitary)",
+   "عظم بشكل فراشة بوسط قاعدة الجمجمة؛ جسمه فيه الجيب الوتدي والسرج التركي (الغدة النخامية)"
+  ],
+  "j": [
+   "Articulates with all other cranial bones; also vomer, palatine, zygomatic bones",
+   "يتمفصل مع كل عظام القحف؛ وكمان الميكعة والحنكيين والوجنيين"
+  ]
+ },
+ "ethmoid-bone": {
+  "t": [
+   "Light, spongy bone between the orbits: cribriform plate (roof of the nasal cavity), perpendicular plate (nasal septum), ethmoid air cells",
+   "عظم خفيف إسفنجي بين المحجرين: الصفيحة الغربالية (سقف جوف الأنف)، والصفيحة العمودية (الحاجز الأنفي)، والخلايا الهوائية الغربالية"
+  ],
+  "j": [
+   "Frontal, sphenoid, nasal, maxillae, lacrimals, palatines, inferior nasal conchae, vomer",
+   "الجبهي والوتدي والأنفيان والفكان العلويان والدمعيان والحنكيان والمحارتان السفليتان والميكعة"
+  ]
+ },
+ "maxilla-left": {
+  "t": [
+   "Paired facial bone forming the upper jaw, part of the orbit floor, nasal cavity and hard palate; contains the maxillary sinus and upper teeth",
+   "عظم وجهي مزدوج يكوّن الفك العلوي وجزء من أرضية المحجر وجوف الأنف والحنك الصلب؛ فيه الجيب الفكي والأسنان العليا"
+  ],
+  "j": [
+   "Other maxilla; frontal, ethmoid, nasal, zygomatic, lacrimal, palatine bones, vomer, inferior nasal concha",
+   "الفك العلوي الآخر؛ والجبهي والغربالي والأنفي والوجني والدمعي والحنكي والميكعة والمحارة السفلية"
+  ]
+ },
+ "maxilla-right": {
+  "t": [
+   "Paired facial bone forming the upper jaw, part of the orbit floor, nasal cavity and hard palate; contains the maxillary sinus and upper teeth",
+   "عظم وجهي مزدوج يكوّن الفك العلوي وجزء من أرضية المحجر وجوف الأنف والحنك الصلب؛ فيه الجيب الفكي والأسنان العليا"
+  ],
+  "j": [
+   "Other maxilla; frontal, ethmoid, nasal, zygomatic, lacrimal, palatine bones, vomer, inferior nasal concha",
+   "الفك العلوي الآخر؛ والجبهي والغربالي والأنفي والوجني والدمعي والحنكي والميكعة والمحارة السفلية"
+  ]
+ },
+ "mandible": {
+  "t": [
+   "Lower jaw — the only movable bone of the skull: body, rami, condylar and coronoid processes; holds the lower teeth",
+   "الفك السفلي — العظم الوحيد المتحرك بالجمجمة: الجسم والفرعان والناتئ اللقمي والإكليلي؛ وفيه الأسنان السفلى"
+  ],
+  "j": [
+   "Temporal bones (temporomandibular joints)",
+   "العظمان الصدغيان (المفصلان الصدغيان الفكيان)"
+  ]
+ },
+ "zygomatic-bone-left": {
+  "t": [
+   "Cheek bone; forms the prominence of the cheek and the lateral wall and floor of the orbit",
+   "عظم الخد؛ يكوّن بروز الوجنة والجدار الوحشي وأرضية المحجر"
+  ],
+  "j": [
+   "Frontal, sphenoid, maxilla, temporal (zygomatic arch)",
+   "الجبهي والوتدي والفك العلوي والصدغي (القوس الوجنية)"
+  ]
+ },
+ "zygomatic-bone-right": {
+  "t": [
+   "Cheek bone; forms the prominence of the cheek and the lateral wall and floor of the orbit",
+   "عظم الخد؛ يكوّن بروز الوجنة والجدار الوحشي وأرضية المحجر"
+  ],
+  "j": [
+   "Frontal, sphenoid, maxilla, temporal (zygomatic arch)",
+   "الجبهي والوتدي والفك العلوي والصدغي (القوس الوجنية)"
+  ]
+ },
+ "nasal-bone-left": {
+  "t": [
+   "Small paired bone forming the bridge of the nose",
+   "عظم صغير مزدوج يكوّن جسر الأنف"
+  ],
+  "j": [
+   "Other nasal bone, frontal, ethmoid, maxilla",
+   "العظم الأنفي الآخر والجبهي والغربالي والفك العلوي"
+  ]
+ },
+ "nasal-bone-right": {
+  "t": [
+   "Small paired bone forming the bridge of the nose",
+   "عظم صغير مزدوج يكوّن جسر الأنف"
+  ],
+  "j": [
+   "Other nasal bone, frontal, ethmoid, maxilla",
+   "العظم الأنفي الآخر والجبهي والغربالي والفك العلوي"
+  ]
+ },
+ "lacrimal-bone-left": {
+  "t": [
+   "Smallest facial bone, in the medial wall of the orbit; holds the lacrimal fossa (tear sac)",
+   "أصغر عظم بالوجه، بالجدار الإنسي للمحجر؛ فيه الحفرة الدمعية (الكيس الدمعي)"
+  ],
+  "j": [
+   "Frontal, ethmoid, maxilla, inferior nasal concha",
+   "الجبهي والغربالي والفك العلوي والمحارة الأنفية السفلية"
+  ]
+ },
+ "lacrimal-bone-right": {
+  "t": [
+   "Smallest facial bone, in the medial wall of the orbit; holds the lacrimal fossa (tear sac)",
+   "أصغر عظم بالوجه، بالجدار الإنسي للمحجر؛ فيه الحفرة الدمعية (الكيس الدمعي)"
+  ],
+  "j": [
+   "Frontal, ethmoid, maxilla, inferior nasal concha",
+   "الجبهي والغربالي والفك العلوي والمحارة الأنفية السفلية"
+  ]
+ },
+ "palatine-bone-left": {
+  "t": [
+   "L-shaped bone forming the back of the hard palate and part of the nasal cavity and orbit floor",
+   "عظم بشكل L يكوّن مؤخرة الحنك الصلب وجزء من جوف الأنف وأرضية المحجر"
+  ],
+  "j": [
+   "Other palatine, maxilla, sphenoid, ethmoid, vomer, inferior nasal concha",
+   "الحنكي الآخر والفك العلوي والوتدي والغربالي والميكعة والمحارة السفلية"
+  ]
+ },
+ "palatine-bone-right": {
+  "t": [
+   "L-shaped bone forming the back of the hard palate and part of the nasal cavity and orbit floor",
+   "عظم بشكل L يكوّن مؤخرة الحنك الصلب وجزء من جوف الأنف وأرضية المحجر"
+  ],
+  "j": [
+   "Other palatine, maxilla, sphenoid, ethmoid, vomer, inferior nasal concha",
+   "الحنكي الآخر والفك العلوي والوتدي والغربالي والميكعة والمحارة السفلية"
+  ]
+ },
+ "inferior-nasal-concha-left": {
+  "t": [
+   "Thin curled bone on the lateral wall of the nasal cavity",
+   "عظم رقيق ملتف على الجدار الوحشي لجوف الأنف"
+  ],
+  "j": [
+   "Maxilla, palatine, lacrimal, ethmoid",
+   "الفك العلوي والحنكي والدمعي والغربالي"
+  ]
+ },
+ "inferior-nasal-concha-right": {
+  "t": [
+   "Thin curled bone on the lateral wall of the nasal cavity",
+   "عظم رقيق ملتف على الجدار الوحشي لجوف الأنف"
+  ],
+  "j": [
+   "Maxilla, palatine, lacrimal, ethmoid",
+   "الفك العلوي والحنكي والدمعي والغربالي"
+  ]
+ },
+ "vomer": {
+  "t": [
+   "Thin plough-shaped bone forming the lower back part of the nasal septum",
+   "عظم رقيق بشكل المحراث يكوّن الجزء الخلفي السفلي من الحاجز الأنفي"
+  ],
+  "j": [
+   "Sphenoid, ethmoid, maxillae, palatines",
+   "الوتدي والغربالي والفكان العلويان والحنكيان"
+  ]
+ },
+ "hyoid-bone": {
+  "t": [
+   "U-shaped bone in the neck at C3 level; the only bone with no joint to another bone (held by muscles and ligaments)",
+   "عظم بشكل U بالرقبة بمستوى C3؛ العظم الوحيد اللي ما يتمفصل ويّا عظم ثاني (تمسكه العضلات والأربطة)"
+  ],
+  "j": [
+   "No bony articulation; suspended from the styloid processes by the stylohyoid ligaments",
+   "بلا مفصل عظمي؛ معلّق بالناتئين الإبريين بالرباطين الإبريين اللاميين"
+  ]
+ },
+ "sternocleidomastoid-left": {
+  "o": [
+   "Sternal head: manubrium; clavicular head: medial third of the clavicle",
+   "الرأس القصي: قبضة القص؛ الرأس الترقوي: الثلث الإنسي من الترقوة"
+  ],
+  "i": [
+   "Mastoid process of the temporal bone and lateral half of the superior nuchal line",
+   "الناتئ الخشّائي للعظم الصدغي والنصف الوحشي للخط القفوي العلوي"
+  ],
+  "a": [
+   "One side: tilts the head to the same side and turns the face to the opposite side; both: flex the neck",
+   "جهة وحدة: تميّل الرأس لنفس الجهة وتدوّر الوجه للجهة المعاكسة؛ الثنتين: تثني الرقبة"
+  ],
+  "n": [
+   "Accessory nerve (CN XI); C2–C3 (sensory)",
+   "العصب الإضافي (العصب القحفي 11)؛ C2–C3 (حسّي)"
+  ]
+ },
+ "platysma-left": {
+  "o": [
+   "Fascia over the upper pectoralis major and deltoid",
+   "اللفافة فوق أعلى الصدرية الكبرى والدالية"
+  ],
+  "i": [
+   "Lower border of the mandible and skin of the lower face and angle of the mouth",
+   "الحافة السفلى للفك السفلي وجلد أسفل الوجه وزاوية الفم"
+  ],
+  "a": [
+   "Tenses the skin of the neck; draws the corners of the mouth down",
+   "تشدّ جلد الرقبة؛ وتسحب زاويتي الفم للأسفل"
+  ],
+  "n": [
+   "Cervical branch of the facial nerve (CN VII)",
+   "الفرع العنقي للعصب الوجهي (العصب القحفي 7)"
+  ]
+ },
+ "sternocleidomastoid-right": {
+  "o": [
+   "Sternal head: manubrium; clavicular head: medial third of the clavicle",
+   "الرأس القصي: قبضة القص؛ الرأس الترقوي: الثلث الإنسي من الترقوة"
+  ],
+  "i": [
+   "Mastoid process of the temporal bone and lateral half of the superior nuchal line",
+   "الناتئ الخشّائي للعظم الصدغي والنصف الوحشي للخط القفوي العلوي"
+  ],
+  "a": [
+   "One side: tilts the head to the same side and turns the face to the opposite side; both: flex the neck",
+   "جهة وحدة: تميّل الرأس لنفس الجهة وتدوّر الوجه للجهة المعاكسة؛ الثنتين: تثني الرقبة"
+  ],
+  "n": [
+   "Accessory nerve (CN XI); C2–C3 (sensory)",
+   "العصب الإضافي (العصب القحفي 11)؛ C2–C3 (حسّي)"
+  ]
+ },
+ "platysma-right": {
+  "o": [
+   "Fascia over the upper pectoralis major and deltoid",
+   "اللفافة فوق أعلى الصدرية الكبرى والدالية"
+  ],
+  "i": [
+   "Lower border of the mandible and skin of the lower face and angle of the mouth",
+   "الحافة السفلى للفك السفلي وجلد أسفل الوجه وزاوية الفم"
+  ],
+  "a": [
+   "Tenses the skin of the neck; draws the corners of the mouth down",
+   "تشدّ جلد الرقبة؛ وتسحب زاويتي الفم للأسفل"
+  ],
+  "n": [
+   "Cervical branch of the facial nerve (CN VII)",
+   "الفرع العنقي للعصب الوجهي (العصب القحفي 7)"
+  ]
+ }
+}

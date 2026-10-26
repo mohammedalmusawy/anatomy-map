@@ -1,0 +1,68 @@
+{
+ "extra/pelvis-front": {
+  "file": "File:Pelvis - os coxae, os sacrum (frontal view).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pelvis_-_os_coxae,_os_sacrum_(frontal_view).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/pelvis-back": {
+  "file": "File:Pelvis - os coxae, os sacrum (posterior view).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pelvis_-_os_coxae,_os_sacrum_(posterior_view).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/hip-bone-lat": {
+  "file": "File:Pelvis - os coxae (lateral view).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pelvis_-_os_coxae_(lateral_view).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/sacrum-ant": {
+  "file": "File:Pelvis - os sacrum (anterior).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pelvis_-_os_sacrum_(anterior).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/ribs": {
+  "file": "File:Costae - sin, dex.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Costae_-_sin,_dex.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/ribs-1-3": {
+  "file": "File:Costae - 1, 2, 3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Costae_-_1,_2,_3.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/scapula-ant": {
+  "file": "File:Scapula - anterior view.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Scapula_-_anterior_view.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/clavicles": {
+  "file": "File:Clavicula - sin, dex.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Clavicula_-_sin,_dex.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/skull-lat": {
+  "file": "File:Cranium - lateral view.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Cranium_-_lateral_view.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/skull-pterion": {
+  "file": "File:Cranium - pterion.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Cranium_-_pterion.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/mandible-lat": {
+  "file": "File:Cranium - mandibula (lateral view).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Cranium_-_mandibula_(lateral_view).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ }
+}
