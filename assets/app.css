@@ -1,0 +1,104 @@
+/* موقع دروس الأشعة: نفس ألوان ملفات المحاضرات، ويتبع وضع الموبايل (فاتح/داكن) وحده. */
+:root {
+  --bg: #F5F6FA; --card: #FFFFFF; --ink: #1E2433; --muted: #5E6678; --line: #E3E6EE;
+  --brand: #3B4A8C; --brand-ink: #FFFFFF; --brand-soft: #EEF0F8;
+  --ok: #2E8B57; --ok-soft: #E8F5EE; --bad: #C0392B; --bad-soft: #FCEDEB; --hl: #FFE6A0;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #10141F; --card: #1A2030; --ink: #E8EAF2; --muted: #9AA2B6; --line: #2A3146;
+    --brand: #8E9CF0; --brand-ink: #10141F; --brand-soft: #232B44;
+    --ok: #5CC98A; --ok-soft: #173326; --bad: #F07B6E; --bad-soft: #3A1E1C;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 500 17px/1.7 "IBM Plex Sans Arabic", system-ui, sans-serif;
+  padding: env(safe-area-inset-top) 16px calc(24px + env(safe-area-inset-bottom));
+}
+.wrap { max-width: 560px; margin: 0 auto; }
+a { color: inherit; text-decoration: none; }
+.en { direction: ltr; unicode-bidi: isolate; }
+
+/* الرأس */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0 6px; min-height: 52px; }
+.back { color: var(--brand); font-weight: 600; font-size: 16px; padding: 6px 0; }
+.crumb { color: var(--muted); font-size: 14px; text-align: left; }
+h1 { font-size: 26px; line-height: 1.4; margin: 10px 0 4px; }
+.sub { color: var(--muted); margin: 0 0 22px; font-size: 15px; }
+
+/* أزرار القوائم */
+.list { display: grid; gap: 12px; }
+.item {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+  padding: 18px 18px; min-height: 64px; font-size: 18px; font-weight: 600;
+}
+.item small { display: block; color: var(--muted); font-size: 14px; font-weight: 500; }
+.item .en { font-size: 13px; color: var(--muted); font-weight: 500; display: block; text-align: right; }
+.item .go { color: var(--brand); font-size: 22px; flex: none; }
+.item.off { opacity: .5; pointer-events: none; }
+.item .tag { font-size: 13px; color: var(--muted); font-weight: 500; flex: none; }
+
+/* الرئيسية */
+.hero { text-align: center; padding: 28px 0 18px; }
+.hero h1 { font-size: 28px; }
+.big {
+  display: block; border-radius: 22px; padding: 26px 22px; margin-bottom: 14px;
+  background: var(--brand); color: var(--brand-ink); font-size: 24px; font-weight: 700;
+}
+.big small { display: block; font-size: 15px; font-weight: 500; opacity: .85; margin-top: 4px; }
+.big.alt { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+.big.alt small { color: var(--muted); opacity: 1; }
+.foot { text-align: center; color: var(--muted); font-size: 14px; margin-top: 26px; }
+.foot a { color: var(--brand); font-weight: 600; }
+
+/* الاختبار */
+.progress { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin: 6px 0 6px; }
+.bar { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 18px; }
+.bar i { display: block; height: 100%; width: 0; background: var(--brand); border-radius: 99px; transition: width .25s; }
+.q { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin-bottom: 14px; }
+.q .qen { direction: ltr; text-align: left; font-weight: 600; font-size: 18px; line-height: 1.5; }
+.q .qar { color: var(--muted); margin-top: 6px; font-size: 16px; }
+.opts { display: grid; gap: 10px; }
+.opt {
+  width: 100%; text-align: right; font: inherit; color: var(--ink); cursor: pointer;
+  background: var(--card); border: 2px solid var(--line); border-radius: 14px; padding: 12px 14px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.opt .l { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); display: grid; place-items: center; font-weight: 700; font-size: 14px; margin-top: 2px; }
+.opt .t { flex: 1; }
+.opt .oe { display: block; direction: ltr; text-align: left; font-weight: 600; font-size: 16px; line-height: 1.45; }
+.opt .oa { display: block; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.opt:disabled { cursor: default; }
+.opt.right { border-color: var(--ok); background: var(--ok-soft); }
+.opt.right .l { background: var(--ok); color: #fff; }
+.opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.opt.wrong .l { background: var(--bad); color: #fff; }
+.fb { border-radius: 14px; padding: 14px 16px; margin-top: 14px; font-size: 16px; }
+.fb.ok { background: var(--ok-soft); color: var(--ok); font-weight: 700; }
+.fb.no { background: var(--bad-soft); }
+.fb.no b { color: var(--bad); }
+.fb .ans { margin-top: 6px; font-weight: 600; }
+.fb .ans .en { display: block; text-align: left; }
+.fb .why { margin-top: 8px; color: var(--ink); }
+.next {
+  margin-top: 16px;
+  width: 100%; border: 0; border-radius: 16px; padding: 16px; font: 700 18px "IBM Plex Sans Arabic", system-ui, sans-serif;
+  background: var(--brand); color: var(--brand-ink); cursor: pointer;
+}
+.hidden { display: none !important; }
+
+/* النتيجة */
+.result { text-align: center; padding: 24px 0 8px; }
+.score { font-size: 56px; font-weight: 700; color: var(--brand); line-height: 1.2; }
+.score small { font-size: 22px; color: var(--muted); }
+.msg { font-size: 19px; margin: 10px 0 24px; }
+.actions { display: grid; gap: 12px; }
+.btn { display: block; width: 100%; text-align: center; border-radius: 16px; padding: 16px; font: 700 17px "IBM Plex Sans Arabic", system-ui, sans-serif; cursor: pointer; border: 2px solid var(--brand); background: var(--brand); color: var(--brand-ink); }
+.btn.ghost { background: transparent; color: var(--brand); }
+.btn.plain { border-color: var(--line); background: var(--card); color: var(--ink); }
+.soon { text-align: center; color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 16px; padding: 22px; margin-bottom: 14px; }

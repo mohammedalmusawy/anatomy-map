@@ -1,0 +1,24 @@
+{
+ "name": "دروس تقنيات الأشعة — محمد الموسوي",
+ "short_name": "دروس الأشعة",
+ "lang": "ar",
+ "dir": "rtl",
+ "start_url": "دروس/",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#F5F6FA",
+ "theme_color": "#3B4A8C",
+ "icons": [
+  {
+   "src": "assets/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "assets/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}
