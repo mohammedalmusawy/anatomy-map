@@ -4,7 +4,12 @@
    "key": "p0",
    "en": "Humerus",
    "ar": "عظم العضد",
-   "grp": "bone"
+   "grp": "bone",
+   "pin": [
+    -0.1759,
+    0.8625,
+    0.1473
+   ]
   }
  ],
  "forearm-bones": [
@@ -12,19 +17,34 @@
    "key": "p0",
    "en": "Radius",
    "ar": "الكعبرة",
-   "grp": "bone"
+   "grp": "bone",
+   "pin": [
+    0.1464,
+    -0.8668,
+    0.3231
+   ]
   },
   {
    "key": "p1",
    "en": "Ulna",
    "ar": "الزند",
-   "grp": "bone"
+   "grp": "bone",
+   "pin": [
+    -0.1706,
+    0.8378,
+    -0.0634
+   ]
   },
   {
    "key": "p2",
    "en": "Interosseous membrane",
    "ar": "الغشاء بين العظمين",
-   "grp": "membrane"
+   "grp": "membrane",
+   "pin": [
+    -0.0819,
+    -0.5841,
+    0.2369
+   ]
   }
  ],
  "hand-bones": [
@@ -32,163 +52,298 @@
    "key": "p0",
    "en": "Scaphoid",
    "ar": "الزورقي",
-   "grp": "carpal-p"
+   "grp": "carpal-p",
+   "pin": [
+    -0.2004,
+    0.8838,
+    -0.7448
+   ]
   },
   {
    "key": "p1",
    "en": "Lunate",
    "ar": "الهلالي",
-   "grp": "carpal-p"
+   "grp": "carpal-p",
+   "pin": [
+    -0.5375,
+    0.8864,
+    -0.6949
+   ]
   },
   {
    "key": "p2",
    "en": "Triquetrum",
    "ar": "المثلثي",
-   "grp": "carpal-p"
+   "grp": "carpal-p",
+   "pin": [
+    -0.6476,
+    0.8103,
+    -0.6307
+   ]
   },
   {
    "key": "p3",
    "en": "Pisiform",
    "ar": "الحِمَّصي",
-   "grp": "carpal-p"
+   "grp": "carpal-p",
+   "pin": [
+    -0.627,
+    0.8042,
+    -0.4806
+   ]
   },
   {
    "key": "p4",
    "en": "Trapezium",
    "ar": "المربع المنحرف",
-   "grp": "carpal-d"
+   "grp": "carpal-d",
+   "pin": [
+    -0.135,
+    0.8425,
+    -0.6065
+   ]
   },
   {
    "key": "p5",
    "en": "Trapezoid",
    "ar": "شبه المنحرف",
-   "grp": "carpal-d"
+   "grp": "carpal-d",
+   "pin": [
+    -0.2045,
+    0.66,
+    -0.6713
+   ]
   },
   {
    "key": "p6",
    "en": "Capitate",
    "ar": "الكبير (الرأسي)",
-   "grp": "carpal-d"
+   "grp": "carpal-d",
+   "pin": [
+    -0.3182,
+    0.6813,
+    -0.6448
+   ]
   },
   {
    "key": "p7",
    "en": "Hamate",
    "ar": "الكُلّابي",
-   "grp": "carpal-d"
+   "grp": "carpal-d",
+   "pin": [
+    -0.5313,
+    0.6602,
+    -0.5972
+   ]
   },
   {
    "key": "p8",
    "en": "1st metacarpal",
    "ar": "عظم المشط الأول",
-   "grp": "metacarpal"
+   "grp": "metacarpal",
+   "pin": [
+    0.3854,
+    0.3838,
+    -0.3372
+   ]
   },
   {
    "key": "p9",
    "en": "2nd metacarpal",
    "ar": "عظم المشط الثاني",
-   "grp": "metacarpal"
+   "grp": "metacarpal",
+   "pin": [
+    0.0951,
+    -0.1668,
+    -0.227
+   ]
   },
   {
    "key": "p10",
    "en": "3rd metacarpal",
    "ar": "عظم المشط الثالث",
-   "grp": "metacarpal"
+   "grp": "metacarpal",
+   "pin": [
+    -0.2002,
+    -0.1445,
+    -0.1902
+   ]
   },
   {
    "key": "p11",
    "en": "4th metacarpal",
    "ar": "عظم المشط الرابع",
-   "grp": "metacarpal"
+   "grp": "metacarpal",
+   "pin": [
+    -0.4671,
+    0.5209,
+    -0.606
+   ]
   },
   {
    "key": "p12",
    "en": "5th metacarpal",
    "ar": "عظم المشط الخامس",
-   "grp": "metacarpal"
+   "grp": "metacarpal",
+   "pin": [
+    -0.7394,
+    -0.0042,
+    -0.1213
+   ]
   },
   {
    "key": "p13",
    "en": "Proximal phalanx — thumb",
    "ar": "السلامى الدانية — الإبهام",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    0.7025,
+    0.0654,
+    -0.2088
+   ]
   },
   {
    "key": "p14",
    "en": "Distal phalanx — thumb",
    "ar": "السلامى القاصية — الإبهام",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    0.7902,
+    -0.1091,
+    -0.1468
+   ]
   },
   {
    "key": "p15",
    "en": "Proximal phalanx — index",
    "ar": "السلامى الدانية — السبابة",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    0.3229,
+    -0.6665,
+    0.1239
+   ]
   },
   {
    "key": "p16",
    "en": "Middle phalanx — index",
    "ar": "السلامى الوسطى — السبابة",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    0.5687,
+    -0.8259,
+    0.3834
+   ]
   },
   {
    "key": "p17",
    "en": "Distal phalanx — index",
    "ar": "السلامى القاصية — السبابة",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    0.6156,
+    -0.9269,
+    0.6026
+   ]
   },
   {
    "key": "p18",
    "en": "Proximal phalanx — middle",
    "ar": "السلامى الدانية — الوسطى",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    -0.1813,
+    -0.3633,
+    -0.0205
+   ]
   },
   {
    "key": "p19",
    "en": "Middle phalanx — middle",
    "ar": "السلامى الوسطى — الوسطى",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    -0.1127,
+    -0.7326,
+    0.4394
+   ]
   },
   {
    "key": "p20",
    "en": "Distal phalanx — middle",
    "ar": "السلامى القاصية — الوسطى",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    -0.0313,
+    -0.9088,
+    0.8422
+   ]
   },
   {
    "key": "p21",
    "en": "Proximal phalanx — ring",
    "ar": "السلامى الدانية — البنصر",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    -0.494,
+    -0.3379,
+    -0.0699
+   ]
   },
   {
    "key": "p22",
    "en": "Middle phalanx — ring",
    "ar": "السلامى الوسطى — البنصر",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    -0.4263,
+    -0.7322,
+    0.382
+   ]
   },
   {
    "key": "p23",
    "en": "Distal phalanx — ring",
    "ar": "السلامى القاصية — البنصر",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    -0.3808,
+    -0.8755,
+    0.8143
+   ]
   },
   {
    "key": "p24",
    "en": "Proximal phalanx — little",
    "ar": "السلامى الدانية — الخنصر",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    -0.6844,
+    -0.0958,
+    -0.0587
+   ]
   },
   {
    "key": "p25",
    "en": "Middle phalanx — little",
    "ar": "السلامى الوسطى — الخنصر",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    -0.7994,
+    -0.5614,
+    0.2099
+   ]
   },
   {
    "key": "p26",
    "en": "Distal phalanx — little",
    "ar": "السلامى القاصية — الخنصر",
-   "grp": "phalanx"
+   "grp": "phalanx",
+   "pin": [
+    -0.8656,
+    -0.7651,
+    0.4645
+   ]
   }
  ],
  "arm-muscles": [
@@ -196,43 +351,78 @@
    "key": "p0",
    "en": "Biceps brachii — short head",
    "ar": "ذات الرأسين العضدية — الرأس القصير",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    -0.0358,
+    0.0705,
+    0.2616
+   ]
   },
   {
    "key": "p1",
    "en": "Biceps brachii — long head",
    "ar": "ذات الرأسين العضدية — الرأس الطويل",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    0.0966,
+    -0.005,
+    0.2588
+   ]
   },
   {
    "key": "p2",
    "en": "Brachialis",
    "ar": "العضلة العضدية",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    0.0445,
+    -0.4668,
+    0.1285
+   ]
   },
   {
    "key": "p3",
    "en": "Coracobrachialis",
    "ar": "الغرابية العضدية",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    -0.1604,
+    0.4185,
+    0.1511
+   ]
   },
   {
    "key": "p4",
    "en": "Triceps brachii — long head",
    "ar": "ثلاثية الرؤوس العضدية — الرأس الطويل",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.055,
+    0.1586,
+    -0.0512
+   ]
   },
   {
    "key": "p5",
    "en": "Triceps brachii — lateral head",
    "ar": "ثلاثية الرؤوس العضدية — الرأس الوحشي",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    0.1132,
+    0.1398,
+    0.0018
+   ]
   },
   {
    "key": "p6",
    "en": "Triceps brachii — medial head",
    "ar": "ثلاثية الرؤوس العضدية — الرأس الإنسي",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.0381,
+    -0.23,
+    0.0089
+   ]
   }
  ],
  "forearm-muscles": [
@@ -240,121 +430,221 @@
    "key": "p0",
    "en": "Pronator teres",
    "ar": "الكابّة المدوّرة",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    -0.1191,
+    0.4465,
+    -0.0676
+   ]
   },
   {
    "key": "p1",
    "en": "Flexor carpi radialis",
    "ar": "المثنية الكعبرية للرسغ",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    -0.1185,
+    0.2919,
+    -0.0109
+   ]
   },
   {
    "key": "p2",
    "en": "Palmaris longus",
    "ar": "الراحية الطويلة",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    -0.2015,
+    0.3486,
+    -0.0345
+   ]
   },
   {
    "key": "p3",
    "en": "Flexor carpi ulnaris",
    "ar": "المثنية الزندية للرسغ",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    -0.2271,
+    0.2575,
+    -0.0815
+   ]
   },
   {
    "key": "p4",
    "en": "Flexor digitorum superficialis",
    "ar": "المثنية السطحية للأصابع",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    -0.101,
+    0.1405,
+    -0.0128
+   ]
   },
   {
    "key": "p5",
    "en": "Flexor digitorum profundus",
    "ar": "المثنية العميقة للأصابع",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    -0.0697,
+    0.0244,
+    -0.0091
+   ]
   },
   {
    "key": "p6",
    "en": "Flexor pollicis longus",
    "ar": "المثنية الطويلة للإبهام",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    0.0229,
+    -0.1315,
+    -0.0284
+   ]
   },
   {
    "key": "p7",
    "en": "Pronator quadratus",
    "ar": "الكابّة المربعة",
-   "grp": "anterior"
+   "grp": "anterior",
+   "pin": [
+    -0.016,
+    -0.2641,
+    0.0211
+   ]
   },
   {
    "key": "p8",
    "en": "Brachioradialis",
    "ar": "العضدية الكعبرية",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.0086,
+    0.3721,
+    -0.025
+   ]
   },
   {
    "key": "p9",
    "en": "Extensor carpi radialis longus",
    "ar": "الباسطة الكعبرية الطويلة للرسغ",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    0.0345,
+    0.4145,
+    -0.1524
+   ]
   },
   {
    "key": "p10",
    "en": "Extensor carpi radialis brevis",
    "ar": "الباسطة الكعبرية القصيرة للرسغ",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    0.0318,
+    0.1491,
+    -0.1291
+   ]
   },
   {
    "key": "p11",
    "en": "Extensor digitorum",
    "ar": "الباسطة للأصابع",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    0.0294,
+    0.1591,
+    -0.1959
+   ]
   },
   {
    "key": "p12",
    "en": "Extensor digiti minimi",
    "ar": "الباسطة للخنصر",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.0409,
+    -0.0114,
+    -0.1525
+   ]
   },
   {
    "key": "p13",
    "en": "Extensor carpi ulnaris",
    "ar": "الباسطة الزندية للرسغ",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.1141,
+    0.0972,
+    -0.1524
+   ]
   },
   {
    "key": "p14",
    "en": "Anconeus",
    "ar": "العضلة المرفقية",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.1559,
+    0.3827,
+    -0.239
+   ]
   },
   {
    "key": "p15",
    "en": "Supinator",
    "ar": "العضلة الباطحة",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.0447,
+    0.3913,
+    -0.098
+   ]
   },
   {
    "key": "p16",
    "en": "Abductor pollicis longus",
    "ar": "المبعِدة الطويلة للإبهام",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.0615,
+    0.0082,
+    -0.097
+   ]
   },
   {
    "key": "p17",
    "en": "Extensor pollicis brevis",
    "ar": "الباسطة القصيرة للإبهام",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.02,
+    -0.1993,
+    -0.0471
+   ]
   },
   {
    "key": "p18",
    "en": "Extensor pollicis longus",
    "ar": "الباسطة الطويلة للإبهام",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.0453,
+    -0.1729,
+    -0.0493
+   ]
   },
   {
    "key": "p19",
    "en": "Extensor indicis",
    "ar": "الباسطة للسبابة",
-   "grp": "posterior"
+   "grp": "posterior",
+   "pin": [
+    -0.0222,
+    -0.317,
+    -0.0161
+   ]
   }
  ],
  "hand-muscles": [
@@ -362,61 +652,111 @@
    "key": "p0",
    "en": "Abductor pollicis brevis",
    "ar": "المبعِدة القصيرة للإبهام",
-   "grp": "thenar"
+   "grp": "thenar",
+   "pin": [
+    0.0033,
+    0.9126,
+    -0.1927
+   ]
   },
   {
    "key": "p1",
    "en": "Flexor pollicis brevis",
    "ar": "المثنية القصيرة للإبهام",
-   "grp": "thenar"
+   "grp": "thenar",
+   "pin": [
+    0.0925,
+    0.6491,
+    -0.0533
+   ]
   },
   {
    "key": "p2",
    "en": "Opponens pollicis",
    "ar": "المقابِلة للإبهام",
-   "grp": "thenar"
+   "grp": "thenar",
+   "pin": [
+    0.1433,
+    0.73,
+    -0.1338
+   ]
   },
   {
    "key": "p3",
    "en": "Adductor pollicis",
    "ar": "المقرِّبة للإبهام",
-   "grp": "thenar"
+   "grp": "thenar",
+   "pin": [
+    0.323,
+    0.4082,
+    -0.0931
+   ]
   },
   {
    "key": "p4",
    "en": "Abductor digiti minimi",
    "ar": "المبعِدة للخنصر",
-   "grp": "hypothenar"
+   "grp": "hypothenar",
+   "pin": [
+    -0.5283,
+    0.3012,
+    -0.0587
+   ]
   },
   {
    "key": "p5",
    "en": "Flexor digiti minimi brevis",
    "ar": "المثنية القصيرة للخنصر",
-   "grp": "hypothenar"
+   "grp": "hypothenar",
+   "pin": [
+    -0.4833,
+    0.3814,
+    -0.1164
+   ]
   },
   {
    "key": "p6",
    "en": "Opponens digiti minimi",
    "ar": "المقابِلة للخنصر",
-   "grp": "hypothenar"
+   "grp": "hypothenar",
+   "pin": [
+    -0.4222,
+    0.5051,
+    -0.1871
+   ]
   },
   {
    "key": "p7",
    "en": "Lumbricals",
    "ar": "العضلات الدودية",
-   "grp": "central"
+   "grp": "central",
+   "pin": [
+    -0.4341,
+    0.2185,
+    -0.1534
+   ]
   },
   {
    "key": "p8",
    "en": "Palmar interossei",
    "ar": "بين العظام الراحية",
-   "grp": "central"
+   "grp": "central",
+   "pin": [
+    -0.4223,
+    0.1505,
+    -0.1485
+   ]
   },
   {
    "key": "p9",
    "en": "Dorsal interossei",
    "ar": "بين العظام الظهرية",
-   "grp": "central"
+   "grp": "central",
+   "pin": [
+    0.2519,
+    0.4034,
+    -0.2584
+   ]
   }
  ]
 }

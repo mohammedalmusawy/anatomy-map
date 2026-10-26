@@ -1,7 +1,7 @@
 """يحوّل مجسّمات BodyParts3D (OBJ) لملفات GLB، ملف لكل منطقة × (عظام | عضلات).
 
 كل جزء عقدة (node) منفصلة باسم مفتاحه، حتى الصفحة تگدر تلوّنه وتأشّره لما ينضغط.
-الاستعمال: python3 build_models.py <مجلد OBJ> <map.json>
+الاستعمال: python3 build_models.py <مجلد OBJ> <map.json> [مجلد STL 2009] [ids2009.json]
 """
 import json, struct, sys
 from pathlib import Path
@@ -9,6 +9,9 @@ import numpy as np
 from parts import BONES, MUSCLES, CONTEXT
 
 OBJ_DIR, MAP = Path(sys.argv[1]), json.load(open(sys.argv[2]))
+# اختياري: مجلد STL نسخة 2009 (دقة 10%) وخريطة أسمائها، للعظام
+STL_DIR = Path(sys.argv[3]) if len(sys.argv) > 3 else None
+IDS2009 = json.load(open(sys.argv[4])) if len(sys.argv) > 4 else {}
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "models"
 
@@ -24,16 +27,56 @@ def load_obj(path):
     return np.array(v, np.float32), np.array(f, np.int64) - 1
 
 
-def part_mesh(names):
+def load_stl(path):
+    v = np.array([l.split()[1:4] for l in open(path) if l.lstrip().startswith("vertex")], np.float32)
+    return v, np.arange(len(v)).reshape(-1, 3)
+
+
+def weld(v, f):
+    """يدمج النقاط المكررة حتى يصير السطح متصل وينعّم صح."""
+    u, inv = np.unique(v.round(4), axis=0, return_inverse=True)
+    f = inv.ravel()[f]
+    f = f[(f[:, 0] != f[:, 1]) & (f[:, 1] != f[:, 2]) & (f[:, 0] != f[:, 2])]
+    return u.astype(np.float32), f
+
+
+def subdivide(v, f):
+    """كل مثلث ينقسم لأربعة (نقاط منتصف الأضلاع)."""
+    e = np.sort(np.concatenate([f[:, [0, 1]], f[:, [1, 2]], f[:, [2, 0]]]), 1)
+    ue, inv = np.unique(e, axis=0, return_inverse=True)
+    mid = len(v) + inv.ravel().reshape(3, -1).T
+    v = np.concatenate([v, (v[ue[:, 0]] + v[ue[:, 1]]) / 2])
+    a, b, c = f.T; ab, bc, ca = mid.T
+    return v, np.concatenate([np.stack(x, 1) for x in ((a, ab, ca), (ab, b, bc), (ca, bc, c), (ab, bc, ca))])
+
+
+def taubin(v, f, it=12, lam=0.5, mu=-0.53):
+    """تنعيم Taubin: يشيل التضرّس بدون ما يصغّر الشكل."""
+    e = np.concatenate([f[:, [0, 1]], f[:, [1, 2]], f[:, [2, 0]]])
+    e = np.concatenate([e, e[:, ::-1]])
+    deg = np.bincount(e[:, 0], minlength=len(v)).astype(np.float32)[:, None]
+    for k in range(it * 2):
+        s = np.zeros_like(v); np.add.at(s, e[:, 0], v[e[:, 1]])
+        v = v + (lam if k % 2 == 0 else mu) * (s / np.maximum(deg, 1) - v)
+    return v
+
+
+def part_mesh(names, hi_res=False, refine=False):
     vs, fs, off = [], [], 0
     for n in names:
-        for fj in MAP[n]:
-            v, f = load_obj(OBJ_DIR / f"{fj}.obj")
+        # العظام بمشهد العظام من نسخة 2009 الأدق، والباقي من نسخة 4.0
+        files = [(load_stl, STL_DIR / f"{IDS2009[n]}.stl")] if hi_res and n in IDS2009 else \
+                [(load_obj, OBJ_DIR / f"{fj}.obj") for fj in MAP[n]]
+        for loader, p in files:
+            v, f = weld(*loader(p))
             vs.append(v); fs.append(f + off); off += len(v)
-    v = np.concatenate(vs)
+    v, f = np.concatenate(vs), np.concatenate(fs)
+    if refine and len(f) < 12000:
+        v, f = subdivide(v, f)
+    v = taubin(v, f)
     # BodyParts3D: Z للأعلى، و-Y للأمام → three.js: Y للأعلى، و+Z نحو الكاميرا
     v = np.stack([v[:, 0], v[:, 2], -v[:, 1]], 1)
-    return v, np.concatenate(fs)
+    return v, f
 
 
 def normals(v, f):
@@ -81,6 +124,22 @@ def write_glb(path, parts):
         fh.write(struct.pack("<III", 0x46546C67, 2, 12 + 8 + len(js) + 8 + len(blob)))
         fh.write(struct.pack("<II", len(js), 0x4E4F534A) + js)
         fh.write(struct.pack("<II", len(blob), 0x004E4942) + bytes(blob))
+    return center, scale
+
+
+def anchor(v, muscle=False):
+    """نقطة على سطح الجزء لدبّوس التأشير: بأعرض مقطع (بطن العضلة مو وترها)، وبالجهة الأقرب للكاميرا.
+    للعضلات ندوّر بس بالـ 60% الدانية، لأن الأوتار الطويلة تنزل للأصابع."""
+    y = v[:, 1]; lo = y.max() - 0.6 * np.ptp(y) if muscle else y.min()
+    edges = np.linspace(lo, y.max(), 13)
+    best, area = v, -1
+    for a, b in zip(edges[:-1], edges[1:]):
+        s = v[(y >= a) & (y <= b)]
+        if len(s) > 8:
+            w = min(np.ptp(s[:, 0]), np.ptp(s[:, 2]))  # السُّمك، حتى مروحة الأوتار العريضة الرفيعة ما تغلب البطن
+            if w > area:
+                best, area = s, w
+    return best[np.argmax(best[:, 2])]
 
 
 OUT.mkdir(exist_ok=True)
@@ -88,15 +147,24 @@ index = {}
 for kind, D in (("bones", BONES), ("muscles", MUSCLES)):
     for region, items in D.items():
         parts, meta = [], []
+        few = len(items) <= 7  # مشهد بيه أجزاء قليلة: نزيد دقّتها
         for k, (names, en, ar, grp) in enumerate(items):
             key = f"p{k}"
-            parts.append((key, *part_mesh(names)))
+            parts.append((key, *part_mesh(names, hi_res=kind == "bones", refine=few)))
             meta.append({"key": key, "en": en, "ar": ar, "grp": grp})
         if kind == "muscles":
             for k, n in enumerate(CONTEXT[region]):
                 parts.append((f"ctx{k}", *part_mesh([n])))
+        # فحص: جزء بعيد عن الباقي يعني بيانات بالجهة الغلط (صار ويّا Flexor pollicis brevis)
+        cs = np.array([p[1].mean(0) for p in parts]); med = np.median(cs, 0)
+        span = np.ptp(np.concatenate([p[1] for p in parts]), 0).max()
+        for (key, v, _f), c in zip(parts, cs):
+            if np.linalg.norm(c - med) > 0.9 * span:
+                print("⚠️ جزء بعيد:", region, kind, key)
         out = OUT / f"{region}-{kind}.glb"
-        write_glb(out, parts)
+        center, scale = write_glb(out, parts)
+        for m, (_, v, _f) in zip(meta, parts):
+            m["pin"] = [round(float(x), 4) for x in (anchor(v, kind == "muscles") - center) * scale]
         index[f"{region}-{kind}"] = meta
         print(out.name, f"{out.stat().st_size / 1e6:.2f} MB", len(meta), "parts")
 (OUT / "parts.json").write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")

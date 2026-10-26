@@ -72,15 +72,26 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
 .modes button.on{border-color:var(--accent);color:var(--accent);font-weight:600}
 .modes button[hidden]{display:none}
 .pane{display:none}.pane.on{display:block}
-.stage{position:relative;height:min(62vh,520px);border-radius:18px;overflow:hidden;
-  background:radial-gradient(circle at 50% 35%,#2a3346,#0e1219);touch-action:none}
+/* مسرح المجسّم: خلفية استوديو فاتحة مثل الأطالس */
+.stage{position:relative;height:min(68vh,560px);border-radius:18px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 38%,#ffffff 0%,#eef0f3 45%,#cfd4dc 100%);touch-action:none}
 .stage canvas{display:block;width:100%;height:100%}
-.loading{position:absolute;inset:0;display:grid;place-items:center;color:#c9d2e3;font-size:14px}
-.tag{position:absolute;top:12px;inset-inline:12px;background:rgba(10,14,22,.78);backdrop-filter:blur(8px);color:#fff;border-radius:14px;
-  padding:10px 14px;display:none;flex-direction:column;gap:2px;text-align:center}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:#5d6675;font-size:14px}
+.tag{position:absolute;top:10px;inset-inline:10px;background:rgba(20,26,36,.88);backdrop-filter:blur(8px);color:#fff;border-radius:14px;
+  padding:9px 14px;display:none;flex-direction:column;gap:2px;text-align:center;z-index:3}
 .tag.on{display:flex}.tag b{font-size:16px}.tag span{font-size:14px;opacity:.8}
-.tools3d{position:absolute;bottom:12px;left:12px;display:flex;gap:8px}
-.tools3d button{width:40px;height:40px;border:0;border-radius:12px;background:rgba(255,255,255,.14);color:#fff;font-size:20px;cursor:pointer}
+.lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.lines line{stroke:#2b3442;stroke-width:1}.lines circle{fill:#fff;stroke:#2b3442;stroke-width:1.4}
+.lines .sel line{stroke:#d4900a;stroke-width:1.6}.lines .sel circle{fill:#ffcc33;stroke:#9a6500}
+.labels{position:absolute;inset:0;pointer-events:none;z-index:2;direction:ltr}
+.lbl{position:absolute;transform:translateY(-50%);font:600 11px/1.15 Inter,system-ui,sans-serif;color:#1d2530;white-space:nowrap;
+  pointer-events:auto;cursor:pointer;padding:2px 4px;border-radius:5px;background:rgba(255,255,255,.72)}
+.lbl.r{text-align:left}.lbl.l{text-align:right;transform:translate(-100%,-50%)}
+.lbl.sel{background:#ffcc33;color:#3b2a00}
+.tools3d{position:absolute;bottom:10px;left:10px;display:flex;gap:6px;z-index:3}
+.tools3d button{width:38px;height:38px;border:0;border-radius:11px;background:rgba(20,26,36,.78);color:#fff;font-size:17px;cursor:pointer}
+.tools3d button.on{background:#2f7cf6}
+.view-name{position:absolute;bottom:16px;right:12px;font:500 11px Inter,system-ui,sans-serif;color:#5d6675;z-index:3;direction:ltr}
 .hint{font-size:13px;color:var(--hint);margin:8px 2px 0}
 .term{cursor:pointer}.term.sel{background:color-mix(in srgb,var(--accent) 16%,transparent)}
 .term .dot{width:10px;height:10px;border-radius:3px;flex:none}
@@ -168,10 +179,14 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
       <div class="stage" id="stage">
         <div class="loading" id="loading">جارٍ تحميل المجسّم…</div>
         <div class="tag" id="tag"><b class="en" id="tag-en"></b><span id="tag-ar"></span></div>
+        <svg class="lines" id="lines"></svg>
+        <div class="labels" id="labels"></div>
         <div class="tools3d">
-          <button id="t-reset" title="إعادة الوضع">⟲</button>
-          <button id="t-flip" title="تدوير ١٨٠°">↻</button>
+          <button id="t-reset" title="المنظر الأمامي">⟲</button>
+          <button id="t-flip" title="المنظر الخلفي">↻</button>
+          <button id="t-labels" title="إظهار التأشيرات" class="on">🏷</button>
         </div>
+        <div class="view-name" id="view-name">Anterior view · منظر أمامي</div>
       </div>
       <p class="hint">اسحب لتدوير المجسّم، وكبّره بإصبعين، واضغط على أي جزء لمعرفة اسمه.</p>
       <div class="credit">3D model: BodyParts3D, © The Database Center for Life Science · CC BY-SA 2.1 JP</div>
@@ -351,7 +366,7 @@ async function lesson(r,k,m){
     await partsReady;
     if (!window.Viewer3D) await new Promise(res=>addEventListener("viewer3d-ready",res,{once:true}));
     const key=r+"-"+k, list=PARTS[key];
-    const groups=[]; list.forEach(p=>{ const g=GRP[p.grp]||p.grp; let e=groups.find(x=>x[0]===g); if(!e) groups.push(e=[g,[]]); e[1].push({...p,color:window.Viewer3D?.color(k,p.grp)}); });
+    const groups=[]; list.forEach(p=>{ const g=GRP[p.grp]||p.grp; let e=groups.find(x=>x[0]===g); if(!e) groups.push(e=[g,[]]); e[1].push({...p,color:window.Viewer3D?.color(k,p.grp,p.key)}); });
     termList(groups, key2=>window.Viewer3D.select(key2));
     window.Viewer3D.show(key, k, list, p=>{ markTerm(p&&p.key); haptic(); });
   }
@@ -385,63 +400,133 @@ $("z-out").addEventListener("click",()=>setZoom(zw-60));
  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
 </script>
 <script type="module">
-// عارض المجسّمات: كل جزء بالـ GLB عقدة باسم مفتاحه (p0, p1…)، والعظام المرجعية بمشهد العضلات اسمها ctx…
+// عارض المجسّمات بأسلوب الأطالس: إضاءة استوديو، مواد عظم وعضلة، وتأشيرات بخطوط جانبية
+// كل جزء بالـ GLB عقدة باسم مفتاحه (p0, p1…)، والعظام المرجعية بمشهد العضلات اسمها ctx…
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
+// ألوان قريبة من الأطالس: عظم عاجي، وعضلة حمراء، وكل مجموعة بدرجة
 const COLORS = {
-  bones: {bone:"#eadfc8",membrane:"#9fc3e6","carpal-p":"#f0c987","carpal-d":"#e8a96b",metacarpal:"#e9dcc4",phalanx:"#d9cbb0"},
-  muscles: {anterior:"#d6503b",posterior:"#d98b3a",thenar:"#d6503b",hypothenar:"#b9497a",central:"#d98b3a"}
+  bones: {bone:"#ece2cc",membrane:"#b9cfe6","carpal-p":"#f2dcae","carpal-d":"#e9cf9a",metacarpal:"#ece2cc",phalanx:"#e4d8bd"},
+  muscles: {anterior:"#c4402f",posterior:"#a8382c",thenar:"#c4402f",hypothenar:"#b23a3a",central:"#cf5a3c"}
 };
-const stage=document.getElementById("stage"), tag=document.getElementById("tag");
+const CTX = "#e9e1cf";
+// عظام الرسغ الثمانية كل وحدة بلون، مثل الأطالس (بنفس ترتيب القائمة: الصف الداني ثم القاصي)
+const CARPAL = {p0:"#e8b04a",p1:"#7fb3d5",p2:"#9ccc65",p3:"#f48fb1",p4:"#ffb74d",p5:"#4db6ac",p6:"#ba68c8",p7:"#e57373"};
+const tint = (kind,grp,key) => kind==="bones"&&grp&&grp.startsWith("carpal")&&CARPAL[key] ? CARPAL[key] : COLORS[kind][grp];
+const $id = id => document.getElementById(id);
+const stage=$id("stage"), tag=$id("tag"), linesEl=$id("lines"), labelsEl=$id("labels");
+
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
 stage.prepend(renderer.domElement);
-const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(35,1,0.01,50);
-scene.add(new THREE.HemisphereLight(0xffffff,0x3a3f4a,1.6));
-const key=new THREE.DirectionalLight(0xffffff,1.6); key.position.set(2,3,4); camera.add(key); scene.add(camera);
+const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(30,1,0.01,50);
+scene.environment=new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(),0.04).texture;
+scene.add(new THREE.HemisphereLight(0xffffff,0x9aa3b0,0.6));
+const keyL=new THREE.DirectionalLight(0xffffff,1.5); keyL.position.set(-1.5,2.5,3);
+const rimL=new THREE.DirectionalLight(0xdfe8ff,0.7); rimL.position.set(2,1,-2.5);
+camera.add(keyL,rimL); scene.add(camera);
+
 const controls=new OrbitControls(camera,renderer.domElement);
-controls.enableDamping=true; controls.enablePan=false; controls.minDistance=1.2; controls.maxDistance=9;
-controls.autoRotate=true; controls.autoRotateSpeed=1.2;
-controls.addEventListener("start",()=>controls.autoRotate=false);
+controls.enableDamping=true; controls.enablePan=false; controls.minDistance=0.8; controls.maxDistance=9;
 
 const loader=new GLTFLoader(), cache={};
-let root=null, meta={}, onPick=null, selected=null, curKind="bones";
+let root=null, meta={}, list=[], onPick=null, selected=null, curKind="bones", showLabels=true;
 
 function fit(){
   const w=stage.clientWidth, h=stage.clientHeight; if(!w||!h) return;
   renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
 }
-function home(){
+function view(back){
   const box=new THREE.Box3().setFromObject(root), size=box.getSize(new THREE.Vector3()), c=box.getCenter(new THREE.Vector3());
-  const d=Math.max(size.y/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))), size.x/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)))/camera.aspect)*1.35;
-  controls.target.copy(c); camera.position.set(c.x,c.y,c.z+d); controls.update();
+  const t=Math.tan(THREE.MathUtils.degToRad(camera.fov/2));
+  // مسافة تخلي الجزء بالنص، وتترك مجال على الجانبين للتأشيرات
+  const d=Math.max(size.y/(2*t), size.x/(2*t)/camera.aspect*(showLabels?2.1:1))*1.12+size.z/2;
+  controls.target.copy(c); camera.position.set(c.x,c.y,c.z+(back?-d:d)); controls.update();
+  $id("view-name").textContent=back?"Posterior view · منظر خلفي":"Anterior view · منظر أمامي";
+}
+function material(o){
+  const m=meta[o.name];
+  const bone=curKind==="bones"||!m;
+  o.material=new THREE.MeshPhysicalMaterial({
+    color:m?tint(curKind,m.grp,o.name):CTX, roughness:bone?0.62:0.42, metalness:0,
+    clearcoat:bone?0.08:0.35, clearcoatRoughness:0.5, sheen:bone?0.3:0.6, sheenColor:new THREE.Color(bone?"#fff6e0":"#ff9a8a"),
+    envMapIntensity:0.55
+  });
 }
 function paint(){
   root.traverse(o=>{ if(!o.isMesh) return; const m=meta[o.name], isSel=selected&&o.name===selected;
-    const base=m?COLORS[curKind][m.grp]:"#cfc6b4";
-    o.material.color.set(isSel?"#ffd54a":base);
-    o.material.emissive.set(isSel?"#4a3a00":"#000000");
-    o.material.opacity=selected&&!isSel?(m?0.28:0.15):(m?1:0.35);
-    o.material.transparent=o.material.opacity<1; o.material.depthWrite=o.material.opacity===1; o.material.needsUpdate=true;
+    o.material.color.set(isSel?"#ffcc33":m?tint(curKind,m.grp,o.name):CTX);
+    o.material.emissive.set(isSel?"#3d2c00":"#000000");
+    // العظام المرجعية بمشهد العضلات تبقى ظاهرة، وتخفت ويّا الباقي لما ينختار جزء
+    const op=selected&&!isSel?(m?0.22:0.12):1;
+    o.material.opacity=op; o.material.transparent=op<1; o.material.depthWrite=op===1; o.material.needsUpdate=true;
   });
 }
 function select(k){
   selected=k&&meta[k]?k:null; paint();
-  if(selected){ document.getElementById("tag-en").textContent=meta[k].en; document.getElementById("tag-ar").textContent=meta[k].ar; tag.classList.add("on"); controls.autoRotate=false; }
+  if(selected){ $id("tag-en").textContent=meta[k].en; $id("tag-ar").textContent=meta[k].ar; tag.classList.add("on"); }
   else tag.classList.remove("on");
   onPick&&onPick(selected?meta[selected]:null);
 }
-async function show(name, kind, list, cb){
-  curKind=kind; onPick=cb; meta=Object.fromEntries(list.map(p=>[p.key,p])); selected=null; tag.classList.remove("on");
-  document.getElementById("loading").style.display="grid";
+
+// التأشيرات: دبّوس على الجزء، وخط لعمود الأسماء يمين أو يسار (مثل الأطالس)
+const v3=new THREE.Vector3(), seen={}, occ=new THREE.Raycaster();
+let frame=0, lastCam="";
+// الأسماء الطويلة تنختصر على المجسّم بس (مثل الأطالس)، والاسم الكامل بالقائمة وبالبطاقة
+const ABBR=[[" brachii",""],["Extensor ","Ext. "],["Flexor ","Flex. "],["Abductor ","Abd. "],["Adductor ","Add. "],[" digitorum"," dig."],
+  [" pollicis"," poll."],[" radialis"," rad."],[" ulnaris"," uln."],[" superficialis"," superf."],[" profundus"," prof."],[" digiti minimi"," dig. min."],
+  ["Proximal phalanx","Prox. phalanx"],["Distal phalanx","Dist. phalanx"],["Middle phalanx","Mid. phalanx"]];
+const short=t=>ABBR.reduce((s,[a,b])=>s.split(a).join(b),t);
+// الدبّوس يبين بس إذا جزءه مو مغطّى بجزء ثاني من هذي الزاوية
+function updateSeen(){
+  const meshes=[]; root.traverse(o=>{ if(o.isMesh&&meta[o.name]) meshes.push(o); });
+  for(const p of list){
+    v3.set(...p.pin); const dist=camera.position.distanceTo(v3);
+    occ.set(camera.position, v3.clone().sub(camera.position).normalize());
+    const hit=occ.intersectObjects(meshes,false)[0];
+    seen[p.key]=!hit||hit.object.name===p.key||hit.distance>dist-0.02;
+  }
+}
+function layout(){
+  const W=stage.clientWidth, H=stage.clientHeight;
+  if(!root||!showLabels){ linesEl.innerHTML=""; labelsEl.innerHTML=""; return; }
+  const cam=camera.position.toArray().map(x=>x.toFixed(2)).join();
+  if(cam!==lastCam||frame++%30===0){ updateSeen(); lastCam=cam; }
+  const items=(selected?list.filter(p=>p.key===selected):list.filter(p=>seen[p.key])).map(p=>{
+    v3.set(...p.pin).project(camera);
+    return {p,x:(v3.x+1)/2*W,y:(1-v3.y)/2*H,front:v3.z<1};
+  }).filter(i=>i.front&&i.x>0&&i.x<W&&i.y>0&&i.y<H);
+  const cx=W/2, gap=Math.max(15,Math.min(24,(H-40)/Math.max(1,Math.ceil(items.length/2))));
+  const cols={l:items.filter(i=>i.x<cx).sort((a,b)=>a.y-b.y), r:items.filter(i=>i.x>=cx).sort((a,b)=>a.y-b.y)};
+  let svg="", html="";
+  for(const side of ["l","r"]){
+    let last=12-gap; const col=cols[side], lx=side==="l"?14:W-14;
+    // توزيع عمودي بدون تداخل
+    col.forEach(i=>{ i.ly=Math.max(i.y,last+gap); last=i.ly; });
+    const over=last-(H-14); if(over>0) col.forEach(i=>i.ly-=over*(i.ly/last));
+    col.forEach(i=>{
+      const s=i.p.key===selected?" sel":"", ex=side==="l"?lx+4:lx-4;
+      svg+=`<g class="${s}"><line x1="${i.x}" y1="${i.y}" x2="${ex}" y2="${i.ly}"/><circle cx="${i.x}" cy="${i.y}" r="3"/></g>`;
+      html+=`<div class="lbl ${side==="l"?"r":"l"}${s}" data-k="${i.p.key}" style="left:${side==="l"?lx+6:lx-6}px;top:${i.ly}px">${short(i.p.en)}</div>`;
+    });
+  }
+  linesEl.setAttribute("viewBox",`0 0 ${W} ${H}`); linesEl.innerHTML=svg; labelsEl.innerHTML=html;
+}
+labelsEl.addEventListener("click",e=>{ const k=e.target.dataset&&e.target.dataset.k; if(k) select(selected===k?null:k); });
+
+async function show(name, kind, parts, cb){
+  curKind=kind; onPick=cb; list=parts; meta=Object.fromEntries(parts.map(p=>[p.key,p])); selected=null; tag.classList.remove("on");
+  showLabels=parts.length<=20; $id("t-labels").classList.toggle("on",showLabels);
+  $id("loading").style.display="grid"; linesEl.innerHTML=""; labelsEl.innerHTML="";
   if(root) scene.remove(root);
   const gltf=cache[name]||(cache[name]=await loader.loadAsync(`models/${name}.glb`));
-  root=gltf.scene;
-  root.traverse(o=>{ if(o.isMesh) o.material=new THREE.MeshStandardMaterial({roughness:kind==="bones"?0.75:0.55,metalness:0}); });
-  scene.add(root); paint(); fit(); home(); controls.autoRotate=true;
-  document.getElementById("loading").style.display="none";
+  root=gltf.scene; root.traverse(o=>{ if(o.isMesh) material(o); });
+  scene.add(root); paint(); fit(); view(false);
+  $id("loading").style.display="none";
 }
 
 // الضغط بدون سحب = اختيار الجزء
@@ -455,15 +540,13 @@ renderer.domElement.addEventListener("pointerup",e=>{
   const hit=ray.intersectObjects(root.children,true).find(h=>meta[h.object.name]);
   select(hit?hit.object.name:null);
 });
-document.getElementById("t-reset").addEventListener("click",()=>{ select(null); home(); controls.autoRotate=true; });
-document.getElementById("t-flip").addEventListener("click",()=>{
-  const off=camera.position.clone().sub(controls.target); off.applyAxisAngle(new THREE.Vector3(0,1,0),Math.PI);
-  camera.position.copy(controls.target).add(off); controls.update();
-});
+$id("t-reset").addEventListener("click",()=>{ select(null); view(false); });
+$id("t-flip").addEventListener("click",()=>{ select(null); view(true); });
+$id("t-labels").addEventListener("click",()=>{ showLabels=!showLabels; $id("t-labels").classList.toggle("on",showLabels); view(false); });
 new ResizeObserver(fit).observe(stage);
-renderer.setAnimationLoop(()=>{ controls.update(); renderer.render(scene,camera); });
+renderer.setAnimationLoop(()=>{ controls.update(); renderer.render(scene,camera); layout(); });
 
-window.Viewer3D={show,select,color:(kind,grp)=>COLORS[kind][grp]};
+window.Viewer3D={show,select,color:tint};
 window.dispatchEvent(new Event("viewer3d-ready"));
 </script>
 </body>

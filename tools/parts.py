@@ -76,7 +76,7 @@ MUSCLES = {
     ],
     "hand": [
         (["left abductor pollicis brevis"], "Abductor pollicis brevis", "المبعِدة القصيرة للإبهام", "thenar"),
-        (["left flexor pollicis brevis"], "Flexor pollicis brevis", "المثنية القصيرة للإبهام", "thenar"),
+        (["superficial head of left flexor pollicis brevis"], "Flexor pollicis brevis", "المثنية القصيرة للإبهام", "thenar"),
         (["left opponens pollicis"], "Opponens pollicis", "المقابِلة للإبهام", "thenar"),
         (["oblique head of left adductor pollicis", "transverse head of left adductor pollicis"], "Adductor pollicis", "المقرِّبة للإبهام", "thenar"),
         (["abductor digiti minimi of left hand"], "Abductor digiti minimi", "المبعِدة للخنصر", "hypothenar"),
