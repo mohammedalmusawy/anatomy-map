@@ -121,5 +121,48 @@ rep('!/phalanx|intervertebral/.test(p.key)', '!/phalanx|intervertebral|cartilage
 # أسماء أجزاء الصدرية الكبرى طويلة على التأشيرة
 rep('[" metacarpal"," MC"]];', '[" metacarpal"," MC"],["Pectoralis major — ","Pec. major "],[" part (", " ("]];')
 
+# ═════ الرأس (الجمجمة): كان أشعة بس، صار مجسّم عظام + عضلات الرقبة ═════
+rep('const XONLY = {head:{ar:"الرأس",en:"Head (Skull)"}, abdomen:{ar:"البطن",en:"Abdomen"}};',
+    'const XONLY = {abdomen:{ar:"البطن",en:"Abdomen"}};')
+rep('''  "1119": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg"]
+};''', '''  "1119": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg"],
+  "705": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:705_Lateral_View_of_Skull-01.jpg"],
+  "1106": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1106_Front_and_Side_Views_of_the_Muscles_of_Facial_Expressions.jpg"]
+};''')
+HEADR = """
+  ,head: { ar: "الرأس", en: "Head (Skull)",
+    bones: { img: "img/extra/head-bones.jpg", src: "705",
+      note: "الجمجمة 22 عظم: 8 عظام قحفية تحمي الدماغ (الجبهي، والجداريان، والصدغيان، والقذالي، والوتدي، والغربالي) و14 عظم وجهي (الفكان العلويان، والوجنيان، والأنفيان، والدمعيان، والحنكيان، والمحارتان السفليتان، والميكعة، والفك السفلي). العظام تلتقي بدروز ثابتة، والفك السفلي هو الوحيد المتحرك (المفصل الصدغي الفكي). العظم اللامي بالرقبة ما يتمفصل ويّا أي عظم. البتيريون (<span class='en'>Pterion</span>) = ملتقى الجبهي والجداري والصدغي والوتدي، وتحته الشريان السحائي الأوسط.",
+      groups: [
+        ["العظام", [["Frontal bone","العظم الجبهي"],["Parietal bone","العظم الجداري"],["Temporal bone","العظم الصدغي"],["Occipital bone","العظم القذالي"],["Greater wing of sphenoid bone","الجناح الكبير للعظم الوتدي"],["Ethmoid bone","العظم الغربالي"],["Lacrimal bone","العظم الدمعي"],["Nasal bone","العظم الأنفي"],["Zygomatic bone","العظم الوجني"],["Maxilla","الفك العلوي"],["Mandible","الفك السفلي"]]],
+        ["الدروز (Sutures)", [["Coronal suture","الدرز الإكليلي"],["Squamous suture","الدرز الحرشفي"],["Lambdoid suture","الدرز اللامي"],["Pterion","البتيريون (ملتقى أربع عظام)"]]],
+        ["معالم العظم الصدغي", [["Squamous temporal","الجزء الحرشفي للصدغي"],["Zygomatic process","الناتئ الوجني"],["External acoustic meatus","الصماخ السمعي الظاهر"],["Mastoid portion","الجزء الخشّائي"],["Mastoid process","الناتئ الخشّائي"],["Styloid process","الناتئ الإبري"],["Articular tubercle","الحديبة المفصلية"],["Mandibular fossa","الحفرة الفكية"]]],
+        ["معالم أخرى", [["Zygomatic arch","القوس الوجنية"],["Temporal process","الناتئ الصدغي (للوجني)"],["Lacrimal fossa","الحفرة الدمعية"],["Mental protuberance of mandible","البروز الذقني للفك السفلي"]]]
+      ]},
+    muscles: { img: "img/extra/head-muscles.jpg", src: "1106",
+      note: "مصدر المجسّم (BodyParts3D) ما بيه عضلات الوجه ولا عضلات المضغ، فالمجسّم يبين بس عضلتي الرقبة السطحيتين: الجلدية العنقية (<span class='en'>Platysma</span>) والقصية الترقوية الخشّائية (<span class='en'>Sternocleidomastoid</span>). عضلات تعابير الوجه بالرسم المؤشّر، وكلها يعصبها العصب الوجهي (العصب القحفي 7).",
+      groups: [
+        ["عضلات تعابير الوجه (من الرسم)", [["Epicranial aponeurosis","السفاق القحفي"],["Occipitofrontalis (frontal belly)","القذالية الجبهية (البطن الجبهي)"],["Occipitofrontalis (occipital belly)","القذالية الجبهية (البطن القذالي)"],["Corrugator supercilii","المغضّنة للحاجب"],["Orbicularis oculi","الدويرية العينية"],["Orbicularis oris","الدويرية الفموية"],["Buccinator","المبوّقة (عضلة الخد)"]]]
+      ]}
+  }
+};
+const SOON = {};"""
+rep('  }\n};\nconst SOON = {};', '  }' + HEADR)
+rep('''    ["extra/scapula-ant","Scapula — anterior (costal) view","لوح الكتف — منظر أمامي (الوجه الضلعي)","MAKY.OREL · CC0","Scapula_-_anterior_view.jpg"]
+  ]
+};''', '''    ["extra/scapula-ant","Scapula — anterior (costal) view","لوح الكتف — منظر أمامي (الوجه الضلعي)","MAKY.OREL · CC0","Scapula_-_anterior_view.jpg"]
+  ],
+  head: [
+    ["extra/skull-pterion","Skull — lateral view; the box marks the pterion","الجمجمة — منظر جانبي؛ المربع يأشّر البتيريون","MAKY.OREL · CC0","Cranium_-_pterion.jpg"],
+    ["extra/skull-lat","Skull (calvaria and face) — lateral view showing the sutures","الجمجمة — منظر جانبي يبين الدروز","MAKY.OREL · CC0","Cranium_-_lateral_view.jpg"],
+    ["extra/mandible-lat","Mandible — lateral view (condylar and coronoid processes, mental foramen)","الفك السفلي — منظر جانبي (الناتئ اللقمي والإكليلي والثقبة الذقنية)","MAKY.OREL · CC0","Cranium_-_mandibula_(lateral_view).jpg"]
+  ]
+};''')
+rep('girdle:"حزام الكتف (الترقوة ولوح الكتف)"};',
+    'girdle:"حزام الكتف (الترقوة ولوح الكتف)",cranial:"عظام القحف (8)",facial:"عظام الوجه (14)",hyoid:"العظم اللامي",neck:"عضلات الرقبة السطحية"};')
+rep('pelvis:"الحوض",chest:"الصدر"};', 'pelvis:"الحوض",chest:"الصدر",head:"الرأس"};')
+rep('pelvis:"pelvis",chest:"chest"};', 'pelvis:"pelvis",chest:"chest",head:"head"};')
+rep('"rib-floating":"#d6bf98"};', '"rib-floating":"#d6bf98",\n  // الجمجمة: القحف والوجه بلونين حتى يبين الحد بينهم\n  cranial:"#ece2cc",facial:"#e3cfa8",hyoid:"#d9c7a6"};')
+
 open(dst, "w", encoding="utf-8").write(h)
 print("written", len(h))

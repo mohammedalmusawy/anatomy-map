@@ -46,5 +46,23 @@
   "page": "https://commons.wikimedia.org/wiki/File:Clavicula_-_sin,_dex.jpg",
   "license": "CC0",
   "artist": "MAKY.OREL"
+ },
+ "extra/skull-lat": {
+  "file": "File:Cranium - lateral view.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Cranium_-_lateral_view.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/skull-pterion": {
+  "file": "File:Cranium - pterion.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Cranium_-_pterion.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/mandible-lat": {
+  "file": "File:Cranium - mandibula (lateral view).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Cranium_-_mandibula_(lateral_view).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
  }
 }

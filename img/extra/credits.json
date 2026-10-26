@@ -22,5 +22,17 @@
   "page": "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg",
   "license": "CC BY 4.0",
   "artist": "OpenStax"
+ },
+ "head-bones": {
+  "file": "File:705 Lateral View of Skull-01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:705_Lateral_View_of_Skull-01.jpg",
+  "license": "CC BY 3.0",
+  "artist": "OpenStax College"
+ },
+ "head-muscles": {
+  "file": "File:1106 Front and Side Views of the Muscles of Facial Expressions.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1106_Front_and_Side_Views_of_the_Muscles_of_Facial_Expressions.jpg",
+  "license": "CC BY 4.0",
+  "artist": "OpenStax"
  }
 }

@@ -955,5 +955,307 @@
    "Phrenic nerve (C3–C5)",
    "العصب الحجابي (C3–C5)"
   ]
+ },
+ "frontal-bone": {
+  "t": [
+   "Cranial (neurocranium) bone forming the forehead, roofs of the orbits and contains the frontal sinuses",
+   "عظم قحفي يكوّن الجبهة وسقف المحجرين وفيه الجيوب الجبهية"
+  ],
+  "j": [
+   "Parietal bones (coronal suture); sphenoid, ethmoid, nasal, maxillae, lacrimal and zygomatic bones",
+   "العظمان الجداريان (الدرز الإكليلي)؛ والوتدي والغربالي والأنفيان والفكان العلويان والدمعيان والوجنيان"
+  ]
+ },
+ "parietal-bone-left": {
+  "t": [
+   "Paired cranial bone forming the roof and sides of the skull",
+   "عظم قحفي مزدوج يكوّن سقف الجمجمة وجانبيها"
+  ],
+  "j": [
+   "Other parietal (sagittal suture); frontal (coronal); occipital (lambdoid); temporal (squamous suture); sphenoid (at pterion)",
+   "الجداري الآخر (الدرز السهمي)؛ الجبهي (الإكليلي)؛ القذالي (اللامي)؛ الصدغي (الدرز الحرشفي)؛ الوتدي (عند الجناح/البتيريون)"
+  ]
+ },
+ "parietal-bone-right": {
+  "t": [
+   "Paired cranial bone forming the roof and sides of the skull",
+   "عظم قحفي مزدوج يكوّن سقف الجمجمة وجانبيها"
+  ],
+  "j": [
+   "Other parietal (sagittal suture); frontal (coronal); occipital (lambdoid); temporal (squamous suture); sphenoid (at pterion)",
+   "الجداري الآخر (الدرز السهمي)؛ الجبهي (الإكليلي)؛ القذالي (اللامي)؛ الصدغي (الدرز الحرشفي)؛ الوتدي (عند الجناح/البتيريون)"
+  ]
+ },
+ "occipital-bone": {
+  "t": [
+   "Cranial bone forming the back and base of the skull; contains the foramen magnum and the occipital condyles",
+   "عظم قحفي يكوّن مؤخرة الجمجمة وقاعدتها؛ فيه الثقبة العظمى واللقمتان القذاليتان"
+  ],
+  "j": [
+   "Parietals (lambdoid suture); temporals; sphenoid; atlas C1 (atlanto-occipital joint)",
+   "الجداريان (الدرز اللامي)؛ الصدغيان؛ الوتدي؛ الفهقة C1 (المفصل الفهقي القذالي)"
+  ]
+ },
+ "temporal-bone-left": {
+  "t": [
+   "Paired cranial bone at the side and base of the skull: squamous, petrous (houses the middle and inner ear), mastoid and tympanic parts; styloid and zygomatic processes",
+   "عظم قحفي مزدوج بجانب وقاعدة الجمجمة: الجزء الحرشفي، والصخري (فيه الأذن الوسطى والداخلية)، والخشّائي، والطبلي؛ وفيه الناتئ الإبري والوجني"
+  ],
+  "j": [
+   "Parietal (squamous suture); occipital; sphenoid; zygomatic (zygomatic arch); mandible (temporomandibular joint)",
+   "الجداري (الدرز الحرشفي)؛ القذالي؛ الوتدي؛ الوجني (القوس الوجنية)؛ الفك السفلي (المفصل الصدغي الفكي)"
+  ]
+ },
+ "temporal-bone-right": {
+  "t": [
+   "Paired cranial bone at the side and base of the skull: squamous, petrous (houses the middle and inner ear), mastoid and tympanic parts; styloid and zygomatic processes",
+   "عظم قحفي مزدوج بجانب وقاعدة الجمجمة: الجزء الحرشفي، والصخري (فيه الأذن الوسطى والداخلية)، والخشّائي، والطبلي؛ وفيه الناتئ الإبري والوجني"
+  ],
+  "j": [
+   "Parietal (squamous suture); occipital; sphenoid; zygomatic (zygomatic arch); mandible (temporomandibular joint)",
+   "الجداري (الدرز الحرشفي)؛ القذالي؛ الوتدي؛ الوجني (القوس الوجنية)؛ الفك السفلي (المفصل الصدغي الفكي)"
+  ]
+ },
+ "sphenoid-bone": {
+  "t": [
+   "Butterfly-shaped bone in the middle of the skull base; its body contains the sphenoid sinus and the sella turcica (pituitary)",
+   "عظم بشكل فراشة بوسط قاعدة الجمجمة؛ جسمه فيه الجيب الوتدي والسرج التركي (الغدة النخامية)"
+  ],
+  "j": [
+   "Articulates with all other cranial bones; also vomer, palatine, zygomatic bones",
+   "يتمفصل مع كل عظام القحف؛ وكمان الميكعة والحنكيين والوجنيين"
+  ]
+ },
+ "ethmoid-bone": {
+  "t": [
+   "Light, spongy bone between the orbits: cribriform plate (roof of the nasal cavity), perpendicular plate (nasal septum), ethmoid air cells",
+   "عظم خفيف إسفنجي بين المحجرين: الصفيحة الغربالية (سقف جوف الأنف)، والصفيحة العمودية (الحاجز الأنفي)، والخلايا الهوائية الغربالية"
+  ],
+  "j": [
+   "Frontal, sphenoid, nasal, maxillae, lacrimals, palatines, inferior nasal conchae, vomer",
+   "الجبهي والوتدي والأنفيان والفكان العلويان والدمعيان والحنكيان والمحارتان السفليتان والميكعة"
+  ]
+ },
+ "maxilla-left": {
+  "t": [
+   "Paired facial bone forming the upper jaw, part of the orbit floor, nasal cavity and hard palate; contains the maxillary sinus and upper teeth",
+   "عظم وجهي مزدوج يكوّن الفك العلوي وجزء من أرضية المحجر وجوف الأنف والحنك الصلب؛ فيه الجيب الفكي والأسنان العليا"
+  ],
+  "j": [
+   "Other maxilla; frontal, ethmoid, nasal, zygomatic, lacrimal, palatine bones, vomer, inferior nasal concha",
+   "الفك العلوي الآخر؛ والجبهي والغربالي والأنفي والوجني والدمعي والحنكي والميكعة والمحارة السفلية"
+  ]
+ },
+ "maxilla-right": {
+  "t": [
+   "Paired facial bone forming the upper jaw, part of the orbit floor, nasal cavity and hard palate; contains the maxillary sinus and upper teeth",
+   "عظم وجهي مزدوج يكوّن الفك العلوي وجزء من أرضية المحجر وجوف الأنف والحنك الصلب؛ فيه الجيب الفكي والأسنان العليا"
+  ],
+  "j": [
+   "Other maxilla; frontal, ethmoid, nasal, zygomatic, lacrimal, palatine bones, vomer, inferior nasal concha",
+   "الفك العلوي الآخر؛ والجبهي والغربالي والأنفي والوجني والدمعي والحنكي والميكعة والمحارة السفلية"
+  ]
+ },
+ "mandible": {
+  "t": [
+   "Lower jaw — the only movable bone of the skull: body, rami, condylar and coronoid processes; holds the lower teeth",
+   "الفك السفلي — العظم الوحيد المتحرك بالجمجمة: الجسم والفرعان والناتئ اللقمي والإكليلي؛ وفيه الأسنان السفلى"
+  ],
+  "j": [
+   "Temporal bones (temporomandibular joints)",
+   "العظمان الصدغيان (المفصلان الصدغيان الفكيان)"
+  ]
+ },
+ "zygomatic-bone-left": {
+  "t": [
+   "Cheek bone; forms the prominence of the cheek and the lateral wall and floor of the orbit",
+   "عظم الخد؛ يكوّن بروز الوجنة والجدار الوحشي وأرضية المحجر"
+  ],
+  "j": [
+   "Frontal, sphenoid, maxilla, temporal (zygomatic arch)",
+   "الجبهي والوتدي والفك العلوي والصدغي (القوس الوجنية)"
+  ]
+ },
+ "zygomatic-bone-right": {
+  "t": [
+   "Cheek bone; forms the prominence of the cheek and the lateral wall and floor of the orbit",
+   "عظم الخد؛ يكوّن بروز الوجنة والجدار الوحشي وأرضية المحجر"
+  ],
+  "j": [
+   "Frontal, sphenoid, maxilla, temporal (zygomatic arch)",
+   "الجبهي والوتدي والفك العلوي والصدغي (القوس الوجنية)"
+  ]
+ },
+ "nasal-bone-left": {
+  "t": [
+   "Small paired bone forming the bridge of the nose",
+   "عظم صغير مزدوج يكوّن جسر الأنف"
+  ],
+  "j": [
+   "Other nasal bone, frontal, ethmoid, maxilla",
+   "العظم الأنفي الآخر والجبهي والغربالي والفك العلوي"
+  ]
+ },
+ "nasal-bone-right": {
+  "t": [
+   "Small paired bone forming the bridge of the nose",
+   "عظم صغير مزدوج يكوّن جسر الأنف"
+  ],
+  "j": [
+   "Other nasal bone, frontal, ethmoid, maxilla",
+   "العظم الأنفي الآخر والجبهي والغربالي والفك العلوي"
+  ]
+ },
+ "lacrimal-bone-left": {
+  "t": [
+   "Smallest facial bone, in the medial wall of the orbit; holds the lacrimal fossa (tear sac)",
+   "أصغر عظم بالوجه، بالجدار الإنسي للمحجر؛ فيه الحفرة الدمعية (الكيس الدمعي)"
+  ],
+  "j": [
+   "Frontal, ethmoid, maxilla, inferior nasal concha",
+   "الجبهي والغربالي والفك العلوي والمحارة الأنفية السفلية"
+  ]
+ },
+ "lacrimal-bone-right": {
+  "t": [
+   "Smallest facial bone, in the medial wall of the orbit; holds the lacrimal fossa (tear sac)",
+   "أصغر عظم بالوجه، بالجدار الإنسي للمحجر؛ فيه الحفرة الدمعية (الكيس الدمعي)"
+  ],
+  "j": [
+   "Frontal, ethmoid, maxilla, inferior nasal concha",
+   "الجبهي والغربالي والفك العلوي والمحارة الأنفية السفلية"
+  ]
+ },
+ "palatine-bone-left": {
+  "t": [
+   "L-shaped bone forming the back of the hard palate and part of the nasal cavity and orbit floor",
+   "عظم بشكل L يكوّن مؤخرة الحنك الصلب وجزء من جوف الأنف وأرضية المحجر"
+  ],
+  "j": [
+   "Other palatine, maxilla, sphenoid, ethmoid, vomer, inferior nasal concha",
+   "الحنكي الآخر والفك العلوي والوتدي والغربالي والميكعة والمحارة السفلية"
+  ]
+ },
+ "palatine-bone-right": {
+  "t": [
+   "L-shaped bone forming the back of the hard palate and part of the nasal cavity and orbit floor",
+   "عظم بشكل L يكوّن مؤخرة الحنك الصلب وجزء من جوف الأنف وأرضية المحجر"
+  ],
+  "j": [
+   "Other palatine, maxilla, sphenoid, ethmoid, vomer, inferior nasal concha",
+   "الحنكي الآخر والفك العلوي والوتدي والغربالي والميكعة والمحارة السفلية"
+  ]
+ },
+ "inferior-nasal-concha-left": {
+  "t": [
+   "Thin curled bone on the lateral wall of the nasal cavity",
+   "عظم رقيق ملتف على الجدار الوحشي لجوف الأنف"
+  ],
+  "j": [
+   "Maxilla, palatine, lacrimal, ethmoid",
+   "الفك العلوي والحنكي والدمعي والغربالي"
+  ]
+ },
+ "inferior-nasal-concha-right": {
+  "t": [
+   "Thin curled bone on the lateral wall of the nasal cavity",
+   "عظم رقيق ملتف على الجدار الوحشي لجوف الأنف"
+  ],
+  "j": [
+   "Maxilla, palatine, lacrimal, ethmoid",
+   "الفك العلوي والحنكي والدمعي والغربالي"
+  ]
+ },
+ "vomer": {
+  "t": [
+   "Thin plough-shaped bone forming the lower back part of the nasal septum",
+   "عظم رقيق بشكل المحراث يكوّن الجزء الخلفي السفلي من الحاجز الأنفي"
+  ],
+  "j": [
+   "Sphenoid, ethmoid, maxillae, palatines",
+   "الوتدي والغربالي والفكان العلويان والحنكيان"
+  ]
+ },
+ "hyoid-bone": {
+  "t": [
+   "U-shaped bone in the neck at C3 level; the only bone with no joint to another bone (held by muscles and ligaments)",
+   "عظم بشكل U بالرقبة بمستوى C3؛ العظم الوحيد اللي ما يتمفصل ويّا عظم ثاني (تمسكه العضلات والأربطة)"
+  ],
+  "j": [
+   "No bony articulation; suspended from the styloid processes by the stylohyoid ligaments",
+   "بلا مفصل عظمي؛ معلّق بالناتئين الإبريين بالرباطين الإبريين اللاميين"
+  ]
+ },
+ "sternocleidomastoid-left": {
+  "o": [
+   "Sternal head: manubrium; clavicular head: medial third of the clavicle",
+   "الرأس القصي: قبضة القص؛ الرأس الترقوي: الثلث الإنسي من الترقوة"
+  ],
+  "i": [
+   "Mastoid process of the temporal bone and lateral half of the superior nuchal line",
+   "الناتئ الخشّائي للعظم الصدغي والنصف الوحشي للخط القفوي العلوي"
+  ],
+  "a": [
+   "One side: tilts the head to the same side and turns the face to the opposite side; both: flex the neck",
+   "جهة وحدة: تميّل الرأس لنفس الجهة وتدوّر الوجه للجهة المعاكسة؛ الثنتين: تثني الرقبة"
+  ],
+  "n": [
+   "Accessory nerve (CN XI); C2–C3 (sensory)",
+   "العصب الإضافي (العصب القحفي 11)؛ C2–C3 (حسّي)"
+  ]
+ },
+ "platysma-left": {
+  "o": [
+   "Fascia over the upper pectoralis major and deltoid",
+   "اللفافة فوق أعلى الصدرية الكبرى والدالية"
+  ],
+  "i": [
+   "Lower border of the mandible and skin of the lower face and angle of the mouth",
+   "الحافة السفلى للفك السفلي وجلد أسفل الوجه وزاوية الفم"
+  ],
+  "a": [
+   "Tenses the skin of the neck; draws the corners of the mouth down",
+   "تشدّ جلد الرقبة؛ وتسحب زاويتي الفم للأسفل"
+  ],
+  "n": [
+   "Cervical branch of the facial nerve (CN VII)",
+   "الفرع العنقي للعصب الوجهي (العصب القحفي 7)"
+  ]
+ },
+ "sternocleidomastoid-right": {
+  "o": [
+   "Sternal head: manubrium; clavicular head: medial third of the clavicle",
+   "الرأس القصي: قبضة القص؛ الرأس الترقوي: الثلث الإنسي من الترقوة"
+  ],
+  "i": [
+   "Mastoid process of the temporal bone and lateral half of the superior nuchal line",
+   "الناتئ الخشّائي للعظم الصدغي والنصف الوحشي للخط القفوي العلوي"
+  ],
+  "a": [
+   "One side: tilts the head to the same side and turns the face to the opposite side; both: flex the neck",
+   "جهة وحدة: تميّل الرأس لنفس الجهة وتدوّر الوجه للجهة المعاكسة؛ الثنتين: تثني الرقبة"
+  ],
+  "n": [
+   "Accessory nerve (CN XI); C2–C3 (sensory)",
+   "العصب الإضافي (العصب القحفي 11)؛ C2–C3 (حسّي)"
+  ]
+ },
+ "platysma-right": {
+  "o": [
+   "Fascia over the upper pectoralis major and deltoid",
+   "اللفافة فوق أعلى الصدرية الكبرى والدالية"
+  ],
+  "i": [
+   "Lower border of the mandible and skin of the lower face and angle of the mouth",
+   "الحافة السفلى للفك السفلي وجلد أسفل الوجه وزاوية الفم"
+  ],
+  "a": [
+   "Tenses the skin of the neck; draws the corners of the mouth down",
+   "تشدّ جلد الرقبة؛ وتسحب زاويتي الفم للأسفل"
+  ],
+  "n": [
+   "Cervical branch of the facial nerve (CN VII)",
+   "الفرع العنقي للعصب الوجهي (العصب القحفي 7)"
+  ]
  }
 }

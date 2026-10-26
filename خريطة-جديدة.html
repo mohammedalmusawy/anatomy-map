@@ -354,7 +354,9 @@ const CREDIT = {
   "808": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:808_Hip_Bone.jpg"],
   "1115": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1115_Muscles_of_the_Pelvic_Floor.jpg"],
   "gray115": ["Henry Vandyke Carter, Gray's Anatomy (1918)", "Public domain", "https://commons.wikimedia.org/wiki/File:Gray115.png"],
-  "1119": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg"]
+  "1119": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg"],
+  "705": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:705_Lateral_View_of_Skull-01.jpg"],
+  "1106": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1106_Front_and_Side_Views_of_the_Muscles_of_Facial_Expressions.jpg"]
 };
 // كل التأشيرات منقولة من الرسم نفسه، والترجمة العربية بجنبها
 const REGIONS = {
@@ -506,10 +508,25 @@ const REGIONS = {
         ["من الرسم (b, d)", [["Supraspinatus","فوق الشوكة"],["Infraspinatus","تحت الشوكة"],["Teres minor","المدوّرة الصغرى"],["Spine of scapula","شوكة لوح الكتف"],["Humerus","عظم العضد"],["Triceps brachii: long head","ثلاثية الرؤوس العضدية: الرأس الطويل"],["Triceps brachii: lateral head","ثلاثية الرؤوس العضدية: الرأس الوحشي"]]]
       ]}
   }
+  ,head: { ar: "الرأس", en: "Head (Skull)",
+    bones: { img: "img/extra/head-bones.jpg", src: "705",
+      note: "الجمجمة 22 عظم: 8 عظام قحفية تحمي الدماغ (الجبهي، والجداريان، والصدغيان، والقذالي، والوتدي، والغربالي) و14 عظم وجهي (الفكان العلويان، والوجنيان، والأنفيان، والدمعيان، والحنكيان، والمحارتان السفليتان، والميكعة، والفك السفلي). العظام تلتقي بدروز ثابتة، والفك السفلي هو الوحيد المتحرك (المفصل الصدغي الفكي). العظم اللامي بالرقبة ما يتمفصل ويّا أي عظم. البتيريون (<span class='en'>Pterion</span>) = ملتقى الجبهي والجداري والصدغي والوتدي، وتحته الشريان السحائي الأوسط.",
+      groups: [
+        ["العظام", [["Frontal bone","العظم الجبهي"],["Parietal bone","العظم الجداري"],["Temporal bone","العظم الصدغي"],["Occipital bone","العظم القذالي"],["Greater wing of sphenoid bone","الجناح الكبير للعظم الوتدي"],["Ethmoid bone","العظم الغربالي"],["Lacrimal bone","العظم الدمعي"],["Nasal bone","العظم الأنفي"],["Zygomatic bone","العظم الوجني"],["Maxilla","الفك العلوي"],["Mandible","الفك السفلي"]]],
+        ["الدروز (Sutures)", [["Coronal suture","الدرز الإكليلي"],["Squamous suture","الدرز الحرشفي"],["Lambdoid suture","الدرز اللامي"],["Pterion","البتيريون (ملتقى أربع عظام)"]]],
+        ["معالم العظم الصدغي", [["Squamous temporal","الجزء الحرشفي للصدغي"],["Zygomatic process","الناتئ الوجني"],["External acoustic meatus","الصماخ السمعي الظاهر"],["Mastoid portion","الجزء الخشّائي"],["Mastoid process","الناتئ الخشّائي"],["Styloid process","الناتئ الإبري"],["Articular tubercle","الحديبة المفصلية"],["Mandibular fossa","الحفرة الفكية"]]],
+        ["معالم أخرى", [["Zygomatic arch","القوس الوجنية"],["Temporal process","الناتئ الصدغي (للوجني)"],["Lacrimal fossa","الحفرة الدمعية"],["Mental protuberance of mandible","البروز الذقني للفك السفلي"]]]
+      ]},
+    muscles: { img: "img/extra/head-muscles.jpg", src: "1106",
+      note: "مصدر المجسّم (BodyParts3D) ما بيه عضلات الوجه ولا عضلات المضغ، فالمجسّم يبين بس عضلتي الرقبة السطحيتين: الجلدية العنقية (<span class='en'>Platysma</span>) والقصية الترقوية الخشّائية (<span class='en'>Sternocleidomastoid</span>). عضلات تعابير الوجه بالرسم المؤشّر، وكلها يعصبها العصب الوجهي (العصب القحفي 7).",
+      groups: [
+        ["عضلات تعابير الوجه (من الرسم)", [["Epicranial aponeurosis","السفاق القحفي"],["Occipitofrontalis (frontal belly)","القذالية الجبهية (البطن الجبهي)"],["Occipitofrontalis (occipital belly)","القذالية الجبهية (البطن القذالي)"],["Corrugator supercilii","المغضّنة للحاجب"],["Orbicularis oculi","الدويرية العينية"],["Orbicularis oris","الدويرية الفموية"],["Buccinator","المبوّقة (عضلة الخد)"]]]
+      ]}
+  }
 };
 const SOON = {};
 // مناطق بيها أشعة بس (لحد ما ينضاف مجسّمها): تفتح الدرس على الأشعة مباشرة
-const XONLY = {head:{ar:"الرأس",en:"Head (Skull)"}, abdomen:{ar:"البطن",en:"Abdomen"}};
+const XONLY = {abdomen:{ar:"البطن",en:"Abdomen"}};
 
 // النص الثاني من الجسم: نسخة معكوسة من نفس المناطق (حتى يبقى الضغط عليها شغّال)
 (() => { const h=document.getElementById("half"), m=h.cloneNode(true); m.removeAttribute("id");
@@ -581,11 +598,16 @@ const PHOTOS = {
     ["extra/ribs-1-3","Ribs 1, 2 and 3 — the 1st is short, broad and flat","الأضلاع 1 و2 و3 — الأول قصير وعريض ومسطّح","MAKY.OREL · CC0","Costae_-_1,_2,_3.jpg"],
     ["extra/clavicles","Clavicles — left and right","الترقوتان — اليسرى واليمنى","MAKY.OREL · CC0","Clavicula_-_sin,_dex.jpg"],
     ["extra/scapula-ant","Scapula — anterior (costal) view","لوح الكتف — منظر أمامي (الوجه الضلعي)","MAKY.OREL · CC0","Scapula_-_anterior_view.jpg"]
+  ],
+  head: [
+    ["extra/skull-pterion","Skull — lateral view; the box marks the pterion","الجمجمة — منظر جانبي؛ المربع يأشّر البتيريون","MAKY.OREL · CC0","Cranium_-_pterion.jpg"],
+    ["extra/skull-lat","Skull (calvaria and face) — lateral view showing the sutures","الجمجمة — منظر جانبي يبين الدروز","MAKY.OREL · CC0","Cranium_-_lateral_view.jpg"],
+    ["extra/mandible-lat","Mandible — lateral view (condylar and coronoid processes, mental foramen)","الفك السفلي — منظر جانبي (الناتئ اللقمي والإكليلي والثقبة الذقنية)","MAKY.OREL · CC0","Cranium_-_mandibula_(lateral_view).jpg"]
   ]
 };
 const GRP = {bone:"العظام",membrane:"الأغشية","carpal-p":"عظام الرسغ — الصف الداني","carpal-d":"عظام الرسغ — الصف القاصي",
   metacarpal:"عظام المشط (Metacarpals)",phalanx:"السُّلاميات (Phalanges)",sup:"العضلات السطحية",mid:"العضلات الوسطى",deep:"العضلات العميقة",
-  thenar:"بارزة الإبهام (Thenar)",cervical:"الفقرات الرقبية",thoracic:"الفقرات الصدرية",lumbar:"الفقرات القطنية",sacral:"العجز",disc:"الأقراص بين الفقرات",hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى","pelvic-floor":"قاع الحوض (Pelvic floor)","pelvic-wall":"جدار الحوض (Pelvic wall)",iliopsoas:"الحرقفية القطنية (Iliopsoas)",sternum:"القص (Sternum)","rib-true":"الأضلاع الحقيقية (1–7)","rib-false":"الأضلاع الكاذبة (8–10)","rib-floating":"الأضلاع العائمة (11–12)",cartilage:"الغضاريف الضلعية",girdle:"حزام الكتف (الترقوة ولوح الكتف)"};
+  thenar:"بارزة الإبهام (Thenar)",cervical:"الفقرات الرقبية",thoracic:"الفقرات الصدرية",lumbar:"الفقرات القطنية",sacral:"العجز",disc:"الأقراص بين الفقرات",hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى","pelvic-floor":"قاع الحوض (Pelvic floor)","pelvic-wall":"جدار الحوض (Pelvic wall)",iliopsoas:"الحرقفية القطنية (Iliopsoas)",sternum:"القص (Sternum)","rib-true":"الأضلاع الحقيقية (1–7)","rib-false":"الأضلاع الكاذبة (8–10)","rib-floating":"الأضلاع العائمة (11–12)",cartilage:"الغضاريف الضلعية",girdle:"حزام الكتف (الترقوة ولوح الكتف)",cranial:"عظام القحف (8)",facial:"عظام الوجه (14)",hyoid:"العظم اللامي",neck:"عضلات الرقبة السطحية"};
 let mode="3d";
 
 function termList(groups, pick){
@@ -749,14 +771,16 @@ const BONE={bone:"#ece2cc",membrane:"#b9cfe6",metacarpal:"#ece2cc",metatarsal:"#
   // مناطق العمود الفقري كل وحدة بلون، والأقراص زرقاء
   cervical:"#f2d39b",thoracic:"#ece2cc",lumbar:"#e3c8a0",sacral:"#d9c7a6",disc:"#8fb8e3",
   // القفص الصدري: الغضاريف زرقاء فاتحة، والأضلاع الكاذبة والعائمة أغمق شوية
-  cartilage:"#a9c9e8","rib-false":"#e3d1ad","rib-floating":"#d6bf98"};
+  cartilage:"#a9c9e8","rib-false":"#e3d1ad","rib-floating":"#d6bf98",
+  // الجمجمة: القحف والوجه بلونين حتى يبين الحد بينهم
+  cranial:"#ece2cc",facial:"#e3cfa8",hyoid:"#d9c7a6"};
 const CARPAL={scaphoid:"#e8b04a",lunate:"#7fb3d5",triquetrum:"#9ccc65",pisiform:"#f48fb1",trapezium:"#ffb74d",trapezoid:"#4db6ac",capitate:"#ba68c8",hamate:"#e57373",
   // عظام رصغ القدم السبعة كل وحدة بلون
   talus:"#e8b04a",calcaneus:"#7fb3d5",navicular:"#9ccc65",cuboid:"#f48fb1","medial-cuneiform":"#ffb74d","intermediate-cuneiform":"#4db6ac","lateral-cuneiform":"#ba68c8"};
 const MUSCLE={sup:"#c4402f",mid:"#d0623f",deep:"#9e3328"};
 const ORDER=["sup","mid","deep","bone"];               // من الخارج للداخل
 const LNAME={sup:"سطحية",mid:"وسطى",deep:"عميقة",bone:"عظم"};
-const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم",spine:"العمود الفقري",pelvis:"الحوض",chest:"الصدر"};
+const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم",spine:"العمود الفقري",pelvis:"الحوض",chest:"الصدر",head:"الرأس"};
 const colorOf=p=>p.kind==="bone"?(CARPAL[p.key]||BONE[p.grp]||BONE.bone):MUSCLE[p.layer];
 
 // ── المشهد
@@ -871,7 +895,7 @@ function layout(){
 labelsEl.addEventListener("click",e=>{ const k=e.target.dataset&&e.target.dataset.k; if(k) select(selected===k?null:k); });
 
 // ── التحميل: كل طرف بملف (العلوي والسفلي)، ونحمّل اللي نحتاجه بس ونخزّنه
-const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb",spine:"spine",pelvis:"pelvis",chest:"chest"};
+const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb",spine:"spine",pelvis:"pelvis",chest:"chest",head:"head"};
 const models={}, infoReady=Promise.all([fetch("data/info.json").then(r=>r.json()),fetch("data/info-extra.json").then(r=>r.json()).catch(()=>({}))]).then(([a,b])=>info={...b,...a});
 let current=null;
 async function loadModel(name){

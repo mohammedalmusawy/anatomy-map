@@ -1,0 +1,380 @@
+[
+ {
+  "key": "frontal-bone",
+  "en": "Frontal bone",
+  "ar": "العظم الجبهي",
+  "kind": "bone",
+  "region": "head",
+  "grp": "cranial",
+  "layer": "bone",
+  "pin": [
+   0.0207,
+   0.6421,
+   0.5325
+  ]
+ },
+ {
+  "key": "parietal-bone-left",
+  "en": "Parietal bone (left)",
+  "ar": "العظم الجداري الأيسر",
+  "kind": "bone",
+  "region": "head",
+  "grp": "cranial",
+  "layer": "bone",
+  "pin": [
+   0.3737,
+   0.6451,
+   0.2152
+  ]
+ },
+ {
+  "key": "parietal-bone-right",
+  "en": "Parietal bone (right)",
+  "ar": "العظم الجداري الأيمن",
+  "kind": "bone",
+  "region": "head",
+  "grp": "cranial",
+  "layer": "bone",
+  "pin": [
+   -0.3264,
+   0.7408,
+   0.1963
+  ]
+ },
+ {
+  "key": "occipital-bone",
+  "en": "Occipital bone",
+  "ar": "العظم القذالي",
+  "kind": "bone",
+  "region": "head",
+  "grp": "cranial",
+  "layer": "bone",
+  "pin": [
+   0.0164,
+   0.2133,
+   0.0844
+  ]
+ },
+ {
+  "key": "temporal-bone-left",
+  "en": "Temporal bone (left)",
+  "ar": "العظم الصدغي الأيسر",
+  "kind": "bone",
+  "region": "head",
+  "grp": "cranial",
+  "layer": "bone",
+  "pin": [
+   0.3412,
+   0.2277,
+   0.2813
+  ]
+ },
+ {
+  "key": "temporal-bone-right",
+  "en": "Temporal bone (right)",
+  "ar": "العظم الصدغي الأيمن",
+  "kind": "bone",
+  "region": "head",
+  "grp": "cranial",
+  "layer": "bone",
+  "pin": [
+   -0.342,
+   0.2291,
+   0.2791
+  ]
+ },
+ {
+  "key": "sphenoid-bone",
+  "en": "Sphenoid bone",
+  "ar": "العظم الوتدي",
+  "kind": "bone",
+  "region": "head",
+  "grp": "cranial",
+  "layer": "bone",
+  "pin": [
+   0.2734,
+   0.3713,
+   0.3517
+  ]
+ },
+ {
+  "key": "ethmoid-bone",
+  "en": "Ethmoid bone",
+  "ar": "العظم الغربالي",
+  "kind": "bone",
+  "region": "head",
+  "grp": "cranial",
+  "layer": "bone",
+  "pin": [
+   0.0011,
+   0.2244,
+   0.4835
+  ]
+ },
+ {
+  "key": "maxilla-left",
+  "en": "Maxilla (left)",
+  "ar": "عظم الفك العلوي الأيسر",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   -0.0018,
+   0.0506,
+   0.5562
+  ]
+ },
+ {
+  "key": "maxilla-right",
+  "en": "Maxilla (right)",
+  "ar": "عظم الفك العلوي الأيمن",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   -0.0065,
+   0.0579,
+   0.5521
+  ]
+ },
+ {
+  "key": "mandible",
+  "en": "Mandible",
+  "ar": "عظم الفك السفلي",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   -0.0132,
+   -0.1532,
+   0.5229
+  ]
+ },
+ {
+  "key": "zygomatic-bone-left",
+  "en": "Zygomatic bone (left)",
+  "ar": "العظم الوجني الأيسر",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   0.2061,
+   0.1542,
+   0.4488
+  ]
+ },
+ {
+  "key": "zygomatic-bone-right",
+  "en": "Zygomatic bone (right)",
+  "ar": "العظم الوجني الأيمن",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   -0.2084,
+   0.1529,
+   0.4487
+  ]
+ },
+ {
+  "key": "nasal-bone-left",
+  "en": "Nasal bone (left)",
+  "ar": "العظم الأنفي الأيسر",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   -0.007,
+   0.2478,
+   0.6163
+  ]
+ },
+ {
+  "key": "nasal-bone-right",
+  "en": "Nasal bone (right)",
+  "ar": "العظم الأنفي الأيمن",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   -0.0074,
+   0.3367,
+   0.5454
+  ]
+ },
+ {
+  "key": "lacrimal-bone-left",
+  "en": "Lacrimal bone (left)",
+  "ar": "العظم الدمعي الأيسر",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   0.0717,
+   0.2107,
+   0.4643
+  ]
+ },
+ {
+  "key": "lacrimal-bone-right",
+  "en": "Lacrimal bone (right)",
+  "ar": "العظم الدمعي الأيمن",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   -0.0713,
+   0.2196,
+   0.452
+  ]
+ },
+ {
+  "key": "palatine-bone-left",
+  "en": "Palatine bone (left)",
+  "ar": "العظم الحنكي الأيسر",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   -0.0016,
+   0.0469,
+   0.3799
+  ]
+ },
+ {
+  "key": "palatine-bone-right",
+  "en": "Palatine bone (right)",
+  "ar": "العظم الحنكي الأيمن",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   0.0015,
+   0.0496,
+   0.3772
+  ]
+ },
+ {
+  "key": "inferior-nasal-concha-left",
+  "en": "Inferior nasal concha (left)",
+  "ar": "المحارة الأنفية السفلية اليسرى",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   0.0776,
+   0.1349,
+   0.4826
+  ]
+ },
+ {
+  "key": "inferior-nasal-concha-right",
+  "en": "Inferior nasal concha (right)",
+  "ar": "المحارة الأنفية السفلية اليمنى",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   -0.0697,
+   0.1167,
+   0.4727
+  ]
+ },
+ {
+  "key": "vomer",
+  "en": "Vomer",
+  "ar": "الميكعة",
+  "kind": "bone",
+  "region": "head",
+  "grp": "facial",
+  "layer": "bone",
+  "pin": [
+   0.0051,
+   0.229,
+   0.2831
+  ]
+ },
+ {
+  "key": "hyoid-bone",
+  "en": "Hyoid bone",
+  "ar": "العظم اللامي",
+  "kind": "bone",
+  "region": "head",
+  "grp": "hyoid",
+  "layer": "bone",
+  "pin": [
+   0.0786,
+   -0.2059,
+   0.2211
+  ]
+ },
+ {
+  "key": "sternocleidomastoid-left",
+  "en": "Sternocleidomastoid (left)",
+  "ar": "القصية الترقوية الخشّائية (يسار)",
+  "kind": "muscle",
+  "region": "head",
+  "grp": "neck",
+  "layer": "mid",
+  "pin": [
+   0.1272,
+   -0.5133,
+   0.2216
+  ]
+ },
+ {
+  "key": "sternocleidomastoid-right",
+  "en": "Sternocleidomastoid (right)",
+  "ar": "القصية الترقوية الخشّائية (يمين)",
+  "kind": "muscle",
+  "region": "head",
+  "grp": "neck",
+  "layer": "mid",
+  "pin": [
+   -0.3415,
+   0.1434,
+   -0.0632
+  ]
+ },
+ {
+  "key": "platysma-left",
+  "en": "Platysma (left)",
+  "ar": "الجلدية العنقية (يسار)",
+  "kind": "muscle",
+  "region": "head",
+  "grp": "neck",
+  "layer": "sup",
+  "pin": [
+   0.1634,
+   -0.5371,
+   0.2445
+  ]
+ },
+ {
+  "key": "platysma-right",
+  "en": "Platysma (right)",
+  "ar": "الجلدية العنقية (يمين)",
+  "kind": "muscle",
+  "region": "head",
+  "grp": "neck",
+  "layer": "sup",
+  "pin": [
+   -0.1559,
+   -0.5381,
+   0.2438
+  ]
+ }
+]
