@@ -1,0 +1,38 @@
+{
+ "arm-muscles": {
+  "file": "File:1120 Muscles that Move the Forearm.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1120_Muscles_that_Move_the_Forearm.jpg",
+  "license": "CC BY 4.0",
+  "artist": "OpenStax"
+ },
+ "hand-muscles": {
+  "file": "File:1121 Intrinsic Muscles of the Hand.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1121_Intrinsic_Muscles_of_the_Hand.jpg",
+  "license": "CC BY 4.0",
+  "artist": "OpenStax"
+ },
+ "forearm-muscles": {
+  "file": "File:1120 Muscles that Move the Forearm.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1120_Muscles_that_Move_the_Forearm.jpg",
+  "license": "CC BY 4.0",
+  "artist": "OpenStax"
+ },
+ "forearm-bones": {
+  "file": "File:805 Ulna and Radius.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:805_Ulna_and_Radius.jpg",
+  "license": "CC BY 3.0",
+  "artist": "OpenStax College"
+ },
+ "hand-bones": {
+  "file": "File:806 Hand and Wrist.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:806_Hand_and_Wrist.jpg",
+  "license": "CC BY 3.0",
+  "artist": "OpenStax College"
+ },
+ "arm-bones": {
+  "file": "File:804 Humerus and Elbow.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:804_Humerus_and_Elbow.jpg",
+  "license": "CC BY 3.0",
+  "artist": "OpenStax College"
+ }
+}

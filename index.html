@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تعلّم التشريح</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:var(--tg-theme-bg-color,#f6f7fb);
+  --card:var(--tg-theme-secondary-bg-color,#ffffff);
+  --text:var(--tg-theme-text-color,#14161c);
+  --hint:var(--tg-theme-hint-color,#7a8090);
+  --accent:var(--tg-theme-button-color,#2f7cf6);
+  --accent-text:var(--tg-theme-button-text-color,#ffffff);
+  --line:color-mix(in srgb,var(--hint) 22%,transparent);
+  --body:color-mix(in srgb,var(--hint) 34%,var(--card));
+  --bone:#e9dcc3; --muscle:#e26d5a;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:var(--tg-theme-bg-color,#101318);--card:var(--tg-theme-secondary-bg-color,#1a1e26);
+  --text:var(--tg-theme-text-color,#eef0f4);--hint:var(--tg-theme-hint-color,#8a91a2);}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif}
+.en{font-family:Inter,system-ui,sans-serif;direction:ltr;unicode-bidi:isolate}
+main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
+.view{display:none}.view.on{display:block;animation:in .25s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+header h1{font-size:22px;margin:4px 0 2px;font-weight:700}
+header p{margin:0;color:var(--hint);font-size:14px}
+
+/* خريطة الجسم */
+.mapwrap{position:relative;margin:14px 0 0;background:var(--card);border-radius:22px;padding:14px 8px 8px}
+svg.body{display:block;width:100%;height:auto;max-height:66vh}
+.rg{fill:var(--body);stroke:var(--card);stroke-width:1.5;transition:fill .2s}
+.rg.live{fill:var(--accent);fill-opacity:.62;cursor:pointer}
+.rg.live:hover,.rg.live.sel{fill-opacity:1;animation:none}
+.rg.soon{cursor:pointer}
+.pulse{animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{fill-opacity:.95}}
+.legend{display:flex;gap:14px;justify-content:center;font-size:13px;color:var(--hint);margin:10px 0 2px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:6px;vertical-align:middle}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{border:0;background:var(--card);color:var(--text);padding:10px 14px;border-radius:14px;font:inherit;font-size:14px;cursor:pointer;
+  display:inline-flex;align-items:baseline;gap:7px}
+.chip b{font-weight:600}.chip .en{color:var(--hint);font-size:12px}
+
+/* نافذة الاختيار */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.2s}
+.sheet{position:fixed;inset-inline:0;bottom:0;max-width:520px;margin:0 auto;background:var(--card);border-radius:22px 22px 0 0;
+  padding:10px 16px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.open .sheet{transform:none}.open .sheet-bg{opacity:1;pointer-events:auto}
+.grab{width:38px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 12px}
+.sheet h2{margin:0;font-size:20px}.sheet .en.big{font-size:15px;color:var(--hint);display:block;margin-top:2px}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.pick button{border:0;border-radius:18px;padding:16px 10px;font:inherit;cursor:pointer;color:#2a1a10;text-align:center}
+.pick .b{background:var(--bone)}.pick .m{background:var(--muscle);color:#fff}
+.pick .ic{font-size:30px;display:block}.pick b{display:block;font-size:17px;margin-top:4px}
+.pick .en{display:block;font-size:13px;opacity:.75}
+
+/* صفحة الدرس */
+.top{display:flex;align-items:center;gap:10px}
+.back{border:0;background:var(--card);color:var(--text);width:40px;height:40px;border-radius:12px;font-size:20px;cursor:pointer;flex:none}
+.top h1{margin:0;font-size:20px}.top .en{color:var(--hint);font-size:13px;display:block}
+.tabs{display:flex;background:var(--card);border-radius:14px;padding:4px;margin:14px 0}
+.tabs button{flex:1;border:0;background:none;color:var(--hint);font:inherit;font-size:14px;padding:9px;border-radius:10px;cursor:pointer}
+.tabs button.on{background:var(--accent);color:var(--accent-text);font-weight:600}
+.fig{background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;position:relative}
+.fig img{display:block;width:100%;height:auto}
+.fig .zoomhint{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:4px 9px;border-radius:9px}
+.credit{font-size:11px;color:var(--hint);margin:6px 2px 0;direction:ltr;text-align:left}
+.credit a{color:inherit}
+.grp{margin-top:18px}
+.grp h3{font-size:14px;color:var(--hint);margin:0 4px 8px;font-weight:600}
+.terms{background:var(--card);border-radius:16px;overflow:hidden}
+.term{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line)}
+.term:first-child{border-top:0}
+.term .en{font-weight:600;font-size:15px}
+.term .ar{color:var(--hint);font-size:14px;text-align:left}
+.note{background:color-mix(in srgb,var(--accent) 12%,var(--card));border-radius:14px;padding:12px 14px;font-size:14px;margin-top:14px;line-height:1.7}
+
+/* تكبير الصورة */
+.zoom{position:fixed;inset:0;background:#000;display:none;z-index:9}
+.zoom.on{display:block}
+.zoom .sc{position:absolute;inset:0;overflow:auto;touch-action:pan-x pan-y pinch-zoom;direction:ltr}
+.zoom img{display:block;background:#fff;width:200%;max-width:none}
+.zoom .x{position:fixed;top:calc(12px + env(safe-area-inset-top));right:12px;z-index:2;border:0;width:42px;height:42px;border-radius:21px;
+  background:rgba(0,0,0,.72);color:#fff;font-size:22px;cursor:pointer}
+.zoom .zb{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:2}
+.zoom .zb button{border:0;width:46px;height:46px;border-radius:23px;background:rgba(0,0,0,.72);color:#fff;font-size:22px;cursor:pointer}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;
+  font-size:14px;opacity:0;transition:.25s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<main>
+  <!-- ١. خريطة الجسم -->
+  <section class="view on" id="v-map">
+    <header>
+      <h1>تعلّم التشريح</h1>
+      <p>اضغط على أي جزء من الجسم، واختر العظام أو العضلات.</p>
+    </header>
+    <div class="mapwrap">
+      <svg class="body" viewBox="0 0 200 420" aria-label="خريطة جسم الإنسان">
+        <g id="half">
+          <path class="rg soon" data-r="head" d="M100 12c14 0 23 11 23 26s-9 28-23 28-23-13-23-28 9-26 23-26z"/>
+          <path class="rg soon" data-r="neck" d="M91 64h18l2 14H89z"/>
+          <path class="rg soon" data-r="chest" d="M89 78h22l29 6c4 8 4 24 0 38l-6 30H66l-6-30c-4-14-4-30 0-38z"/>
+          <path class="rg soon" data-r="abdomen" d="M66 154h68l-3 46H69z"/>
+          <path class="rg soon" data-r="pelvis" d="M69 202h62l5 30H64z"/>
+          <path class="rg live pulse" data-r="arm" d="M59 85c-11 3-17 12-19 25l-5 50 16 2 7-42z"/>
+          <path class="rg live pulse" data-r="forearm" d="M35 164l16 2-4 60-15-1z"/>
+          <path class="rg live pulse" data-r="hand" d="M31 228l16 1 3 18c1 8-1 16-5 19-3 3-9 3-12 0-4-4-5-12-4-20z"/>
+          <path class="rg soon" data-r="thigh" d="M64 234h35l-2 88H75z"/>
+          <path class="rg soon" data-r="leg" d="M75 326h22l-2 66H80z"/>
+          <path class="rg soon" data-r="foot" d="M79 395h17l5 13c0 3-2 4-5 4H76c-3 0-4-2-3-5z"/>
+        </g>
+      </svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>متاح الآن</span><span><i style="background:var(--body)"></i>قريبًا</span></div>
+    </div>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <!-- ٢. الدرس -->
+  <section class="view" id="v-lesson">
+    <div class="top">
+      <button class="back" id="back" aria-label="رجوع">→</button>
+      <div><h1 id="l-title"></h1><span class="en" id="l-en"></span></div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button data-k="bones">🦴 العظام</button>
+      <button data-k="muscles">💪 العضلات</button>
+    </div>
+    <div class="fig" id="fig"><img id="l-img" alt=""><span class="zoomhint">اضغط للتكبير</span></div>
+    <div class="credit" id="l-credit"></div>
+    <div id="l-note"></div>
+    <div id="l-groups"></div>
+  </section>
+</main>
+
+<div id="sheet"><div class="sheet-bg" id="sheet-bg"></div>
+  <div class="sheet" role="dialog">
+    <div class="grab"></div>
+    <h2 id="s-title"></h2><span class="en big" id="s-en"></span>
+    <div class="pick">
+      <button class="b" data-k="bones"><span class="ic">🦴</span><b>العظام</b><span class="en">Bones</span></button>
+      <button class="m" data-k="muscles"><span class="ic">💪</span><b>العضلات</b><span class="en">Muscles</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="zoom" id="zoom"><button class="x" id="zx" aria-label="إغلاق">×</button>
+  <div class="sc"><img id="z-img" alt=""></div>
+  <div class="zb"><button id="z-out">−</button><button id="z-in">+</button></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const CREDIT = {
+  "804": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:804_Humerus_and_Elbow.jpg"],
+  "805": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:805_Ulna_and_Radius.jpg"],
+  "806": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:806_Hand_and_Wrist.jpg"],
+  "1120": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1120_Muscles_that_Move_the_Forearm.jpg"],
+  "1121": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1121_Intrinsic_Muscles_of_the_Hand.jpg"]
+};
+// كل التأشيرات منقولة من الرسم نفسه، والترجمة العربية بجنبها
+const REGIONS = {
+  arm: { ar: "العضد", en: "Arm (Brachium)",
+    bones: { img: "img/arm-bones.jpg", src: "804",
+      note: "عظم واحد: <b class='en'>Humerus</b> (عظم العضد). يتمفصل في الأعلى مع لوح الكتف، وفي الأسفل مع الكعبرة والزند في مفصل المرفق.",
+      groups: [
+        ["الطرف العلوي (Proximal)", [["Head","رأس العضد"],["Anatomical neck","العنق التشريحي"],["Surgical neck","العنق الجراحي"],["Greater tubercle","الحديبة الكبرى"],["Lesser tubercle","الحديبة الصغرى"],["Intertubercular groove (sulcus)","الميزاب بين الحديبتين"]]],
+        ["الجسم (Shaft)", [["Body (shaft)","جسم العظم"],["Deltoid tuberosity","الحدبة الدالية"],["Lateral supracondylar ridge","الحرف فوق اللقمي الوحشي"]]],
+        ["الطرف السفلي (Distal)", [["Capitulum","الرُّؤَيس"],["Trochlea","البَكَرة"],["Medial epicondyle","اللُّقَيمة الإنسية"],["Lateral epicondyle","اللُّقَيمة الوحشية"],["Radial fossa","الحفرة الكعبرية"],["Coronoid fossa","الحفرة الإكليلية"],["Olecranon fossa","الحفرة الزُّجّية"]]]
+      ]},
+    muscles: { img: "img/arm-muscles.jpg", src: "1120",
+      groups: [
+        ["المجموعة الأمامية (Flexors)", [["Biceps brachii — short head","ذات الرأسين العضدية — الرأس القصير"],["Biceps brachii — long head","ذات الرأسين العضدية — الرأس الطويل"],["Brachialis","العضلة العضدية"]]],
+        ["المجموعة الخلفية (Extensors)", [["Triceps brachii — lateral head","ثلاثية الرؤوس العضدية — الرأس الوحشي"],["Triceps brachii — long head","ثلاثية الرؤوس العضدية — الرأس الطويل"]]]
+      ]}
+  },
+  forearm: { ar: "الساعد", en: "Forearm (Antebrachium)",
+    bones: { img: "img/forearm-bones.jpg", src: "805",
+      note: "عظمين: <b class='en'>Radius</b> (الكعبرة) بجهة الإبهام، و<b class='en'>Ulna</b> (الزند) بجهة الخنصر، ويربط بينهما الغشاء بين العظمين.",
+      groups: [
+        ["العظام", [["Radius","الكعبرة"],["Ulna","الزند"],["Interosseous membrane","الغشاء بين العظمين"]]],
+        ["الطرف العلوي (Proximal)", [["Olecranon process","الناتئ الزُّجّي"],["Trochlear notch","الثلمة البكرية"],["Coronoid process","الناتئ الإكليلي"],["Radial notch of the ulna","الثلمة الكعبرية للزند"],["Head of radius","رأس الكعبرة"],["Neck of radius","عنق الكعبرة"],["Radial tuberosity","الحدبة الكعبرية"],["Proximal radioulnar joint","المفصل الكعبري الزندي الداني"]]],
+        ["الطرف السفلي (Distal)", [["Head of ulna","رأس الزند"],["Ulnar notch of the radius","الثلمة الزندية للكعبرة"],["Styloid process of ulna","الناتئ الإبري للزند"],["Styloid process of radius","الناتئ الإبري للكعبرة"],["Distal radioulnar joint","المفصل الكعبري الزندي القاصي"]]]
+      ]},
+    muscles: { img: "img/forearm-muscles.jpg", src: "1120",
+      groups: [
+        ["أمامية سطحية (Palmar — superficial)", [["Pronator teres","الكابّة المدوّرة"],["Flexor carpi radialis","المثنية الكعبرية للرسغ"],["Palmaris longus","الراحية الطويلة"],["Flexor carpi ulnaris","المثنية الزندية للرسغ"],["Flexor digitorum superficialis","المثنية السطحية للأصابع"],["Brachioradialis","العضدية الكعبرية"]]],
+        ["أمامية عميقة (Palmar — deep)", [["Flexor digitorum profundus","المثنية العميقة للأصابع"],["Flexor pollicis longus","المثنية الطويلة للإبهام"],["Pronator quadratus","الكابّة المربعة"]]],
+        ["خلفية سطحية (Dorsal — superficial)", [["Extensor carpi radialis longus","الباسطة الكعبرية الطويلة للرسغ"],["Extensor carpi radialis brevis","الباسطة الكعبرية القصيرة للرسغ"],["Extensor digitorum","الباسطة للأصابع"],["Extensor digiti minimi","الباسطة للخنصر"],["Extensor carpi ulnaris","الباسطة الزندية للرسغ"],["Anconeus","العضلة المرفقية"]]],
+        ["خلفية عميقة (Dorsal — deep)", [["Supinator","العضلة الباطحة"],["Abductor pollicis longus","المبعِدة الطويلة للإبهام"],["Extensor pollicis brevis","الباسطة القصيرة للإبهام"],["Extensor pollicis longus","الباسطة الطويلة للإبهام"],["Extensor indicis","الباسطة للسبابة"]]],
+        ["أربطة الرسغ", [["Flexor retinaculum","القيد المثني"],["Extensor retinaculum","القيد الباسط"]]]
+      ]}
+  },
+  hand: { ar: "اليد", en: "Hand (Manus)",
+    bones: { img: "img/hand-bones.jpg", src: "806",
+      note: "٢٧ عظمًا: ٨ رسغية، و٥ مشطية، و١٤ سُلامى. للإبهام سلاميتان فقط (بلا سلامى وسطى).",
+      groups: [
+        ["عظام الرسغ (Carpals) — الصف الداني", [["Scaphoid","الزورقي"],["Lunate","الهلالي"],["Triquetrum","المثلثي"],["Pisiform","الحِمَّصي"]]],
+        ["عظام الرسغ (Carpals) — الصف القاصي", [["Trapezium","المربع المنحرف"],["Trapezoid","شبه المنحرف"],["Capitate","الكبير (الرأسي)"],["Hamate","الكُلّابي"]]],
+        ["عظام المشط (Metacarpals 1–5)", [["Base","القاعدة"],["Shaft","الجسم"],["Head","الرأس"]]],
+        ["السُّلاميات (Phalanges)", [["Proximal phalanx","السلامى الدانية"],["Middle phalanx","السلامى الوسطى"],["Distal phalanx","السلامى القاصية"],["Thumb (pollex)","الإبهام"]]]
+      ]},
+    muscles: { img: "img/hand-muscles.jpg", src: "1121",
+      groups: [
+        ["بارزة الإبهام (Thenar)", [["Abductor pollicis brevis","المبعِدة القصيرة للإبهام"],["Flexor pollicis brevis","المثنية القصيرة للإبهام"],["Opponens pollicis","المقابِلة للإبهام"],["Adductor pollicis","المقرِّبة للإبهام"]]],
+        ["بارزة الخنصر (Hypothenar)", [["Abductor digiti minimi","المبعِدة للخنصر"],["Flexor digiti minimi brevis","المثنية القصيرة للخنصر"],["Opponens digiti minimi","المقابِلة للخنصر"]]],
+        ["العضلات الوسطى", [["Lumbrical muscles","العضلات الدودية"],["Palmar interossei","بين العظام الراحية"],["Dorsal interossei","بين العظام الظهرية"]]],
+        ["أربطة", [["Pisometacarpal ligament","الرباط الحِمَّصي المشطي"]]]
+      ]}
+  }
+};
+const SOON = {head:"الرأس",neck:"الرقبة",chest:"الصدر",abdomen:"البطن",pelvis:"الحوض",thigh:"الفخذ",leg:"الساق",foot:"القدم"};
+
+// النص الثاني من الجسم: نسخة معكوسة من نفس المناطق (حتى يبقى الضغط عليها شغّال)
+(() => { const h=document.getElementById("half"), m=h.cloneNode(true); m.removeAttribute("id");
+  m.setAttribute("transform","translate(200 0) scale(-1 1)");
+  m.querySelectorAll('[data-r="head"],[data-r="neck"],[data-r="chest"],[data-r="abdomen"],[data-r="pelvis"]').forEach(e=>e.remove());
+  h.after(m); })();
+const tg = window.Telegram && Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+const $ = id => document.getElementById(id);
+let cur = null, kind = "bones";
+
+function toast(t){ const e=$("toast"); e.textContent=t; e.classList.add("on"); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove("on"),1600); }
+function haptic(){ try{ tg && tg.HapticFeedback.selectionChanged(); }catch(e){} }
+
+function openSheet(r){
+  cur=r; $("s-title").textContent=REGIONS[r].ar; $("s-en").textContent=REGIONS[r].en;
+  document.querySelectorAll(".rg").forEach(p=>p.classList.toggle("sel",p.dataset.r===r));
+  $("sheet").classList.add("open"); haptic();
+}
+function closeSheet(){ $("sheet").classList.remove("open"); document.querySelectorAll(".rg.sel").forEach(p=>p.classList.remove("sel")); }
+
+function show(view){
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===view));
+  window.scrollTo(0,0);
+  if (tg) view==="v-lesson" ? tg.BackButton.show() : tg.BackButton.hide();
+}
+function lesson(r,k){
+  cur=r; kind=k; const R=REGIONS[r], L=R[k], c=CREDIT[L.src];
+  $("l-title").textContent=R.ar+" · "+(k==="bones"?"العظام":"العضلات");
+  $("l-en").textContent=R.en+" — "+(k==="bones"?"Bones":"Muscles");
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
+  $("l-img").src=L.img; $("l-img").alt=R.en;
+  $("l-credit").innerHTML=`Figure: ${c[0]} · ${c[1]} · <a href="${c[2]}" target="_blank" rel="noopener">source</a>`;
+  $("l-note").innerHTML=L.note?`<div class="note">${L.note}</div>`:"";
+  $("l-groups").innerHTML=L.groups.map(([h,items])=>`<div class="grp"><h3>${h}</h3><div class="terms">`+
+    items.map(([en,ar])=>`<div class="term"><span class="en">${en}</span><span class="ar">${ar}</span></div>`).join("")+`</div></div>`).join("");
+  show("v-lesson");
+}
+
+document.querySelectorAll(".rg").forEach(p=>p.addEventListener("click",()=>{
+  const r=p.dataset.r; REGIONS[r] ? openSheet(r) : toast((SOON[r]||"هذا الجزء")+" — قريبًا");
+}));
+$("chips").innerHTML=Object.entries(REGIONS).map(([k,v])=>`<button class="chip" data-r="${k}"><b>${v.ar}</b><span class="en">${v.en.split(" (")[0]}</span></button>`).join("");
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>openSheet(b.dataset.r)));
+$("sheet-bg").addEventListener("click",closeSheet);
+document.querySelectorAll(".pick button").forEach(b=>b.addEventListener("click",()=>{ closeSheet(); lesson(cur,b.dataset.k); }));
+document.querySelectorAll("#tabs button").forEach(b=>b.addEventListener("click",()=>{ haptic(); lesson(cur,b.dataset.k); }));
+const goBack=()=>{ if($("zoom").classList.contains("on")) return closeZoom(); show("v-map"); };
+$("back").addEventListener("click",goBack);
+if (tg) tg.BackButton.onClick(goBack);
+
+let zw=200;
+function setZoom(w){ zw=Math.max(100,Math.min(500,w)); $("z-img").style.width=zw+"%"; }
+$("fig").addEventListener("click",()=>{ $("z-img").src=$("l-img").src; setZoom(200); $("zoom").classList.add("on"); });
+function closeZoom(){ $("zoom").classList.remove("on"); }
+$("zx").addEventListener("click",closeZoom);
+$("z-in").addEventListener("click",()=>setZoom(zw+60));
+$("z-out").addEventListener("click",()=>setZoom(zw-60));
+</script>
+</body>
+</html>
