@@ -419,6 +419,172 @@
    }
   },
   {
+   "id": "thumb-pa",
+   "region": "hand",
+   "img": "img/xray/thumb-pa.jpg",
+   "w": 1280,
+   "h": 1635,
+   "en": "Thumb — PA",
+   "ar": "الإبهام — خلفي أمامي (PA)",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_thumb_of_an_18_year_old_male_-_posteroanterior.jpg"
+   ],
+   "pts": [
+    [
+     400,
+     660,
+     "distal-phalanx-thumb",
+     "Distal phalanx",
+     "السلامى القاصية"
+    ],
+    [
+     470,
+     730,
+     "distal-phalanx-thumb",
+     "Interphalangeal (IP) joint",
+     "المفصل بين السلامي"
+    ],
+    [
+     570,
+     850,
+     "proximal-phalanx-thumb",
+     "Proximal phalanx",
+     "السلامى الدانية"
+    ],
+    [
+     650,
+     940,
+     "proximal-phalanx-thumb",
+     "1st metacarpophalangeal (MCP) joint",
+     "المفصل المشطي السلامي الأول"
+    ],
+    [
+     770,
+     1100,
+     "1st-metacarpal",
+     "1st metacarpal",
+     "المشط الأول"
+    ],
+    [
+     930,
+     1220,
+     "1st-metacarpal",
+     "1st carpometacarpal (CMC) joint",
+     "المفصل الرسغي المشطي الأول"
+    ],
+    [
+     950,
+     1280,
+     "trapezium",
+     "Trapezium",
+     "المربع المنحرف"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Hand in a near-lateral position on its ulnar side, thumb slightly abducted with its long axis parallel to the IR.",
+     "اليد بوضع شبه جانبي على جهتها الزندية، والإبهام مُبعَد قليلًا ومحوره الطولي موازٍ للكاسيت."
+    ],
+    "cr": [
+     "Perpendicular to the 1st MCP joint.",
+     "عمودي على المفصل المشطي السلامي الأول."
+    ],
+    "exp": [
+     "SID 100 cm · about 50–60 kVp.",
+     "مسافة 100 سم · حوالي 50–60 kVp."
+    ],
+    "eval": [
+     "Whole thumb from the distal phalanx to the trapezium included; no rotation (equal concavity on both sides of the shafts); IP and MCP joints open. The PA thumb is slightly magnified because the thumb is away from the IR.",
+     "يظهر الإبهام كاملًا من السلامى القاصية إلى المربع المنحرف؛ لا دوران (تقعّر متساوٍ على جانبي أجسام العظام)؛ المفصلان بين السلامي والمشطي السلامي مفتوحان. صورة PA مكبّرة قليلًا لأن الإبهام بعيد عن الكاسيت."
+    ]
+   }
+  },
+  {
+   "id": "thumb-lat",
+   "region": "hand",
+   "img": "img/xray/thumb-lat.jpg",
+   "w": 977,
+   "h": 1820,
+   "en": "Thumb — lateral",
+   "ar": "الإبهام — جانبي",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_thumb_of_an_18_year_old_male_-_lateral.jpg"
+   ],
+   "pts": [
+    [
+     677,
+     422,
+     "distal-phalanx-thumb",
+     "Distal phalanx",
+     "السلامى القاصية"
+    ],
+    [
+     633,
+     555,
+     "distal-phalanx-thumb",
+     "Interphalangeal (IP) joint",
+     "المفصل بين السلامي"
+    ],
+    [
+     511,
+     711,
+     "proximal-phalanx-thumb",
+     "Proximal phalanx",
+     "السلامى الدانية"
+    ],
+    [
+     444,
+     866,
+     "proximal-phalanx-thumb",
+     "1st MCP joint",
+     "المفصل المشطي السلامي الأول"
+    ],
+    [
+     566,
+     910,
+     null,
+     "Sesamoid bone",
+     "عظم سمسمي"
+    ],
+    [
+     366,
+     1044,
+     "1st-metacarpal",
+     "1st metacarpal",
+     "المشط الأول"
+    ],
+    [
+     311,
+     1343,
+     "trapezium",
+     "Trapezium",
+     "المربع المنحرف"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Hand pronated with the fingers slightly flexed, then rotated until the thumb is in a true lateral position.",
+     "اليد مكبوبة والأصابع مثنية قليلًا، ثم تُدار حتى يصير الإبهام بوضع جانبي تام."
+    ],
+    "cr": [
+     "Perpendicular to the 1st MCP joint.",
+     "عمودي على المفصل المشطي السلامي الأول."
+    ],
+    "exp": [
+     "SID 100 cm · about 50–60 kVp.",
+     "مسافة 100 سم · حوالي 50–60 kVp."
+    ],
+    "eval": [
+     "True lateral: anterior surfaces of the proximal phalanx and metacarpal are concave and the posterior surfaces straighter; IP and MCP joints open; trapezium included.",
+     "جانبي تام: الوجه الأمامي للسلامى الدانية والمشط مقعّر والخلفي أكثر استقامة؛ المفصلان مفتوحان؛ ويظهر المربع المنحرف."
+    ]
+   }
+  },
+  {
    "id": "elbow-ap",
    "region": "forearm",
    "img": "img/xray/elbow-ap.jpg",
