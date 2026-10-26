@@ -205,10 +205,10 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
     <div class="mapwrap">
       <svg class="body" viewBox="0 0 200 420" aria-label="خريطة جسم الإنسان">
         <g id="half">
-          <path class="rg soon" data-r="head" d="M100 12c14 0 23 11 23 26s-9 28-23 28-23-13-23-28 9-26 23-26z"/>
+          <path class="rg live pulse" data-r="head" d="M100 12c14 0 23 11 23 26s-9 28-23 28-23-13-23-28 9-26 23-26z"/>
           <path class="rg live pulse" data-r="spine" d="M91 64h18l2 14H89z"/>
-          <path class="rg soon" data-r="chest" d="M89 78h22l29 6c4 8 4 24 0 38l-6 30H66l-6-30c-4-14-4-30 0-38z"/>
-          <path class="rg soon" data-r="abdomen" d="M66 154h68l-3 46H69z"/>
+          <path class="rg live pulse" data-r="chest" d="M89 78h22l29 6c4 8 4 24 0 38l-6 30H66l-6-30c-4-14-4-30 0-38z"/>
+          <path class="rg live pulse" data-r="abdomen" d="M66 154h68l-3 46H69z"/>
           <path class="rg soon" data-r="pelvis" d="M69 202h62l5 30H64z"/>
           <path class="rg live pulse" data-r="arm" d="M59 85c-11 3-17 12-19 25l-5 50 16 2 7-42z"/>
           <path class="rg live pulse" data-r="forearm" d="M35 164l16 2-4 60-15-1z"/>
@@ -470,7 +470,9 @@ const REGIONS = {
       ]}
   }
 };
-const SOON = {head:"الرأس",chest:"الصدر",abdomen:"البطن",pelvis:"الحوض"};
+const SOON = {pelvis:"الحوض"};
+// مناطق بيها أشعة بس (لحد ما ينضاف مجسّمها): تفتح الدرس على الأشعة مباشرة
+const XONLY = {head:{ar:"الرأس",en:"Head (Skull)"}, chest:{ar:"الصدر",en:"Chest (Thorax)"}, abdomen:{ar:"البطن",en:"Abdomen"}};
 
 // النص الثاني من الجسم: نسخة معكوسة من نفس المناطق (حتى يبقى الضغط عليها شغّال)
 (() => { const h=document.getElementById("half"), m=h.cloneNode(true); m.removeAttribute("id");
@@ -618,12 +620,14 @@ $("x-test").addEventListener("click",()=>{ const v=XRAY.views.find(x=>x.id===xVi
 addEventListener("resize",()=>{ if(mode==="xray"&&XRAY) xDots(XRAY.views.find(x=>x.id===xView)); });
 
 async function lesson(r,k,m){
-  cur=r; kind=k; mode=m||mode; const R=REGIONS[r], L=R[k], c=CREDIT[L.src];
+  const xo=!!XONLY[r]; if (xo){ k="bones"; m="xray"; }
+  cur=r; kind=k; mode=m||mode; const R=REGIONS[r]||XONLY[r], L=R[k]||{}, c=CREDIT[L.src];
   if ((mode==="photo"||mode==="xray") && k!=="bones") mode="3d";
-  $("l-title").textContent=R.ar+" · "+(k==="bones"?"العظام":"العضلات");
-  $("l-en").textContent=R.en+" — "+(k==="bones"?"Bones":"Muscles");
+  $("l-title").textContent=R.ar+" · "+(xo?"الأشعة":k==="bones"?"العظام":"العضلات");
+  $("l-en").textContent=R.en+" — "+(xo?"Radiographs":k==="bones"?"Bones":"Muscles");
+  $("tabs").style.display=$("modes").style.display=xo?"none":"";
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
-  document.querySelectorAll("#modes button").forEach(b=>{ b.classList.toggle("on",b.dataset.m===mode); b.hidden=(b.dataset.m==="photo"||b.dataset.m==="xray")&&k!=="bones"; });
+  document.querySelectorAll("#modes button").forEach(b=>{ b.classList.toggle("on",b.dataset.m===mode); b.hidden=(xo&&b.dataset.m!=="xray")||((b.dataset.m==="photo"||b.dataset.m==="xray")&&k!=="bones"); });
   document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id==="p-"+mode));
   $("l-note").innerHTML=L.note&&mode!=="3d"?`<div class="note">${L.note}</div>`:"";
   show("v-lesson");
@@ -655,10 +659,10 @@ async function lesson(r,k,m){
 }
 
 document.querySelectorAll(".rg").forEach(p=>p.addEventListener("click",()=>{
-  const r=p.dataset.r; REGIONS[r] ? openSheet(r) : toast((SOON[r]||"هذا الجزء")+" — قريبًا");
+  const r=p.dataset.r; REGIONS[r] ? openSheet(r) : XONLY[r] ? lesson(r,"bones","xray") : toast((SOON[r]||"هذا الجزء")+" — قريبًا");
 }));
-$("chips").innerHTML=Object.entries(REGIONS).map(([k,v])=>`<button class="chip" data-r="${k}"><b>${v.ar}</b><span class="en">${v.en.split(" (")[0]}</span></button>`).join("");
-document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>openSheet(b.dataset.r)));
+$("chips").innerHTML=Object.entries({...REGIONS,...XONLY}).map(([k,v])=>`<button class="chip" data-r="${k}"><b>${v.ar}</b><span class="en">${v.en.split(" (")[0]}</span></button>`).join("");
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>XONLY[b.dataset.r] ? lesson(b.dataset.r,"bones","xray") : openSheet(b.dataset.r)));
 $("sheet-bg").addEventListener("click",closeSheet);
 document.querySelectorAll(".pick button").forEach(b=>b.addEventListener("click",()=>{ closeSheet(); lesson(cur,b.dataset.k); }));
 document.querySelectorAll("#tabs button").forEach(b=>b.addEventListener("click",()=>{ haptic(); lesson(cur,b.dataset.k); }));

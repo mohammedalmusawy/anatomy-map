@@ -116,5 +116,17 @@
   "file": "File:AP Whole spine with piercing.jpg",
   "artist": "Hollandmjuk",
   "license": "Public domain"
+ },
+ "thoracic-ap": {
+  "file": "thoracic-ap.jpg",
+  "page": "https://radiopaedia.org/cases/46581",
+  "license": "CC BY-NC-SA 3.0",
+  "artist": "Ian Bickle, Radiopaedia.org, rID: 46581"
+ },
+ "thoracic-lat": {
+  "file": "thoracic-lat.jpg",
+  "page": "https://radiopaedia.org/cases/46580",
+  "license": "CC BY-NC-SA 3.0",
+  "artist": "Ian Bickle, Radiopaedia.org, rID: 46580"
  }
 }
