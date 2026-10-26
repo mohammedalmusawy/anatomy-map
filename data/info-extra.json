@@ -1,0 +1,275 @@
+{
+ "_note": "بطاقات إضافية لخريطة-جديدة.html (الحوض). تندمج فوق data/info.json بدون ما تغيّر أي مفتاح قديم؛ مفاتيح «-right» نسخة الجهة اليمنى.",
+ "hip-bone-right": {
+  "t": [
+   "Flat bone formed by ilium, ischium and pubis",
+   "عظم مسطّح يتكوّن من الحرقفة والإسك والعانة"
+  ],
+  "j": [
+   "Sacrum (sacroiliac joint); femur (hip joint); other hip bone (pubic symphysis)",
+   "العجز (المفصل العجزي الحرقفي)؛ الفخذ (مفصل الورك)؛ عظم الورك الآخر (الارتفاق العاني)"
+  ]
+ },
+ "femur-right": {
+  "t": [
+   "Longest and strongest bone of the body",
+   "أطول وأقوى عظم في الجسم"
+  ],
+  "j": [
+   "Hip bone (hip joint); tibia and patella (knee joint)",
+   "عظم الورك (مفصل الورك)؛ الظنبوب والرضفة (مفصل الركبة)"
+  ]
+ },
+ "psoas-major-right": {
+  "o": [
+   "Bodies and transverse processes of T12–L5",
+   "أجسام الفقرات T12–L5 ونواتئها المستعرضة"
+  ],
+  "i": [
+   "Lesser trochanter of the femur",
+   "المدوَّر الصغير للفخذ"
+  ],
+  "a": [
+   "Flexes the hip; flexes the trunk",
+   "يثني الورك والجذع"
+  ],
+  "n": [
+   "Anterior rami of L1–L3",
+   "الفروع الأمامية للأعصاب L1–L3"
+  ]
+ },
+ "iliacus-right": {
+  "o": [
+   "Iliac fossa",
+   "الحفرة الحرقفية"
+  ],
+  "i": [
+   "Lesser trochanter (with psoas major)",
+   "المدوَّر الصغير (مع القطنية الكبرى)"
+  ],
+  "a": [
+   "Flexes the hip",
+   "يثني الورك"
+  ],
+  "n": [
+   "Femoral nerve (L2–L3)",
+   "العصب الفخذي (L2–L3)"
+  ]
+ },
+ "piriformis-right": {
+  "o": [
+   "Anterior surface of the sacrum",
+   "الوجه الأمامي للعجز"
+  ],
+  "i": [
+   "Superior border of the greater trochanter",
+   "الحافة العلوية للمدوَّر الكبير"
+  ],
+  "a": [
+   "Laterally rotates the extended hip; abducts the flexed hip",
+   "يدوّر الورك الممدود للخارج ويبعد الورك المثني"
+  ],
+  "n": [
+   "Nerve to piriformis (S1–S2)",
+   "العصب الكمثري (S1–S2)"
+  ]
+ },
+ "obturator-internus-right": {
+  "o": [
+   "Internal surface of the obturator membrane and surrounding bone",
+   "الوجه الداخلي للغشاء السدّادي والعظم المحيط به"
+  ],
+  "i": [
+   "Medial surface of the greater trochanter",
+   "الوجه الإنسي للمدوَّر الكبير"
+  ],
+  "a": [
+   "Laterally rotates the hip",
+   "يدوّر الورك للخارج"
+  ],
+  "n": [
+   "Nerve to obturator internus (L5–S1)",
+   "عصب السدّادة الباطنة (L5–S1)"
+  ]
+ },
+ "pubococcygeus": {
+  "o": [
+   "Posterior surface of the body of the pubis and the front of the tendinous arch of levator ani",
+   "الوجه الخلفي لجسم العانة ومقدمة القوس الوترية للرافعة الشرجية"
+  ],
+  "i": [
+   "Anococcygeal body and coccyx",
+   "الجسم الشرجي العصعصي والعصعص"
+  ],
+  "a": [
+   "Part of levator ani: supports the pelvic organs and resists rises in abdominal pressure",
+   "جزء من الرافعة الشرجية: تسند أعضاء الحوض وتقاوم ارتفاع ضغط البطن"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "pubococcygeus-right": {
+  "o": [
+   "Posterior surface of the body of the pubis and the front of the tendinous arch of levator ani",
+   "الوجه الخلفي لجسم العانة ومقدمة القوس الوترية للرافعة الشرجية"
+  ],
+  "i": [
+   "Anococcygeal body and coccyx",
+   "الجسم الشرجي العصعصي والعصعص"
+  ],
+  "a": [
+   "Part of levator ani: supports the pelvic organs and resists rises in abdominal pressure",
+   "جزء من الرافعة الشرجية: تسند أعضاء الحوض وتقاوم ارتفاع ضغط البطن"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "puborectalis": {
+  "o": [
+   "Posterior surface of the body of the pubis (both sides)",
+   "الوجه الخلفي لجسم العانة (من الجهتين)"
+  ],
+  "i": [
+   "Loops behind the anorectal junction as a U-shaped sling, joining the muscle of the other side",
+   "تلتف خلف الملتقى الشرجي المستقيمي كحمّالة على شكل U وتتصل بعضلة الجهة الثانية"
+  ],
+  "a": [
+   "Pulls the anorectal junction forward and keeps the anorectal angle (faecal continence); relaxes during defecation",
+   "تسحب الملتقى الشرجي المستقيمي للأمام وتحافظ على الزاوية الشرجية المستقيمية (التحكم بالبراز)؛ ترتخي وقت التغوّط"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "puborectalis-right": {
+  "o": [
+   "Posterior surface of the body of the pubis (both sides)",
+   "الوجه الخلفي لجسم العانة (من الجهتين)"
+  ],
+  "i": [
+   "Loops behind the anorectal junction as a U-shaped sling, joining the muscle of the other side",
+   "تلتف خلف الملتقى الشرجي المستقيمي كحمّالة على شكل U وتتصل بعضلة الجهة الثانية"
+  ],
+  "a": [
+   "Pulls the anorectal junction forward and keeps the anorectal angle (faecal continence); relaxes during defecation",
+   "تسحب الملتقى الشرجي المستقيمي للأمام وتحافظ على الزاوية الشرجية المستقيمية (التحكم بالبراز)؛ ترتخي وقت التغوّط"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "iliococcygeus": {
+  "o": [
+   "Tendinous arch of levator ani (thickened obturator fascia) and the ischial spine",
+   "القوس الوترية للرافعة الشرجية (لفافة السدّادة المتثخنة) والشوكة الإسكية"
+  ],
+  "i": [
+   "Anococcygeal body and the last two segments of the coccyx",
+   "الجسم الشرجي العصعصي وآخر قطعتين من العصعص"
+  ],
+  "a": [
+   "Part of levator ani: raises and supports the pelvic floor",
+   "جزء من الرافعة الشرجية: ترفع قاع الحوض وتسنده"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "iliococcygeus-right": {
+  "o": [
+   "Tendinous arch of levator ani (thickened obturator fascia) and the ischial spine",
+   "القوس الوترية للرافعة الشرجية (لفافة السدّادة المتثخنة) والشوكة الإسكية"
+  ],
+  "i": [
+   "Anococcygeal body and the last two segments of the coccyx",
+   "الجسم الشرجي العصعصي وآخر قطعتين من العصعص"
+  ],
+  "a": [
+   "Part of levator ani: raises and supports the pelvic floor",
+   "جزء من الرافعة الشرجية: ترفع قاع الحوض وتسنده"
+  ],
+  "n": [
+   "Nerve to levator ani (S4) and the inferior rectal branch of the pudendal nerve (S2–S4)",
+   "عصب الرافعة الشرجية (S4) والفرع المستقيمي السفلي للعصب الفرجي (S2–S4)"
+  ]
+ },
+ "coccygeus": {
+  "o": [
+   "Ischial spine (lies on the sacrospinous ligament)",
+   "الشوكة الإسكية (تستلقي على الرباط العجزي الشوكي)"
+  ],
+  "i": [
+   "Lateral margins of the lower sacrum and the coccyx",
+   "الحافتان الجانبيتان لأسفل العجز والعصعص"
+  ],
+  "a": [
+   "Completes the back of the pelvic floor; supports the pelvic organs and flexes the coccyx",
+   "تكمّل الجزء الخلفي من قاع الحوض؛ تسند أعضاء الحوض وتثني العصعص"
+  ],
+  "n": [
+   "Anterior rami of S4–S5",
+   "الفروع الأمامية لـ S4–S5"
+  ]
+ },
+ "coccygeus-right": {
+  "o": [
+   "Ischial spine (lies on the sacrospinous ligament)",
+   "الشوكة الإسكية (تستلقي على الرباط العجزي الشوكي)"
+  ],
+  "i": [
+   "Lateral margins of the lower sacrum and the coccyx",
+   "الحافتان الجانبيتان لأسفل العجز والعصعص"
+  ],
+  "a": [
+   "Completes the back of the pelvic floor; supports the pelvic organs and flexes the coccyx",
+   "تكمّل الجزء الخلفي من قاع الحوض؛ تسند أعضاء الحوض وتثني العصعص"
+  ],
+  "n": [
+   "Anterior rami of S4–S5",
+   "الفروع الأمامية لـ S4–S5"
+  ]
+ },
+ "external-anal-sphincter": {
+  "o": [
+   "Perineal body and anococcygeal body (subcutaneous, superficial and deep parts)",
+   "الجسم العجاني والجسم الشرجي العصعصي (أجزاء تحت الجلد وسطحية وعميقة)"
+  ],
+  "i": [
+   "Encircles the lower anal canal; the deep part blends with puborectalis",
+   "تحيط بأسفل القناة الشرجية؛ الجزء العميق يندمج مع العانية المستقيمية"
+  ],
+  "a": [
+   "Voluntary closure of the anal canal",
+   "غلق القناة الشرجية إراديًا"
+  ],
+  "n": [
+   "Inferior rectal nerve (pudendal, S2–S4) and the perineal branch of S4",
+   "العصب المستقيمي السفلي (من الفرجي، S2–S4) والفرع العجاني لـ S4"
+  ]
+ },
+ "external-anal-sphincter-right": {
+  "o": [
+   "Perineal body and anococcygeal body (subcutaneous, superficial and deep parts)",
+   "الجسم العجاني والجسم الشرجي العصعصي (أجزاء تحت الجلد وسطحية وعميقة)"
+  ],
+  "i": [
+   "Encircles the lower anal canal; the deep part blends with puborectalis",
+   "تحيط بأسفل القناة الشرجية؛ الجزء العميق يندمج مع العانية المستقيمية"
+  ],
+  "a": [
+   "Voluntary closure of the anal canal",
+   "غلق القناة الشرجية إراديًا"
+  ],
+  "n": [
+   "Inferior rectal nerve (pudendal, S2–S4) and the perineal branch of S4",
+   "العصب المستقيمي السفلي (من الفرجي، S2–S4) والفرع العجاني لـ S4"
+  ]
+ }
+}

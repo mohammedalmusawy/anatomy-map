@@ -1,0 +1,26 @@
+{
+ "extra/pelvis-front": {
+  "file": "File:Pelvis - os coxae, os sacrum (frontal view).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pelvis_-_os_coxae,_os_sacrum_(frontal_view).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/pelvis-back": {
+  "file": "File:Pelvis - os coxae, os sacrum (posterior view).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pelvis_-_os_coxae,_os_sacrum_(posterior_view).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/hip-bone-lat": {
+  "file": "File:Pelvis - os coxae (lateral view).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pelvis_-_os_coxae_(lateral_view).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/sacrum-ant": {
+  "file": "File:Pelvis - os sacrum (anterior).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pelvis_-_os_sacrum_(anterior).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ }
+}
