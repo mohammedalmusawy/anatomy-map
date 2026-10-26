@@ -1,0 +1,50 @@
+{
+ "elbow-articulated": {
+  "file": "File:AnteriorHumerusRadiusUlnaArticulated.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:AnteriorHumerusRadiusUlnaArticulated.jpg",
+  "license": "Public domain",
+  "artist": "Brian C. Goss"
+ },
+ "hand-skeleton": {
+  "file": "File:Hand-bones.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hand-bones.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "User:Raul654"
+ },
+ "humerus-ant": {
+  "file": "File:Humerus - anterior.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Humerus_-_anterior.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "humerus-post": {
+  "file": "File:Humerus - posterior 2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Humerus_-_posterior_2.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "radius-ant": {
+  "file": "File:Radius - anterior.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Radius_-_anterior.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "radius-post": {
+  "file": "File:Radius - posterior.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Radius_-_posterior.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "wrist-carpals": {
+  "file": "File:RightHumanAnteriorDistalRadiusUlnaCarpals.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:RightHumanAnteriorDistalRadiusUlnaCarpals.jpg",
+  "license": "Public domain",
+  "artist": "Brian C. Goss"
+ },
+ "ulna": {
+  "file": "File:Ulna - lateral, anterior.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ulna_-_lateral,_anterior.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ }
+}

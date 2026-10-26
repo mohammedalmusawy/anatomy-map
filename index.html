@@ -67,6 +67,29 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
 .tabs{display:flex;background:var(--card);border-radius:14px;padding:4px;margin:14px 0}
 .tabs button{flex:1;border:0;background:none;color:var(--hint);font:inherit;font-size:14px;padding:9px;border-radius:10px;cursor:pointer}
 .tabs button.on{background:var(--accent);color:var(--accent-text);font-weight:600}
+.modes{display:flex;gap:6px;margin:-4px 0 12px;overflow-x:auto}
+.modes button{flex:1;white-space:nowrap;border:1px solid var(--line);background:none;color:var(--text);font:inherit;font-size:13px;padding:8px 10px;border-radius:999px;cursor:pointer}
+.modes button.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+.modes button[hidden]{display:none}
+.pane{display:none}.pane.on{display:block}
+.stage{position:relative;height:min(62vh,520px);border-radius:18px;overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,#2a3346,#0e1219);touch-action:none}
+.stage canvas{display:block;width:100%;height:100%}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:#c9d2e3;font-size:14px}
+.tag{position:absolute;top:12px;inset-inline:12px;background:rgba(10,14,22,.78);backdrop-filter:blur(8px);color:#fff;border-radius:14px;
+  padding:10px 14px;display:none;flex-direction:column;gap:2px;text-align:center}
+.tag.on{display:flex}.tag b{font-size:16px}.tag span{font-size:14px;opacity:.8}
+.tools3d{position:absolute;bottom:12px;left:12px;display:flex;gap:8px}
+.tools3d button{width:40px;height:40px;border:0;border-radius:12px;background:rgba(255,255,255,.14);color:#fff;font-size:20px;cursor:pointer}
+.hint{font-size:13px;color:var(--hint);margin:8px 2px 0}
+.term{cursor:pointer}.term.sel{background:color-mix(in srgb,var(--accent) 16%,transparent)}
+.term .dot{width:10px;height:10px;border-radius:3px;flex:none}
+.term .l{display:flex;align-items:center;gap:10px}
+.photos{display:grid;gap:12px}
+.photo{background:var(--card);border-radius:18px;overflow:hidden;cursor:zoom-in}
+.photo img{display:block;width:100%;height:auto;background:#111}
+.photo .cap{padding:10px 14px}.photo .cap b{display:block;font-size:15px}.photo .cap span{font-size:13px;color:var(--hint)}
+.photo .credit{padding:0 14px 10px;margin:0}
 .fig{background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;position:relative}
 .fig img{display:block;width:100%;height:auto}
 .fig .zoomhint{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:4px 9px;border-radius:9px}
@@ -134,8 +157,35 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
       <button data-k="bones">🦴 العظام</button>
       <button data-k="muscles">💪 العضلات</button>
     </div>
-    <div class="fig" id="fig"><img id="l-img" alt=""><span class="zoomhint">اضغط للتكبير</span></div>
-    <div class="credit" id="l-credit"></div>
+    <div class="modes" id="modes">
+      <button data-m="3d">🧊 مجسّم</button>
+      <button data-m="photo">📷 صور حقيقية</button>
+      <button data-m="fig">📖 رسم مؤشّر</button>
+    </div>
+
+    <!-- مجسّم ثلاثي الأبعاد -->
+    <div class="pane" id="p-3d">
+      <div class="stage" id="stage">
+        <div class="loading" id="loading">جارٍ تحميل المجسّم…</div>
+        <div class="tag" id="tag"><b class="en" id="tag-en"></b><span id="tag-ar"></span></div>
+        <div class="tools3d">
+          <button id="t-reset" title="إعادة الوضع">⟲</button>
+          <button id="t-flip" title="تدوير ١٨٠°">↻</button>
+        </div>
+      </div>
+      <p class="hint">اسحب لتدوير المجسّم، وكبّره بإصبعين، واضغط على أي جزء لمعرفة اسمه.</p>
+      <div class="credit">3D model: BodyParts3D, © The Database Center for Life Science · CC BY-SA 2.1 JP</div>
+    </div>
+
+    <!-- صور حقيقية -->
+    <div class="pane" id="p-photo"></div>
+
+    <!-- رسم مؤشّر -->
+    <div class="pane" id="p-fig">
+      <div class="fig" id="fig"><img id="l-img" alt=""><span class="zoomhint">اضغط للتكبير</span></div>
+      <div class="credit" id="l-credit"></div>
+    </div>
+
     <div id="l-note"></div>
     <div id="l-groups"></div>
   </section>
@@ -244,17 +294,67 @@ function show(view){
   window.scrollTo(0,0);
   if (tg) view==="v-lesson" ? tg.BackButton.show() : tg.BackButton.hide();
 }
-function lesson(r,k){
-  cur=r; kind=k; const R=REGIONS[r], L=R[k], c=CREDIT[L.src];
+// صور عظام حقيقية (ويكيميديا، مجموعات متاحف وكليات): [الملف، الإنكليزي، العربي، الحقوق، الرابط]
+const PHOTOS = {
+  arm: [
+    ["humerus-ant","Humerus — anterior view","عظم العضد — منظر أمامي","MAKY.OREL · CC0","Humerus_-_anterior.jpg"],
+    ["humerus-post","Humerus — posterior view (two specimens)","عظم العضد — منظر خلفي (عيّنتان)","MAKY.OREL · CC0","Humerus_-_posterior_2.jpg"],
+    ["elbow-articulated","Elbow: humerus, radius and ulna — anterior","المرفق: العضد والكعبرة والزند — منظر أمامي","Brian C. Goss · Public domain","AnteriorHumerusRadiusUlnaArticulated.jpg"]
+  ],
+  forearm: [
+    ["radius-ant","Radius — anterior view (two specimens)","الكعبرة — منظر أمامي (عيّنتان)","MAKY.OREL · CC0","Radius_-_anterior.jpg"],
+    ["radius-post","Radius — posterior view (two specimens)","الكعبرة — منظر خلفي (عيّنتان)","MAKY.OREL · CC0","Radius_-_posterior.jpg"],
+    ["ulna","Ulna — anterolateral view (three specimens)","الزند — منظر أمامي وحشي (ثلاث عيّنات)","MAKY.OREL · CC0","Ulna_-_lateral,_anterior.jpg"]
+  ],
+  hand: [
+    ["hand-skeleton","Bones of the hand — real skeleton","عظام اليد — هيكل حقيقي","Raul654 · CC BY-SA 3.0","Hand-bones.jpg"],
+    ["wrist-carpals","Wrist: carpals with distal radius and ulna","الرسغ: عظام الرسغ مع نهايتي الكعبرة والزند","Brian C. Goss · Public domain","RightHumanAnteriorDistalRadiusUlnaCarpals.jpg"]
+  ]
+};
+const GRP = {bone:"العظام",membrane:"الأغشية","carpal-p":"عظام الرسغ — الصف الداني","carpal-d":"عظام الرسغ — الصف القاصي",
+  metacarpal:"عظام المشط (Metacarpals)",phalanx:"السُّلاميات (Phalanges)",anterior:"المجموعة الأمامية",posterior:"المجموعة الخلفية",
+  thenar:"بارزة الإبهام (Thenar)",hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى"};
+let mode="3d", PARTS=null;
+const partsReady=fetch("models/parts.json").then(r=>r.json()).then(j=>PARTS=j);
+
+function termList(groups, pick){
+  $("l-groups").innerHTML=groups.map(([h,items])=>`<div class="grp"><h3>${h}</h3><div class="terms">`+
+    items.map(t=>`<div class="term" data-key="${t.key||""}"><span class="l">${t.color?`<i class="dot" style="background:${t.color}"></i>`:""}<span class="en">${t.en}</span></span><span class="ar">${t.ar}</span></div>`).join("")+`</div></div>`).join("");
+  if (pick) $("l-groups").querySelectorAll(".term").forEach(e=>e.addEventListener("click",()=>{ pick(e.dataset.key); $("stage").scrollIntoView({behavior:"smooth",block:"center"}); }));
+}
+function markTerm(key){
+  document.querySelectorAll("#l-groups .term").forEach(e=>e.classList.toggle("sel",e.dataset.key===key));
+}
+
+async function lesson(r,k,m){
+  cur=r; kind=k; mode=m||mode; const R=REGIONS[r], L=R[k], c=CREDIT[L.src];
+  if (mode==="photo" && k!=="bones") mode="3d";
   $("l-title").textContent=R.ar+" · "+(k==="bones"?"العظام":"العضلات");
   $("l-en").textContent=R.en+" — "+(k==="bones"?"Bones":"Muscles");
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
-  $("l-img").src=L.img; $("l-img").alt=R.en;
-  $("l-credit").innerHTML=`Figure: ${c[0]} · ${c[1]} · <a href="${c[2]}" target="_blank" rel="noopener">source</a>`;
-  $("l-note").innerHTML=L.note?`<div class="note">${L.note}</div>`:"";
-  $("l-groups").innerHTML=L.groups.map(([h,items])=>`<div class="grp"><h3>${h}</h3><div class="terms">`+
-    items.map(([en,ar])=>`<div class="term"><span class="en">${en}</span><span class="ar">${ar}</span></div>`).join("")+`</div></div>`).join("");
+  document.querySelectorAll("#modes button").forEach(b=>{ b.classList.toggle("on",b.dataset.m===mode); b.hidden=b.dataset.m==="photo"&&k!=="bones"; });
+  document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id==="p-"+mode));
+  $("l-note").innerHTML=L.note&&mode!=="3d"?`<div class="note">${L.note}</div>`:"";
   show("v-lesson");
+
+  if (mode==="fig"){
+    $("l-img").src=L.img; $("l-img").alt=R.en;
+    $("l-credit").innerHTML=`Figure: ${c[0]} · ${c[1]} · <a href="${c[2]}" target="_blank" rel="noopener">source</a>`;
+    termList(L.groups.map(([h,items])=>[h,items.map(([en,ar])=>({en,ar}))]));
+  } else if (mode==="photo"){
+    $("p-photo").innerHTML=`<div class="photos">`+PHOTOS[r].map(([f,en,ar,by,src])=>`<div class="photo" data-img="img/real/${f}.jpg">
+      <img src="img/real/${f}.jpg" alt="${en}" loading="lazy"><div class="cap"><b class="en">${en}</b><span>${ar}</span></div>
+      <div class="credit">Photo: ${by} · <a href="https://commons.wikimedia.org/wiki/File:${src}" target="_blank" rel="noopener">source</a></div></div>`).join("")+`</div>`;
+    $("p-photo").querySelectorAll(".photo").forEach(e=>e.addEventListener("click",ev=>{ if(ev.target.tagName!=="A") openZoom(e.dataset.img); }));
+    $("l-groups").innerHTML=`<div class="note">قارن الصورة الحقيقية بالرسم المؤشّر والمجسّم حتى تثبت المعالم بذهنك.</div>`;
+  } else {
+    await partsReady;
+    if (!window.Viewer3D) await new Promise(res=>addEventListener("viewer3d-ready",res,{once:true}));
+    const key=r+"-"+k, list=PARTS[key];
+    const groups=[]; list.forEach(p=>{ const g=GRP[p.grp]||p.grp; let e=groups.find(x=>x[0]===g); if(!e) groups.push(e=[g,[]]); e[1].push({...p,color:window.Viewer3D?.color(k,p.grp)}); });
+    termList(groups, key2=>window.Viewer3D.select(key2));
+    window.Viewer3D.show(key, k, list, p=>{ markTerm(p&&p.key); haptic(); });
+  }
 }
 
 document.querySelectorAll(".rg").forEach(p=>p.addEventListener("click",()=>{
@@ -265,17 +365,106 @@ document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>ope
 $("sheet-bg").addEventListener("click",closeSheet);
 document.querySelectorAll(".pick button").forEach(b=>b.addEventListener("click",()=>{ closeSheet(); lesson(cur,b.dataset.k); }));
 document.querySelectorAll("#tabs button").forEach(b=>b.addEventListener("click",()=>{ haptic(); lesson(cur,b.dataset.k); }));
+document.querySelectorAll("#modes button").forEach(b=>b.addEventListener("click",()=>{ haptic(); lesson(cur,kind,b.dataset.m); }));
 const goBack=()=>{ if($("zoom").classList.contains("on")) return closeZoom(); show("v-map"); };
 $("back").addEventListener("click",goBack);
 if (tg) tg.BackButton.onClick(goBack);
 
 let zw=200;
 function setZoom(w){ zw=Math.max(100,Math.min(500,w)); $("z-img").style.width=zw+"%"; }
-$("fig").addEventListener("click",()=>{ $("z-img").src=$("l-img").src; setZoom(200); $("zoom").classList.add("on"); });
+function openZoom(src){ $("z-img").src=src; setZoom(200); $("zoom").classList.add("on"); }
+$("fig").addEventListener("click",()=>openZoom($("l-img").src));
 function closeZoom(){ $("zoom").classList.remove("on"); }
 $("zx").addEventListener("click",closeZoom);
 $("z-in").addEventListener("click",()=>setZoom(zw+60));
 $("z-out").addEventListener("click",()=>setZoom(zw-60));
+</script>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+ "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+<script type="module">
+// عارض المجسّمات: كل جزء بالـ GLB عقدة باسم مفتاحه (p0, p1…)، والعظام المرجعية بمشهد العضلات اسمها ctx…
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const COLORS = {
+  bones: {bone:"#eadfc8",membrane:"#9fc3e6","carpal-p":"#f0c987","carpal-d":"#e8a96b",metacarpal:"#e9dcc4",phalanx:"#d9cbb0"},
+  muscles: {anterior:"#d6503b",posterior:"#d98b3a",thenar:"#d6503b",hypothenar:"#b9497a",central:"#d98b3a"}
+};
+const stage=document.getElementById("stage"), tag=document.getElementById("tag");
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+stage.prepend(renderer.domElement);
+const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(35,1,0.01,50);
+scene.add(new THREE.HemisphereLight(0xffffff,0x3a3f4a,1.6));
+const key=new THREE.DirectionalLight(0xffffff,1.6); key.position.set(2,3,4); camera.add(key); scene.add(camera);
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true; controls.enablePan=false; controls.minDistance=1.2; controls.maxDistance=9;
+controls.autoRotate=true; controls.autoRotateSpeed=1.2;
+controls.addEventListener("start",()=>controls.autoRotate=false);
+
+const loader=new GLTFLoader(), cache={};
+let root=null, meta={}, onPick=null, selected=null, curKind="bones";
+
+function fit(){
+  const w=stage.clientWidth, h=stage.clientHeight; if(!w||!h) return;
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+}
+function home(){
+  const box=new THREE.Box3().setFromObject(root), size=box.getSize(new THREE.Vector3()), c=box.getCenter(new THREE.Vector3());
+  const d=Math.max(size.y/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))), size.x/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)))/camera.aspect)*1.35;
+  controls.target.copy(c); camera.position.set(c.x,c.y,c.z+d); controls.update();
+}
+function paint(){
+  root.traverse(o=>{ if(!o.isMesh) return; const m=meta[o.name], isSel=selected&&o.name===selected;
+    const base=m?COLORS[curKind][m.grp]:"#cfc6b4";
+    o.material.color.set(isSel?"#ffd54a":base);
+    o.material.emissive.set(isSel?"#4a3a00":"#000000");
+    o.material.opacity=selected&&!isSel?(m?0.28:0.15):(m?1:0.35);
+    o.material.transparent=o.material.opacity<1; o.material.depthWrite=o.material.opacity===1; o.material.needsUpdate=true;
+  });
+}
+function select(k){
+  selected=k&&meta[k]?k:null; paint();
+  if(selected){ document.getElementById("tag-en").textContent=meta[k].en; document.getElementById("tag-ar").textContent=meta[k].ar; tag.classList.add("on"); controls.autoRotate=false; }
+  else tag.classList.remove("on");
+  onPick&&onPick(selected?meta[selected]:null);
+}
+async function show(name, kind, list, cb){
+  curKind=kind; onPick=cb; meta=Object.fromEntries(list.map(p=>[p.key,p])); selected=null; tag.classList.remove("on");
+  document.getElementById("loading").style.display="grid";
+  if(root) scene.remove(root);
+  const gltf=cache[name]||(cache[name]=await loader.loadAsync(`models/${name}.glb`));
+  root=gltf.scene;
+  root.traverse(o=>{ if(o.isMesh) o.material=new THREE.MeshStandardMaterial({roughness:kind==="bones"?0.75:0.55,metalness:0}); });
+  scene.add(root); paint(); fit(); home(); controls.autoRotate=true;
+  document.getElementById("loading").style.display="none";
+}
+
+// الضغط بدون سحب = اختيار الجزء
+const ray=new THREE.Raycaster(), down={x:0,y:0,on:false};
+renderer.domElement.addEventListener("pointerdown",e=>{down.x=e.clientX;down.y=e.clientY;down.on=true;});
+renderer.domElement.addEventListener("pointerup",e=>{
+  if(!down.on) return; down.on=false;
+  if(!root||Math.hypot(e.clientX-down.x,e.clientY-down.y)>6) return;
+  const r=renderer.domElement.getBoundingClientRect();
+  ray.setFromCamera({x:(e.clientX-r.left)/r.width*2-1,y:-(e.clientY-r.top)/r.height*2+1},camera);
+  const hit=ray.intersectObjects(root.children,true).find(h=>meta[h.object.name]);
+  select(hit?hit.object.name:null);
+});
+document.getElementById("t-reset").addEventListener("click",()=>{ select(null); home(); controls.autoRotate=true; });
+document.getElementById("t-flip").addEventListener("click",()=>{
+  const off=camera.position.clone().sub(controls.target); off.applyAxisAngle(new THREE.Vector3(0,1,0),Math.PI);
+  camera.position.copy(controls.target).add(off); controls.update();
+});
+new ResizeObserver(fit).observe(stage);
+renderer.setAnimationLoop(()=>{ controls.update(); renderer.render(scene,camera); });
+
+window.Viewer3D={show,select,color:(kind,grp)=>COLORS[kind][grp]};
+window.dispatchEvent(new Event("viewer3d-ready"));
 </script>
 </body>
 </html>
