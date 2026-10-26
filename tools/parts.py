@@ -94,3 +94,22 @@ CONTEXT = {
     "forearm": ["left radius", "left ulna"],
     "hand": [n for p in BONES["hand"] for n in p[0]],
 }
+
+# طبقات العضلات للاستوديو (مثل Complete Anatomy): نقشّر من السطحية للعميقة
+# المرجع: التقسيم المعتاد بكتب التشريح (سطحية / وسطى / عميقة)
+LAYER = {
+    "Biceps brachii — short head": "sup", "Biceps brachii — long head": "sup",
+    "Triceps brachii — long head": "sup", "Triceps brachii — lateral head": "sup",
+    "Brachialis": "deep", "Coracobrachialis": "deep", "Triceps brachii — medial head": "deep",
+    "Pronator teres": "sup", "Flexor carpi radialis": "sup", "Palmaris longus": "sup", "Flexor carpi ulnaris": "sup",
+    "Brachioradialis": "sup", "Extensor carpi radialis longus": "sup", "Extensor carpi radialis brevis": "sup",
+    "Extensor digitorum": "sup", "Extensor digiti minimi": "sup", "Extensor carpi ulnaris": "sup", "Anconeus": "sup",
+    "Flexor digitorum superficialis": "mid",
+    "Flexor digitorum profundus": "deep", "Flexor pollicis longus": "deep", "Pronator quadratus": "deep",
+    "Supinator": "deep", "Abductor pollicis longus": "deep", "Extensor pollicis brevis": "deep",
+    "Extensor pollicis longus": "deep", "Extensor indicis": "deep",
+    "Abductor pollicis brevis": "sup", "Flexor pollicis brevis": "sup", "Abductor digiti minimi": "sup",
+    "Flexor digiti minimi brevis": "sup", "Lumbricals": "mid",
+    "Opponens pollicis": "deep", "Adductor pollicis": "deep", "Opponens digiti minimi": "deep",
+    "Palmar interossei": "deep", "Dorsal interossei": "deep",
+}

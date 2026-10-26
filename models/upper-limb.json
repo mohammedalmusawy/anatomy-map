@@ -1,0 +1,954 @@
+[
+ {
+  "key": "humerus",
+  "en": "Humerus",
+  "ar": "عظم العضد",
+  "kind": "bone",
+  "region": "arm",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   -0.175,
+   0.9289,
+   -0.0202
+  ]
+ },
+ {
+  "key": "radius",
+  "en": "Radius",
+  "ar": "الكعبرة",
+  "kind": "bone",
+  "region": "forearm",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   0.0767,
+   -0.5245,
+   0.0596
+  ]
+ },
+ {
+  "key": "ulna",
+  "en": "Ulna",
+  "ar": "الزند",
+  "kind": "bone",
+  "region": "forearm",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   -0.0514,
+   0.1008,
+   -0.0775
+  ]
+ },
+ {
+  "key": "interosseous-membrane",
+  "en": "Interosseous membrane",
+  "ar": "الغشاء بين العظمين",
+  "kind": "bone",
+  "region": "forearm",
+  "grp": "membrane",
+  "layer": "bone",
+  "pin": [
+   0.0184,
+   -0.359,
+   -0.0088
+  ]
+ },
+ {
+  "key": "scaphoid",
+  "en": "Scaphoid",
+  "ar": "الزورقي",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "carpal-p",
+  "layer": "bone",
+  "pin": [
+   0.12,
+   -0.5649,
+   0.0554
+  ]
+ },
+ {
+  "key": "lunate",
+  "en": "Lunate",
+  "ar": "الهلالي",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "carpal-p",
+  "layer": "bone",
+  "pin": [
+   0.0624,
+   -0.5612,
+   0.0583
+  ]
+ },
+ {
+  "key": "triquetrum",
+  "en": "Triquetrum",
+  "ar": "المثلثي",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "carpal-p",
+  "layer": "bone",
+  "pin": [
+   0.0314,
+   -0.5839,
+   0.0646
+  ]
+ },
+ {
+  "key": "pisiform",
+  "en": "Pisiform",
+  "ar": "الحِمَّصي",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "carpal-p",
+  "layer": "bone",
+  "pin": [
+   0.0287,
+   -0.5876,
+   0.0888
+  ]
+ },
+ {
+  "key": "trapezium",
+  "en": "Trapezium",
+  "ar": "المربع المنحرف",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "carpal-d",
+  "layer": "bone",
+  "pin": [
+   0.1235,
+   -0.5792,
+   0.0798
+  ]
+ },
+ {
+  "key": "trapezoid",
+  "en": "Trapezoid",
+  "ar": "شبه المنحرف",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "carpal-d",
+  "layer": "bone",
+  "pin": [
+   0.1134,
+   -0.6021,
+   0.0606
+  ]
+ },
+ {
+  "key": "capitate",
+  "en": "Capitate",
+  "ar": "الكبير (الرأسي)",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "carpal-d",
+  "layer": "bone",
+  "pin": [
+   0.0927,
+   -0.6032,
+   0.0561
+  ]
+ },
+ {
+  "key": "hamate",
+  "en": "Hamate",
+  "ar": "الكُلّابي",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "carpal-d",
+  "layer": "bone",
+  "pin": [
+   0.0567,
+   -0.6089,
+   0.0756
+  ]
+ },
+ {
+  "key": "1st-metacarpal",
+  "en": "1st metacarpal",
+  "ar": "عظم المشط الأول",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "metacarpal",
+  "layer": "bone",
+  "pin": [
+   0.1998,
+   -0.6233,
+   0.1005
+  ]
+ },
+ {
+  "key": "2nd-metacarpal",
+  "en": "2nd metacarpal",
+  "ar": "عظم المشط الثاني",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "metacarpal",
+  "layer": "bone",
+  "pin": [
+   0.1208,
+   -0.6329,
+   0.0723
+  ]
+ },
+ {
+  "key": "3rd-metacarpal",
+  "en": "3rd metacarpal",
+  "ar": "عظم المشط الثالث",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "metacarpal",
+  "layer": "bone",
+  "pin": [
+   0.0999,
+   -0.6329,
+   0.058
+  ]
+ },
+ {
+  "key": "4th-metacarpal",
+  "en": "4th metacarpal",
+  "ar": "عظم المشط الرابع",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "metacarpal",
+  "layer": "bone",
+  "pin": [
+   0.0484,
+   -0.772,
+   0.1012
+  ]
+ },
+ {
+  "key": "5th-metacarpal",
+  "en": "5th metacarpal",
+  "ar": "عظم المشط الخامس",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "metacarpal",
+  "layer": "bone",
+  "pin": [
+   0.0025,
+   -0.7538,
+   0.1082
+  ]
+ },
+ {
+  "key": "proximal-phalanx-thumb",
+  "en": "Proximal phalanx — thumb",
+  "ar": "السلامى الدانية — الإبهام",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.2474,
+   -0.6982,
+   0.1389
+  ]
+ },
+ {
+  "key": "distal-phalanx-thumb",
+  "en": "Distal phalanx — thumb",
+  "ar": "السلامى القاصية — الإبهام",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.2655,
+   -0.7675,
+   0.1812
+  ]
+ },
+ {
+  "key": "proximal-phalanx-index",
+  "en": "Proximal phalanx — index",
+  "ar": "السلامى الدانية — السبابة",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1838,
+   -0.8076,
+   0.108
+  ]
+ },
+ {
+  "key": "middle-phalanx-index",
+  "en": "Middle phalanx — index",
+  "ar": "السلامى الوسطى — السبابة",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.2202,
+   -0.9095,
+   0.1565
+  ]
+ },
+ {
+  "key": "distal-phalanx-index",
+  "en": "Distal phalanx — index",
+  "ar": "السلامى القاصية — السبابة",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.2322,
+   -0.9483,
+   0.2061
+  ]
+ },
+ {
+  "key": "proximal-phalanx-middle",
+  "en": "Proximal phalanx — middle",
+  "ar": "السلامى الدانية — الوسطى",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1192,
+   -0.8206,
+   0.1164
+  ]
+ },
+ {
+  "key": "middle-phalanx-middle",
+  "en": "Middle phalanx — middle",
+  "ar": "السلامى الوسطى — الوسطى",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1282,
+   -0.9177,
+   0.1755
+  ]
+ },
+ {
+  "key": "distal-phalanx-middle",
+  "en": "Distal phalanx — middle",
+  "ar": "السلامى القاصية — الوسطى",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.1499,
+   -0.9782,
+   0.2346
+  ]
+ },
+ {
+  "key": "proximal-phalanx-ring",
+  "en": "Proximal phalanx — ring",
+  "ar": "السلامى الدانية — البنصر",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0489,
+   -0.7897,
+   0.1138
+  ]
+ },
+ {
+  "key": "middle-phalanx-ring",
+  "en": "Middle phalanx — ring",
+  "ar": "السلامى الوسطى — البنصر",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0551,
+   -0.9413,
+   0.2138
+  ]
+ },
+ {
+  "key": "distal-phalanx-ring",
+  "en": "Distal phalanx — ring",
+  "ar": "السلامى القاصية — البنصر",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0658,
+   -0.9518,
+   0.2351
+  ]
+ },
+ {
+  "key": "proximal-phalanx-little",
+  "en": "Proximal phalanx — little",
+  "ar": "السلامى الدانية — الخنصر",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   0.0089,
+   -0.7823,
+   0.1182
+  ]
+ },
+ {
+  "key": "middle-phalanx-little",
+  "en": "Middle phalanx — little",
+  "ar": "السلامى الوسطى — الخنصر",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   -0.0202,
+   -0.8919,
+   0.187
+  ]
+ },
+ {
+  "key": "distal-phalanx-little",
+  "en": "Distal phalanx — little",
+  "ar": "السلامى القاصية — الخنصر",
+  "kind": "bone",
+  "region": "hand",
+  "grp": "phalanx",
+  "layer": "bone",
+  "pin": [
+   -0.0126,
+   -0.9042,
+   0.1968
+  ]
+ },
+ {
+  "key": "biceps-brachii-short-head",
+  "en": "Biceps brachii — short head",
+  "ar": "ذات الرأسين العضدية — الرأس القصير",
+  "kind": "muscle",
+  "region": "arm",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   -0.1489,
+   0.5901,
+   -0.0003
+  ]
+ },
+ {
+  "key": "biceps-brachii-long-head",
+  "en": "Biceps brachii — long head",
+  "ar": "ذات الرأسين العضدية — الرأس الطويل",
+  "kind": "muscle",
+  "region": "arm",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   -0.0628,
+   0.4995,
+   0.005
+  ]
+ },
+ {
+  "key": "brachialis",
+  "en": "Brachialis",
+  "ar": "العضلة العضدية",
+  "kind": "muscle",
+  "region": "arm",
+  "grp": "anterior",
+  "layer": "deep",
+  "pin": [
+   -0.0923,
+   0.2632,
+   -0.0615
+  ]
+ },
+ {
+  "key": "coracobrachialis",
+  "en": "Coracobrachialis",
+  "ar": "الغرابية العضدية",
+  "kind": "muscle",
+  "region": "arm",
+  "grp": "anterior",
+  "layer": "deep",
+  "pin": [
+   -0.1961,
+   0.7085,
+   -0.0519
+  ]
+ },
+ {
+  "key": "triceps-brachii-long-head",
+  "en": "Triceps brachii — long head",
+  "ar": "ثلاثية الرؤوس العضدية — الرأس الطويل",
+  "kind": "muscle",
+  "region": "arm",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   -0.15,
+   0.5758,
+   -0.1516
+  ]
+ },
+ {
+  "key": "triceps-brachii-lateral-head",
+  "en": "Triceps brachii — lateral head",
+  "ar": "ثلاثية الرؤوس العضدية — الرأس الوحشي",
+  "kind": "muscle",
+  "region": "arm",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   -0.0618,
+   0.5541,
+   -0.1235
+  ]
+ },
+ {
+  "key": "triceps-brachii-medial-head",
+  "en": "Triceps brachii — medial head",
+  "ar": "ثلاثية الرؤوس العضدية — الرأس الإنسي",
+  "kind": "muscle",
+  "region": "arm",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   -0.1462,
+   0.4237,
+   -0.1191
+  ]
+ },
+ {
+  "key": "pronator-teres",
+  "en": "Pronator teres",
+  "ar": "الكابّة المدوّرة",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   -0.0198,
+   0.0529,
+   -0.0261
+  ]
+ },
+ {
+  "key": "flexor-carpi-radialis",
+  "en": "Flexor carpi radialis",
+  "ar": "المثنية الكعبرية للرسغ",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   -0.0373,
+   -0.0229,
+   0.0019
+  ]
+ },
+ {
+  "key": "palmaris-longus",
+  "en": "Palmaris longus",
+  "ar": "الراحية الطويلة",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   -0.0778,
+   -0.016,
+   -0.0028
+  ]
+ },
+ {
+  "key": "flexor-carpi-ulnaris",
+  "en": "Flexor carpi ulnaris",
+  "ar": "المثنية الزندية للرسغ",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "anterior",
+  "layer": "sup",
+  "pin": [
+   -0.0959,
+   -0.0802,
+   -0.0359
+  ]
+ },
+ {
+  "key": "flexor-digitorum-superficialis",
+  "en": "Flexor digitorum superficialis",
+  "ar": "المثنية السطحية للأصابع",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "anterior",
+  "layer": "mid",
+  "pin": [
+   -0.0071,
+   -0.1626,
+   0.0125
+  ]
+ },
+ {
+  "key": "flexor-digitorum-profundus",
+  "en": "Flexor digitorum profundus",
+  "ar": "المثنية العميقة للأصابع",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "anterior",
+  "layer": "deep",
+  "pin": [
+   0.015,
+   -0.2443,
+   0.0151
+  ]
+ },
+ {
+  "key": "flexor-pollicis-longus",
+  "en": "Flexor pollicis longus",
+  "ar": "المثنية الطويلة للإبهام",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "anterior",
+  "layer": "deep",
+  "pin": [
+   0.0648,
+   -0.2868,
+   -0.0149
+  ]
+ },
+ {
+  "key": "pronator-quadratus",
+  "en": "Pronator quadratus",
+  "ar": "الكابّة المربعة",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "anterior",
+  "layer": "deep",
+  "pin": [
+   0.0504,
+   -0.4253,
+   0.0288
+  ]
+ },
+ {
+  "key": "brachioradialis",
+  "en": "Brachioradialis",
+  "ar": "العضدية الكعبرية",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   0.058,
+   0.0005,
+   0.0039
+  ]
+ },
+ {
+  "key": "extensor-carpi-radialis-longus",
+  "en": "Extensor carpi radialis longus",
+  "ar": "الباسطة الكعبرية الطويلة للرسغ",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   0.0882,
+   0.0305,
+   -0.086
+  ]
+ },
+ {
+  "key": "extensor-carpi-radialis-brevis",
+  "en": "Extensor carpi radialis brevis",
+  "ar": "الباسطة الكعبرية القصيرة للرسغ",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   0.0961,
+   -0.199,
+   -0.0648
+  ]
+ },
+ {
+  "key": "extensor-digitorum",
+  "en": "Extensor digitorum",
+  "ar": "الباسطة للأصابع",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   0.0847,
+   -0.1495,
+   -0.1164
+  ]
+ },
+ {
+  "key": "extensor-digiti-minimi",
+  "en": "Extensor digiti minimi",
+  "ar": "الباسطة للخنصر",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   0.0352,
+   -0.2696,
+   -0.0858
+  ]
+ },
+ {
+  "key": "extensor-carpi-ulnaris",
+  "en": "Extensor carpi ulnaris",
+  "ar": "الباسطة الزندية للرسغ",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   -0.0163,
+   -0.193,
+   -0.0858
+  ]
+ },
+ {
+  "key": "anconeus",
+  "en": "Anconeus",
+  "ar": "العضلة المرفقية",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "sup",
+  "pin": [
+   -0.0455,
+   0.0084,
+   -0.1468
+  ]
+ },
+ {
+  "key": "supinator",
+  "en": "Supinator",
+  "ar": "العضلة الباطحة",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   0.0326,
+   0.014,
+   -0.0475
+  ]
+ },
+ {
+  "key": "abductor-pollicis-longus",
+  "en": "Abductor pollicis longus",
+  "ar": "المبعِدة الطويلة للإبهام",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   0.0213,
+   -0.2566,
+   -0.0469
+  ]
+ },
+ {
+  "key": "extensor-pollicis-brevis",
+  "en": "Extensor pollicis brevis",
+  "ar": "الباسطة القصيرة للإبهام",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   0.0502,
+   -0.4019,
+   -0.0119
+  ]
+ },
+ {
+  "key": "extensor-pollicis-longus",
+  "en": "Extensor pollicis longus",
+  "ar": "الباسطة الطويلة للإبهام",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   0.0323,
+   -0.383,
+   -0.0134
+  ]
+ },
+ {
+  "key": "extensor-indicis",
+  "en": "Extensor indicis",
+  "ar": "الباسطة للسبابة",
+  "kind": "muscle",
+  "region": "forearm",
+  "grp": "posterior",
+  "layer": "deep",
+  "pin": [
+   0.045,
+   -0.4758,
+   0.0099
+  ]
+ },
+ {
+  "key": "abductor-pollicis-brevis",
+  "en": "Abductor pollicis brevis",
+  "ar": "المبعِدة القصيرة للإبهام",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "thenar",
+  "layer": "sup",
+  "pin": [
+   0.1396,
+   -0.5593,
+   0.0899
+  ]
+ },
+ {
+  "key": "flexor-pollicis-brevis",
+  "en": "Flexor pollicis brevis",
+  "ar": "المثنية القصيرة للإبهام",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "thenar",
+  "layer": "sup",
+  "pin": [
+   0.1481,
+   -0.6168,
+   0.1185
+  ]
+ },
+ {
+  "key": "opponens-pollicis",
+  "en": "Opponens pollicis",
+  "ar": "المقابِلة للإبهام",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "thenar",
+  "layer": "deep",
+  "pin": [
+   0.1625,
+   -0.6073,
+   0.106
+  ]
+ },
+ {
+  "key": "adductor-pollicis",
+  "en": "Adductor pollicis",
+  "ar": "المقرِّبة للإبهام",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "thenar",
+  "layer": "deep",
+  "pin": [
+   0.2115,
+   -0.6838,
+   0.1158
+  ]
+ },
+ {
+  "key": "abductor-digiti-minimi",
+  "en": "Abductor digiti minimi",
+  "ar": "المبعِدة للخنصر",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "hypothenar",
+  "layer": "sup",
+  "pin": [
+   0.0091,
+   -0.7007,
+   0.12
+  ]
+ },
+ {
+  "key": "flexor-digiti-minimi-brevis",
+  "en": "Flexor digiti minimi brevis",
+  "ar": "المثنية القصيرة للخنصر",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "hypothenar",
+  "layer": "sup",
+  "pin": [
+   0.0194,
+   -0.6825,
+   0.1068
+  ]
+ },
+ {
+  "key": "opponens-digiti-minimi",
+  "en": "Opponens digiti minimi",
+  "ar": "المقابِلة للخنصر",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "hypothenar",
+  "layer": "deep",
+  "pin": [
+   0.038,
+   -0.6543,
+   0.0925
+  ]
+ },
+ {
+  "key": "lumbricals",
+  "en": "Lumbricals",
+  "ar": "العضلات الدودية",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "central",
+  "layer": "mid",
+  "pin": [
+   0.0306,
+   -0.7199,
+   0.0985
+  ]
+ },
+ {
+  "key": "palmar-interossei",
+  "en": "Palmar interossei",
+  "ar": "بين العظام الراحية",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "central",
+  "layer": "deep",
+  "pin": [
+   0.0306,
+   -0.7433,
+   0.1024
+  ]
+ },
+ {
+  "key": "dorsal-interossei",
+  "en": "Dorsal interossei",
+  "ar": "بين العظام الظهرية",
+  "kind": "muscle",
+  "region": "hand",
+  "grp": "central",
+  "layer": "deep",
+  "pin": [
+   0.1884,
+   -0.6774,
+   0.0743
+  ]
+ }
+]

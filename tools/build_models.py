@@ -87,29 +87,46 @@ def normals(v, f):
     return (n / np.maximum(np.linalg.norm(n, axis=1, keepdims=True), 1e-9)).astype(np.float32)
 
 
-def write_glb(path, parts):
-    """parts: [(key, v, f)] — كل جزء mesh وnode بنفس الاسم."""
+def write_glb(path, parts, quantize=False):
+    """parts: [(key, v, f)] — كل جزء mesh وnode بنفس الاسم.
+    quantize: يخزّن النقاط int16 والاتجاهات int8 (KHR_mesh_quantization) حتى ينزل الحجم للنص تقريباً."""
     allv = np.concatenate([p[1] for p in parts])
     lo, hi = allv.min(0), allv.max(0)
     center, scale = (lo + hi) / 2, 2.0 / (hi - lo).max()  # المشهد يصير بحجم 2 وحدة ومتوسّط
     blob, views, accs, meshes, nodes = bytearray(), [], [], [], []
 
-    def add(arr, target, comp, typ, minmax=False):
+    def add(arr, target, comp, typ, minmax=None, stride=None, normalized=False):
         while len(blob) % 4:
             blob.append(0)
         views.append({"buffer": 0, "byteOffset": len(blob), "byteLength": arr.nbytes, "target": target})
+        if stride:
+            views[-1]["byteStride"] = stride
         blob.extend(arr.tobytes())
         a = {"bufferView": len(views) - 1, "componentType": comp, "count": len(arr), "type": typ}
-        if minmax:
-            a["min"], a["max"] = arr.min(0).tolist(), arr.max(0).tolist()
+        if normalized:
+            a["normalized"] = True
+        if minmax is not None:
+            a["min"], a["max"] = minmax.min(0).tolist(), minmax.max(0).tolist()
         accs.append(a)
         return len(accs) - 1
 
+    def pad4(a):  # VEC3 → 4 خانات حتى تصير خطوة القراءة من مضاعفات 4 بايت
+        return np.concatenate([a, np.zeros((len(a), 1), a.dtype)], 1)
+
     for key, v, f in parts:
         v = ((v - center) * scale).astype(np.float32)
-        p = add(v, 34962, 5126, "VEC3", True)
-        n = add(normals(v, f), 34962, 5126, "VEC3")
-        i = add(f.astype(np.uint32).ravel(), 34963, 5125, "SCALAR")
+        nm = normals(v, f)
+        if quantize:
+            q = np.round(np.clip(v, -1, 1) * 32767).astype(np.int16)
+            p = add(pad4(q), 34962, 5122, "VEC3", q[:, :3].astype(np.float32) / 32767, 8, True)
+            # المواصفة: min/max للأعداد الصحيحة المطبّعة تنكتب بقيمها الخام، والمحمّل يقسمها بنفسه
+            accs[-1]["min"] = q[:, :3].min(0).tolist(); accs[-1]["max"] = q[:, :3].max(0).tolist()
+            n = add(pad4(np.round(nm * 127).astype(np.int8)), 34962, 5120, "VEC3", None, 4, True)
+        else:
+            p = add(v, 34962, 5126, "VEC3", v)
+            n = add(nm, 34962, 5126, "VEC3")
+        idx = f.astype(np.uint16 if len(v) < 65536 else np.uint32).ravel()
+        i = add(idx, 34963, 5123 if idx.dtype == np.uint16 else 5125, "SCALAR")
         meshes.append({"name": key, "primitives": [{"attributes": {"POSITION": p, "NORMAL": n}, "indices": i}]})
         nodes.append({"name": key, "mesh": len(meshes) - 1})
     while len(blob) % 4:
@@ -118,6 +135,8 @@ def write_glb(path, parts):
                       "copyright": "BodyParts3D, (c) The Database Center for Life Science, CC BY-SA 2.1 Japan"},
             "scene": 0, "scenes": [{"nodes": list(range(len(nodes)))}], "nodes": nodes, "meshes": meshes,
             "accessors": accs, "bufferViews": views, "buffers": [{"byteLength": len(blob)}]}
+    if quantize:
+        gltf["extensionsUsed"] = gltf["extensionsRequired"] = ["KHR_mesh_quantization"]
     js = json.dumps(gltf, separators=(",", ":")).encode()
     js += b" " * (-len(js) % 4)
     with open(path, "wb") as fh:
@@ -143,28 +162,27 @@ def anchor(v, muscle=False):
 
 
 OUT.mkdir(exist_ok=True)
-index = {}
-for kind, D in (("bones", BONES), ("muscles", MUSCLES)):
+
+# ───────────── الاستوديو: الطرف العلوي كله بملف واحد (عظام + عضلات بطبقات) ─────────────
+import re
+from parts import LAYER
+
+def slug(t):
+    return re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")
+
+parts, meta = [], []
+for kind, D in (("bone", BONES), ("muscle", MUSCLES)):
     for region, items in D.items():
-        parts, meta = [], []
-        few = len(items) <= 7  # مشهد بيه أجزاء قليلة: نزيد دقّتها
-        for k, (names, en, ar, grp) in enumerate(items):
-            key = f"p{k}"
-            parts.append((key, *part_mesh(names, hi_res=kind == "bones", refine=few)))
-            meta.append({"key": key, "en": en, "ar": ar, "grp": grp})
-        if kind == "muscles":
-            for k, n in enumerate(CONTEXT[region]):
-                parts.append((f"ctx{k}", *part_mesh([n])))
-        # فحص: جزء بعيد عن الباقي يعني بيانات بالجهة الغلط (صار ويّا Flexor pollicis brevis)
-        cs = np.array([p[1].mean(0) for p in parts]); med = np.median(cs, 0)
-        span = np.ptp(np.concatenate([p[1] for p in parts]), 0).max()
-        for (key, v, _f), c in zip(parts, cs):
-            if np.linalg.norm(c - med) > 0.9 * span:
-                print("⚠️ جزء بعيد:", region, kind, key)
-        out = OUT / f"{region}-{kind}.glb"
-        center, scale = write_glb(out, parts)
-        for m, (_, v, _f) in zip(meta, parts):
-            m["pin"] = [round(float(x), 4) for x in (anchor(v, kind == "muscles") - center) * scale]
-        index[f"{region}-{kind}"] = meta
-        print(out.name, f"{out.stat().st_size / 1e6:.2f} MB", len(meta), "parts")
-(OUT / "parts.json").write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
+        for names, en, ar, grp in items:
+            key = slug(en)
+            v, f = part_mesh(names)  # نسخة 4.0 للكل حتى تتطابق الإحداثيات
+            if len(f) < 2500:  # الأجزاء الصغيرة بس تنقسم، حتى يبقى الملف خفيف
+                v, f = subdivide(v, f); v = taubin(v, f, it=4)
+            parts.append((key, v, f))
+            meta.append({"key": key, "en": en, "ar": ar, "kind": kind, "region": region, "grp": grp,
+                         "layer": "bone" if kind == "bone" else LAYER[en]})
+center, scale = write_glb(OUT / "upper-limb.glb", parts, quantize=True)
+for m, (_, v, _f) in zip(meta, parts):
+    m["pin"] = [round(float(x), 4) for x in (anchor(v, m["kind"] == "muscle") - center) * scale]
+(OUT / "upper-limb.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+print("upper-limb.glb", f"{(OUT / 'upper-limb.glb').stat().st_size / 1e6:.2f} MB", len(meta), "parts")
