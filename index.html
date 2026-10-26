@@ -135,6 +135,36 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
 .photo img{display:block;width:100%;height:auto;background:#111}
 .photo .cap{padding:10px 14px}.photo .cap b{display:block;font-size:15px}.photo .cap span{font-size:13px;color:var(--hint)}
 .photo .credit{padding:0 14px 10px;margin:0}
+/* الأشعة المؤشّرة */
+.xviews{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;padding-bottom:2px}
+.xviews button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit;font-size:13px;padding:7px 12px;border-radius:999px;cursor:pointer}
+.xviews button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-text)}
+.xtools{display:flex;gap:6px;margin-bottom:8px}
+.xtools button{flex:1;border:1px solid var(--line);background:none;color:var(--text);font:inherit;font-size:13px;padding:7px;border-radius:11px;cursor:pointer}
+.xtools button.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+.xstage{position:relative;background:#000;border-radius:16px;overflow:hidden;max-height:72vh;display:flex;justify-content:center}
+.xstage img{display:block;max-width:100%;max-height:72vh;width:auto;height:auto}
+.xdots{position:absolute;inset:0;margin:auto}
+.xdot{position:absolute;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:rgba(47,124,246,.85);
+  color:#fff;font:700 9.5px/14px Inter,sans-serif;text-align:center;cursor:pointer;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
+.xdot.sel{background:#ffcc33;color:#3b2a00;width:24px;height:24px;line-height:20px}
+.xdot.done{background:#2e9e5b}
+.xlbl{position:absolute;transform:translateY(-50%);font:600 10.5px/1.1 Inter,sans-serif;color:#fff;background:rgba(0,0,0,.62);padding:2px 5px;border-radius:5px;
+  white-space:nowrap;pointer-events:none;direction:ltr}
+.xinfo{background:var(--card);border-radius:14px;padding:12px 14px;margin-top:10px;display:none}
+.xinfo.on{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.xinfo b{display:block;font-size:16px}.xinfo span{color:var(--hint);font-size:14px}
+.xinfo button{flex:none;border:0;background:var(--accent);color:var(--accent-text);font:inherit;font-size:13px;padding:8px 12px;border-radius:11px;cursor:pointer}
+.xinfo .opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}
+.xinfo .opts button{background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--text);text-align:left;direction:ltr;font:600 12.5px Inter,sans-serif}
+.xinfo .opts button.ok{background:#2e9e5b;color:#fff}.xinfo .opts button.no{background:#c0392b;color:#fff}
+.xlegend{background:var(--card);border-radius:14px;margin:10px 0 0;padding:6px 34px 6px 12px;font-size:13px;columns:2;column-gap:14px}
+.xlegend li{break-inside:avoid;padding:4px 0;cursor:pointer}.xlegend li.sel{color:var(--accent)}
+.xlegend b{font:600 12px Inter,sans-serif;display:block;direction:ltr;text-align:right}.xlegend span{color:var(--hint);font-size:11.5px}
+.xpos{background:var(--card);border-radius:16px;padding:4px 14px 12px;margin-top:12px}
+.xpos h3{font-size:15px;margin:12px 0 2px}
+.xpos dt{font-size:12px;color:var(--accent);font-weight:600;margin-top:10px}
+.xpos dd{margin:2px 0 0;font-size:14px;line-height:1.7}.xpos dd .en{display:block;font-size:13px;color:var(--hint);line-height:1.5}
 .fig{background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;position:relative}
 .fig img{display:block;width:100%;height:auto}
 .fig .zoomhint{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:4px 9px;border-radius:9px}
@@ -204,6 +234,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
     </div>
     <div class="modes" id="modes">
       <button data-m="3d">🧊 مجسّم</button>
+      <button data-m="xray">🩻 أشعة</button>
       <button data-m="photo">📷 صور حقيقية</button>
       <button data-m="fig">📖 رسم مؤشّر</button>
     </div>
@@ -257,6 +288,20 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
       </div>
       <p class="hint">اسحب لتدوير المجسّم، وكبّره بإصبعين، واضغط على أي جزء لمعرفة اسمه ومعلوماته.</p>
       <div class="credit">3D model: BodyParts3D, © The Database Center for Life Science · CC BY-SA 2.1 JP</div>
+    </div>
+
+    <!-- أشعة مؤشّرة مربوطة بالمجسّم -->
+    <div class="pane" id="p-xray">
+      <div class="xviews" id="xviews"></div>
+      <div class="xtools">
+        <button id="x-names">🏷 الأسماء</button>
+        <button id="x-test">❓ اختبر نفسك</button>
+      </div>
+      <div class="xstage" id="xstage"><img id="x-img" alt=""><div class="xdots" id="xdots"></div></div>
+      <div class="xinfo" id="xinfo"></div>
+      <ol class="xlegend" id="xlegend"></ol>
+      <div class="credit" id="x-credit"></div>
+      <div class="xpos" id="xpos"></div>
     </div>
 
     <!-- صور حقيقية -->
@@ -407,13 +452,83 @@ function markTerm(key){
   document.querySelectorAll("#l-groups .term").forEach(e=>e.classList.toggle("sel",e.dataset.key===key));
 }
 
+// ── الأشعة المؤشّرة: نقاط على الصورة، كل نقطة مربوطة بجزئها بالمجسّم
+let XRAY=null, xView=null, xNames=true, xTest=null, xSel=null;
+const xrayReady=fetch("data/xray.json").then(r=>r.json()).then(j=>XRAY=j);
+function xShow(v){
+  const img=$("x-img"); img.src=v.img; xSel=null; xTest=null;
+  xNames=false;  // أرقام بس على الصورة والأسماء بالقائمة تحتها مثل الأطالس، وزر «الأسماء» يظهرها
+  $("x-test").classList.remove("on"); $("x-names").classList.toggle("on",xNames);
+  $("x-credit").innerHTML=`Radiograph: ${v.credit[0]} · ${v.credit[1]} · <a href="${v.credit[2]}" target="_blank" rel="noopener">source</a>`;
+  const P=v.pos, row=(t,x)=>`<dt>${t}</dt><dd>${x[1]}<span class="en">${x[0]}</span></dd>`;
+  $("xpos").innerHTML=`<h3>📐 الوضعية · ${v.en}</h3><dl>`+row("وضع المريض",P.patient)+row("الأشعة المركزية (CR)",P.cr)+row("التعريض",P.exp)+row("معايير تقييم الصورة",P.eval)+`</dl>`;
+  const draw=()=>xDots(v); img.onload=draw; if(img.complete) draw();
+  $("xlegend").innerHTML=v.pts.map((p,i)=>`<li data-i="${i}"><b class="en">${p[3]}</b><span>${p[4]}</span></li>`).join("");
+  xInfo(null,v);
+}
+function xDots(v){
+  const img=$("x-img"), box=$("xdots"); box.style.width=img.clientWidth+"px"; box.style.height=img.clientHeight+"px";
+  const sx=img.clientWidth/v.w, sy=img.clientHeight/v.h, half=img.clientWidth/2;
+  document.querySelectorAll("#xlegend li").forEach(li=>li.classList.toggle("sel",+li.dataset.i===xSel));
+  $("xlegend").style.display=xTest?"none":"";  // بالاختبار نخفي القائمة حتى ما تفضح الجواب
+  // الأسماء: كل اسم بجنب نقطته، وإذا تداخل ويّا اسم ثاني ننزّله شوية
+  const placed=[]; let html="";
+  v.pts.forEach((p,i)=>{
+    const x=p[0]*sx, y=p[1]*sy, cls=(xSel===i?" sel":"")+(xTest&&xTest.done.has(i)?" done":"");
+    html+=`<div class="xdot${cls}" data-i="${i}" style="left:${x}px;top:${y}px">${i+1}</div>`;
+    if(!xNames||xTest) return;
+    const w=p[3].length*6+12, left=x<half, x0=left?x+12:x-12-w; let ly=y;
+    while(placed.some(r=>Math.abs(r.y-ly)<15&&x0<r.x1&&x0+w>r.x0)) ly+=15;
+    placed.push({x0,x1:x0+w,y:ly});
+    html+=`<div class="xlbl" style="${left?`left:${x+12}px`:`right:${img.clientWidth-x+12}px`};top:${ly}px">${p[3]}</div>`;
+  });
+  box.innerHTML=html;
+}
+function xInfo(i,v){
+  const el=$("xinfo");
+  if(i==null){ el.classList.remove("on"); el.innerHTML=""; return; }
+  const p=v.pts[i];
+  el.innerHTML=`<div><b class="en">${p[3]}</b><span>${p[4]}</span></div>`+(p[2]?`<button data-k="${p[2]}">🧊 شوفه بالمجسّم</button>`:"");
+  el.classList.add("on");
+  const b=el.querySelector("button"); if(b) b.onclick=async()=>{ await lesson(cur,"bones","3d"); window.Studio.select(b.dataset.k,true); };
+}
+// اختبر نفسك: نخفي الأسماء، ونأشّر نقطة، وتختار اسمها من أربعة
+function xAsk(v){
+  const left=v.pts.map((_,i)=>i).filter(i=>!xTest.done.has(i));
+  if(!left.length){ $("xinfo").innerHTML=`<div><b>أحسنت! ${xTest.ok}/${xTest.n}</b><span>خلصت كل نقاط هذه الصورة.</span></div>`; xTest=null; xDots(v); $("x-test").classList.remove("on"); return; }
+  const i=left[Math.floor(Math.random()*left.length)]; xSel=i; xDots(v);
+  const names=[...new Set(v.pts.map(p=>p[3]))].filter(n=>n!==v.pts[i][3]).sort(()=>Math.random()-.5).slice(0,3);
+  const opts=[v.pts[i][3],...names].sort(()=>Math.random()-.5);
+  const el=$("xinfo"); el.classList.add("on");
+  el.innerHTML=`<div style="width:100%"><b style="font-size:14px;margin-bottom:8px">شنو النقطة رقم ${i+1}؟ <span style="float:left">${xTest.ok}/${xTest.n}</span></b><div class="opts">`+opts.map(o=>`<button>${o}</button>`).join("")+`</div></div>`;
+  el.querySelectorAll(".opts button").forEach(b=>b.onclick=()=>{
+    if(xTest.lock) return; xTest.lock=true; const ok=b.textContent===v.pts[i][3]; xTest.n++; if(ok) xTest.ok++;
+    b.classList.add(ok?"ok":"no"); if(!ok) [...el.querySelectorAll(".opts button")].find(x=>x.textContent===v.pts[i][3]).classList.add("ok");
+    if(ok) xTest.done.add(i); haptic();
+    setTimeout(()=>{ xTest.lock=false; xAsk(v); }, ok?800:1600);
+  });
+}
+$("xlegend").addEventListener("click",e=>{
+  const li=e.target.closest("li"); if(!li||xTest) return; const v=XRAY.views.find(x=>x.id===xView);
+  xSel=+li.dataset.i; xDots(v); xInfo(xSel,v); $("xstage").scrollIntoView({behavior:"smooth",block:"center"});
+});
+$("xdots").addEventListener("click",e=>{
+  const d=e.target.closest(".xdot"); if(!d||xTest) return; const v=XRAY.views.find(x=>x.id===xView);
+  xSel=+d.dataset.i; xDots(v); xInfo(xSel,v); haptic();
+});
+$("x-names").addEventListener("click",()=>{ xNames=!xNames; $("x-names").classList.toggle("on",xNames); xDots(XRAY.views.find(x=>x.id===xView)); });
+$("x-test").addEventListener("click",()=>{ const v=XRAY.views.find(x=>x.id===xView);
+  if(xTest){ xTest=null; xSel=null; $("x-test").classList.remove("on"); xDots(v); xInfo(null,v); return; }
+  xTest={done:new Set(),ok:0,n:0}; $("x-test").classList.add("on"); xAsk(v); });
+addEventListener("resize",()=>{ if(mode==="xray"&&XRAY) xDots(XRAY.views.find(x=>x.id===xView)); });
+
 async function lesson(r,k,m){
   cur=r; kind=k; mode=m||mode; const R=REGIONS[r], L=R[k], c=CREDIT[L.src];
-  if (mode==="photo" && k!=="bones") mode="3d";
+  if ((mode==="photo"||mode==="xray") && k!=="bones") mode="3d";
   $("l-title").textContent=R.ar+" · "+(k==="bones"?"العظام":"العضلات");
   $("l-en").textContent=R.en+" — "+(k==="bones"?"Bones":"Muscles");
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
-  document.querySelectorAll("#modes button").forEach(b=>{ b.classList.toggle("on",b.dataset.m===mode); b.hidden=b.dataset.m==="photo"&&k!=="bones"; });
+  document.querySelectorAll("#modes button").forEach(b=>{ b.classList.toggle("on",b.dataset.m===mode); b.hidden=(b.dataset.m==="photo"||b.dataset.m==="xray")&&k!=="bones"; });
   document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id==="p-"+mode));
   $("l-note").innerHTML=L.note&&mode!=="3d"?`<div class="note">${L.note}</div>`:"";
   show("v-lesson");
@@ -422,6 +537,14 @@ async function lesson(r,k,m){
     $("l-img").src=L.img; $("l-img").alt=R.en;
     $("l-credit").innerHTML=`Figure: ${c[0]} · ${c[1]} · <a href="${c[2]}" target="_blank" rel="noopener">source</a>`;
     termList(L.groups.map(([h,items])=>[h,items.map(([en,ar])=>({en,ar}))]));
+  } else if (mode==="xray"){
+    await xrayReady;
+    const views=XRAY.views.filter(v=>v.region===r);
+    if(!views.find(v=>v.id===xView)) xView=views[0]&&views[0].id;
+    $("xviews").innerHTML=views.map(v=>`<button data-v="${v.id}" class="${v.id===xView?"on":""}">${v.ar.split(" — ")[0]} · ${v.en.split(" — ")[1]}</button>`).join("");
+    $("xviews").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ xView=b.dataset.v; lesson(cur,kind,"xray"); }));
+    xShow(XRAY.views.find(v=>v.id===xView));
+    $("l-groups").innerHTML="";
   } else if (mode==="photo"){
     $("p-photo").innerHTML=`<div class="photos">`+PHOTOS[r].map(([f,en,ar,by,src])=>`<div class="photo" data-img="img/real/${f}.jpg">
       <img src="img/real/${f}.jpg" alt="${en}" loading="lazy"><div class="cap"><b class="en">${en}</b><span>${ar}</span></div>

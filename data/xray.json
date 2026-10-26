@@ -1,0 +1,86 @@
+{
+ "_note": "Normal radiographs with tap points. Points are in the image's own pixels and were checked by eye on each image. k = 3D part key (null = not in the 3D model). Positioning follows standard radiographic positioning texts (Bontrager / Merrill); exposure values are typical ranges and vary with equipment.",
+ "views": [
+  {"id":"hand-pa","region":"hand","img":"img/xray/hand-pa.jpg","w":1280,"h":1818,
+   "en":"Hand — PA","ar":"اليد — خلفي أمامي (PA)",
+   "credit":["Mikael Häggström, M.D.","CC0","https://commons.wikimedia.org/wiki/File:X-ray_of_normal_hand_by_dorsoplantar_projection.jpg"],
+   "pts":[
+    [545,1480,"scaphoid","Scaphoid","الزورقي"],[410,1535,"lunate","Lunate","الهلالي"],[335,1500,"triquetrum","Triquetrum","المثلثي"],
+    [295,1415,"pisiform","Pisiform (superimposed on triquetrum)","الحمّصي (متراكب على المثلثي)"],[640,1390,"trapezium","Trapezium","المربع المنحرف"],
+    [565,1320,"trapezoid","Trapezoid","شبه المنحرف"],[460,1410,"capitate","Capitate","الكبير"],[370,1350,"hamate","Hamate (hook seen as a ring)","الكُلّابي (يظهر خطّافه كحلقة)"],
+    [790,1300,"1st-metacarpal","1st metacarpal","المشط الأول"],[640,1050,"2nd-metacarpal","2nd metacarpal","المشط الثاني"],[520,1080,"3rd-metacarpal","3rd metacarpal","المشط الثالث"],
+    [410,1060,"4th-metacarpal","4th metacarpal","المشط الرابع"],[290,1050,"5th-metacarpal","5th metacarpal","المشط الخامس"],
+    [1010,1000,"proximal-phalanx-thumb","Proximal phalanx — thumb","السلامى الدانية — الإبهام"],[1180,880,"distal-phalanx-thumb","Distal phalanx — thumb","السلامى القاصية — الإبهام"],
+    [745,620,"proximal-phalanx-index","Proximal phalanx — index","السلامى الدانية — السبابة"],[820,430,"middle-phalanx-index","Middle phalanx — index","السلامى الوسطى — السبابة"],[875,240,"distal-phalanx-index","Distal phalanx — index","السلامى القاصية — السبابة"],
+    [555,600,"proximal-phalanx-middle","Proximal phalanx — middle","السلامى الدانية — الوسطى"],[565,330,"middle-phalanx-middle","Middle phalanx — middle","السلامى الوسطى — الوسطى"],[580,120,"distal-phalanx-middle","Distal phalanx — middle","السلامى القاصية — الوسطى"],
+    [380,600,"proximal-phalanx-ring","Proximal phalanx — ring","السلامى الدانية — البنصر"],[350,370,"middle-phalanx-ring","Middle phalanx — ring","السلامى الوسطى — البنصر"],[335,190,"distal-phalanx-ring","Distal phalanx — ring","السلامى القاصية — البنصر"],
+    [230,720,"proximal-phalanx-little","Proximal phalanx — little","السلامى الدانية — الخنصر"],[160,540,"middle-phalanx-little","Middle phalanx — little","السلامى الوسطى — الخنصر"],[110,400,"distal-phalanx-little","Distal phalanx — little","السلامى القاصية — الخنصر"],
+    [520,1720,"radius","Radius","الكعبرة"],[300,1730,"ulna","Ulna","الزند"]],
+   "pos":{
+    "patient":["Seated at the table; hand pronated flat on the IR, fingers slightly spread.","يجلس المريض بجانب الطاولة، واليد بوضع الكبّ (الكف للأسفل) مسطّحة على الكاسيت، مع تباعد الأصابع قليلًا."],
+    "cr":["Perpendicular to the 3rd MCP joint.","عمودي على المفصل المشطي السلامي الثالث."],
+    "exp":["SID 100 cm · about 50–60 kVp (varies with equipment).","مسافة 100 سم · حوالي 50–60 kVp (تختلف بحسب الجهاز)."],
+    "eval":["All phalanges, metacarpals, carpals and distal radius/ulna included; no rotation (equal concavity on both sides of the shafts); MCP and IP joints open; fingers separated; the thumb appears oblique.","تظهر جميع السلاميات والأمشاط وعظام الرسغ ونهايتا الكعبرة والزند؛ لا دوران (تقعّر متساوٍ على جانبي أجسام العظام)؛ المفاصل المشطية السلامية وبين السلامية مفتوحة؛ الأصابع متباعدة؛ ويظهر الإبهام بوضع مائل."]}},
+
+  {"id":"wrist-pa","region":"hand","img":"img/xray/wrist-pa.jpg","w":690,"h":2122,
+   "en":"Wrist — PA","ar":"الرسغ — خلفي أمامي (PA)",
+   "credit":["Mikael Häggström, M.D.","CC0","https://commons.wikimedia.org/wiki/File:X-ray_of_normal_wrist_by_dorsoplantar_projection.jpg"],
+   "pts":[
+    [470,570,"scaphoid","Scaphoid","الزورقي"],[330,665,"lunate","Lunate","الهلالي"],[250,600,"triquetrum","Triquetrum","المثلثي"],[215,555,"pisiform","Pisiform","الحمّصي"],
+    [560,460,"trapezium","Trapezium","المربع المنحرف"],[490,440,"trapezoid","Trapezoid","شبه المنحرف"],[375,495,"capitate","Capitate","الكبير"],[265,440,"hamate","Hamate","الكُلّابي"],
+    [590,630,"radius","Radial styloid process","الناتئ الإبري للكعبرة"],[160,710,"ulna","Ulnar styloid process","الناتئ الإبري للزند"],
+    [470,1100,"radius","Radius","الكعبرة"],[220,1100,"ulna","Ulna","الزند"]],
+   "pos":{
+    "patient":["Hand pronated, fingers lightly flexed so the wrist touches the IR.","اليد بوضع الكبّ، والأصابع مثنية قليلًا ليلامس الرسغ الكاسيت."],
+    "cr":["Perpendicular to the midcarpal area.","عمودي على منتصف الرسغ."],
+    "exp":["SID 100 cm · about 55–60 kVp.","مسافة 100 سم · حوالي 55–60 kVp."],
+    "eval":["Distal radius and ulna, carpals and proximal metacarpals included; no rotation (distal radioulnar joint slightly open); intercarpal spaces visible.","تظهر نهايتا الكعبرة والزند وعظام الرسغ وبدايات الأمشاط؛ لا دوران (المفصل الكعبري الزندي القاصي مفتوح قليلًا)؛ المسافات بين عظام الرسغ واضحة."]}},
+
+  {"id":"wrist-lat","region":"hand","img":"img/xray/wrist-lat.jpg","w":559,"h":1756,
+   "en":"Wrist — lateral","ar":"الرسغ — جانبي",
+   "credit":["Mikael Häggström, M.D.","CC0","https://commons.wikimedia.org/wiki/File:X-ray_of_normal_wrist_by_lateral_projection.jpg"],
+   "pts":[[321,860,"radius","Radius (ulna superimposed)","الكعبرة (والزند متراكب عليها)"],[287,557,"lunate","Lunate","الهلالي"],[304,422,"capitate","Capitate","الكبير"],[287,169,null,"Metacarpals (superimposed)","الأمشاط (متراكبة)"]],
+   "pos":{
+    "patient":["Elbow flexed 90°; ulnar side of the wrist on the IR, hand and forearm in a true lateral position.","المرفق مثني 90°، والجهة الزندية للرسغ على الكاسيت، واليد والساعد بوضع جانبي تام."],
+    "cr":["Perpendicular to the midcarpal area.","عمودي على منتصف الرسغ."],
+    "exp":["SID 100 cm · about 60–65 kVp.","مسافة 100 سم · حوالي 60–65 kVp."],
+    "eval":["Distal radius and ulna superimposed; metacarpals superimposed; lunate sits in the radial concavity and the capitate in the lunate.","نهايتا الكعبرة والزند متراكبتان؛ الأمشاط متراكبة؛ الهلالي مستقر في تقعّر الكعبرة، والكبير مستقر في الهلالي."]}},
+
+  {"id":"elbow-ap","region":"forearm","img":"img/xray/elbow-ap.jpg","w":849,"h":1138,
+   "en":"Elbow — AP","ar":"المرفق — أمامي خلفي (AP)",
+   "credit":["Mikael Häggström, M.D.","CC0","https://commons.wikimedia.org/wiki/File:X-ray_of_normal_elbow_by_anteroposterior_projection.jpg"],
+   "pts":[
+    [470,120,"humerus","Humerus","العضد"],[160,330,"humerus","Medial epicondyle","اللقيمة الإنسية"],[575,440,"humerus","Lateral epicondyle","اللقيمة الوحشية"],
+    [385,320,"humerus","Olecranon fossa","الحفرة الزُّجّية"],[310,470,"humerus","Trochlea","البكرة"],[470,515,"humerus","Capitulum","الرُّؤَيس"],
+    [470,595,"radius","Radial head","رأس الكعبرة"],[455,660,"radius","Radial neck","عنق الكعبرة"],[395,745,"radius","Radial tuberosity","الحدبة الكعبرية"],
+    [310,800,"ulna","Ulna","الزند"],[440,900,"radius","Radius","الكعبرة"]],
+   "pos":{
+    "patient":["Arm fully extended, hand supinated, epicondyles parallel to the IR.","الذراع ممدود بالكامل، والكف بوضع البطح (للأعلى)، واللقيمتان موازيتان للكاسيت."],
+    "cr":["Perpendicular to the mid-elbow joint (about 2 cm distal to the midpoint between the epicondyles).","عمودي على منتصف مفصل المرفق (نحو 2 سم أسفل منتصف المسافة بين اللقيمتين)."],
+    "exp":["SID 100 cm · about 60–70 kVp.","مسافة 100 سم · حوالي 60–70 kVp."],
+    "eval":["No rotation: epicondyles in profile; radial head slightly superimposed on the ulna; joint space open.","لا دوران: اللقيمتان ظاهرتان في المحيط؛ رأس الكعبرة متراكب قليلًا على الزند؛ مسافة المفصل مفتوحة."]}},
+
+  {"id":"elbow-lat","region":"forearm","img":"img/xray/elbow-lat.jpg","w":1086,"h":1103,
+   "en":"Elbow — lateral","ar":"المرفق — جانبي",
+   "credit":["Mikael Häggström, M.D.","CC0","https://commons.wikimedia.org/wiki/File:X-ray_of_normal_elbow_by_lateral_projection.jpg"],
+   "pts":[[820,300,"humerus","Humerus","العضد"],[745,800,"humerus","Trochlea and capitulum (concentric circles)","البكرة والرُّؤَيس (دوائر متداخلة)"],
+    [630,780,"radius","Radial head","رأس الكعبرة"],[650,860,"ulna","Coronoid process","الناتئ الإكليلي"],[815,960,"ulna","Olecranon","الناتئ الزُّجّي"],
+    [300,800,"radius","Radius","الكعبرة"],[300,930,"ulna","Ulna","الزند"]],
+   "pos":{
+    "patient":["Elbow flexed 90°, forearm and hand lateral (thumb up), humerus flat on the table at shoulder level.","المرفق مثني 90°، والساعد واليد بوضع جانبي (الإبهام للأعلى)، والعضد مسطّح على الطاولة بمستوى الكتف."],
+    "cr":["Perpendicular to the mid-elbow joint.","عمودي على منتصف مفصل المرفق."],
+    "exp":["SID 100 cm · about 60–70 kVp.","مسافة 100 سم · حوالي 60–70 kVp."],
+    "eval":["Flexed 90°; three concentric arcs (trochlear sulcus, capitulum, trochlear notch); olecranon in profile; radial head partly over the coronoid process.","مثني 90°؛ ثلاثة أقواس متحدة المركز (ميزاب البكرة، والرُّؤَيس، والثلمة البكرية)؛ الزُّج ظاهر في المحيط؛ رأس الكعبرة متراكب جزئيًا على الناتئ الإكليلي."]}},
+
+  {"id":"shoulder-ap","region":"arm","img":"img/xray/humerus-ap.jpg","w":842,"h":1742,
+   "en":"Shoulder & proximal humerus — AP (external rotation)","ar":"الكتف وأعلى العضد — أمامي خلفي (دوران خارجي)",
+   "credit":["Hellerhoff","CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:Tuberositas_deltoidea_71W_-_CR_-_001.jpg"],
+   "pts":[[556,539,"humerus","Humeral head","رأس العضد"],[682,522,"humerus","Greater tubercle (in profile)","الحديبة الكبرى (في المحيط)"],[564,724,"humerus","Surgical neck","العنق الجراحي"],
+    [539,1212,"humerus","Humeral shaft","جسم العضد"],[674,303,null,"Acromion","الأخرم"],[219,93,null,"Clavicle","الترقوة"],[379,556,null,"Glenoid cavity","التجويف الحقّاني"]],
+   "pos":{
+    "patient":["Erect or supine, body slightly rotated toward the affected side; arm slightly abducted in external rotation (epicondyles parallel to the IR).","واقف أو مستلقٍ، والجسم مستدير قليلًا نحو الجهة المصابة؛ والذراع مُبعَد قليلًا بدوران خارجي (اللقيمتان موازيتان للكاسيت)."],
+    "cr":["Perpendicular to about 2.5 cm inferior to the coracoid process.","عمودي على نقطة نحو 2.5 سم أسفل الناتئ الغرابي."],
+    "exp":["SID 100 cm · about 70–80 kVp · suspended respiration.","مسافة 100 سم · حوالي 70–80 kVp · حبس النفس."],
+    "eval":["Greater tubercle in profile on the lateral side (external rotation); humeral head slightly overlaps the glenoid; proximal humerus and lateral clavicle included.","الحديبة الكبرى ظاهرة في المحيط الوحشي (دوران خارجي)؛ رأس العضد متراكب قليلًا على الحقّانية؛ يظهر أعلى العضد والطرف الوحشي للترقوة."]}}
+ ]
+}
