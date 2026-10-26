@@ -10,5 +10,17 @@
   "page": "https://commons.wikimedia.org/wiki/File:1115_Muscles_of_the_Pelvic_Floor.jpg",
   "license": "CC BY 4.0",
   "artist": "OpenStax"
+ },
+ "chest-bones": {
+  "file": "File:Gray115.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Gray115.png",
+  "license": "Public domain",
+  "artist": "Henry Vandyke Carter (Gray's Anatomy, 1918)"
+ },
+ "chest-muscles": {
+  "file": "File:1119 Muscles that Move the Humerus.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg",
+  "license": "CC BY 4.0",
+  "artist": "OpenStax"
  }
 }

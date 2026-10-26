@@ -352,7 +352,9 @@ const CREDIT = {
   "715": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:715_Vertebral_Column.jpg"],
   "1117": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1117_Muscles_of_the_Neck_and_Back.jpg"],
   "808": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:808_Hip_Bone.jpg"],
-  "1115": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1115_Muscles_of_the_Pelvic_Floor.jpg"]
+  "1115": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1115_Muscles_of_the_Pelvic_Floor.jpg"],
+  "gray115": ["Henry Vandyke Carter, Gray's Anatomy (1918)", "Public domain", "https://commons.wikimedia.org/wiki/File:Gray115.png"],
+  "1119": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg"]
 };
 // كل التأشيرات منقولة من الرسم نفسه، والترجمة العربية بجنبها
 const REGIONS = {
@@ -489,10 +491,25 @@ const REGIONS = {
         ["الفتحات بقاع الحوض", [["Urethral canal","القناة الإحليلية"],["Vaginal canal (females only)","القناة المهبلية (للإناث فقط)"],["Rectal canal","القناة الشرجية"]]]
       ]}
   }
+  ,chest: { ar: "الصدر", en: "Chest (Thorax)",
+    bones: { img: "img/extra/chest-bones.png", src: "gray115",
+      note: "القفص الصدري = القص من الأمام، و12 زوج أضلاع مع غضاريفها الضلعية، و12 فقرة صدرية من الخلف. الأضلاع 1–7 <b>حقيقية</b> (غضروفها يتصل بالقص مباشرة)، و8–10 <b>كاذبة</b> (غضروفها يتصل بالغضروف اللي فوگه ويكوّن الحافة الضلعية)، و11–12 <b>عائمة</b> (بلا اتصال أمامي). القص ثلاث قطع: القبضة والجسم والناتئ الرهابي، ومفصل القبضة مع الجسم = الزاوية القصية بمستوى الضلع الثاني. وبالمجسّم كمان الترقوة ولوح الكتف (حزام الكتف) فوق القفص؛ الغضاريف زرقاء فاتحة، والأضلاع الكاذبة والعائمة أغمق شوية.",
+      groups: [
+        ["القص (Sternum)", [["1st piece or Manubrium","القطعة الأولى أو القبضة"],["Jugular notch","الثلمة الوِدجية"],["2nd piece or Body","القطعة الثانية أو الجسم"],["3rd piece or Xiphoid process","القطعة الثالثة أو الناتئ الرهابي"],["Articular facet for clavicle","الوجيه المفصلي للترقوة"]]],
+        ["الأضلاع (Ribs)", [["Vertebro-sternal or True ribs (1–7)","الأضلاع الفقرية القصية أو الحقيقية (1–7)"],["False ribs: Vertebro-costal (8–10)","الأضلاع الكاذبة: الفقرية الضلعية (8–10)"],["Vertebral (floating) ribs (11–12)","الأضلاع الفقرية (العائمة) (11–12)"],["Costal cartilages","الغضاريف الضلعية"]]],
+        ["مناشئ العضلات المؤشّرة بالأحمر", [["Sternocleidomastoideus","القصية الترقوية الخشّائية"],["Subclavius","تحت الترقوة"],["Pectoralis major","الصدرية الكبرى"],["Pectoralis minor","الصدرية الصغرى"],["Rectus abdominis","المستقيمة البطنية"],["Pect. maj. (abdominal slip)","الصدرية الكبرى (الشريحة البطنية)"],["Triangularis sterni (transversus thoracis)","المثلثة القصية (المستعرضة الصدرية)"]]]
+      ]},
+    muscles: { img: "img/extra/chest-muscles.jpg", src: "1119",
+      note: "بالمجسّم: الصدرية الكبرى بأجزائها الثلاثة (سطحية)، ثم الصدرية الصغرى وتحت الترقوة والمسنّنة الأمامية (وسطى)، ثم الحجاب الحاجز (عميقة) — قبتاه تبينان بأشعة الصدر، واليمنى أعلى من اليسرى.",
+      groups: [
+        ["من الرسم (a, c)", [["Pectoralis major","الصدرية الكبرى"],["Pectoralis major (cut)","الصدرية الكبرى (مقطوعة)"],["Serratus anterior","المسنّنة الأمامية"],["Latissimus dorsi","العريضة الظهرية"],["Deltoid","الدالية"],["Subscapularis","تحت الكتف"],["Teres major","المدوّرة الكبرى"],["Coracoid process of scapula","الناتئ الغرابي للوح الكتف"]]],
+        ["من الرسم (b, d)", [["Supraspinatus","فوق الشوكة"],["Infraspinatus","تحت الشوكة"],["Teres minor","المدوّرة الصغرى"],["Spine of scapula","شوكة لوح الكتف"],["Humerus","عظم العضد"],["Triceps brachii: long head","ثلاثية الرؤوس العضدية: الرأس الطويل"],["Triceps brachii: lateral head","ثلاثية الرؤوس العضدية: الرأس الوحشي"]]]
+      ]}
+  }
 };
 const SOON = {};
 // مناطق بيها أشعة بس (لحد ما ينضاف مجسّمها): تفتح الدرس على الأشعة مباشرة
-const XONLY = {head:{ar:"الرأس",en:"Head (Skull)"}, chest:{ar:"الصدر",en:"Chest (Thorax)"}, abdomen:{ar:"البطن",en:"Abdomen"}};
+const XONLY = {head:{ar:"الرأس",en:"Head (Skull)"}, abdomen:{ar:"البطن",en:"Abdomen"}};
 
 // النص الثاني من الجسم: نسخة معكوسة من نفس المناطق (حتى يبقى الضغط عليها شغّال)
 (() => { const h=document.getElementById("half"), m=h.cloneNode(true); m.removeAttribute("id");
@@ -558,11 +575,17 @@ const PHOTOS = {
     ["extra/pelvis-back","Bony pelvis — posterior view","الحوض العظمي — منظر خلفي","MAKY.OREL · CC0","Pelvis_-_os_coxae,_os_sacrum_(posterior_view).jpg"],
     ["extra/hip-bone-lat","Hip bone (os coxae) — lateral view, acetabulum","عظم الورك — منظر وحشي يبين الحُقّ","MAKY.OREL · CC0","Pelvis_-_os_coxae_(lateral_view).jpg"],
     ["extra/sacrum-ant","Sacrum — anterior (pelvic) surface with sacral foramina","العجز — الوجه الأمامي (الحوضي) مع الثقوب العجزية","MAKY.OREL · CC0","Pelvis_-_os_sacrum_(anterior).jpg"]
+  ],
+  chest: [
+    ["extra/ribs","Ribs — left and right specimens","أضلاع — عيّنات يسار ويمين","MAKY.OREL · CC0","Costae_-_sin,_dex.jpg"],
+    ["extra/ribs-1-3","Ribs 1, 2 and 3 — the 1st is short, broad and flat","الأضلاع 1 و2 و3 — الأول قصير وعريض ومسطّح","MAKY.OREL · CC0","Costae_-_1,_2,_3.jpg"],
+    ["extra/clavicles","Clavicles — left and right","الترقوتان — اليسرى واليمنى","MAKY.OREL · CC0","Clavicula_-_sin,_dex.jpg"],
+    ["extra/scapula-ant","Scapula — anterior (costal) view","لوح الكتف — منظر أمامي (الوجه الضلعي)","MAKY.OREL · CC0","Scapula_-_anterior_view.jpg"]
   ]
 };
 const GRP = {bone:"العظام",membrane:"الأغشية","carpal-p":"عظام الرسغ — الصف الداني","carpal-d":"عظام الرسغ — الصف القاصي",
   metacarpal:"عظام المشط (Metacarpals)",phalanx:"السُّلاميات (Phalanges)",sup:"العضلات السطحية",mid:"العضلات الوسطى",deep:"العضلات العميقة",
-  thenar:"بارزة الإبهام (Thenar)",cervical:"الفقرات الرقبية",thoracic:"الفقرات الصدرية",lumbar:"الفقرات القطنية",sacral:"العجز",disc:"الأقراص بين الفقرات",hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى","pelvic-floor":"قاع الحوض (Pelvic floor)","pelvic-wall":"جدار الحوض (Pelvic wall)",iliopsoas:"الحرقفية القطنية (Iliopsoas)"};
+  thenar:"بارزة الإبهام (Thenar)",cervical:"الفقرات الرقبية",thoracic:"الفقرات الصدرية",lumbar:"الفقرات القطنية",sacral:"العجز",disc:"الأقراص بين الفقرات",hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى","pelvic-floor":"قاع الحوض (Pelvic floor)","pelvic-wall":"جدار الحوض (Pelvic wall)",iliopsoas:"الحرقفية القطنية (Iliopsoas)",sternum:"القص (Sternum)","rib-true":"الأضلاع الحقيقية (1–7)","rib-false":"الأضلاع الكاذبة (8–10)","rib-floating":"الأضلاع العائمة (11–12)",cartilage:"الغضاريف الضلعية",girdle:"حزام الكتف (الترقوة ولوح الكتف)"};
 let mode="3d";
 
 function termList(groups, pick){
@@ -724,14 +747,16 @@ const $id = id => document.getElementById(id);
 const stage=$id("stage"), linesEl=$id("lines"), labelsEl=$id("labels");
 const BONE={bone:"#ece2cc",membrane:"#b9cfe6",metacarpal:"#ece2cc",metatarsal:"#ece2cc",phalanx:"#e4d8bd",tarsal:"#ead9b8",
   // مناطق العمود الفقري كل وحدة بلون، والأقراص زرقاء
-  cervical:"#f2d39b",thoracic:"#ece2cc",lumbar:"#e3c8a0",sacral:"#d9c7a6",disc:"#8fb8e3"};
+  cervical:"#f2d39b",thoracic:"#ece2cc",lumbar:"#e3c8a0",sacral:"#d9c7a6",disc:"#8fb8e3",
+  // القفص الصدري: الغضاريف زرقاء فاتحة، والأضلاع الكاذبة والعائمة أغمق شوية
+  cartilage:"#a9c9e8","rib-false":"#e3d1ad","rib-floating":"#d6bf98"};
 const CARPAL={scaphoid:"#e8b04a",lunate:"#7fb3d5",triquetrum:"#9ccc65",pisiform:"#f48fb1",trapezium:"#ffb74d",trapezoid:"#4db6ac",capitate:"#ba68c8",hamate:"#e57373",
   // عظام رصغ القدم السبعة كل وحدة بلون
   talus:"#e8b04a",calcaneus:"#7fb3d5",navicular:"#9ccc65",cuboid:"#f48fb1","medial-cuneiform":"#ffb74d","intermediate-cuneiform":"#4db6ac","lateral-cuneiform":"#ba68c8"};
 const MUSCLE={sup:"#c4402f",mid:"#d0623f",deep:"#9e3328"};
 const ORDER=["sup","mid","deep","bone"];               // من الخارج للداخل
 const LNAME={sup:"سطحية",mid:"وسطى",deep:"عميقة",bone:"عظم"};
-const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم",spine:"العمود الفقري",pelvis:"الحوض"};
+const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم",spine:"العمود الفقري",pelvis:"الحوض",chest:"الصدر"};
 const colorOf=p=>p.kind==="bone"?(CARPAL[p.key]||BONE[p.grp]||BONE.bone):MUSCLE[p.layer];
 
 // ── المشهد
@@ -809,7 +834,7 @@ function select(k, focus=false){
 const v3=new THREE.Vector3(), seen={}, occ=new THREE.Raycaster(); let tick=0, lastCam="";
 const ABBR=[[" brachii",""],["Extensor ","Ext. "],["Flexor ","Flex. "],["Abductor ","Abd. "],["Adductor ","Add. "],[" digitorum"," dig."],
   [" pollicis"," poll."],[" radialis"," rad."],[" ulnaris"," uln."],[" superficialis"," superf."],[" profundus"," prof."],[" digiti minimi"," dig. min."],
-  ["Proximal phalanx","Prox. phal."],["Distal phalanx","Dist. phal."],["Middle phalanx","Mid. phal."],[" metacarpal"," MC"]];
+  ["Proximal phalanx","Prox. phal."],["Distal phalanx","Dist. phal."],["Middle phalanx","Mid. phal."],[" metacarpal"," MC"],["Pectoralis major — ","Pec. major "],[" part (", " ("]];
 const short=t=>ABBR.reduce((s,[a,b])=>s.split(a).join(b),t);
 function updateSeen(){
   const vis=parts.filter(visible).map(p=>meshes[p.key]);
@@ -828,7 +853,7 @@ function layout(){
   // بالمنطقة بس، ونوع الدرس (عظام أو عضلات) إلا إذا الطالب مختار جزء
   let pool=parts.filter(p=>seen[p.key]&&(!region||p.region===region)&&(isolated||p.kind===kindFocus||kindFocus==="all"));
   if(selected) pool=pool.filter(p=>p.key===selected);
-  if(pool.length>18) pool=pool.filter(p=>p.kind!=="bone"||!/phalanx|intervertebral/.test(p.key));
+  if(pool.length>18) pool=pool.filter(p=>p.kind!=="bone"||!/phalanx|intervertebral|cartilage|^(2nd|3rd|4th|5th|6th|8th|9th|10th)-rib/.test(p.key));
   const items=pool.map(p=>{ v3.set(...p.pin).project(camera); return {p,x:(v3.x+1)/2*W,y:(1-v3.y)/2*H,front:v3.z<1}; })
     .filter(i=>i.front&&i.x>0&&i.x<W&&i.y>0&&i.y<H);
   const cx=W/2, gap=Math.max(15,Math.min(24,(H-40)/Math.max(1,Math.ceil(items.length/2))));
@@ -846,7 +871,7 @@ function layout(){
 labelsEl.addEventListener("click",e=>{ const k=e.target.dataset&&e.target.dataset.k; if(k) select(selected===k?null:k); });
 
 // ── التحميل: كل طرف بملف (العلوي والسفلي)، ونحمّل اللي نحتاجه بس ونخزّنه
-const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb",spine:"spine",pelvis:"pelvis"};
+const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb",spine:"spine",pelvis:"pelvis",chest:"chest"};
 const models={}, infoReady=Promise.all([fetch("data/info.json").then(r=>r.json()),fetch("data/info-extra.json").then(r=>r.json()).catch(()=>({}))]).then(([a,b])=>info={...b,...a});
 let current=null;
 async function loadModel(name){

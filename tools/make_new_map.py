@@ -73,5 +73,53 @@ rep('const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thi
     'const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb",spine:"spine",pelvis:"pelvis"};')
 rep('infoReady=fetch("data/info.json").then(r=>r.json()).then(j=>info=j);',
     'infoReady=Promise.all([fetch("data/info.json").then(r=>r.json()),fetch("data/info-extra.json").then(r=>r.json()).catch(()=>({}))]).then(([a,b])=>info={...b,...a});')
+# ═════ الصدر (القفص الصدري): كان أشعة بس، صار مجسّم كامل ═════
+rep('const XONLY = {head:{ar:"الرأس",en:"Head (Skull)"}, chest:{ar:"الصدر",en:"Chest (Thorax)"}, abdomen:{ar:"البطن",en:"Abdomen"}};',
+    'const XONLY = {head:{ar:"الرأس",en:"Head (Skull)"}, abdomen:{ar:"البطن",en:"Abdomen"}};')
+rep('''  "1115": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1115_Muscles_of_the_Pelvic_Floor.jpg"]
+};''', '''  "1115": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1115_Muscles_of_the_Pelvic_Floor.jpg"],
+  "gray115": ["Henry Vandyke Carter, Gray's Anatomy (1918)", "Public domain", "https://commons.wikimedia.org/wiki/File:Gray115.png"],
+  "1119": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg"]
+};''')
+CHESTR = """
+  ,chest: { ar: "الصدر", en: "Chest (Thorax)",
+    bones: { img: "img/extra/chest-bones.png", src: "gray115",
+      note: "القفص الصدري = القص من الأمام، و12 زوج أضلاع مع غضاريفها الضلعية، و12 فقرة صدرية من الخلف. الأضلاع 1–7 <b>حقيقية</b> (غضروفها يتصل بالقص مباشرة)، و8–10 <b>كاذبة</b> (غضروفها يتصل بالغضروف اللي فوگه ويكوّن الحافة الضلعية)، و11–12 <b>عائمة</b> (بلا اتصال أمامي). القص ثلاث قطع: القبضة والجسم والناتئ الرهابي، ومفصل القبضة مع الجسم = الزاوية القصية بمستوى الضلع الثاني. وبالمجسّم كمان الترقوة ولوح الكتف (حزام الكتف) فوق القفص؛ الغضاريف زرقاء فاتحة، والأضلاع الكاذبة والعائمة أغمق شوية.",
+      groups: [
+        ["القص (Sternum)", [["1st piece or Manubrium","القطعة الأولى أو القبضة"],["Jugular notch","الثلمة الوِدجية"],["2nd piece or Body","القطعة الثانية أو الجسم"],["3rd piece or Xiphoid process","القطعة الثالثة أو الناتئ الرهابي"],["Articular facet for clavicle","الوجيه المفصلي للترقوة"]]],
+        ["الأضلاع (Ribs)", [["Vertebro-sternal or True ribs (1–7)","الأضلاع الفقرية القصية أو الحقيقية (1–7)"],["False ribs: Vertebro-costal (8–10)","الأضلاع الكاذبة: الفقرية الضلعية (8–10)"],["Vertebral (floating) ribs (11–12)","الأضلاع الفقرية (العائمة) (11–12)"],["Costal cartilages","الغضاريف الضلعية"]]],
+        ["مناشئ العضلات المؤشّرة بالأحمر", [["Sternocleidomastoideus","القصية الترقوية الخشّائية"],["Subclavius","تحت الترقوة"],["Pectoralis major","الصدرية الكبرى"],["Pectoralis minor","الصدرية الصغرى"],["Rectus abdominis","المستقيمة البطنية"],["Pect. maj. (abdominal slip)","الصدرية الكبرى (الشريحة البطنية)"],["Triangularis sterni (transversus thoracis)","المثلثة القصية (المستعرضة الصدرية)"]]]
+      ]},
+    muscles: { img: "img/extra/chest-muscles.jpg", src: "1119",
+      note: "بالمجسّم: الصدرية الكبرى بأجزائها الثلاثة (سطحية)، ثم الصدرية الصغرى وتحت الترقوة والمسنّنة الأمامية (وسطى)، ثم الحجاب الحاجز (عميقة) — قبتاه تبينان بأشعة الصدر، واليمنى أعلى من اليسرى.",
+      groups: [
+        ["من الرسم (a, c)", [["Pectoralis major","الصدرية الكبرى"],["Pectoralis major (cut)","الصدرية الكبرى (مقطوعة)"],["Serratus anterior","المسنّنة الأمامية"],["Latissimus dorsi","العريضة الظهرية"],["Deltoid","الدالية"],["Subscapularis","تحت الكتف"],["Teres major","المدوّرة الكبرى"],["Coracoid process of scapula","الناتئ الغرابي للوح الكتف"]]],
+        ["من الرسم (b, d)", [["Supraspinatus","فوق الشوكة"],["Infraspinatus","تحت الشوكة"],["Teres minor","المدوّرة الصغرى"],["Spine of scapula","شوكة لوح الكتف"],["Humerus","عظم العضد"],["Triceps brachii: long head","ثلاثية الرؤوس العضدية: الرأس الطويل"],["Triceps brachii: lateral head","ثلاثية الرؤوس العضدية: الرأس الوحشي"]]]
+      ]}
+  }
+};
+const SOON = {};"""
+rep('  }\n};\nconst SOON = {};', '  }' + CHESTR)
+rep('''    ["extra/sacrum-ant","Sacrum — anterior (pelvic) surface with sacral foramina","العجز — الوجه الأمامي (الحوضي) مع الثقوب العجزية","MAKY.OREL · CC0","Pelvis_-_os_sacrum_(anterior).jpg"]
+  ]
+};''', '''    ["extra/sacrum-ant","Sacrum — anterior (pelvic) surface with sacral foramina","العجز — الوجه الأمامي (الحوضي) مع الثقوب العجزية","MAKY.OREL · CC0","Pelvis_-_os_sacrum_(anterior).jpg"]
+  ],
+  chest: [
+    ["extra/ribs","Ribs — left and right specimens","أضلاع — عيّنات يسار ويمين","MAKY.OREL · CC0","Costae_-_sin,_dex.jpg"],
+    ["extra/ribs-1-3","Ribs 1, 2 and 3 — the 1st is short, broad and flat","الأضلاع 1 و2 و3 — الأول قصير وعريض ومسطّح","MAKY.OREL · CC0","Costae_-_1,_2,_3.jpg"],
+    ["extra/clavicles","Clavicles — left and right","الترقوتان — اليسرى واليمنى","MAKY.OREL · CC0","Clavicula_-_sin,_dex.jpg"],
+    ["extra/scapula-ant","Scapula — anterior (costal) view","لوح الكتف — منظر أمامي (الوجه الضلعي)","MAKY.OREL · CC0","Scapula_-_anterior_view.jpg"]
+  ]
+};''')
+rep('iliopsoas:"الحرقفية القطنية (Iliopsoas)"};',
+    'iliopsoas:"الحرقفية القطنية (Iliopsoas)",sternum:"القص (Sternum)","rib-true":"الأضلاع الحقيقية (1–7)","rib-false":"الأضلاع الكاذبة (8–10)","rib-floating":"الأضلاع العائمة (11–12)",cartilage:"الغضاريف الضلعية",girdle:"حزام الكتف (الترقوة ولوح الكتف)"};')
+rep('spine:"العمود الفقري",pelvis:"الحوض"};', 'spine:"العمود الفقري",pelvis:"الحوض",chest:"الصدر"};')
+rep('spine:"spine",pelvis:"pelvis"};', 'spine:"spine",pelvis:"pelvis",chest:"chest"};')
+rep('disc:"#8fb8e3"};', 'disc:"#8fb8e3",\n  // القفص الصدري: الغضاريف زرقاء فاتحة، والأضلاع الكاذبة والعائمة أغمق شوية\n  cartilage:"#a9c9e8","rib-false":"#e3d1ad","rib-floating":"#d6bf98"};')
+# الصدر بيه 45 عظم: نخلي التأشيرات للأضلاع 1 و7 و11 و12 والقص وحزام الكتف حتى ما تزدحم
+rep('!/phalanx|intervertebral/.test(p.key)', '!/phalanx|intervertebral|cartilage|^(2nd|3rd|4th|5th|6th|8th|9th|10th)-rib/.test(p.key)')
+# أسماء أجزاء الصدرية الكبرى طويلة على التأشيرة
+rep('[" metacarpal"," MC"]];', '[" metacarpal"," MC"],["Pectoralis major — ","Pec. major "],[" part (", " ("]];')
+
 open(dst, "w", encoding="utf-8").write(h)
 print("written", len(h))

@@ -22,5 +22,29 @@
   "page": "https://commons.wikimedia.org/wiki/File:Pelvis_-_os_sacrum_(anterior).jpg",
   "license": "CC0",
   "artist": "MAKY.OREL"
+ },
+ "extra/ribs": {
+  "file": "File:Costae - sin, dex.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Costae_-_sin,_dex.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/ribs-1-3": {
+  "file": "File:Costae - 1, 2, 3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Costae_-_1,_2,_3.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/scapula-ant": {
+  "file": "File:Scapula - anterior view.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Scapula_-_anterior_view.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/clavicles": {
+  "file": "File:Clavicula - sin, dex.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Clavicula_-_sin,_dex.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
  }
 }

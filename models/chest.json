@@ -1,0 +1,982 @@
+[
+ {
+  "key": "manubrium",
+  "en": "Manubrium of sternum",
+  "ar": "قبضة القص",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "sternum",
+  "layer": "bone",
+  "pin": [
+   0.0054,
+   0.6107,
+   0.3189
+  ]
+ },
+ {
+  "key": "body-of-sternum",
+  "en": "Body of sternum",
+  "ar": "جسم القص",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "sternum",
+  "layer": "bone",
+  "pin": [
+   0.0354,
+   0.3195,
+   0.4529
+  ]
+ },
+ {
+  "key": "xiphoid-process",
+  "en": "Xiphoid process",
+  "ar": "الناتئ الرهابي (الخنجري)",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "sternum",
+  "layer": "bone",
+  "pin": [
+   0.0329,
+   0.0066,
+   0.5444
+  ]
+ },
+ {
+  "key": "1st-rib-left",
+  "en": "1st rib (left)",
+  "ar": "الضلع الأول الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   0.2279,
+   0.7084,
+   0.0997
+  ]
+ },
+ {
+  "key": "2nd-rib-left",
+  "en": "2nd rib (left)",
+  "ar": "الضلع الثاني الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   0.2084,
+   0.5442,
+   0.2667
+  ]
+ },
+ {
+  "key": "3rd-rib-left",
+  "en": "3rd rib (left)",
+  "ar": "الضلع الثالث الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   0.234,
+   0.3976,
+   0.3516
+  ]
+ },
+ {
+  "key": "4th-rib-left",
+  "en": "4th rib (left)",
+  "ar": "الضلع الرابع الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   0.2924,
+   0.1966,
+   0.4344
+  ]
+ },
+ {
+  "key": "5th-rib-left",
+  "en": "5th rib (left)",
+  "ar": "الضلع الخامس الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   0.3992,
+   0.0064,
+   0.4633
+  ]
+ },
+ {
+  "key": "6th-rib-left",
+  "en": "6th rib (left)",
+  "ar": "الضلع السادس الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   0.4487,
+   -0.1452,
+   0.443
+  ]
+ },
+ {
+  "key": "7th-rib-left",
+  "en": "7th rib (left)",
+  "ar": "الضلع السابع الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   0.6204,
+   0.0147,
+   -0.2873
+  ]
+ },
+ {
+  "key": "8th-rib-left",
+  "en": "8th rib (left)",
+  "ar": "الضلع الثامن الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-false",
+  "layer": "bone",
+  "pin": [
+   0.5562,
+   -0.1372,
+   -0.3056
+  ]
+ },
+ {
+  "key": "9th-rib-left",
+  "en": "9th rib (left)",
+  "ar": "الضلع التاسع الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-false",
+  "layer": "bone",
+  "pin": [
+   0.5575,
+   -0.3243,
+   -0.3036
+  ]
+ },
+ {
+  "key": "10th-rib-left",
+  "en": "10th rib (left)",
+  "ar": "الضلع العاشر الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-false",
+  "layer": "bone",
+  "pin": [
+   0.0893,
+   -0.1761,
+   -0.2682
+  ]
+ },
+ {
+  "key": "11th-rib-left",
+  "en": "11th rib (left)",
+  "ar": "الضلع الحادي عشر الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-floating",
+  "layer": "bone",
+  "pin": [
+   0.1083,
+   -0.3545,
+   -0.2523
+  ]
+ },
+ {
+  "key": "12th-rib-left",
+  "en": "12th rib (left)",
+  "ar": "الضلع الثاني عشر الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-floating",
+  "layer": "bone",
+  "pin": [
+   0.1091,
+   -0.5386,
+   -0.2138
+  ]
+ },
+ {
+  "key": "1st-costal-cartilage-left",
+  "en": "1st costal cartilage (left)",
+  "ar": "الغضروف الضلعي الأول الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   0.1179,
+   0.6506,
+   0.1965
+  ]
+ },
+ {
+  "key": "2nd-costal-cartilage-left",
+  "en": "2nd costal cartilage (left)",
+  "ar": "الغضروف الضلعي الثاني الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   0.0676,
+   0.5109,
+   0.3605
+  ]
+ },
+ {
+  "key": "3rd-costal-cartilage-left",
+  "en": "3rd costal cartilage (left)",
+  "ar": "الغضروف الضلعي الثالث الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   0.0809,
+   0.3612,
+   0.423
+  ]
+ },
+ {
+  "key": "4th-costal-cartilage-left",
+  "en": "4th costal cartilage (left)",
+  "ar": "الغضروف الضلعي الرابع الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   0.1159,
+   0.2116,
+   0.4685
+  ]
+ },
+ {
+  "key": "5th-costal-cartilage-left",
+  "en": "5th costal cartilage (left)",
+  "ar": "الغضروف الضلعي الخامس الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   0.2438,
+   0.0032,
+   0.5215
+  ]
+ },
+ {
+  "key": "6th-costal-cartilage-left",
+  "en": "6th costal cartilage (left)",
+  "ar": "الغضروف الضلعي السادس الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   0.2282,
+   -0.1237,
+   0.5376
+  ]
+ },
+ {
+  "key": "7th-costal-cartilage-left",
+  "en": "7th costal cartilage (left)",
+  "ar": "الغضروف الضلعي السابع الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   0.2767,
+   -0.3372,
+   0.5224
+  ]
+ },
+ {
+  "key": "clavicle-left",
+  "en": "Clavicle (left)",
+  "ar": "الترقوة اليسرى",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "girdle",
+  "layer": "bone",
+  "pin": [
+   0.2521,
+   0.7906,
+   0.1551
+  ]
+ },
+ {
+  "key": "scapula-left",
+  "en": "Scapula (left)",
+  "ar": "لوح الكتف الأيسر",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "girdle",
+  "layer": "bone",
+  "pin": [
+   0.6792,
+   0.7196,
+   -0.0214
+  ]
+ },
+ {
+  "key": "1st-rib-right",
+  "en": "1st rib (right)",
+  "ar": "الضلع الأول الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   -0.2228,
+   0.709,
+   0.0969
+  ]
+ },
+ {
+  "key": "2nd-rib-right",
+  "en": "2nd rib (right)",
+  "ar": "الضلع الثاني الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   -0.2166,
+   0.544,
+   0.2683
+  ]
+ },
+ {
+  "key": "3rd-rib-right",
+  "en": "3rd rib (right)",
+  "ar": "الضلع الثالث الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   -0.242,
+   0.3978,
+   0.3521
+  ]
+ },
+ {
+  "key": "4th-rib-right",
+  "en": "4th rib (right)",
+  "ar": "الضلع الرابع الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   -0.2988,
+   0.1981,
+   0.4334
+  ]
+ },
+ {
+  "key": "5th-rib-right",
+  "en": "5th rib (right)",
+  "ar": "الضلع الخامس الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   -0.4025,
+   0.012,
+   0.4645
+  ]
+ },
+ {
+  "key": "6th-rib-right",
+  "en": "6th rib (right)",
+  "ar": "الضلع السادس الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   -0.5837,
+   0.2156,
+   -0.3007
+  ]
+ },
+ {
+  "key": "7th-rib-right",
+  "en": "7th rib (right)",
+  "ar": "الضلع السابع الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-true",
+  "layer": "bone",
+  "pin": [
+   -0.6209,
+   0.0196,
+   -0.2914
+  ]
+ },
+ {
+  "key": "8th-rib-right",
+  "en": "8th rib (right)",
+  "ar": "الضلع الثامن الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-false",
+  "layer": "bone",
+  "pin": [
+   -0.5553,
+   -0.1377,
+   -0.3075
+  ]
+ },
+ {
+  "key": "9th-rib-right",
+  "en": "9th rib (right)",
+  "ar": "الضلع التاسع الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-false",
+  "layer": "bone",
+  "pin": [
+   -0.5668,
+   -0.3251,
+   -0.3035
+  ]
+ },
+ {
+  "key": "10th-rib-right",
+  "en": "10th rib (right)",
+  "ar": "الضلع العاشر الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-false",
+  "layer": "bone",
+  "pin": [
+   -0.0972,
+   -0.1741,
+   -0.2673
+  ]
+ },
+ {
+  "key": "11th-rib-right",
+  "en": "11th rib (right)",
+  "ar": "الضلع الحادي عشر الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-floating",
+  "layer": "bone",
+  "pin": [
+   -0.1099,
+   -0.3551,
+   -0.2519
+  ]
+ },
+ {
+  "key": "12th-rib-right",
+  "en": "12th rib (right)",
+  "ar": "الضلع الثاني عشر الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "rib-floating",
+  "layer": "bone",
+  "pin": [
+   -0.1131,
+   -0.538,
+   -0.2135
+  ]
+ },
+ {
+  "key": "1st-costal-cartilage-right",
+  "en": "1st costal cartilage (right)",
+  "ar": "الغضروف الضلعي الأول الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   -0.115,
+   0.6506,
+   0.1968
+  ]
+ },
+ {
+  "key": "2nd-costal-cartilage-right",
+  "en": "2nd costal cartilage (right)",
+  "ar": "الغضروف الضلعي الثاني الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   -0.0661,
+   0.4995,
+   0.3639
+  ]
+ },
+ {
+  "key": "3rd-costal-cartilage-right",
+  "en": "3rd costal cartilage (right)",
+  "ar": "الغضروف الضلعي الثالث الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   -0.0816,
+   0.361,
+   0.4234
+  ]
+ },
+ {
+  "key": "4th-costal-cartilage-right",
+  "en": "4th costal cartilage (right)",
+  "ar": "الغضروف الضلعي الرابع الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   -0.1155,
+   0.2081,
+   0.4683
+  ]
+ },
+ {
+  "key": "5th-costal-cartilage-right",
+  "en": "5th costal cartilage (right)",
+  "ar": "الغضروف الضلعي الخامس الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   -0.2337,
+   0.0094,
+   0.5223
+  ]
+ },
+ {
+  "key": "6th-costal-cartilage-right",
+  "en": "6th costal cartilage (right)",
+  "ar": "الغضروف الضلعي السادس الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   -0.2779,
+   -0.1568,
+   0.5319
+  ]
+ },
+ {
+  "key": "7th-costal-cartilage-right",
+  "en": "7th costal cartilage (right)",
+  "ar": "الغضروف الضلعي السابع الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "cartilage",
+  "layer": "bone",
+  "pin": [
+   -0.2689,
+   -0.3329,
+   0.5236
+  ]
+ },
+ {
+  "key": "clavicle-right",
+  "en": "Clavicle (right)",
+  "ar": "الترقوة اليمنى",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "girdle",
+  "layer": "bone",
+  "pin": [
+   -0.2371,
+   0.79,
+   0.1589
+  ]
+ },
+ {
+  "key": "scapula-right",
+  "en": "Scapula (right)",
+  "ar": "لوح الكتف الأيمن",
+  "kind": "bone",
+  "region": "chest",
+  "grp": "girdle",
+  "layer": "bone",
+  "pin": [
+   -0.6809,
+   0.7184,
+   -0.0219
+  ]
+ },
+ {
+  "key": "t1-vertebra",
+  "en": "T1 vertebra",
+  "ar": "الفقرة الصدرية الأولى",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   -0.0038,
+   0.9052,
+   -0.1013
+  ]
+ },
+ {
+  "key": "t2-vertebra",
+  "en": "T2 vertebra",
+  "ar": "الفقرة الصدرية الثانية",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   -0.0505,
+   0.8284,
+   -0.1409
+  ]
+ },
+ {
+  "key": "t3-vertebra",
+  "en": "T3 vertebra",
+  "ar": "الفقرة الصدرية الثالثة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   0.0056,
+   0.7217,
+   -0.1598
+  ]
+ },
+ {
+  "key": "t4-vertebra",
+  "en": "T4 vertebra",
+  "ar": "الفقرة الصدرية الرابعة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   0.0017,
+   0.6079,
+   -0.1885
+  ]
+ },
+ {
+  "key": "t5-vertebra",
+  "en": "T5 vertebra",
+  "ar": "الفقرة الصدرية الخامسة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   -0.004,
+   0.4897,
+   -0.208
+  ]
+ },
+ {
+  "key": "t6-vertebra",
+  "en": "T6 vertebra",
+  "ar": "الفقرة الصدرية السادسة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   -0.0065,
+   0.344,
+   -0.2164
+  ]
+ },
+ {
+  "key": "t7-vertebra",
+  "en": "T7 vertebra",
+  "ar": "الفقرة الصدرية السابعة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   0.0026,
+   0.226,
+   -0.2115
+  ]
+ },
+ {
+  "key": "t8-vertebra",
+  "en": "T8 vertebra",
+  "ar": "الفقرة الصدرية الثامنة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   0.0012,
+   0.0388,
+   -0.1795
+  ]
+ },
+ {
+  "key": "t9-vertebra",
+  "en": "T9 vertebra",
+  "ar": "الفقرة الصدرية التاسعة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   0.0048,
+   -0.1033,
+   -0.1493
+  ]
+ },
+ {
+  "key": "t10-vertebra",
+  "en": "T10 vertebra",
+  "ar": "الفقرة الصدرية العاشرة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   -0.004,
+   -0.2378,
+   -0.1165
+  ]
+ },
+ {
+  "key": "t11-vertebra",
+  "en": "T11 vertebra",
+  "ar": "الفقرة الصدرية الحادية عشرة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   -0.0089,
+   -0.3778,
+   -0.0725
+  ]
+ },
+ {
+  "key": "t12-vertebra",
+  "en": "T12 vertebra",
+  "ar": "الفقرة الصدرية الثانية عشرة",
+  "kind": "bone",
+  "region": "spine",
+  "grp": "thoracic",
+  "layer": "bone",
+  "pin": [
+   -0.0129,
+   -0.5171,
+   -0.0328
+  ]
+ },
+ {
+  "key": "pectoralis-major-clavicular-left",
+  "en": "Pectoralis major — clavicular part (left)",
+  "ar": "الصدرية الكبرى — الجزء الترقوي (يسار)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "sup",
+  "pin": [
+   0.1746,
+   0.7355,
+   0.194
+  ]
+ },
+ {
+  "key": "pectoralis-major-sternocostal-left",
+  "en": "Pectoralis major — sternocostal part (left)",
+  "ar": "الصدرية الكبرى — الجزء القصي الضلعي (يسار)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "sup",
+  "pin": [
+   0.2666,
+   0.28,
+   0.5181
+  ]
+ },
+ {
+  "key": "pectoralis-major-abdominal-left",
+  "en": "Pectoralis major — abdominal part (left)",
+  "ar": "الصدرية الكبرى — الجزء البطني (يسار)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "sup",
+  "pin": [
+   0.733,
+   0.3613,
+   0.053
+  ]
+ },
+ {
+  "key": "pectoralis-minor-left",
+  "en": "Pectoralis minor (left)",
+  "ar": "الصدرية الصغرى (يسار)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "mid",
+  "pin": [
+   0.3688,
+   0.4122,
+   0.256
+  ]
+ },
+ {
+  "key": "subclavius-left",
+  "en": "Subclavius (left)",
+  "ar": "تحت الترقوة (يسار)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "mid",
+  "pin": [
+   0.3154,
+   0.7389,
+   0.0922
+  ]
+ },
+ {
+  "key": "serratus-anterior-left",
+  "en": "Serratus anterior (left)",
+  "ar": "المسنّنة الأمامية (يسار)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "thoracic-wall",
+  "layer": "mid",
+  "pin": [
+   0.6523,
+   0.2327,
+   0.0737
+  ]
+ },
+ {
+  "key": "pectoralis-major-clavicular-right",
+  "en": "Pectoralis major — clavicular part (right)",
+  "ar": "الصدرية الكبرى — الجزء الترقوي (يمين)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "sup",
+  "pin": [
+   -0.1746,
+   0.7355,
+   0.194
+  ]
+ },
+ {
+  "key": "pectoralis-major-sternocostal-right",
+  "en": "Pectoralis major — sternocostal part (right)",
+  "ar": "الصدرية الكبرى — الجزء القصي الضلعي (يمين)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "sup",
+  "pin": [
+   -0.2666,
+   0.28,
+   0.5181
+  ]
+ },
+ {
+  "key": "pectoralis-major-abdominal-right",
+  "en": "Pectoralis major — abdominal part (right)",
+  "ar": "الصدرية الكبرى — الجزء البطني (يمين)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "sup",
+  "pin": [
+   -0.733,
+   0.3613,
+   0.053
+  ]
+ },
+ {
+  "key": "pectoralis-minor-right",
+  "en": "Pectoralis minor (right)",
+  "ar": "الصدرية الصغرى (يمين)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "mid",
+  "pin": [
+   -0.3688,
+   0.4122,
+   0.256
+  ]
+ },
+ {
+  "key": "subclavius-right",
+  "en": "Subclavius (right)",
+  "ar": "تحت الترقوة (يمين)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "pectoral",
+  "layer": "mid",
+  "pin": [
+   -0.3154,
+   0.7389,
+   0.0922
+  ]
+ },
+ {
+  "key": "serratus-anterior-right",
+  "en": "Serratus anterior (right)",
+  "ar": "المسنّنة الأمامية (يمين)",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "thoracic-wall",
+  "layer": "mid",
+  "pin": [
+   -0.6523,
+   0.2328,
+   0.0737
+  ]
+ },
+ {
+  "key": "diaphragm",
+  "en": "Diaphragm",
+  "ar": "الحجاب الحاجز",
+  "kind": "muscle",
+  "region": "chest",
+  "grp": "respiratory",
+  "layer": "deep",
+  "pin": [
+   0.2422,
+   -0.3142,
+   0.4911
+  ]
+ }
+]

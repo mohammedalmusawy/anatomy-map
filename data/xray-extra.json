@@ -292,6 +292,138 @@
      "الحدبة الإسكية"
     ]
    ]
+  },
+  {
+   "id": "chest-pa2",
+   "region": "chest",
+   "img": "img/xray/extra/chest-pa-bones.jpg",
+   "w": 1748,
+   "h": 2000,
+   "en": "Chest — PA (second case)",
+   "ar": "الصدر — خلفي أمامي (حالة ثانية)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:Normal_posteroanterior_(PA)_chest_radiograph_(X-ray).jpg"
+   ],
+   "pos": {
+    "patient": [
+     "Erect, chest against the IR, chin up, hands on the hips and shoulders rolled forward (to move the scapulae off the lungs).",
+     "واقف، الصدر على الكاسيت، الذقن مرفوعة، اليدين على الورك والأكتاف مدفوعة لقدام (حتى يطلع لوح الكتف من الرئة)."
+    ],
+    "cr": [
+     "Perpendicular to T7 (about the inferior angle of the scapula).",
+     "عمودي على T7 (حوالي الزاوية السفلى للوح الكتف)."
+    ],
+    "exp": [
+     "SID 180 cm · about 110–125 kVp · full inspiration (second breath).",
+     "مسافة 180 سم · حوالي 110–125 kVp · شهيق كامل (بالنفس الثاني)."
+    ],
+    "eval": [
+     "10 posterior ribs above the diaphragm; medial ends of the clavicles equidistant from the spinous processes; scapulae outside the lungs; both costophrenic angles included.",
+     "10 أضلاع خلفية فوق الحجاب؛ نهايتا الترقوتين على بعد متساوي من النواتئ الشوكية؛ لوح الكتف برا الرئة؛ الزاويتين الضلعيتين الحجابيتين ظاهرتين."
+    ]
+   },
+   "pts": [
+    [
+     200,
+     250,
+     "clavicle-right",
+     "Clavicle",
+     "الترقوة"
+    ],
+    [
+     1450,
+     262,
+     "clavicle-left",
+     "Clavicle",
+     "الترقوة"
+    ],
+    [
+     840,
+     250,
+     null,
+     "Spinous processes (upper thoracic)",
+     "النواتئ الشوكية (الفقرات الصدرية العليا)"
+    ],
+    [
+     870,
+     450,
+     null,
+     "Trachea",
+     "القصبة الهوائية"
+    ],
+    [
+     1700,
+     350,
+     null,
+     "Humeral head (outside the lung field)",
+     "رأس عظم العضد (خارج حقل الرئة)"
+    ],
+    [
+     1010,
+     660,
+     null,
+     "Aortic knob",
+     "قوس الأبهر"
+    ],
+    [
+     600,
+     1300,
+     null,
+     "Right heart border (right atrium)",
+     "الحافة اليمنى للقلب (الأذين الأيمن)"
+    ],
+    [
+     1270,
+     1350,
+     null,
+     "Left heart border (left ventricle)",
+     "الحافة اليسرى للقلب (البطين الأيسر)"
+    ],
+    [
+     1720,
+     1100,
+     null,
+     "Lateral arcs of the ribs",
+     "الأقواس الجانبية للأضلاع"
+    ],
+    [
+     450,
+     1595,
+     "diaphragm",
+     "Right hemidiaphragm (dome)",
+     "قبة الحجاب الحاجز اليمنى"
+    ],
+    [
+     1400,
+     1655,
+     "diaphragm",
+     "Left hemidiaphragm (dome)",
+     "قبة الحجاب الحاجز اليسرى"
+    ],
+    [
+     165,
+     1710,
+     null,
+     "Right costophrenic angle",
+     "الزاوية الضلعية الحجابية اليمنى"
+    ],
+    [
+     1640,
+     1820,
+     null,
+     "Left costophrenic angle",
+     "الزاوية الضلعية الحجابية اليسرى"
+    ],
+    [
+     1200,
+     1800,
+     null,
+     "Gastric air bubble",
+     "فقاعة هواء المعدة"
+    ]
+   ]
   }
  ]
 }
