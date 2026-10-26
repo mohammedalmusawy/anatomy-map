@@ -144,6 +144,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
 .xtools button.on{border-color:var(--accent);color:var(--accent);font-weight:600}
 .xstage{position:relative;background:#000;border-radius:16px;overflow:hidden;max-height:72vh;display:flex;justify-content:center}
 .xstage img{display:block;max-width:100%;max-height:72vh;width:auto;height:auto}
+.xstage.tall{max-height:none}.xstage.tall img{max-height:none;width:100%}
 .xdots{position:absolute;inset:0;margin:auto}
 .xdot{position:absolute;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:rgba(47,124,246,.85);
   color:#fff;font:700 9.5px/14px Inter,sans-serif;text-align:center;cursor:pointer;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
@@ -550,6 +551,7 @@ let XRAY=null, xView=null, xNames=true, xTest=null, xSel=null;
 const xrayReady=fetch("data/xray.json").then(r=>r.json()).then(j=>XRAY=j);
 function xShow(v){
   const img=$("x-img"); img.src=v.img; xSel=null; xTest=null;
+  $("xstage").classList.toggle("tall", v.h/v.w>1.6);  // الصور الطويلة (العمود كامل) تاخذ عرض الشاشة وتنسحب للأسفل
   xNames=false;  // أرقام بس على الصورة والأسماء بالقائمة تحتها مثل الأطالس، وزر «الأسماء» يظهرها
   $("x-test").classList.remove("on"); $("x-names").classList.toggle("on",xNames);
   $("x-credit").innerHTML=`Radiograph: ${v.credit[0]} · ${v.credit[1]} · <a href="${v.credit[2]}" target="_blank" rel="noopener">source</a>`;

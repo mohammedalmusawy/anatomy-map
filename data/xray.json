@@ -1479,6 +1479,145 @@
    }
   },
   {
+   "id": "whole-spine",
+   "region": "spine",
+   "img": "img/xray/whole-spine.jpg",
+   "w": 1920,
+   "h": 3880,
+   "en": "Whole spine — AP (standing)",
+   "ar": "العمود الفقري كاملًا — أمامي خلفي (وقوف)",
+   "credit": [
+    "Hollandmjuk",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:AP_Whole_spine_with_piercing.jpg"
+   ],
+   "pts": [
+    [
+     950,
+     210,
+     null,
+     "Mandible",
+     "الفك السفلي"
+    ],
+    [
+     940,
+     450,
+     null,
+     "Cervical vertebrae",
+     "الفقرات الرقبية"
+    ],
+    [
+     1250,
+     800,
+     null,
+     "Clavicle",
+     "الترقوة"
+    ],
+    [
+     700,
+     1010,
+     null,
+     "Ribs",
+     "الأضلاع"
+    ],
+    [
+     920,
+     1150,
+     null,
+     "Thoracic vertebrae",
+     "الفقرات الصدرية"
+    ],
+    [
+     915,
+     1890,
+     "t12-vertebra",
+     "T12 (lowest rib-bearing vertebra)",
+     "T12 (آخر فقرة تحمل ضلعًا)"
+    ],
+    [
+     910,
+     2045,
+     "l1-vertebra",
+     "L1",
+     "الفقرة القطنية L1"
+    ],
+    [
+     905,
+     2205,
+     "l2-vertebra",
+     "L2",
+     "الفقرة القطنية L2"
+    ],
+    [
+     900,
+     2370,
+     "l3-vertebra",
+     "L3",
+     "الفقرة القطنية L3"
+    ],
+    [
+     900,
+     2525,
+     "l4-vertebra",
+     "L4",
+     "الفقرة القطنية L4"
+    ],
+    [
+     900,
+     2660,
+     "l5-vertebra",
+     "L5",
+     "الفقرة القطنية L5"
+    ],
+    [
+     1220,
+     2700,
+     null,
+     "Iliac crest",
+     "العرف الحرقفي"
+    ],
+    [
+     900,
+     2810,
+     "sacrum",
+     "Sacrum",
+     "العجز"
+    ],
+    [
+     940,
+     2740,
+     null,
+     "Navel piercing — artefact (should be removed)",
+     "حلقة سُرّة — جسم معدني (يجب نزعه قبل التصوير)"
+    ],
+    [
+     930,
+     2980,
+     null,
+     "Gonadal shield",
+     "واقي الغدد التناسلية"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Erect, back (or front for PA) against the long IR, arms by the sides, weight on both feet, no rotation; remove all metal and jewellery.",
+     "وقوف، والظهر (أو الصدر بوضعية PA) على الكاسيت الطويل، والذراعان بجانب الجسم، والوزن على القدمين بالتساوي، بلا دوران؛ ويُنزع كل معدن وحُليّ."
+    ],
+    "cr": [
+     "Perpendicular to the centre of the long IR (about T12–L1 for C7-to-sacrum coverage), or stitched exposures.",
+     "عمودي على منتصف الكاسيت الطويل (نحو T12–L1 لتغطية من C7 إلى العجز)، أو بعدة صور تُدمج معًا."
+    ],
+    "exp": [
+     "SID about 180 cm · about 80–90 kVp · compensating filter for the thinner upper body; shielding as per local protocol.",
+     "مسافة نحو 180 سم · حوالي 80–90 kVp · مرشّح تعويضي للجزء العلوي الأرق؛ والواقيات حسب بروتوكول القسم."
+    ],
+    "eval": [
+     "Whole spine from the lower cervical region to the sacrum and iliac crests included (for scoliosis assessment); spinous processes in the midline; no jewellery over the spine. In this image the navel piercing was left on — a common error.",
+     "يظهر العمود من أسفل الرقبة إلى العجز والعرفين الحرقفيين (لتقييم الجنف)؛ النواتئ الشوكية في الخط الأوسط؛ لا حُليّ فوق العمود. في هذه الصورة بقيت حلقة السُّرة — خطأ شائع."
+    ]
+   }
+  },
+  {
    "id": "cspine-lat",
    "region": "spine",
    "img": "img/xray/cspine-lat.jpg",
