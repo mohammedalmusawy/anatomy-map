@@ -102,3 +102,14 @@ h1 { font-size: 26px; line-height: 1.4; margin: 10px 0 4px; }
 .btn.ghost { background: transparent; color: var(--brand); }
 .btn.plain { border-color: var(--line); background: var(--card); color: var(--ink); }
 .soon { text-align: center; color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 16px; padding: 22px; margin-bottom: 14px; }
+
+/* سهولة التعلم: سلايدات تتقلب بالإصبع */
+.slides { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none; border-radius: 16px; }
+.slides::-webkit-scrollbar { display: none; }
+.slide { flex: 0 0 100%; scroll-snap-align: center; scroll-snap-stop: always; }
+.slide img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; border-radius: 16px; border: 1px solid var(--line); background: #fff; }
+.snav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 12px 0 16px; }
+.snav button { font: 700 16px "IBM Plex Sans Arabic", system-ui, sans-serif; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 12px; padding: 10px 16px; cursor: pointer; }
+.snav button:disabled { opacity: .35; cursor: default; }
+.snav .pos { color: var(--muted); font-size: 15px; }
+.hint { text-align: center; color: var(--muted); font-size: 14px; margin: 0 0 10px; }
