@@ -137,7 +137,7 @@
       if (pool.length < 3) pool = all.filter((x) => x.id !== c.id);
       const opts = shuffle([c, ...shuffle(pool).filter((x, k, arr) => arr.findIndex((y) => y.en === x.en) === k && x.en !== c.en).slice(0, 3)]);
       gz.innerHTML = `<div class="wrap"><div class="bar2"><button class="close">‹ رجوع</button><span>صحيح ${ok} من ${n}</span></div>
-        <h2 style="margin:0 0 8px;font-size:19px">🎯 شنو هذه الحالة؟</h2>
+        <h2 style="margin:0 0 8px;font-size:19px">🎯 What is this case? · شنو هذه الحالة؟</h2>
         <div class="xi"><img src="${esc(window.ATLAS_BASE + c.img)}" width="${c.w}" height="${c.h}" alt=""></div>
         <div class="opts">${opts.map((o) => `<button data-id="${esc(o.id)}"><span class="en">${esc(o.en)}</span><small>${esc(o.ar)}</small></button>`).join("")}</div>
         <div class="fbx"></div></div>`;
@@ -155,7 +155,7 @@
         else if (c.mk) { xi.insertAdjacentHTML("beforeend", c.mk); xi.querySelector(".marks").removeAttribute("hidden"); }
         gz.querySelector(".fbx").innerHTML = `<div class="fb"><b>${right ? "✅ صحيح" : "❌ الجواب الصحيح"}: <span class="en">${esc(c.en)}</span> — ${esc(c.ar)}</b>
           <p style="margin:6px 0 0">${esc(c.line)}</p><a class="go" href="${esc(window.ATLAS_BASE + caseUrl(c))}">👁️ افتح البطاقة وشوف العلامة</a></div>
-          <button class="next">التالية ›</button>`;
+          <button class="next">Next · التالية ›</button>`;
         gz.querySelector(".go").onclick = close;
         gz.querySelector(".fbx").scrollIntoView({ behavior: "smooth", block: "nearest" });
         gz.querySelector(".next").onclick = () => { i++; show(); gz.scrollTop = 0; };

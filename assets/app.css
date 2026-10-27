@@ -38,6 +38,9 @@ h1 { font-size: 26px; line-height: 1.4; margin: 10px 0 4px; }
   padding: 18px 18px; min-height: 64px; font-size: 18px; font-weight: 600;
 }
 .item small { display: block; color: var(--muted); font-size: 14px; font-weight: 500; }
+.item bdi { display: block; direction: ltr; unicode-bidi: isolate; text-align: right; }
+.item .ar2 { display: block; font-size: 14px; color: var(--muted); font-weight: 500; }
+.h1-en { direction: ltr; text-align: left; }
 .item .en { font-size: 13px; color: var(--muted); font-weight: 500; display: block; text-align: right; }
 .item .go { color: var(--brand); font-size: 22px; flex: none; }
 .item.off { opacity: .5; pointer-events: none; }

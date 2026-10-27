@@ -59,13 +59,15 @@ svg.body.mini .sp { display: none; }
 .tile { min-width: 0; position: relative; padding-bottom: 26px !important; display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px; min-height: 92px; }
 .tile.off { opacity: .5; }
 .tile .gn { flex: 1; min-width: 0; overflow-wrap: break-word; font-weight: 700; font-size: 15px; line-height: 1.35; }
-.tile .gn .en { display: block; font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.tile .gn bdi { display: block; direction: ltr; unicode-bidi: isolate; text-align: right; }
+.tile .gn .ar { display: block; font-size: 12px; color: var(--muted); font-weight: 500; }
 .tile .gc { position: absolute; bottom: 8px; inset-inline-end: 12px; font-size: 12px; color: var(--muted); white-space: nowrap; }
 
 /* صفحة المنطقة */
 .chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 8px; scrollbar-width: none; }
 .chip { flex: none; font-size: 13.5px; font-weight: 600; border-radius: 99px; padding: 5px 12px; background: color-mix(in srgb, var(--g) 14%, var(--card)); color: var(--ink); border: 1px solid color-mix(in srgb, var(--g) 45%, transparent); }
 .chip b { color: var(--g); }
+.gh .gh-ar, .step h2 .gh-ar { font-size: 14px; color: var(--muted); font-weight: 600; }
 .gh { font-size: 19px; margin: 26px 0 10px; padding-inline-start: 10px; border-inline-start: 5px solid var(--g); scroll-margin-top: 12px; }
 
 /* بطاقة الحالة */

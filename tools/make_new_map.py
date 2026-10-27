@@ -1,4 +1,5 @@
 import sys
+# الاستعمال: python3 tools/make_new_map.py map.html new-map.html  (الخريطة القديمة صارت map.html والجديدة new-map.html، 28/10)
 src, dst = sys.argv[1], sys.argv[2]
 h = open(src, encoding="utf-8").read()
 def rep(a, b):

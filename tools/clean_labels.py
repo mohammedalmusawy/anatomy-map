@@ -173,7 +173,7 @@ def clean(views):
 if __name__ == "__main__":
     old = json.load(open(os.path.join(ROOT, "data/xray.json"), encoding="utf-8"))
     old["views"] = clean(old["views"])
-    old["_note"] = ("Cleaned copy of data/xray.json (made by tools/clean_labels.py), read by index.html and خريطة-جديدة.html. "
+    old["_note"] = ("Cleaned copy of data/xray.json (made by tools/clean_labels.py), read by map.html (old map) and new-map.html. "
                     "Only labels whose position comes from the image's own source annotation are kept (p[5] = source); "
                     "images that were abnormal or replaced by an annotated normal source are swapped (see REPLACE). "
                     "data/xray.json is the historical file and is not changed.")
