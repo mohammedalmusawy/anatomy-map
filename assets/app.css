@@ -216,3 +216,94 @@ bdi { direction: ltr; unicode-bidi: isolate; }
 .lfile .btn { margin: 0; }
 .lfile .btn small { display: block; font-size: 12px; font-weight: 500; opacity: .85; }
 .lfile .btn.alt { background: var(--brand-soft); color: var(--brand); }
+/* «شوف الحالة» بالمصطلحات (27/10) */
+.term .seecase { display: inline-block; margin-top: 8px; font-size: 13.5px; font-weight: 600; color: var(--brand); background: var(--brand-soft); padding: 4px 12px; border-radius: 999px; text-decoration: none; }
+/* الأعراض (27/10) */
+.sx { color: var(--ink); }
+.sxlink { margin-top: 12px; }
+.sxg { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin: 0 0 10px; overflow: hidden; }
+.sxg summary { display: flex; align-items: center; gap: 8px; padding: 12px 14px; cursor: pointer; list-style: none; }
+.sxg summary::-webkit-details-marker { display: none; }
+.sxg summary b { font-size: 16px; }
+.sxg summary .en { color: var(--muted); font-size: 13px; flex: 1; text-align: left; }
+.sxg summary i { font-style: normal; font-size: 12px; background: var(--brand-soft); color: var(--brand); border-radius: 999px; padding: 2px 9px; }
+.sxl { display: grid; gap: 6px; padding: 0 10px 12px; }
+.sxc { display: block; padding: 10px 12px; border-radius: 10px; background: var(--bg); text-decoration: none; color: var(--ink); }
+.sxc .sxt { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; }
+.sxc .mod { font-size: 11.5px; font-weight: 600; color: var(--brand); background: var(--brand-soft); border-radius: 6px; padding: 1px 7px; flex: none; }
+.sxc .sxa { display: block; font-size: 14px; }
+.sxc small { display: block; color: var(--muted); font-size: 13px; line-height: 1.6; margin-top: 2px; }
+/* 🎤 البحث بالصوت (27/10) */
+.vbox { display: inline-flex; gap: 6px; vertical-align: middle; margin-inline-start: 6px; }
+.vbox button { border: 1px solid var(--line); background: var(--card); color: var(--brand); border-radius: 10px; min-width: 40px; height: 40px; font: 600 14px inherit; font-family: inherit; cursor: pointer; }
+.vbox .vmic.on { background: #E5484D; color: #fff; border-color: #E5484D; animation: vpulse 1s infinite; }
+@keyframes vpulse { 50% { opacity: .6; } }
+/* ✨ أدوات الطالب (27/10) */
+.mytools { display: grid; gap: 8px; margin: 0 0 12px; }
+.mytools:empty { display: none; }
+.mytools .tool { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; color: var(--ink); text-decoration: none; }
+.mytools .tool b { margin-inline-start: 4px; }
+.mytools .tool small { display: block; color: var(--muted); font-size: 13px; }
+.mytools details.tool summary { cursor: pointer; list-style: none; }
+.mytools details.tool a { display: block; padding: 6px 0; color: var(--brand); font-size: 14px; }
+.qotd { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 0 0 14px; }
+.qotd .qh small { display: block; color: var(--muted); font-size: 12.5px; }
+.qotd .qen { direction: ltr; text-align: left; font-weight: 600; margin: 8px 0 2px; }
+.qotd .qar { margin: 0 0 8px; }
+.qotd .qo { display: grid; gap: 6px; }
+.qotd .qo button { text-align: start; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 10px; padding: 8px 10px; font-family: inherit; font-size: 14px; }
+.qotd .qo button span { display: block; direction: ltr; text-align: left; }
+.qotd .qo button small { display: block; color: var(--muted); }
+.qotd .qo button.right { border-color: #2E9E5B; background: #2E9E5B22; }
+.qotd .qo button.wrong { border-color: #E5484D; background: #E5484D22; }
+.qotd .qw { margin: 8px 0 0; font-size: 14px; }
+.prog { display: inline-flex; align-items: center; gap: 4px; margin-inline-end: 6px; font-size: 11.5px; color: var(--brand); }
+.prog .pb { display: inline-block; width: 36px; height: 6px; border-radius: 3px; background: var(--brand-soft); overflow: hidden; }
+.prog .pb i { display: block; height: 100%; background: var(--brand); }
+.favb { border: 1px solid var(--line); background: var(--card); color: var(--brand); border-radius: 999px; padding: 6px 14px; font: 600 14px inherit; font-family: inherit; margin: 0 0 8px; cursor: pointer; }
+.favb.on { background: var(--brand-soft); }
+.hidden { display: none !important; }
+/* 🧠 الأقسام الذكية (27/10) */
+.smartlinks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 12px; }
+.smartlinks .tool { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; color: var(--ink); text-decoration: none; }
+.smartlinks .tool small { display: block; color: var(--muted); font-size: 12.5px; }
+.sbox input, .ask input { width: 100%; box-sizing: border-box; font: 16px inherit; font-family: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); }
+.sbox { display: flex; align-items: center; margin: 0 0 8px; }
+.sres small { display: block; color: var(--muted); font-size: 13px; font-weight: 400; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px; }
+.chips button { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 6px 12px; font: 600 14px inherit; font-family: inherit; cursor: pointer; }
+.chips button.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+.rec { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px; margin: 0 0 12px; }
+.rec .q1 { margin: 6px 0 0; font-weight: 600; }
+.rev-only { background: #FFF4E5; color: #8A4B00; border-radius: 12px; padding: 10px 12px; text-align: center; font-size: 15px; }
+@media (prefers-color-scheme: dark) { .rev-only { background: #3A2A12; color: #FFD9A0; } }
+.rsum, .rq { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; margin: 6px 0; }
+.rsum summary, .rq summary { cursor: pointer; font-weight: 600; }
+.rsum li, .rq p, .hintl { line-height: 1.7; }
+.rsum .en, .rq .en, .key .en, .hintl .en, .exam .en { display: block; direction: ltr; text-align: left; font-weight: 500; }
+.rq .rate { font-style: normal; font-size: 12px; color: #E5484D; }
+.chat { display: grid; gap: 8px; margin: 8px 0; }
+.chat .msg { border-radius: 14px; padding: 10px 12px; max-width: 92%; line-height: 1.7; }
+.chat .me { background: var(--brand); color: #fff; justify-self: start; }
+.chat .bot { background: var(--card); border: 1px solid var(--line); justify-self: end; }
+.chat .ai, .ai-note { font-size: 12px; color: var(--muted); margin: 0; }
+.chat .nx { border: 1px solid var(--line); background: var(--brand-soft); color: var(--brand); border-radius: 999px; padding: 5px 12px; margin: 4px 2px 0; font-family: inherit; cursor: pointer; }
+.ask { display: flex; gap: 6px; position: sticky; bottom: 8px; }
+.ask button { border: 0; background: var(--brand); color: #fff; border-radius: 12px; padding: 0 14px; font: 600 15px inherit; font-family: inherit; }
+.exam { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; margin: 0 0 14px; }
+.exam .when b { color: var(--brand); font-size: 18px; }
+.exam .post { color: #E5484D; font-weight: 600; }
+.topq { border: 2px solid #F5A623; border-radius: 12px; padding: 8px; margin: 8px 0; }
+.annbar { background: var(--brand); color: #fff; text-align: center; padding: 8px 12px; font-size: 14px; }
+.repb, .explainme, .whywrong { display: inline-block; border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 4px 10px; font: 500 12.5px inherit; font-family: inherit; margin: 6px 4px 0 0; cursor: pointer; text-decoration: none; }
+.explainme, .whywrong { color: var(--brand); background: var(--brand-soft); }
+.diff { font-size: 12.5px; margin-inline-start: 6px; }
+table.adm { width: 100%; border-collapse: collapse; font-size: 13px; margin: 6px 0 14px; }
+table.adm th, table.adm td { border: 1px solid var(--line); padding: 5px 6px; text-align: start; vertical-align: top; }
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0; }
+.kpis div { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; text-align: center; }
+.kpis b { display: block; font-size: 22px; color: var(--brand); }
+.kpis span { font-size: 12px; color: var(--muted); }
+.alert { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; margin: 0 0 8px; }
+#admin input, #admin textarea, #admin select { font-family: inherit; font-size: 15px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); max-width: 100%; }
+#admin label { display: block; margin: 6px 0; }

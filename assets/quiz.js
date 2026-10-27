@@ -39,6 +39,7 @@
     $("fb").className = "fb hidden";
     $("next").classList.add("hidden");
     $("opts").querySelectorAll(".opt").forEach((b) => b.addEventListener("click", () => pick(b)));
+    document.dispatchEvent(new CustomEvent("quiz:show", { detail: { q } }));
     window.scrollTo({ top: 0 });
   }
 
@@ -50,6 +51,7 @@
       b.disabled = true;
       if (+b.dataset.k === q.answer) b.classList.add("right");
     });
+    document.dispatchEvent(new CustomEvent("quiz:answer", { detail: { q, ok: k === q.answer } })); // أدوات الطالب (tools.js)
     const fb = $("fb");
     if (k === q.answer) {
       fb.className = "fb ok";
@@ -81,11 +83,12 @@
       pct >= 0.5 ? "بداية جيدة 💪 اقرأ المحاضرة مرة أخرى ثم أعد المحاولة." :
                    "لا بأس 🌱 كل محاولة تقرّبك من الفهم. اقرأ الملف وعد إلينا.";
     $("retry-wrong").classList.toggle("hidden", wrong.length === 0);
+    document.dispatchEvent(new CustomEvent("quiz:finish", { detail: { ok, n } }));
     window.scrollTo({ top: 0 });
   }
 
   $("next").addEventListener("click", () => (pos < round.length - 1 ? (pos++, show()) : finish()));
   $("retry-wrong").addEventListener("click", () => start(wrong));
   $("retry-all").addEventListener("click", () => start(data.questions));
-  start(data.questions);
+  if (data.questions.length) start(data.questions);
 })();

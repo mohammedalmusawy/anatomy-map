@@ -21,7 +21,8 @@
     $("#tl").innerHTML = list.slice(0, 400).map(({ t }) => `<article class="term">
       <div class="th"><bdi class="te">${esc(t.en)}</bdi><button class="say" data-say="${esc(t.en)}" aria-label="انطق ${esc(t.en)}">🔊</button></div>
       <b class="ta">${esc(t.ar)}</b>${t.d ? `<p>${esc(t.d)}</p>` : ""}
-      ${t.s ? `<span class="ts">${esc(t.s)}${t.sa ? " · " + esc(t.sa) : ""}</span>` : ""}</article>`).join("");
+      ${t.s ? `<span class="ts">${esc(t.s)}${t.sa ? " · " + esc(t.sa) : ""}</span>` : ""}
+      ${t.c ? `<a class="seecase" href="${esc(t.c)}">🩻 شوف الحالة</a>` : ""}</article>`).join("");
   }
   $("#tt").addEventListener("click", (ev) => {
     const a = ev.target.closest("a[data-set]");
@@ -49,6 +50,7 @@
     const b = ev.target.closest("button.say");
     if (!b) return;
     if (!window.speechSynthesis) { b.textContent = "🔇"; return; }
+    if (!voice) pick(); // iOS/Android: قائمة الأصوات أحياناً تتحمّل متأخرة
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(b.dataset.say);
     u.lang = voice ? voice.lang : "en-GB";
