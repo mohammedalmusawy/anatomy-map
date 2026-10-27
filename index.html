@@ -141,6 +141,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
 .xviews button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-text)}
 .xtools{display:flex;gap:6px;margin-bottom:8px}
 .xtools button{flex:1;border:1px solid var(--line);background:none;color:var(--text);font:inherit;font-size:13px;padding:7px;border-radius:11px;cursor:pointer}
+.xnote{font-size:12.5px;opacity:.75;margin:0 0 8px;line-height:1.6}
 .xtools button.on{border-color:var(--accent);color:var(--accent);font-weight:600}
 .xstage{position:relative;background:#000;border-radius:16px;overflow:hidden;max-height:72vh;display:flex;justify-content:center}
 .xstage img{display:block;max-width:100%;max-height:72vh;width:auto;height:auto}
@@ -298,6 +299,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
         <button id="x-names">🏷 الأسماء</button>
         <button id="x-test">❓ اختبر نفسك</button>
       </div>
+      <p class="xnote" id="xnote" hidden>هاي الصورة بدون تأشير: التسميات اللي انحطت بالتقدير انشالت، وتبقى بس التسميات اللي مأشّرها مصدر الصورة نفسه.</p>
       <div class="xstage" id="xstage"><img id="x-img" alt=""><div class="xdots" id="xdots"></div></div>
       <div class="xinfo" id="xinfo"></div>
       <ol class="xlegend" id="xlegend"></ol>
@@ -550,7 +552,7 @@ function markTerm(key){
 
 // ── الأشعة المؤشّرة: نقاط على الصورة، كل نقطة مربوطة بجزئها بالمجسّم
 let XRAY=null, xView=null, xNames=true, xTest=null, xSel=null;
-const xrayReady=fetch("data/xray.json").then(r=>r.json()).then(j=>XRAY=j);
+const xrayReady=fetch("data/xray-clean.json").then(r=>r.json()).then(j=>XRAY=j);
 function xShow(v){
   const img=$("x-img"); img.src=v.img; xSel=null; xTest=null;
   $("xstage").classList.toggle("tall", v.h/v.w>1.6);  // الصور الطويلة (العمود كامل) تاخذ عرض الشاشة وتنسحب للأسفل
@@ -561,6 +563,9 @@ function xShow(v){
   $("xpos").innerHTML=`<h3>📐 الوضعية · ${v.en}</h3><dl>`+row("وضع المريض",P.patient)+row("الأشعة المركزية (CR)",P.cr)+row("التعريض",P.exp)+row("معايير تقييم الصورة",P.eval)+`</dl>`;
   const draw=()=>xDots(v); img.onload=draw; if(img.complete) draw();
   $("xlegend").innerHTML=v.pts.map((p,i)=>`<li data-i="${i}"><b class="en">${p[3]}</b><span>${p[4]}</span></li>`).join("");
+  const np=v.pts.length, srcs=[...new Set(v.pts.map(p=>p[5]).filter(Boolean))];
+  $("x-names").hidden=!np; $("x-test").hidden=np<4; $("xlegend").hidden=!np; $("xnote").hidden=!!np;
+  if(srcs.length) $("x-credit").innerHTML+=` · Labels from source: ${srcs.join(", ")}`;
   xInfo(null,v);
 }
 function xDots(v){

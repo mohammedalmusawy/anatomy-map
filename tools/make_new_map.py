@@ -3,6 +3,8 @@ src, dst = sys.argv[1], sys.argv[2]
 h = open(src, encoding="utf-8").read()
 def rep(a, b):
     global h
+    if b in h:  # index.html صار بيه نفس التعديل (تنظيف التسميات 27/10)
+        return
     assert h.count(a) == 1, ("not unique/found", a[:80], h.count(a))
     h = h.replace(a, b)
 
@@ -61,7 +63,7 @@ rep('hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات �
     'hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى","pelvic-floor":"قاع الحوض (Pelvic floor)","pelvic-wall":"جدار الحوض (Pelvic wall)",iliopsoas:"الحرقفية القطنية (Iliopsoas)"};')
 
 # ٦. الأشعة: نضيف data/xray-extra.json، والحوض يعرض كمان صوره القديمة (reuse)
-rep('const xrayReady=fetch("data/xray.json").then(r=>r.json()).then(j=>XRAY=j);',
+rep('const xrayReady=fetch("data/xray-clean.json").then(r=>r.json()).then(j=>XRAY=j);',
     'const xrayReady=Promise.all([fetch("data/xray-clean.json").then(r=>r.json()),fetch("data/xray-extra.json").then(r=>r.json()).catch(()=>({views:[],reuse:{}}))])\n  .then(([a,b])=>XRAY={...a,views:[...b.views,...a.views],reuse:b.reuse||{}});')
 rep('const views=XRAY.views.filter(v=>v.region===r);',
     'const views=XRAY.views.filter(v=>v.region===r||(XRAY.reuse[r]||[]).includes(v.id));')
