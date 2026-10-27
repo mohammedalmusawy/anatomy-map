@@ -1,0 +1,88 @@
+{
+ "_note": "Normal radiographs from sources with their own annotation (or normal replacements), added 27/10/2026. Points are computed in tools/clean_labels.py. No cropping, no upscaling, no AI; only downscaling where 'scale' < 1. Converted to greyscale JPEG.",
+ "shoulder-ap": {
+  "file": "shoulder-ap-rp80413.jpg",
+  "source": "https://radiopaedia.org/cases/80413",
+  "case": "Normal shoulder (radiograph)",
+  "artist": "Dai Roberts",
+  "rid": 80413,
+  "study": 93816,
+  "license": "CC BY-NC-SA 3.0",
+  "original_size": [
+   1568,
+   1226
+  ],
+  "scale": 1.0,
+  "annotation": "none in source (0 labels)",
+  "replaces": "Hellerhoff, Tuberositas deltoidea 71W - CR - 001.jpg (proximal humerus fracture; moved to the local pathology atlas)"
+ },
+ "chest-lat": {
+  "file": "chest-lat-rp40794.jpg",
+  "source": "https://radiopaedia.org/cases/40794",
+  "case": "Normal CXR and lateral",
+  "artist": "Craig Hacking",
+  "rid": 40794,
+  "study": 43455,
+  "license": "CC BY-NC-SA 3.0",
+  "original_size": [
+   2418,
+   2865
+  ],
+  "scale": 0.6980802792321117,
+  "annotation": "https://radiopaedia.org/studies/43455/annotated_viewer_json (17 labels)"
+ },
+ "skull-pa": {
+  "file": "skull-frontal-hellerhoff.jpg",
+  "source": "https://commons.wikimedia.org/wiki/File:NNH_im_Roentgen_frontal.png",
+  "annotation": "https://commons.wikimedia.org/wiki/File:NNH_im_Roentgen_frontal_Annotation.png (6 coloured regions)",
+  "artist": "Hellerhoff",
+  "license": "CC BY-SA 3.0",
+  "original_size": [
+   678,
+   962
+  ],
+  "scale": 1.0
+ },
+ "knee-ap": {
+  "file": "knee-ap-hellerhoff-55w.jpg",
+  "source": "https://commons.wikimedia.org/wiki/File:Tuberculum_adductorium_femoris_55W_-_CR_ap_-_001.jpg",
+  "annotation": "https://commons.wikimedia.org/wiki/File:Tuberculum_adductorium_femoris_55W_-_CR_ap_-_001_-_Annotation.jpg (1 arrow; source text: 'Keine Pathologie')",
+  "artist": "Hellerhoff",
+  "license": "CC BY-SA 4.0",
+  "original_size": [
+   886,
+   934
+  ],
+  "scale": 1.0
+ },
+ "chest-pa2": {
+  "file": "chest-pa-rp247006.jpg",
+  "source": "https://radiopaedia.org/cases/247006",
+  "case": "Anterior junction line and azygo-esophageal recess (findings: Normal; 30-year-old male)",
+  "artist": "Stefan Tigges",
+  "rid": 247006,
+  "study": 185614,
+  "license": "CC BY-NC-SA 3.0",
+  "original_size": [
+   3032,
+   2440
+  ],
+  "scale": 0.6596306068601583,
+  "annotation": "https://radiopaedia.org/studies/185614/annotated_viewer_json (2 labels)"
+ },
+ "facial-om": {
+  "file": "facial-om-rp220490.jpg",
+  "source": "https://radiopaedia.org/cases/220490",
+  "case": "Normal paranasal sinuses x-ray series",
+  "artist": "Dalia Ibrahim",
+  "rid": 220490,
+  "study": 170246,
+  "license": "CC BY-NC-SA 3.0",
+  "original_size": [
+   570,
+   630
+  ],
+  "scale": 1.0,
+  "annotation": "https://radiopaedia.org/studies/170246/annotated_viewer_json (OM series: 2 labels, 4 arrows)"
+ }
+}

@@ -81,15 +81,15 @@
   {
    "id": "chest-pa2",
    "region": "chest",
-   "img": "img/xray/extra/chest-pa-bones.jpg",
-   "w": 1748,
-   "h": 2000,
-   "en": "Chest — PA (second case)",
-   "ar": "الصدر — خلفي أمامي (حالة ثانية)",
+   "img": "img/xray/src/chest-pa-rp247006.jpg",
+   "w": 2000,
+   "h": 1609,
+   "en": "Chest — frontal (second case, portable)",
+   "ar": "الصدر — أمامي (حالة ثانية، جهاز متنقل)",
    "credit": [
-    "Mikael Häggström, M.D.",
-    "CC0",
-    "https://commons.wikimedia.org/wiki/File:Normal_posteroanterior_(PA)_chest_radiograph_(X-ray).jpg"
+    "Case courtesy of Stefan Tigges, Radiopaedia.org, rID: 247006",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/247006"
    ],
    "pos": {
     "patient": [
@@ -109,7 +109,24 @@
      "10 أضلاع خلفية فوق الحجاب؛ نهايتا الترقوتين على بعد متساوي من النواتئ الشوكية؛ لوح الكتف برا الرئة؛ الزاويتين الضلعيتين الحجابيتين ظاهرتين."
     ]
    },
-   "pts": []
+   "pts": [
+    [
+     952,
+     472,
+     null,
+     "Anterior junction line",
+     "خط الاتصال الأمامي (بين الرئتين)",
+     "Radiopaedia 247006 (annotation, Stefan Tigges)"
+    ],
+    [
+     920,
+     869,
+     null,
+     "Azygo-oesophageal recess",
+     "الرَّدب الأزيغوسي المريئي",
+     "Radiopaedia 247006 (annotation, Stefan Tigges)"
+    ]
+   ]
   },
   {
    "id": "abdomen-supine",

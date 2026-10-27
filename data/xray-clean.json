@@ -1,5 +1,5 @@
 {
- "_note": "Cleaned copy of data/xray.json for خريطة-جديدة.html (made by tools/clean_labels.py). Only labels whose position comes from the image's own source are kept (p[5] = source); all labels that were placed by eye were removed. data/xray.json (live map) is unchanged.",
+ "_note": "Cleaned copy of data/xray.json (made by tools/clean_labels.py), read by index.html and خريطة-جديدة.html. Only labels whose position comes from the image's own source annotation are kept (p[5] = source); images that were abnormal or replaced by an annotated normal source are swapped (see REPLACE). data/xray.json is the historical file and is not changed.",
  "views": [
   {
    "id": "hand-pa",
@@ -367,26 +367,17 @@
   {
    "id": "shoulder-ap",
    "region": "arm",
-   "img": "img/xray/hd/shoulder-ap.jpg",
-   "w": 842,
-   "h": 1742,
-   "en": "Shoulder & proximal humerus — AP (external rotation)",
-   "ar": "الكتف وأعلى العضد — أمامي خلفي (دوران خارجي)",
+   "img": "img/xray/src/shoulder-ap-rp80413.jpg",
+   "w": 1568,
+   "h": 1226,
+   "en": "Shoulder — AP",
+   "ar": "الكتف — أمامي خلفي (AP)",
    "credit": [
-    "Hellerhoff",
-    "CC BY-SA 4.0",
-    "https://commons.wikimedia.org/wiki/File:Tuberositas_deltoidea_71W_-_CR_-_001.jpg"
+    "Case courtesy of Dai Roberts, Radiopaedia.org, rID: 80413",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/80413"
    ],
-   "pts": [
-    [
-     596,
-     1289,
-     "humerus",
-     "Deltoid tuberosity",
-     "الحدبة الدالية",
-     "Hellerhoff, Wikimedia «Tuberositas deltoidea 71W - CR - 001 - Annotation.jpg»"
-    ]
-   ],
+   "pts": [],
    "pos": {
     "patient": [
      "Erect or supine, body slightly rotated toward the affected side; arm slightly abducted in external rotation (epicondyles parallel to the IR).",
@@ -607,17 +598,26 @@
   {
    "id": "knee-ap",
    "region": "thigh",
-   "img": "img/xray/hd/knee-ap.jpg",
-   "w": 1067,
-   "h": 1913,
+   "img": "img/xray/src/knee-ap-hellerhoff-55w.jpg",
+   "w": 886,
+   "h": 934,
    "en": "Knee — AP",
    "ar": "الركبة — أمامي خلفي (AP)",
    "credit": [
-    "Mikael Häggström, M.D.",
-    "CC0",
-    "https://commons.wikimedia.org/wiki/File:X-ray_of_a_normal_knee_by_anteroposterior_projection.jpg"
+    "Hellerhoff",
+    "CC BY-SA 4.0",
+    "https://commons.wikimedia.org/wiki/File:Tuberculum_adductorium_femoris_55W_-_CR_ap_-_001_-_Annotation.jpg"
    ],
-   "pts": [],
+   "pts": [
+    [
+     124,
+     153,
+     "femur",
+     "Adductor tubercle of femur",
+     "الحديبة المقرِّبة لعظم الفخذ",
+     "Hellerhoff, Wikimedia «Tuberculum adductorium femoris 55W - CR ap - 001 - Annotation.jpg» (arrow tip)"
+    ]
+   ],
    "pos": {
     "patient": [
      "Supine, leg extended and rotated about 3–5° internally so the femoral epicondyles are parallel to the IR.",
@@ -1480,17 +1480,154 @@
   {
    "id": "chest-lat",
    "region": "chest",
-   "img": "img/xray/hd/chest-lat.jpg",
-   "w": 1442,
+   "img": "img/xray/src/chest-lat-rp40794.jpg",
+   "w": 1688,
    "h": 2000,
    "en": "Chest — lateral",
    "ar": "الصدر — جانبي",
    "credit": [
-    "Mikael Häggström, M.D.",
-    "CC0",
-    "https://commons.wikimedia.org/wiki/File:Normal_lateral_chest_radiograph_(X-ray).jpg"
+    "Case courtesy of Craig Hacking, Radiopaedia.org, rID: 40794",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/40794"
    ],
-   "pts": [],
+   "pts": [
+    [
+     992,
+     152,
+     null,
+     "Arm soft tissue",
+     "الأنسجة الرخوة للذراع",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     713,
+     425,
+     null,
+     "Scapula",
+     "لوح الكتف",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     1086,
+     399,
+     null,
+     "Ascending aorta",
+     "الأبهر الصاعد",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     690,
+     901,
+     null,
+     "Descending aorta",
+     "الأبهر النازل",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     926,
+     297,
+     null,
+     "Trachea",
+     "الرغامى (القصبة الهوائية)",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     1380,
+     607,
+     "body-of-sternum",
+     "Sternum",
+     "عظم القص",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     854,
+     739,
+     null,
+     "Right upper lobe bronchus",
+     "قصبة الفص العلوي الأيمن",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     873,
+     875,
+     null,
+     "Left upper lobe bronchus",
+     "قصبة الفص العلوي الأيسر",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     954,
+     738,
+     null,
+     "Right pulmonary artery",
+     "الشريان الرئوي الأيمن",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     785,
+     615,
+     null,
+     "Left pulmonary artery",
+     "الشريان الرئوي الأيسر",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     802,
+     209,
+     null,
+     "Oesophagus",
+     "المريء",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     458,
+     1709,
+     "diaphragm",
+     "Left hemidiaphragm",
+     "الحجاب الحاجز الأيسر",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     1199,
+     1284,
+     "diaphragm",
+     "Right hemidiaphragm",
+     "الحجاب الحاجز الأيمن",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     875,
+     1079,
+     null,
+     "Left atrium",
+     "الأذين الأيسر",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     949,
+     1172,
+     null,
+     "Left ventricle",
+     "البطين الأيسر",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     1067,
+     1255,
+     null,
+     "Inferior vena cava",
+     "الوريد الأجوف السفلي",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ],
+    [
+     1377,
+     1190,
+     null,
+     "Right ventricle",
+     "البطين الأيمن",
+     "Radiopaedia 40794 (annotation, Craig Hacking)"
+    ]
+   ],
    "pos": {
     "patient": [
      "Erect, left side against the IR, arms raised above the head, midcoronal plane perpendicular to the IR.",
@@ -1546,17 +1683,66 @@
   {
    "id": "skull-pa",
    "region": "head",
-   "img": "img/xray/hd/skull-pa.jpg",
-   "w": 1693,
-   "h": 1856,
-   "en": "Skull — PA",
-   "ar": "الجمجمة — خلفي أمامي",
+   "img": "img/xray/src/skull-frontal-hellerhoff.jpg",
+   "w": 678,
+   "h": 962,
+   "en": "Skull — frontal (source image: AP)",
+   "ar": "الجمجمة — أمامي (الصورة المصدر AP)",
    "credit": [
-    "Case courtesy of Mohd Radhwan Bin Abidin, Radiopaedia.org, rID: 150811",
-    "CC BY-NC-SA 3.0",
-    "https://radiopaedia.org/cases/150811"
+    "Hellerhoff",
+    "CC BY-SA 3.0",
+    "https://commons.wikimedia.org/wiki/File:NNH_im_Roentgen_frontal_Annotation.png"
    ],
-   "pts": [],
+   "pts": [
+    [
+     287,
+     432,
+     "frontal-bone",
+     "Frontal sinus",
+     "الجيب الجبهي",
+     "Hellerhoff, Wikimedia «NNH im Roentgen frontal Annotation.png» (colour region centre)"
+    ],
+    [
+     270,
+     540,
+     "ethmoid-bone",
+     "Ethmoidal air cells",
+     "الخلايا الغربالية (الجيوب الغربالية)",
+     "Hellerhoff, Wikimedia «NNH im Roentgen frontal Annotation.png» (colour region centre)"
+    ],
+    [
+     344,
+     540,
+     "sphenoid-bone",
+     "Sphenoidal sinus",
+     "الجيب الوتدي",
+     "Hellerhoff, Wikimedia «NNH im Roentgen frontal Annotation.png» (colour region centre)"
+    ],
+    [
+     222,
+     658,
+     "maxilla-right",
+     "Maxillary sinus",
+     "الجيب الفكي",
+     "Hellerhoff, Wikimedia «NNH im Roentgen frontal Annotation.png» (colour region centre)"
+    ],
+    [
+     304,
+     648,
+     null,
+     "Nasal cavity",
+     "التجويف الأنفي",
+     "Hellerhoff, Wikimedia «NNH im Roentgen frontal Annotation.png» (colour region centre)"
+    ],
+    [
+     77,
+     588,
+     "temporal-bone-right",
+     "Mastoid air cells",
+     "الخلايا الخشائية",
+     "Hellerhoff, Wikimedia «NNH im Roentgen frontal Annotation.png» (colour region centre)"
+    ]
+   ],
    "pos": {
     "patient": [
      "Prone or erect, forehead and nose touching the IR; orbitomeatal line (OML) perpendicular to the IR; no rotation.",
@@ -1612,17 +1798,50 @@
   {
    "id": "facial-om",
    "region": "head",
-   "img": "img/xray/hd/facial-om.jpg",
-   "w": 1600,
-   "h": 1536,
-   "en": "Facial bones — occipitomental (Waters)",
-   "ar": "عظام الوجه — قذالي ذقني (ووترز)",
+   "img": "img/xray/src/facial-om-rp220490.jpg",
+   "w": 570,
+   "h": 630,
+   "en": "Paranasal sinuses — occipitomental (OM)",
+   "ar": "الجيوب الأنفية — قذالي ذقني (OM)",
    "credit": [
-    "Case courtesy of Bruno Di Muzio, Radiopaedia.org, rID: 48270",
+    "Case courtesy of Dalia Ibrahim, Radiopaedia.org, rID: 220490",
     "CC BY-NC-SA 3.0",
-    "https://radiopaedia.org/cases/48270"
+    "https://radiopaedia.org/cases/220490"
    ],
-   "pts": [],
+   "pts": [
+    [
+     205,
+     153,
+     "frontal-bone",
+     "Frontal sinus (right)",
+     "الجيب الجبهي (يمين)",
+     "Radiopaedia 220490 (annotation, Dalia Ibrahim)"
+    ],
+    [
+     392,
+     172,
+     "frontal-bone",
+     "Frontal sinus (left)",
+     "الجيب الجبهي (يسار)",
+     "Radiopaedia 220490 (annotation, Dalia Ibrahim)"
+    ],
+    [
+     176,
+     324,
+     "maxilla-right",
+     "Maxillary sinus (right)",
+     "الجيب الفكي (يمين)",
+     "Radiopaedia 220490 (annotation, Dalia Ibrahim)"
+    ],
+    [
+     405,
+     328,
+     "maxilla-left",
+     "Maxillary sinus (left)",
+     "الجيب الفكي (يسار)",
+     "Radiopaedia 220490 (annotation, Dalia Ibrahim)"
+    ]
+   ],
    "pos": {
     "patient": [
      "Erect or prone, chin on the IR; orbitomeatal line at 37° to the IR (mentomeatal line perpendicular).",
