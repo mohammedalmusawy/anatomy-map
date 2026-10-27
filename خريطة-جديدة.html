@@ -59,6 +59,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
 .pick .b{background:var(--bone)}.pick .m{background:var(--muscle);color:#fff}
 .pick .ic{font-size:30px;display:block}.pick b{display:block;font-size:17px;margin-top:4px}
 .pick .en{display:block;font-size:13px;opacity:.75}
+.pick.three{grid-template-columns:1fr 1fr 1fr}.pick .o{background:#e7b3a8}
 
 /* صفحة الدرس */
 .top{display:flex;align-items:center;gap:10px}
@@ -218,7 +219,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
           <path class="rg live pulse" data-r="foot" d="M79 395h17l5 13c0 3-2 4-5 4H76c-3 0-4-2-3-5z"/>
         </g>
       </svg>
-      <div class="legend"><span><i style="background:var(--accent)"></i>متاح الآن</span><span><i style="background:var(--body)"></i>قريبًا</span></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>كل الأجزاء متاحة</span></div>
     </div>
     <div class="chips" id="chips"></div>
   </section>
@@ -232,6 +233,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
     <div class="tabs" id="tabs">
       <button data-k="bones">🦴 العظام</button>
       <button data-k="muscles">💪 العضلات</button>
+      <button data-k="organs" hidden>🫁 الأحشاء</button>
     </div>
     <div class="modes" id="modes">
       <button data-m="3d">🧊 مجسّم</button>
@@ -257,6 +259,8 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
           <button data-l="sup"><i style="background:#c4402f"></i>سطحية</button>
           <button data-l="mid"><i style="background:#d0623f"></i>وسطى</button>
           <button data-l="deep"><i style="background:#9e3328"></i>عميقة</button>
+          <button data-l="organ" hidden><i style="background:#e3a88f"></i>داخل الصفاق</button>
+          <button data-l="retro" hidden><i style="background:#a2493c"></i>خلف الصفاق</button>
           <button data-l="bone"><i style="background:#e6dcc6"></i>عظام</button>
           <div class="peel"><button id="peel-out" title="شيل طبقة">−</button><button id="peel-in" title="رجّع طبقة">+</button></div>
         </div>
@@ -326,6 +330,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
     <div class="pick">
       <button class="b" data-k="bones"><span class="ic">🦴</span><b>العظام</b><span class="en">Bones</span></button>
       <button class="m" data-k="muscles"><span class="ic">💪</span><b>العضلات</b><span class="en">Muscles</span></button>
+      <button class="o" data-k="organs" id="pick-o" hidden><span class="ic">🫁</span><b>الأحشاء</b><span class="en">Organs</span></button>
     </div>
   </div>
 </div>
@@ -356,7 +361,10 @@ const CREDIT = {
   "gray115": ["Henry Vandyke Carter, Gray's Anatomy (1918)", "Public domain", "https://commons.wikimedia.org/wiki/File:Gray115.png"],
   "1119": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1119_Muscles_that_Move_the_Humerus.jpg"],
   "705": ["OpenStax College, Anatomy & Physiology", "CC BY 3.0", "https://commons.wikimedia.org/wiki/File:705_Lateral_View_of_Skull-01.jpg"],
-  "1106": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1106_Front_and_Side_Views_of_the_Muscles_of_Facial_Expressions.jpg"]
+  "1106": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1106_Front_and_Side_Views_of_the_Muscles_of_Facial_Expressions.jpg"],
+  "gray1220": ["Henry Vandyke Carter, Gray's Anatomy (1918)", "Public domain", "https://commons.wikimedia.org/wiki/File:Gray1220.png"],
+  "1112": ["OpenStax, Anatomy & Physiology", "CC BY 4.0", "https://commons.wikimedia.org/wiki/File:1112_Muscles_of_the_Abdomen.jpg"],
+  "proj": ["Mikael Häggström", "Public domain", "https://commons.wikimedia.org/wiki/File:Surface_projections_of_the_organs_of_the_trunk.png"]
 };
 // كل التأشيرات منقولة من الرسم نفسه، والترجمة العربية بجنبها
 const REGIONS = {
@@ -523,10 +531,39 @@ const REGIONS = {
         ["عضلات تعابير الوجه (من الرسم)", [["Epicranial aponeurosis","السفاق القحفي"],["Occipitofrontalis (frontal belly)","القذالية الجبهية (البطن الجبهي)"],["Occipitofrontalis (occipital belly)","القذالية الجبهية (البطن القذالي)"],["Corrugator supercilii","المغضّنة للحاجب"],["Orbicularis oculi","الدويرية العينية"],["Orbicularis oris","الدويرية الفموية"],["Buccinator","المبوّقة (عضلة الخد)"]]]
       ]}
   }
+  ,abdomen: { ar: "البطن", en: "Abdomen",
+    bones: { img: "img/extra/abdomen-bones.png", src: "gray1220",
+      note: "عظام البطن هي «الإطار» اللي نقرا عليه أشعة البطن: الفقرات القطنية الخمس بالنص، والأضلاع 10–12 فوق، وجناحا الحرقفة والعجز تحت. " +
+        "مستويات مهمة: <b>المستوى البوابي</b> (<span class='en'>Transpyloric plane</span>) بمستوى L1 — يمر بالبوّاب وسرة الكليتين ورأس البنكرياس؛ و<b>مستوى ما فوق العرفين</b> (<span class='en'>Supracristal</span>) بمستوى L4 — يفيد بعدّ الفقرات وتفرّع الأبهر؛ " +
+        "و<b>المستوى بين الحديبتين</b> (<span class='en'>Transtubercular</span>) بمستوى L5. البطن ينقسم لتسع مناطق (بالرسم) أو لأربعة أرباع بخطّين يعبرون السرة. الناتئ المستعرض للفقرة L3 هو الأطول، والحالب يمشي فوق أطراف النواتئ المستعرضة.",
+      groups: [
+        ["المناطق التسع (من الرسم)", [["Hypochondriac (right / left)","المراقّية (يمين / يسار)"],["Epigastric","الشرسوفية (فوق المعدة)"],["Lumbar (right / left)","القطنية (الخاصرة) (يمين / يسار)"],["Umbilical","السرّية"],["Iliac (right / left)","الحرقفية (يمين / يسار)"],["Hypogastric","الخثلية (تحت المعدة)"]]],
+        ["المستويات والخطوط", [["Transpyloric plane (L1)","المستوى البوابي (L1)"],["Transtubercular plane (L5)","المستوى بين الحديبتين (L5)"],["Left lateral line","الخط الجانبي الأيسر"],["Lateral sternal line","الخط القصي الجانبي"],["Parasternal line","الخط جنب القص"],["Mammary line","خط الثدي"]]],
+        ["عظام الإطار بالمجسّم", [["Lumbar vertebrae L1–L5","الفقرات القطنية L1–L5"],["Ribs 10–12","الأضلاع 10–12"],["Iliac crest","العرف الحرقفي"],["Sacrum","العجز"]]]
+      ]},
+    muscles: { img: "img/extra/abdomen-muscles.jpg", src: "1112",
+      note: "جدار البطن الأمامي من برا للداخل: المائلة الظاهرة ← المائلة الباطنة ← المستعرضة البطنية، والمستقيمة البطنية بالنص داخل غمدها. " +
+        "الجدار الخلفي: <b>القطنية الكبرى</b> (<span class='en'>Psoas major</span>) جنب الفقرات، والمربعة القطنية لبرّاها، والحرقفية بالحفرة الحرقفية. بأشعة البطن <b>حافة العضلة القطنية</b> تبين بسبب الدهن حواليها؛ " +
+        "اختفاؤها بجهة وحدة ممكن يعني سائل أو نزف أو التهاب خلف الصفاق. مصدر المجسّم (BodyParts3D) بيه المائلة الظاهرة والقطنية الكبرى والحرقفية والحجاب الحاجز بس، فالباقي بالرسم.",
+      groups: [
+        ["جدار البطن الأمامي (a)", [["External oblique","المائلة الظاهرة"],["Internal oblique","المائلة الباطنة"],["Aponeurosis of internal oblique","سفاق المائلة الباطنة"],["Transversus abdominis","المستعرضة البطنية"],["Rectus abdominis (enclosed within rectus sheath)","المستقيمة البطنية (داخل غمدها)"],["Rectus sheath","غمد المستقيمة"],["Tendinous intersections","التقاطعات الوترية"],["Linea alba","الخط الأبيض"]]],
+        ["جدار البطن الخلفي (b)", [["Psoas major","القطنية الكبرى"],["Quadratus lumborum","المربعة القطنية"],["Iliacus","الحرقفية"],["Ilia of hip bones","حرقفتا عظمي الورك"],["Sacrum","العجز"]]],
+        ["عضلات مجاورة بالرسم", [["Pectoralis major","الصدرية الكبرى"],["Latissimus dorsi","العريضة الظهرية"],["Anterior serratus muscles","المسنّنة الأمامية"]]]
+      ]},
+    organs: { img: "img/extra/abdomen-organs.jpg", src: "proj",
+      note: "إسقاط الأحشاء على العمود والأضلاع — هذا اللي يحتاجه طالب الأشعة حتى يعرف شنو يبين وين بأشعة البطن. <b>داخل الصفاق</b>: الكبد والمرارة والمعدة والطحال والصائم واللفائفي والقولون المستعرض. " +
+        "<b>خلف الصفاق</b>: الاثنا عشري (أغلبه) والبنكرياس والقولون الصاعد والنازل والكليتان والغدتان الكظريتان والحالبان والأبهر والأجوف السفلي. الكلية اليمنى أوطأ من اليسرى بسبب الكبد، وسرة الكليتين على المستوى البوابي (L1). " +
+        "نمط الغاز الطبيعي: غاز بالمعدة والقولون والمستقيم، وشوية بالأمعاء الدقيقة (قاعدة 3–6–9 سم). القولون السيني والأعور مو موجودين بمصدر المجسّم، فتبين منطقة الأعور بالوصل اللفائفي الأعوري.",
+      groups: [
+        ["من الرسم", [["Liver","الكبد"],["Gallbladder","المرارة"],["Stomach","المعدة"],["Spleen","الطحال"],["Pancreas","البنكرياس"],["Celiac artery","الجذع البطني (الشريان الزلاقي)"],["Right kidney","الكلية اليمنى"],["Left kidney","الكلية اليسرى"],["Urinary bladder","المثانة البولية"]]],
+        ["معالم سطحية", [["Transpyloric plane","المستوى البوابي"],["Costal margin","الحافة الضلعية"],["Navel","السرة"],["McBurney's point","نقطة ماكبرني"],["Anterior superior iliac spine","الشوكة الحرقفية الأمامية العلوية"],["Inguinal ligament","الرباط الإربي"]]],
+        ["مستويات الفقرات", [["Middle of vertebral body","منتصف جسم الفقرة"],["Palpable vertebral spinous process","الناتئ الشوكي المجسوس"]]]
+      ]}
+  }
 };
 const SOON = {};
 // مناطق بيها أشعة بس (لحد ما ينضاف مجسّمها): تفتح الدرس على الأشعة مباشرة
-const XONLY = {abdomen:{ar:"البطن",en:"Abdomen"}};
+const XONLY = {};
 
 // النص الثاني من الجسم: نسخة معكوسة من نفس المناطق (حتى يبقى الضغط عليها شغّال)
 (() => { const h=document.getElementById("half"), m=h.cloneNode(true); m.removeAttribute("id");
@@ -542,6 +579,7 @@ function toast(t){ const e=$("toast"); e.textContent=t; e.classList.add("on"); c
 function haptic(){ try{ tg && tg.HapticFeedback.selectionChanged(); }catch(e){} }
 
 function openSheet(r){
+  const hasO=!!REGIONS[r].organs; $("pick-o").hidden=!hasO; document.querySelector(".pick").classList.toggle("three",hasO);
   cur=r; $("s-title").textContent=REGIONS[r].ar; $("s-en").textContent=REGIONS[r].en;
   document.querySelectorAll(".rg").forEach(p=>p.classList.toggle("sel",p.dataset.r===r));
   $("sheet").classList.add("open"); haptic();
@@ -603,11 +641,17 @@ const PHOTOS = {
     ["extra/skull-pterion","Skull — lateral view; the box marks the pterion","الجمجمة — منظر جانبي؛ المربع يأشّر البتيريون","MAKY.OREL · CC0","Cranium_-_pterion.jpg"],
     ["extra/skull-lat","Skull (calvaria and face) — lateral view showing the sutures","الجمجمة — منظر جانبي يبين الدروز","MAKY.OREL · CC0","Cranium_-_lateral_view.jpg"],
     ["extra/mandible-lat","Mandible — lateral view (condylar and coronoid processes, mental foramen)","الفك السفلي — منظر جانبي (الناتئ اللقمي والإكليلي والثقبة الذقنية)","MAKY.OREL · CC0","Cranium_-_mandibula_(lateral_view).jpg"]
+  ],
+  abdomen: [
+    ["extra/l4-vert-sup","L4 vertebra — superior view: kidney-shaped body, short transverse processes","الفقرة L4 — منظر علوي: جسم بشكل الكلية ونواتئ مستعرضة","MAKY.OREL · CC0","Vertebra_-_lumbales_(superior).jpg"],
+    ["lumbar-vert-sup","Lumbar vertebra — superior view","فقرة قطنية — منظر علوي","MAKY.OREL · CC0","Vertebra_-_lumbales_(superior_view).jpg"],
+    ["extra/ribs-facets","Ribs — heads with their articular facets (the lower ribs frame the upper abdomen)","أضلاع — رؤوسها ووجيهاتها المفصلية (الأضلاع السفلى تحدّ أعلى البطن)","MAKY.OREL · CC0","Costae_-_articular_facets.jpg"],
+    ["extra/pelvis-front","Bony pelvis — iliac crests and sacrum (the lower frame of an abdominal X-ray)","الحوض العظمي — العرفان الحرقفيان والعجز (الإطار السفلي لأشعة البطن)","MAKY.OREL · CC0","Pelvis_-_os_coxae,_os_sacrum_(frontal_view).jpg"]
   ]
 };
 const GRP = {bone:"العظام",membrane:"الأغشية","carpal-p":"عظام الرسغ — الصف الداني","carpal-d":"عظام الرسغ — الصف القاصي",
   metacarpal:"عظام المشط (Metacarpals)",phalanx:"السُّلاميات (Phalanges)",sup:"العضلات السطحية",mid:"العضلات الوسطى",deep:"العضلات العميقة",
-  thenar:"بارزة الإبهام (Thenar)",cervical:"الفقرات الرقبية",thoracic:"الفقرات الصدرية",lumbar:"الفقرات القطنية",sacral:"العجز",disc:"الأقراص بين الفقرات",hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى","pelvic-floor":"قاع الحوض (Pelvic floor)","pelvic-wall":"جدار الحوض (Pelvic wall)",iliopsoas:"الحرقفية القطنية (Iliopsoas)",sternum:"القص (Sternum)","rib-true":"الأضلاع الحقيقية (1–7)","rib-false":"الأضلاع الكاذبة (8–10)","rib-floating":"الأضلاع العائمة (11–12)",cartilage:"الغضاريف الضلعية",girdle:"حزام الكتف (الترقوة ولوح الكتف)",cranial:"عظام القحف (8)",facial:"عظام الوجه (14)",hyoid:"العظم اللامي",neck:"عضلات الرقبة السطحية"};
+  thenar:"بارزة الإبهام (Thenar)",cervical:"الفقرات الرقبية",thoracic:"الفقرات الصدرية",lumbar:"الفقرات القطنية",sacral:"العجز",disc:"الأقراص بين الفقرات",hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات الوسطى","pelvic-floor":"قاع الحوض (Pelvic floor)","pelvic-wall":"جدار الحوض (Pelvic wall)",iliopsoas:"الحرقفية القطنية (Iliopsoas)",sternum:"القص (Sternum)","rib-true":"الأضلاع الحقيقية (1–7)","rib-false":"الأضلاع الكاذبة (8–10)","rib-floating":"الأضلاع العائمة (11–12)",cartilage:"الغضاريف الضلعية",girdle:"حزام الكتف (الترقوة ولوح الكتف)",cranial:"عظام القحف (8)",facial:"عظام الوجه (14)",hyoid:"العظم اللامي",neck:"عضلات الرقبة السطحية","abd-wall":"جدار البطن الأمامي",organ:"الأحشاء داخل الصفاق (Intraperitoneal)",retro:"الأحشاء خلف الصفاق (Retroperitoneal)"};
 let mode="3d";
 
 function termList(groups, pick){
@@ -659,7 +703,7 @@ function xInfo(i,v){
   const p=v.pts[i];
   el.innerHTML=`<div><b class="en">${p[3]}</b><span>${p[4]}</span></div>`+(p[2]?`<button data-k="${p[2]}">🧊 شوفه بالمجسّم</button>`:"");
   el.classList.add("on");
-  const b=el.querySelector("button"); if(b) b.onclick=async()=>{ await lesson(cur,"bones","3d"); window.Studio.select(b.dataset.k,true); };
+  const b=el.querySelector("button"); if(b) b.onclick=async()=>{ const [tk,pk]=b.dataset.k.includes(":")?b.dataset.k.split(":"):["bones",b.dataset.k]; await lesson(cur,tk,"3d"); window.Studio.reveal(pk); };
 }
 // اختبر نفسك: نخفي الأسماء، ونأشّر نقطة، وتختار اسمها من أربعة
 function xAsk(v){
@@ -694,12 +738,13 @@ addEventListener("resize",()=>{ if(mode==="xray"&&XRAY) xDots(XRAY.views.find(x=
 async function lesson(r,k,m){
   const xo=!!XONLY[r]; if (xo){ k="bones"; m="xray"; }
   cur=r; kind=k; mode=m||mode; const R=REGIONS[r]||XONLY[r], L=R[k]||{}, c=CREDIT[L.src];
-  if ((mode==="photo"||mode==="xray") && k!=="bones") mode="3d";
-  $("l-title").textContent=R.ar+" · "+(xo?"الأشعة":k==="bones"?"العظام":"العضلات");
-  $("l-en").textContent=R.en+" — "+(xo?"Radiographs":k==="bones"?"Bones":"Muscles");
+  if ((mode==="photo"&&k!=="bones")||(mode==="xray"&&k==="muscles")) mode="3d";
+  $("l-title").textContent=R.ar+" · "+(xo?"الأشعة":k==="bones"?"العظام":k==="organs"?"الأحشاء":"العضلات");
+  $("l-en").textContent=R.en+" — "+(xo?"Radiographs":k==="bones"?"Bones":k==="organs"?"Organs":"Muscles");
   $("tabs").style.display=$("modes").style.display=xo?"none":"";
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
-  document.querySelectorAll("#modes button").forEach(b=>{ b.classList.toggle("on",b.dataset.m===mode); b.hidden=(xo&&b.dataset.m!=="xray")||((b.dataset.m==="photo"||b.dataset.m==="xray")&&k!=="bones"); });
+  $("tabs").querySelector('[data-k="organs"]').hidden=!R.organs;
+  document.querySelectorAll("#modes button").forEach(b=>{ b.classList.toggle("on",b.dataset.m===mode); b.hidden=(xo&&b.dataset.m!=="xray")||((b.dataset.m==="photo"&&k!=="bones")||(b.dataset.m==="xray"&&k==="muscles")); });
   document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id==="p-"+mode));
   $("l-note").innerHTML=L.note&&mode!=="3d"?`<div class="note">${L.note}</div>`:"";
   show("v-lesson");
@@ -778,10 +823,10 @@ const CARPAL={scaphoid:"#e8b04a",lunate:"#7fb3d5",triquetrum:"#9ccc65",pisiform:
   // عظام رصغ القدم السبعة كل وحدة بلون
   talus:"#e8b04a",calcaneus:"#7fb3d5",navicular:"#9ccc65",cuboid:"#f48fb1","medial-cuneiform":"#ffb74d","intermediate-cuneiform":"#4db6ac","lateral-cuneiform":"#ba68c8"};
 const MUSCLE={sup:"#c4402f",mid:"#d0623f",deep:"#9e3328"};
-const ORDER=["sup","mid","deep","bone"];               // من الخارج للداخل
-const LNAME={sup:"سطحية",mid:"وسطى",deep:"عميقة",bone:"عظم"};
-const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم",spine:"العمود الفقري",pelvis:"الحوض",chest:"الصدر",head:"الرأس"};
-const colorOf=p=>p.kind==="bone"?(CARPAL[p.key]||BONE[p.grp]||BONE.bone):MUSCLE[p.layer];
+const ORDER=["sup","mid","organ","retro","deep","bone"];               // من الخارج للداخل
+const LNAME={sup:"سطحية",mid:"وسطى",deep:"عميقة",bone:"عظم",organ:"داخل الصفاق",retro:"خلف الصفاق"};
+const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم",spine:"العمود الفقري",pelvis:"الحوض",chest:"الصدر",head:"الرأس",abdomen:"البطن"};
+const colorOf=p=>p.kind==="bone"?(CARPAL[p.key]||BONE[p.grp]||BONE.bone):p.kind==="organ"?p.tint:MUSCLE[p.layer];
 
 // ── المشهد
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
@@ -799,7 +844,7 @@ controls.enableDamping=true; controls.enablePan=true; controls.screenSpacePannin
 
 // ── الحالة
 let parts=[], byKey={}, info={}, meshes={}, ready=null;
-const layerOn={sup:true,mid:true,deep:true,bone:true};
+const layerOn={sup:true,mid:true,deep:true,bone:true,organ:true,retro:true};
 const hidden=new Set(), faded=new Set();
 let isolated=null, selected=null, region=null, kindFocus="muscle", showLabels=true, onPick=null, back=false;
 let quiz=null;
@@ -842,10 +887,11 @@ function card(p){
   const c=$id("card");
   if(!p){ c.classList.remove("on"); return; }
   $id("c-en").textContent=p.en; $id("c-ar").textContent=p.ar;
-  $id("c-chip").textContent=(RNAME[p.region]||"")+" · "+(p.kind==="bone"?"عظم":"عضلة "+LNAME[p.layer]);
+  $id("c-chip").textContent=(RNAME[p.region]||"")+" · "+(p.kind==="bone"?"عظم":p.kind==="organ"?"أحشاء · "+LNAME[p.layer]:"عضلة "+LNAME[p.layer]);
   const I=info[p.key]||{}, row=(t,v)=>v?`<dt>${t}</dt><dd><b class="en">${v[0]}</b><span>${v[1]}</span></dd>`:"";
   $id("c-info").innerHTML=row("المنشأ · Origin",I.o)+row("الارتكاز · Insertion",I.i)+row("العمل · Action",I.a)+row("العصب · Nerve",I.n)
-    +row("النوع · Type",I.t)+row("يتمفصل مع · Articulates with",I.j);
+    +row("النوع · Type",I.t)+row("يتمفصل مع · Articulates with",I.j)
+    +row("الموقع · Location",I.loc)+row("المستوى الفقري · Level",I.lv)+row("العلاقات · Relations",I.rel)+row("بالأشعة · On imaging",I.xr);
   c.classList.add("on");
 }
 function select(k, focus=false){
@@ -895,7 +941,7 @@ function layout(){
 labelsEl.addEventListener("click",e=>{ const k=e.target.dataset&&e.target.dataset.k; if(k) select(selected===k?null:k); });
 
 // ── التحميل: كل طرف بملف (العلوي والسفلي)، ونحمّل اللي نحتاجه بس ونخزّنه
-const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb",spine:"spine",pelvis:"pelvis",chest:"chest",head:"head"};
+const MODEL_OF={arm:"upper-limb",forearm:"upper-limb",hand:"upper-limb",thigh:"lower-limb",leg:"lower-limb",foot:"lower-limb",spine:"spine",pelvis:"pelvis",chest:"chest",head:"head",abdomen:"abdomen"};
 const models={}, infoReady=Promise.all([fetch("data/info.json").then(r=>r.json()),fetch("data/info-extra.json").then(r=>r.json()).catch(()=>({}))]).then(([a,b])=>info={...b,...a});
 let current=null;
 async function loadModel(name){
@@ -919,10 +965,11 @@ async function use(name){
 
 // ── فتح الاستوديو على منطقة: العظام = طبقة العظم بس، العضلات = كل الطبقات
 async function open(r, kind, cb){
-  onPick=cb; region=r; kindFocus=kind==="bones"?"bone":"muscle";
+  onPick=cb; region=r; kindFocus=kind==="bones"?"bone":kind==="organs"?"organ":"muscle";
   await use(MODEL_OF[r]); fit();
   hidden.clear(); faded.clear(); isolated=null; selected=null; endQuiz(); card(null);
-  Object.assign(layerOn, kind==="bones"?{sup:false,mid:false,deep:false,bone:true}:{sup:true,mid:true,deep:true,bone:true});
+  Object.assign(layerOn, kind==="bones"?{sup:false,mid:false,deep:false,organ:false,retro:false,bone:true}:kind==="organs"?{sup:false,mid:false,deep:false,organ:true,retro:true,bone:true}:{sup:true,mid:true,deep:true,organ:false,retro:false,bone:true});
+  document.querySelectorAll('#layers>button[data-l="organ"],#layers>button[data-l="retro"]').forEach(b=>b.hidden=!parts.some(p=>p.layer===b.dataset.l));
   showLabels=true; $id("t-labels").classList.add("on");
   // عضلات الظهر تنشاف من ورا
   paint(); frame(regionKeys(), r==="spine"&&kindFocus==="muscle");
@@ -932,8 +979,8 @@ async function open(r, kind, cb){
 // ── الطبقات والتقشير
 $id("layers-btn").addEventListener("click",()=>$id("layers").classList.toggle("open"));
 document.querySelectorAll("#layers>button").forEach(b=>b.addEventListener("click",()=>{ layerOn[b.dataset.l]=!layerOn[b.dataset.l]; paint(); }));
-$id("peel-out").addEventListener("click",()=>{ const l=ORDER.find(x=>x!=="bone"&&layerOn[x]); if(l){ layerOn[l]=false; paint(); } });
-$id("peel-in").addEventListener("click",()=>{ const l=[...ORDER].reverse().find(x=>x!=="bone"&&!layerOn[x]); if(l){ layerOn[l]=true; paint(); } });
+$id("peel-out").addEventListener("click",()=>{ const l=ORDER.find(x=>x!=="bone"&&layerOn[x]&&parts.some(p=>p.layer===x)); if(l){ layerOn[l]=false; paint(); } });
+$id("peel-in").addEventListener("click",()=>{ const l=[...ORDER].reverse().find(x=>x!=="bone"&&!layerOn[x]&&parts.some(p=>p.layer===x)); if(l){ layerOn[l]=true; paint(); } });
 
 // ── أدوات الجزء
 document.querySelectorAll(".acts button").forEach(b=>b.addEventListener("click",()=>{
@@ -973,7 +1020,7 @@ $id("results").addEventListener("click",e=>{
   $id("results").classList.remove("on"); $id("q").value=""; $id("q").blur();
   const p=byKey[k]; region=p.region; layerOn[p.layer]=true; hidden.delete(k);
   // نشيل الطبقات اللي فوگه حتى يبين
-  if(p.kind==="bone") ["sup","mid","deep"].forEach(l=>layerOn[l]=false);
+  if(p.kind==="bone") ["sup","mid","organ","retro","deep"].forEach(l=>layerOn[l]=false);
   else ORDER.slice(0,ORDER.indexOf(p.layer)).forEach(l=>layerOn[l]=false);
   select(k,true); stage.scrollIntoView({behavior:"smooth",block:"center"});
 });
@@ -1005,7 +1052,11 @@ $id("q-opts").addEventListener("click",e=>{
 
 new ResizeObserver(fit).observe(stage);
 renderer.setAnimationLoop(()=>{ controls.update(); renderer.render(scene,camera); layout(); });
-window.Studio={open,select,color:colorOf};
+function reveal(k){ const p=byKey[k]; if(!p) return; layerOn[p.layer]=true; hidden.delete(k);
+  if(p.kind==="bone") ["sup","mid","organ","retro","deep"].forEach(l=>layerOn[l]=false);
+  else ORDER.slice(0,ORDER.indexOf(p.layer)).forEach(l=>layerOn[l]=false);
+  select(k,true); }
+window.Studio={open,select,reveal,color:colorOf};
 window.dispatchEvent(new Event("studio-ready"));
 </script>
 </body>

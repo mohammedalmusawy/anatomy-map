@@ -34,5 +34,25 @@
   "page": "https://commons.wikimedia.org/wiki/File:1106_Front_and_Side_Views_of_the_Muscles_of_Facial_Expressions.jpg",
   "license": "CC BY 4.0",
   "artist": "OpenStax"
+ },
+ "abdomen-bones": {
+  "file": "File:Gray1220.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Gray1220.png",
+  "license": "Public domain",
+  "artist": "Henry Vandyke Carter (Gray's Anatomy, 1918)"
+ },
+ "abdomen-muscles": {
+  "file": "File:1112 Muscles of the Abdomen.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1112_Muscles_of_the_Abdomen.jpg",
+  "license": "CC BY 4.0",
+  "artist": "OpenStax",
+  "note": "CC BY used because no public-domain figure labels all four anterior-wall muscles plus psoas and quadratus lumborum."
+ },
+ "abdomen-organs": {
+  "file": "File:Surface projections of the organs of the trunk.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Surface_projections_of_the_organs_of_the_trunk.png",
+  "license": "Public domain",
+  "artist": "Mikael Häggström",
+  "note": "Converted to JPEG."
  }
 }

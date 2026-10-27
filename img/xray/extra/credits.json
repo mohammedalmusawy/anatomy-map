@@ -16,5 +16,19 @@
   "page": "https://commons.wikimedia.org/wiki/File:Normal_posteroanterior_(PA)_chest_radiograph_(X-ray).jpg",
   "license": "CC0",
   "artist": "Mikael Häggström, M.D."
+ },
+ "abdomen-supine": {
+  "file": "Normal abdominal radiograph — Supine",
+  "page": "https://radiopaedia.org/cases/40900",
+  "license": "CC BY-NC-SA 3.0",
+  "artist": "Case courtesy of Craig Hacking, Radiopaedia.org, rID: 40900",
+  "note": "Resized (downscaled) to 2000 px wide and converted to greyscale JPEG; no other processing."
+ },
+ "abdomen-erect": {
+  "file": "Normal abdominal radiograph — Erect",
+  "page": "https://radiopaedia.org/cases/40900",
+  "license": "CC BY-NC-SA 3.0",
+  "artist": "Case courtesy of Craig Hacking, Radiopaedia.org, rID: 40900",
+  "note": "Resized (downscaled) to 2000 px wide and converted to greyscale JPEG; no other processing."
  }
 }

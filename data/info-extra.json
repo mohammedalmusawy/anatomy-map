@@ -1,5 +1,5 @@
 {
- "_note": "بطاقات إضافية لخريطة-جديدة.html (الحوض). تندمج فوق data/info.json بدون ما تغيّر أي مفتاح قديم؛ مفاتيح «-right» نسخة الجهة اليمنى.",
+ "_note": "بطاقات إضافية لخريطة-جديدة.html (الحوض). تندمج فوق data/info.json بدون ما تغيّر أي مفتاح قديم؛ مفاتيح «-right» نسخة الجهة اليمنى. Abdomen (27/10/2026, 2nd pass): organ cards use loc (location), lv (vertebral level), rel (relations) and xr (on imaging); also cards for carpals, tarsals, metacarpals, metatarsals and phalanges that had none.",
  "hip-bone-right": {
   "t": [
    "Flat bone formed by ilium, ischium and pubis",
@@ -1256,6 +1256,986 @@
   "n": [
    "Cervical branch of the facial nerve (CN VII)",
    "الفرع العنقي للعصب الوجهي (العصب القحفي 7)"
+  ]
+ },
+ "liver": {
+  "loc": [
+   "Right upper quadrant (right hypochondrium and epigastrium), under the right hemidiaphragm",
+   "الربع العلوي الأيمن (المراق الأيمن والشرسوفي)، تحت القبة اليمنى للحجاب"
+  ],
+  "lv": [
+   "Upper border ≈ T8–T9 (5th intercostal space); lower edge along the right costal margin",
+   "الحافة العليا ≈ T8–T9 (المسافة الضلعية الخامسة)؛ الحافة السفلى على طول الحافة الضلعية اليمنى"
+  ],
+  "rel": [
+   "Diaphragm above; gallbladder, right kidney, hepatic flexure and duodenum below; IVC behind",
+   "الحجاب فوگه؛ المرارة والكلية اليمنى والثنية الكبدية والاثنا عشري تحته؛ الأجوف السفلي خلفه"
+  ],
+  "xr": [
+   "Homogeneous soft-tissue density in the RUQ; its inferior edge can be seen against fat (enlarged if it reaches the iliac crest)",
+   "كثافة نسيج رخو متجانسة بالربع العلوي الأيمن؛ حافته السفلى تبين جنب الدهن (متضخم إذا وصل للعرف الحرقفي)"
+  ]
+ },
+ "gallbladder": {
+  "loc": [
+   "Gallbladder fossa on the undersurface of the liver",
+   "حفرة المرارة بالوجه السفلي للكبد"
+  ],
+  "lv": [
+   "Fundus at the tip of the right 9th costal cartilage (transpyloric plane, L1)",
+   "القاع عند طرف الغضروف الضلعي التاسع الأيمن (المستوى البوابي، L1)"
+  ],
+  "rel": [
+   "Liver above; duodenum and transverse colon below and medial",
+   "الكبد فوگها؛ الاثنا عشري والقولون المستعرض تحتها وللداخل"
+  ],
+  "xr": [
+   "Not visible normally; only ~10–15% of gallstones are radio-opaque. Ultrasound is the first test",
+   "ما تبين طبيعياً؛ بس ~10–15% من حصى المرارة تبين بالأشعة. السونار هو الفحص الأول"
+  ]
+ },
+ "stomach": {
+  "loc": [
+   "Left upper quadrant and epigastrium",
+   "الربع العلوي الأيسر والشرسوفي"
+  ],
+  "lv": [
+   "Gastro-oesophageal junction ≈ T11; pylorus on the transpyloric plane (L1)",
+   "الوصل المريئي المعدي ≈ T11؛ البوّاب على المستوى البوابي (L1)"
+  ],
+  "rel": [
+   "Left hemidiaphragm and spleen above-left; pancreas and left kidney behind (stomach bed); transverse colon below",
+   "القبة اليسرى والطحال فوگها ويسارها؛ البنكرياس والكلية اليسرى خلفها (سرير المعدة)؛ القولون المستعرض تحتها"
+  ],
+  "xr": [
+   "Gastric fundus gas under the left hemidiaphragm; on an erect film it shows an air–fluid level",
+   "غاز قاع المعدة تحت القبة اليسرى؛ بالأشعة الواقفة يبين بمستوى هواء–سائل"
+  ]
+ },
+ "spleen": {
+  "loc": [
+   "Left hypochondrium, behind the stomach",
+   "المراق الأيسر، خلف المعدة"
+  ],
+  "lv": [
+   "Along ribs 9–11 on the left (long axis along the 10th rib)",
+   "على طول الأضلاع 9–11 اليسرى (محوره الطويل على الضلع العاشر)"
+  ],
+  "rel": [
+   "Diaphragm and ribs 9–11 laterally; stomach in front; left kidney and splenic flexure below",
+   "الحجاب والأضلاع 9–11 من الجانب؛ المعدة گدّامه؛ الكلية اليسرى والثنية الطحالية تحته"
+  ],
+  "xr": [
+   "Soft-tissue density in the LUQ; a normal spleen does not project below the costal margin",
+   "كثافة نسيج رخو بالربع العلوي الأيسر؛ الطحال الطبيعي ما ينزل تحت الحافة الضلعية"
+  ]
+ },
+ "jejunum": {
+  "loc": [
+   "Mainly left upper and central abdomen",
+   "أغلبه بأعلى يسار ووسط البطن"
+  ],
+  "lv": [
+   "Starts at the duodenojejunal flexure (≈ L2, left of the spine)",
+   "يبدأ من الثنية الاثناعشرية الصائمية (≈ L2، يسار العمود)"
+  ],
+  "rel": [
+   "Suspended by the mesentery; transverse colon above, ileum below",
+   "معلّق بالمساريقا؛ القولون المستعرض فوگه واللفائفي تحته"
+  ],
+  "xr": [
+   "Normally little gas; dilated small bowel > 3 cm is abnormal. Its valvulae conniventes cross the full width of the loop",
+   "طبيعياً غاز قليل؛ قطر الأمعاء الدقيقة > 3 سم غير طبيعي. الطيّات الهلالية تعبر عرض العروة كله"
+  ]
+ },
+ "ileum": {
+  "loc": [
+   "Lower central abdomen and pelvis, ending in the right iliac fossa",
+   "أسفل وسط البطن والحوض، وينتهي بالحفرة الحرقفية اليمنى"
+  ],
+  "lv": [
+   "Ends at the ileocaecal valve (≈ L4–L5 level, right side)",
+   "ينتهي بالصمام اللفائفي الأعوري (≈ مستوى L4–L5، يمين)"
+  ],
+  "rel": [
+   "Jejunum above; bladder and pelvic organs below; caecum at its end",
+   "الصائم فوگه؛ المثانة وأعضاء الحوض تحته؛ الأعور بنهايته"
+  ],
+  "xr": [
+   "Thinner, fewer folds than jejunum (featureless); remember the 3–6–9 rule: small bowel 3 cm, colon 6 cm, caecum 9 cm",
+   "جداره أرق وطيّاته أقل من الصائم؛ تذكّر قاعدة 3–6–9: الدقيقة 3 سم، القولون 6 سم، الأعور 9 سم"
+  ]
+ },
+ "ileocecal-junction": {
+  "loc": [
+   "Right iliac fossa: ileum joins the caecum",
+   "الحفرة الحرقفية اليمنى: يلتقي اللفائفي بالأعور"
+  ],
+  "lv": [
+   "About the level of the right iliac crest to L5",
+   "تقريباً بمستوى العرف الحرقفي الأيمن إلى L5"
+  ],
+  "rel": [
+   "Iliacus and psoas behind; appendix hangs from the caecum below",
+   "الحرقفية والقطنية خلفه؛ الزائدة تتدلى من الأعور تحته"
+  ],
+  "xr": [
+   "The caecum usually contains gas and mottled faeces in the right iliac fossa; > 9 cm diameter is abnormal",
+   "الأعور عادةً بيه غاز وبراز مبرقش بالحفرة الحرقفية اليمنى؛ قطر > 9 سم غير طبيعي"
+  ]
+ },
+ "appendix": {
+  "loc": [
+   "Right iliac fossa, from the posteromedial wall of the caecum",
+   "الحفرة الحرقفية اليمنى، من الجدار الخلفي الإنسي للأعور"
+  ],
+  "lv": [
+   "Base under McBurney's point (⅓ of the way from the right ASIS to the umbilicus)",
+   "قاعدتها تحت نقطة ماكبرني (ثلث المسافة من الشوكة الحرقفية الأمامية العلوية اليمنى للسرة)"
+  ],
+  "rel": [
+   "Commonly retrocaecal; may hang into the pelvis",
+   "غالباً خلف الأعور؛ وممكن تتدلى للحوض"
+  ],
+  "xr": [
+   "Not seen on plain film; an appendicolith may be seen as a small calcified density. Ultrasound / CT for appendicitis",
+   "ما تبين بالأشعة العادية؛ ممكن تبين حصاة زائدة ككثافة متكلسة صغيرة. السونار أو المفراس للالتهاب"
+  ]
+ },
+ "transverse-colon": {
+  "loc": [
+   "Crosses the abdomen from the hepatic flexure (right) to the splenic flexure (left)",
+   "يعبر البطن من الثنية الكبدية (يمين) للثنية الطحالية (يسار)"
+  ],
+  "lv": [
+   "Hangs to about L3 (variable, lower when erect)",
+   "يتدلى لحوالي L3 (يتغيّر، وينزل أكثر بالوقوف)"
+  ],
+  "rel": [
+   "Stomach above; jejunum and ileum below; greater omentum hangs from it",
+   "المعدة فوگه؛ الصائم واللفائفي تحته؛ الثرب الكبير يتدلى منه"
+  ],
+  "xr": [
+   "Gas and faeces outline haustra (folds that do NOT cross the full width); the splenic flexure sits higher than the hepatic",
+   "الغاز والبراز يحددان الجيوب (طيّات ما تعبر العرض كله)؛ الثنية الطحالية أعلى من الكبدية"
+  ]
+ },
+ "duodenum": {
+  "loc": [
+   "C-shaped loop around the head of the pancreas, right of the midline",
+   "عروة بشكل حرف C حول رأس البنكرياس، يمين الخط الأوسط"
+  ],
+  "lv": [
+   "1st part L1, 2nd part L1–L3 (right of the spine), 3rd part crosses L3, 4th part ends at L2",
+   "الجزء الأول L1، الثاني L1–L3 (يمين العمود)، الثالث يعبر L3، الرابع ينتهي عند L2"
+  ],
+  "rel": [
+   "Mostly retroperitoneal; 3rd part between the aorta (behind) and the superior mesenteric artery (in front)",
+   "أغلبه خلف الصفاق؛ الجزء الثالث بين الأبهر (خلفه) والشريان المساريقي العلوي (گدّامه)"
+  ],
+  "xr": [
+   "Gas in the duodenal cap (bulb) may be seen right of L1; free air from a perforated ulcer collects under the diaphragm",
+   "ممكن يبين غاز بالبصلة الاثناعشرية يمين L1؛ الهواء الحر من قرحة مثقوبة يتجمع تحت الحجاب"
+  ]
+ },
+ "pancreas": {
+  "loc": [
+   "Retroperitoneal, across the posterior abdominal wall from the duodenum to the spleen",
+   "خلف الصفاق، يعبر جدار البطن الخلفي من الاثنا عشري للطحال"
+  ],
+  "lv": [
+   "Neck/body on the transpyloric plane (L1–L2)",
+   "العنق والجسم على المستوى البوابي (L1–L2)"
+  ],
+  "rel": [
+   "Head in the duodenal C-loop; behind the stomach; splenic vein behind; tail reaches the splenic hilum",
+   "الرأس بعروة الاثنا عشري؛ خلف المعدة؛ الوريد الطحالي خلفه؛ الذيل يوصل لسرة الطحال"
+  ],
+  "xr": [
+   "Not visible; calcifications across L1–L2 suggest chronic pancreatitis",
+   "ما يبين؛ التكلسات على مستوى L1–L2 تشير لالتهاب بنكرياس مزمن"
+  ]
+ },
+ "ascending-colon": {
+  "loc": [
+   "Right flank, from the caecum up to the hepatic flexure",
+   "الخاصرة اليمنى، من الأعور لحد الثنية الكبدية"
+  ],
+  "lv": [
+   "From about L5 up to L1–L2 (under the liver)",
+   "من حوالي L5 لحد L1–L2 (تحت الكبد)"
+  ],
+  "rel": [
+   "Secondarily retroperitoneal; lies on iliacus, quadratus lumborum and the right kidney",
+   "خلف الصفاق ثانوياً؛ يتمدد على الحرقفية والمربعة القطنية والكلية اليمنى"
+  ],
+  "xr": [
+   "Mottled faeces with gas bubbles in the right flank; haustral folds",
+   "براز مبرقش ويّا فقاعات غاز بالخاصرة اليمنى؛ طيّات الجيوب"
+  ]
+ },
+ "descending-colon": {
+  "loc": [
+   "Left flank, from the splenic flexure down to the sigmoid colon",
+   "الخاصرة اليسرى، من الثنية الطحالية نزولاً للقولون السيني"
+  ],
+  "lv": [
+   "From about T12–L1 down to the left iliac crest",
+   "من حوالي T12–L1 نزولاً للعرف الحرقفي الأيسر"
+  ],
+  "rel": [
+   "Secondarily retroperitoneal; lies on quadratus lumborum and the left kidney's lateral border",
+   "خلف الصفاق ثانوياً؛ يتمدد على المربعة القطنية والحافة الوحشية للكلية اليسرى"
+  ],
+  "xr": [
+   "Gas and faeces along the left flank; the sigmoid colon (not in this 3D source) continues into the pelvis",
+   "غاز وبراز على طول الخاصرة اليسرى؛ القولون السيني (مو موجود بهذا المجسّم) يكمل للحوض"
+  ]
+ },
+ "rectum": {
+  "loc": [
+   "Pelvis, in front of the sacrum and coccyx",
+   "الحوض، گدّام العجز والعصعص"
+  ],
+  "lv": [
+   "From S3 to the anorectal junction (tip of the coccyx)",
+   "من S3 لحد الوصل الشرجي المستقيمي (طرف العصعص)"
+  ],
+  "rel": [
+   "Sacrum behind; bladder (male) or uterus/vagina (female) in front",
+   "العجز خلفه؛ المثانة (ذكر) أو الرحم والمهبل (أنثى) گدّامه"
+  ],
+  "xr": [
+   "Rectal gas over the sacrum/pelvis is normal; it helps exclude complete large-bowel obstruction",
+   "غاز المستقيم فوق العجز والحوض طبيعي؛ يساعد ننفي الانسداد الكامل للأمعاء الغليظة"
+  ]
+ },
+ "kidney-right": {
+  "loc": [
+   "Retroperitoneal, right paravertebral gutter",
+   "خلف الصفاق، بالميزاب جنب العمود يمين"
+  ],
+  "lv": [
+   "About T12–L3 — lower than the left because of the liver; hilum at L1–L2",
+   "حوالي T12–L3 — أوطأ من اليسرى بسبب الكبد؛ السرة عند L1–L2"
+  ],
+  "rel": [
+   "Liver, duodenum (2nd part) and hepatic flexure in front; psoas, quadratus lumborum and the 12th rib behind",
+   "الكبد والاثنا عشري (الجزء الثاني) والثنية الكبدية گدّامها؛ القطنية والمربعة القطنية والضلع 12 خلفها"
+  ],
+  "xr": [
+   "Outline sometimes visible thanks to perirenal fat; length ≈ 3–3.5 vertebral bodies; look for stones along its line on a KUB",
+   "حدودها أحياناً تبين بسبب الدهن حول الكلية؛ طولها ≈ 3–3.5 أجسام فقرات؛ دوّر على حصى بمسارها بأشعة KUB"
+  ]
+ },
+ "kidney-left": {
+  "loc": [
+   "Retroperitoneal, left paravertebral gutter",
+   "خلف الصفاق، بالميزاب جنب العمود يسار"
+  ],
+  "lv": [
+   "About T11–L2/L3; the 12th rib crosses its upper pole",
+   "حوالي T11–L2/L3؛ الضلع 12 يعبر قطبها العلوي"
+  ],
+  "rel": [
+   "Stomach, pancreas, spleen, jejunum and descending colon in front; psoas, quadratus lumborum and ribs 11–12 behind",
+   "المعدة والبنكرياس والطحال والصائم والقولون النازل گدّامها؛ القطنية والمربعة القطنية والضلعان 11–12 خلفها"
+  ],
+  "xr": [
+   "Usually slightly higher than the right; the renal axis lies parallel to the psoas border",
+   "عادةً أعلى شوية من اليمنى؛ محور الكلية موازي لحافة العضلة القطنية"
+  ]
+ },
+ "adrenal-right": {
+  "loc": [
+   "On the upper pole of the right kidney (pyramidal)",
+   "فوق القطب العلوي للكلية اليمنى (هرمية)"
+  ],
+  "lv": [
+   "About T11–T12",
+   "حوالي T11–T12"
+  ],
+  "rel": [
+   "IVC in front-medially; liver laterally; right crus of the diaphragm behind",
+   "الأجوف السفلي گدّامها للداخل؛ الكبد من الجانب؛ الساق اليمنى للحجاب خلفها"
+  ],
+  "xr": [
+   "Not visible on plain film (calcification after haemorrhage/TB may be seen); CT/MRI to assess",
+   "ما تبين بالأشعة العادية (ممكن يبين تكلّس بعد نزف أو تدرّن)؛ المفراس والرنين للتقييم"
+  ]
+ },
+ "adrenal-left": {
+  "loc": [
+   "Medial to the upper pole of the left kidney (crescent-shaped)",
+   "إنسي القطب العلوي للكلية اليسرى (هلالية)"
+  ],
+  "lv": [
+   "About T11–L1",
+   "حوالي T11–L1"
+  ],
+  "rel": [
+   "Stomach and pancreas in front; left crus of the diaphragm medially; aorta medially",
+   "المعدة والبنكرياس گدّامها؛ الساق اليسرى للحجاب والأبهر من الداخل"
+  ],
+  "xr": [
+   "Not visible on plain film; CT/MRI to assess",
+   "ما تبين بالأشعة العادية؛ المفراس والرنين للتقييم"
+  ]
+ },
+ "ureter-right": {
+  "loc": [
+   "Retroperitoneal, from the renal pelvis down along the psoas to the bladder",
+   "خلف الصفاق، من حوض الكلية نزولاً على العضلة القطنية للمثانة"
+  ],
+  "lv": [
+   "Runs over the tips of the L2–L5 transverse processes, crosses the SI joint into the pelvis",
+   "يمشي فوق أطراف النواتئ المستعرضة L2–L5، ويعبر المفصل العجزي الحرقفي للحوض"
+  ],
+  "rel": [
+   "On psoas major; crosses the iliac vessels at the pelvic brim",
+   "على القطنية الكبرى؛ يعبر الأوعية الحرقفية عند حافة الحوض"
+  ],
+  "xr": [
+   "Not visible itself — trace its course on a KUB to look for stones: PUJ, pelvic brim and VUJ are the narrowings",
+   "هو نفسه ما يبين — تتبّع مساره بأشعة KUB حتى تدوّر على حصى: التضيقات عند وصل الحوض بالحالب وحافة الحوض ودخول المثانة"
+  ]
+ },
+ "ureter-left": {
+  "loc": [
+   "Retroperitoneal, from the renal pelvis down along the psoas to the bladder",
+   "خلف الصفاق، من حوض الكلية نزولاً على العضلة القطنية للمثانة"
+  ],
+  "lv": [
+   "Over the tips of the L2–L5 transverse processes, then over the SI joint",
+   "فوق أطراف النواتئ المستعرضة L2–L5، ثم فوق المفصل العجزي الحرقفي"
+  ],
+  "rel": [
+   "On psoas major; behind the sigmoid mesocolon; crosses the iliac vessels",
+   "على القطنية الكبرى؛ خلف مساريقا القولون السيني؛ يعبر الأوعية الحرقفية"
+  ],
+  "xr": [
+   "Phleboliths (round calcified veins with a lucent centre) in the pelvis can mimic ureteric stones",
+   "الحصيات الوريدية (أوردة متكلسة مدوّرة بوسطها شفاف) بالحوض ممكن تشبه حصى الحالب"
+  ]
+ },
+ "urinary-bladder": {
+  "loc": [
+   "Pelvis, behind the pubic symphysis",
+   "الحوض، خلف الارتفاق العاني"
+  ],
+  "lv": [
+   "Empty: below the pelvic brim; full: rises into the abdomen",
+   "فارغة: تحت حافة الحوض؛ مليانة: تصعد للبطن"
+  ],
+  "rel": [
+   "Pubic symphysis in front; rectum (male) or uterus/vagina (female) behind",
+   "الارتفاق العاني گدّامها؛ المستقيم (ذكر) أو الرحم والمهبل (أنثى) خلفها"
+  ],
+  "xr": [
+   "A full bladder gives a rounded soft-tissue density in the pelvis; the KUB must include the symphysis pubis",
+   "المثانة المليانة تعطي كثافة نسيج رخو مدوّرة بالحوض؛ أشعة KUB لازم تشمل الارتفاق العاني"
+  ]
+ },
+ "abdominal-aorta": {
+  "loc": [
+   "Retroperitoneal, just left of the midline in front of the lumbar vertebrae",
+   "خلف الصفاق، يسار الخط الأوسط بشوية گدّام الفقرات القطنية"
+  ],
+  "lv": [
+   "Enters through the aortic hiatus at T12; bifurcates at L4 (umbilicus level)",
+   "يدخل من فتحة الأبهر بالحجاب عند T12؛ يتفرع عند L4 (مستوى السرة)"
+  ],
+  "rel": [
+   "IVC on its right; left renal vein and 3rd part of the duodenum cross in front; celiac (T12), SMA (L1), renal arteries (L1–L2), IMA (L3)",
+   "الأجوف السفلي يمينه؛ الوريد الكلوي الأيسر والجزء الثالث من الاثنا عشري يعبرون گدّامه؛ الجذع البطني (T12)، المساريقي العلوي (L1)، الكلويان (L1–L2)، المساريقي السفلي (L3)"
+  ],
+  "xr": [
+   "Only seen when its wall is calcified (common in older people); a calcified wall > 3 cm apart suggests an aneurysm",
+   "يبين بس إذا جداره متكلس (شائع بكبار السن)؛ إذا المسافة بين الجدارين المتكلسين > 3 سم نشك بتمدد (أم الدم)"
+  ]
+ },
+ "inferior-vena-cava": {
+  "loc": [
+   "Retroperitoneal, right of the aorta",
+   "خلف الصفاق، يمين الأبهر"
+  ],
+  "lv": [
+   "Formed at L5 by the common iliac veins; passes the diaphragm at T8",
+   "يتكوّن عند L5 من الوريدين الحرقفيين المشتركين؛ يعبر الحجاب عند T8"
+  ],
+  "rel": [
+   "Right of the aorta on the vertebral bodies; behind the liver, pancreatic head and duodenum",
+   "يمين الأبهر على أجسام الفقرات؛ خلف الكبد ورأس البنكرياس والاثنا عشري"
+  ],
+  "xr": [
+   "Not visible on plain film; seen on ultrasound (collapses with inspiration) and CT",
+   "ما يبين بالأشعة العادية؛ يبين بالسونار (ينضغط ويّا الشهيق) والمفراس"
+  ]
+ },
+ "external-oblique-left": {
+  "o": [
+   "External surfaces of ribs 5–12",
+   "الوجوه الخارجية للأضلاع 5–12"
+  ],
+  "i": [
+   "Linea alba, pubic tubercle and anterior half of the iliac crest (its lower edge forms the inguinal ligament)",
+   "الخط الأبيض، والحديبة العانية، والنصف الأمامي للعرف الحرقفي (حافتها السفلى تكوّن الرباط الإربي)"
+  ],
+  "a": [
+   "Compresses the abdomen; flexes and rotates the trunk to the opposite side",
+   "تضغط البطن؛ تثني الجذع وتلفّه للجهة المقابلة"
+  ],
+  "n": [
+   "Thoraco-abdominal nerves (T7–T11) and subcostal nerve (T12)",
+   "الأعصاب الصدرية البطنية (T7–T11) والعصب تحت الضلعي (T12)"
+  ]
+ },
+ "external-oblique-right": {
+  "o": [
+   "External surfaces of ribs 5–12",
+   "الوجوه الخارجية للأضلاع 5–12"
+  ],
+  "i": [
+   "Linea alba, pubic tubercle and anterior half of the iliac crest (its lower edge forms the inguinal ligament)",
+   "الخط الأبيض، والحديبة العانية، والنصف الأمامي للعرف الحرقفي (حافتها السفلى تكوّن الرباط الإربي)"
+  ],
+  "a": [
+   "Compresses the abdomen; flexes and rotates the trunk to the opposite side",
+   "تضغط البطن؛ تثني الجذع وتلفّه للجهة المقابلة"
+  ],
+  "n": [
+   "Thoraco-abdominal nerves (T7–T11) and subcostal nerve (T12)",
+   "الأعصاب الصدرية البطنية (T7–T11) والعصب تحت الضلعي (T12)"
+  ]
+ },
+ "scaphoid": {
+  "t": [
+   "Largest bone of the proximal carpal row, on the thumb side; the most commonly fractured carpal bone (risk of avascular necrosis)",
+   "أكبر عظم بالصف الداني للرسغ بجهة الإبهام؛ أكثر عظم رسغي ينكسر (خطر النخر اللاوعائي)"
+  ],
+  "j": [
+   "Radius; lunate, capitate, trapezium and trapezoid",
+   "الكعبرة؛ الهلالي والكبير والمربع المنحرف وشبه المنحرف"
+  ]
+ },
+ "lunate": {
+  "t": [
+   "Moon-shaped bone in the middle of the proximal row; the most commonly dislocated carpal bone",
+   "عظم بشكل الهلال بنص الصف الداني؛ أكثر عظم رسغي ينخلع"
+  ],
+  "j": [
+   "Radius; scaphoid, triquetrum, capitate and hamate",
+   "الكعبرة؛ الزورقي والمثلثي والكبير والكلّابي"
+  ]
+ },
+ "triquetrum": {
+  "t": [
+   "Pyramidal bone of the proximal row on the little-finger side",
+   "عظم هرمي بالصف الداني بجهة الخنصر"
+  ],
+  "j": [
+   "Lunate, pisiform and hamate; articular disc of the wrist",
+   "الهلالي والحمّصي والكلّابي؛ القرص المفصلي للرسغ"
+  ]
+ },
+ "pisiform": {
+  "t": [
+   "Small pea-shaped sesamoid bone in the tendon of flexor carpi ulnaris",
+   "عظم سمسمي صغير بشكل الحمّصة داخل وتر المثنية الزندية للرسغ"
+  ],
+  "j": [
+   "Triquetrum (palmar surface)",
+   "المثلثي (الوجه الراحي)"
+  ]
+ },
+ "trapezium": {
+  "t": [
+   "Distal-row bone at the base of the thumb; saddle joint with the 1st metacarpal",
+   "عظم بالصف القاصي عند قاعدة الإبهام؛ مفصل سرجي ويّا المشط الأول"
+  ],
+  "j": [
+   "Scaphoid, trapezoid; 1st and 2nd metacarpals",
+   "الزورقي وشبه المنحرف؛ المشطان الأول والثاني"
+  ]
+ },
+ "trapezoid": {
+  "t": [
+   "Small wedge-shaped bone of the distal row",
+   "عظم صغير بشكل إسفين بالصف القاصي"
+  ],
+  "j": [
+   "Scaphoid, trapezium, capitate; 2nd metacarpal",
+   "الزورقي والمربع المنحرف والكبير؛ المشط الثاني"
+  ]
+ },
+ "capitate": {
+  "t": [
+   "Largest carpal bone, in the centre of the wrist; first carpal bone to ossify",
+   "أكبر عظم رسغي، بنص الرسغ؛ أول عظم رسغي يتعظّم"
+  ],
+  "j": [
+   "Scaphoid, lunate, trapezoid, hamate; 2nd–4th metacarpals",
+   "الزورقي والهلالي وشبه المنحرف والكلّابي؛ الأمشاط 2–4"
+  ]
+ },
+ "hamate": {
+  "t": [
+   "Wedge-shaped bone of the distal row with a hook (hook of hamate) on its palmar side",
+   "عظم إسفيني بالصف القاصي بيه خطّاف (خطّاف الكلّابي) بوجهه الراحي"
+  ],
+  "j": [
+   "Lunate, triquetrum, capitate; 4th and 5th metacarpals",
+   "الهلالي والمثلثي والكبير؛ المشطان الرابع والخامس"
+  ]
+ },
+ "navicular": {
+  "t": [
+   "Boat-shaped tarsal bone on the medial side of the foot; its tuberosity is felt in front of the medial malleolus",
+   "عظم رصغي بشكل القارب بالجهة الإنسية للقدم؛ حدبته تنحس گدّام الكعب الإنسي"
+  ],
+  "j": [
+   "Talus; three cuneiforms; cuboid",
+   "الكاحل؛ العظام الإسفينية الثلاثة؛ النردي"
+  ]
+ },
+ "cuboid": {
+  "t": [
+   "Cube-shaped tarsal bone on the lateral side of the foot, with a groove for the peroneus longus tendon",
+   "عظم رصغي مكعّب بالجهة الوحشية للقدم، بيه ميزاب لوتر الشظوية الطويلة"
+  ],
+  "j": [
+   "Calcaneus; lateral cuneiform and navicular; 4th and 5th metatarsals",
+   "العقب؛ الإسفيني الوحشي والزورقي؛ المشطان الرابع والخامس"
+  ]
+ },
+ "medial-cuneiform": {
+  "t": [
+   "Largest of the three wedge-shaped (cuneiform) bones",
+   "أكبر العظام الإسفينية الثلاثة"
+  ],
+  "j": [
+   "Navicular; intermediate cuneiform; 1st and 2nd metatarsals",
+   "الزورقي؛ الإسفيني الأوسط؛ المشطان الأول والثاني"
+  ]
+ },
+ "intermediate-cuneiform": {
+  "t": [
+   "Smallest cuneiform bone; the 2nd metatarsal base is recessed between the cuneiforms (Lisfranc joint key)",
+   "أصغر عظم إسفيني؛ قاعدة المشط الثاني محشورة بين الإسفينيات (مفتاح مفصل ليسفرانك)"
+  ],
+  "j": [
+   "Navicular; medial and lateral cuneiforms; 2nd metatarsal",
+   "الزورقي؛ الإسفيني الإنسي والوحشي؛ المشط الثاني"
+  ]
+ },
+ "lateral-cuneiform": {
+  "t": [
+   "Wedge-shaped bone between the intermediate cuneiform and the cuboid",
+   "عظم إسفيني بين الإسفيني الأوسط والنردي"
+  ],
+  "j": [
+   "Navicular, intermediate cuneiform, cuboid; 2nd–4th metatarsals",
+   "الزورقي والإسفيني الأوسط والنردي؛ الأمشاط 2–4"
+  ]
+ },
+ "1st-metacarpal": {
+  "t": [
+   "1st metacarpal: Shortest and thickest; saddle joint with the trapezium (thumb opposition)",
+   "المشط الأول: الأقصر والأسمك؛ مفصل سرجي ويّا المربع المنحرف (مقابلة الإبهام)"
+  ],
+  "j": [
+   "Trapezium; proximal phalanx of the thumb finger",
+   "المربع المنحرف؛ السلامى الدانية لـالإبهام"
+  ]
+ },
+ "1st-metatarsal": {
+  "t": [
+   "1st metatarsal: Short and thick; its head carries two sesamoid bones (weight-bearing)",
+   "المشط الأول: قصير وسميك؛ رأسه يحمل عظمين سمسميين (يحمل الوزن)"
+  ],
+  "j": [
+   "Medial cuneiform; proximal phalanx of the big toe",
+   "الإسفيني الإنسي؛ السلامى الدانية لـالإبهام"
+  ]
+ },
+ "2nd-metacarpal": {
+  "t": [
+   "2nd metacarpal: Long bone with base, shaft and head (the head forms the knuckle)",
+   "المشط الثاني: عظم طويل بقاعدة وجسم ورأس (الرأس يكوّن عقدة الإصبع)"
+  ],
+  "j": [
+   "Trapezium, trapezoid, capitate; proximal phalanx of the index finger",
+   "المربع المنحرف وشبه المنحرف والكبير؛ السلامى الدانية لـالسبابة"
+  ]
+ },
+ "2nd-metatarsal": {
+  "t": [
+   "2nd metatarsal: Long slender bone; the 2nd is the longest and a common site of stress fracture",
+   "المشط الثاني: عظم طويل نحيف؛ الثاني هو الأطول ومكان شائع لكسر الإجهاد"
+  ],
+  "j": [
+   "Three cuneiforms; proximal phalanx of the second toe",
+   "الإسفينيات الثلاثة؛ السلامى الدانية لـالإصبع الثاني"
+  ]
+ },
+ "3rd-metacarpal": {
+  "t": [
+   "3rd metacarpal: Long bone with base, shaft and head (the head forms the knuckle)",
+   "المشط الثالث: عظم طويل بقاعدة وجسم ورأس (الرأس يكوّن عقدة الإصبع)"
+  ],
+  "j": [
+   "Capitate; proximal phalanx of the middle finger",
+   "الكبير؛ السلامى الدانية لـالوسطى"
+  ]
+ },
+ "3rd-metatarsal": {
+  "t": [
+   "3rd metatarsal: Long slender bone with base, shaft and head",
+   "المشط الثالث: عظم طويل نحيف بقاعدة وجسم ورأس"
+  ],
+  "j": [
+   "Lateral cuneiform; proximal phalanx of the third toe",
+   "الإسفيني الوحشي؛ السلامى الدانية لـالإصبع الثالث"
+  ]
+ },
+ "4th-metacarpal": {
+  "t": [
+   "4th metacarpal: Long bone with base, shaft and head (the head forms the knuckle)",
+   "المشط الرابع: عظم طويل بقاعدة وجسم ورأس (الرأس يكوّن عقدة الإصبع)"
+  ],
+  "j": [
+   "Capitate and hamate; proximal phalanx of the ring finger",
+   "الكبير والكلّابي؛ السلامى الدانية لـالبنصر"
+  ]
+ },
+ "4th-metatarsal": {
+  "t": [
+   "4th metatarsal: Long slender bone with base, shaft and head",
+   "المشط الرابع: عظم طويل نحيف بقاعدة وجسم ورأس"
+  ],
+  "j": [
+   "Cuboid; proximal phalanx of the fourth toe",
+   "النردي؛ السلامى الدانية لـالإصبع الرابع"
+  ]
+ },
+ "5th-metacarpal": {
+  "t": [
+   "5th metacarpal: Long bone with base, shaft and head (the head forms the knuckle)",
+   "المشط الخامس: عظم طويل بقاعدة وجسم ورأس (الرأس يكوّن عقدة الإصبع)"
+  ],
+  "j": [
+   "Hamate; proximal phalanx of the little finger",
+   "الكلّابي؛ السلامى الدانية لـالخنصر"
+  ]
+ },
+ "5th-metatarsal": {
+  "t": [
+   "5th metatarsal: Tuberosity at its base (avulsion / Jones fracture site)",
+   "المشط الخامس: بقاعدته حدبة (مكان كسر الاقتلاع / كسر جونز)"
+  ],
+  "j": [
+   "Cuboid; proximal phalanx of the little toe",
+   "النردي؛ السلامى الدانية لـالخنصر"
+  ]
+ },
+ "proximal-phalanx-thumb": {
+  "t": [
+   "Proximal phalanx of the thumb finger (the thumb has only two phalanges)",
+   "السلامى الدانية لـالإبهام (للإبهام سلاميتان بس)"
+  ],
+  "j": [
+   "Metacarpal head (MCP joint) and distal phalanx (IP joint)",
+   "رأس المشط (المفصل المشطي السلامي) والسلامى القاصية (المفصل بين السلاميات)"
+  ]
+ },
+ "proximal-phalanx-index": {
+  "t": [
+   "Proximal phalanx of the index finger",
+   "السلامى الدانية لـالسبابة"
+  ],
+  "j": [
+   "Metacarpal head (MCP joint) and middle phalanx (PIP joint)",
+   "رأس المشط (المفصل المشطي السلامي) والسلامى الوسطى (المفصل بين السلاميات الداني)"
+  ]
+ },
+ "proximal-phalanx-middle": {
+  "t": [
+   "Proximal phalanx of the middle finger",
+   "السلامى الدانية لـالوسطى"
+  ],
+  "j": [
+   "Metacarpal head (MCP joint) and middle phalanx (PIP joint)",
+   "رأس المشط (المفصل المشطي السلامي) والسلامى الوسطى (المفصل بين السلاميات الداني)"
+  ]
+ },
+ "proximal-phalanx-ring": {
+  "t": [
+   "Proximal phalanx of the ring finger",
+   "السلامى الدانية لـالبنصر"
+  ],
+  "j": [
+   "Metacarpal head (MCP joint) and middle phalanx (PIP joint)",
+   "رأس المشط (المفصل المشطي السلامي) والسلامى الوسطى (المفصل بين السلاميات الداني)"
+  ]
+ },
+ "proximal-phalanx-little": {
+  "t": [
+   "Proximal phalanx of the little finger",
+   "السلامى الدانية لـالخنصر"
+  ],
+  "j": [
+   "Metacarpal head (MCP joint) and middle phalanx (PIP joint)",
+   "رأس المشط (المفصل المشطي السلامي) والسلامى الوسطى (المفصل بين السلاميات الداني)"
+  ]
+ },
+ "proximal-phalanx-big-toe": {
+  "t": [
+   "Proximal phalanx of the big toe (the big toe has only two phalanges)",
+   "السلامى الدانية لـإبهام القدم (للإبهام سلاميتان بس)"
+  ],
+  "j": [
+   "1st metatarsal head (MTP joint) and distal phalanx (IP joint)",
+   "رأس المشط الأول (المفصل المشطي السلامي) والسلامى القاصية (المفصل بين السلاميات)"
+  ]
+ },
+ "proximal-phalanx-second-toe": {
+  "t": [
+   "Proximal phalanx of the second toe",
+   "السلامى الدانية لـالإصبع الثاني"
+  ],
+  "j": [
+   "Metatarsal head (MTP joint) and middle phalanx (PIP joint)",
+   "رأس المشط (المفصل المشطي السلامي للقدم) والسلامى الوسطى (المفصل بين السلاميات الداني)"
+  ]
+ },
+ "proximal-phalanx-third-toe": {
+  "t": [
+   "Proximal phalanx of the third toe",
+   "السلامى الدانية لـالإصبع الثالث"
+  ],
+  "j": [
+   "Metatarsal head (MTP joint) and middle phalanx (PIP joint)",
+   "رأس المشط (المفصل المشطي السلامي للقدم) والسلامى الوسطى (المفصل بين السلاميات الداني)"
+  ]
+ },
+ "proximal-phalanx-fourth-toe": {
+  "t": [
+   "Proximal phalanx of the fourth toe",
+   "السلامى الدانية لـالإصبع الرابع"
+  ],
+  "j": [
+   "Metatarsal head (MTP joint) and middle phalanx (PIP joint)",
+   "رأس المشط (المفصل المشطي السلامي للقدم) والسلامى الوسطى (المفصل بين السلاميات الداني)"
+  ]
+ },
+ "proximal-phalanx-little-toe": {
+  "t": [
+   "Proximal phalanx of the little toe",
+   "السلامى الدانية لـخنصر القدم"
+  ],
+  "j": [
+   "Metatarsal head (MTP joint) and middle phalanx (PIP joint)",
+   "رأس المشط (المفصل المشطي السلامي للقدم) والسلامى الوسطى (المفصل بين السلاميات الداني)"
+  ]
+ },
+ "middle-phalanx-thumb": {
+  "t": [
+   "Middle phalanx of the thumb finger (the thumb has only two phalanges)",
+   "السلامى الوسطى لـالإبهام (للإبهام سلاميتان بس)"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "middle-phalanx-index": {
+  "t": [
+   "Middle phalanx of the index finger",
+   "السلامى الوسطى لـالسبابة"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "middle-phalanx-middle": {
+  "t": [
+   "Middle phalanx of the middle finger",
+   "السلامى الوسطى لـالوسطى"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "middle-phalanx-ring": {
+  "t": [
+   "Middle phalanx of the ring finger",
+   "السلامى الوسطى لـالبنصر"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "middle-phalanx-little": {
+  "t": [
+   "Middle phalanx of the little finger",
+   "السلامى الوسطى لـالخنصر"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "middle-phalanx-big-toe": {
+  "t": [
+   "Middle phalanx of the big toe (the big toe has only two phalanges)",
+   "السلامى الوسطى لـإبهام القدم (للإبهام سلاميتان بس)"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "middle-phalanx-second-toe": {
+  "t": [
+   "Middle phalanx of the second toe",
+   "السلامى الوسطى لـالإصبع الثاني"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "middle-phalanx-third-toe": {
+  "t": [
+   "Middle phalanx of the third toe",
+   "السلامى الوسطى لـالإصبع الثالث"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "middle-phalanx-fourth-toe": {
+  "t": [
+   "Middle phalanx of the fourth toe",
+   "السلامى الوسطى لـالإصبع الرابع"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "middle-phalanx-little-toe": {
+  "t": [
+   "Middle phalanx of the little toe",
+   "السلامى الوسطى لـخنصر القدم"
+  ],
+  "j": [
+   "Proximal phalanx (PIP joint) and distal phalanx (DIP joint)",
+   "السلامى الدانية (المفصل الداني) والسلامى القاصية (المفصل القاصي)"
+  ]
+ },
+ "distal-phalanx-thumb": {
+  "t": [
+   "Distal phalanx of the thumb finger (the thumb has only two phalanges)",
+   "السلامى القاصية لـالإبهام (للإبهام سلاميتان بس)"
+  ],
+  "j": [
+   "Proximal phalanx (IP joint); its tuft supports the nail bed",
+   "السلامى الدانية (المفصل بين السلاميات)؛ حافتها العريضة تسند سرير الظفر"
+  ]
+ },
+ "distal-phalanx-index": {
+  "t": [
+   "Distal phalanx of the index finger",
+   "السلامى القاصية لـالسبابة"
+  ],
+  "j": [
+   "Middle phalanx (DIP joint); its tuft supports the nail bed",
+   "السلامى الوسطى (المفصل القاصي)؛ حافتها العريضة تسند سرير الظفر"
+  ]
+ },
+ "distal-phalanx-middle": {
+  "t": [
+   "Distal phalanx of the middle finger",
+   "السلامى القاصية لـالوسطى"
+  ],
+  "j": [
+   "Middle phalanx (DIP joint); its tuft supports the nail bed",
+   "السلامى الوسطى (المفصل القاصي)؛ حافتها العريضة تسند سرير الظفر"
+  ]
+ },
+ "distal-phalanx-ring": {
+  "t": [
+   "Distal phalanx of the ring finger",
+   "السلامى القاصية لـالبنصر"
+  ],
+  "j": [
+   "Middle phalanx (DIP joint); its tuft supports the nail bed",
+   "السلامى الوسطى (المفصل القاصي)؛ حافتها العريضة تسند سرير الظفر"
+  ]
+ },
+ "distal-phalanx-little": {
+  "t": [
+   "Distal phalanx of the little finger",
+   "السلامى القاصية لـالخنصر"
+  ],
+  "j": [
+   "Middle phalanx (DIP joint); its tuft supports the nail bed",
+   "السلامى الوسطى (المفصل القاصي)؛ حافتها العريضة تسند سرير الظفر"
+  ]
+ },
+ "distal-phalanx-big-toe": {
+  "t": [
+   "Distal phalanx of the big toe (the big toe has only two phalanges)",
+   "السلامى القاصية لـإبهام القدم (للإبهام سلاميتان بس)"
+  ],
+  "j": [
+   "Proximal phalanx (IP joint); its tuft supports the nail bed",
+   "السلامى الدانية (المفصل بين السلاميات)؛ حافتها العريضة تسند سرير الظفر"
+  ]
+ },
+ "distal-phalanx-second-toe": {
+  "t": [
+   "Distal phalanx of the second toe",
+   "السلامى القاصية لـالإصبع الثاني"
+  ],
+  "j": [
+   "Middle phalanx (DIP joint); its tuft supports the nail bed",
+   "السلامى الوسطى (المفصل القاصي)؛ حافتها العريضة تسند سرير الظفر"
+  ]
+ },
+ "distal-phalanx-third-toe": {
+  "t": [
+   "Distal phalanx of the third toe",
+   "السلامى القاصية لـالإصبع الثالث"
+  ],
+  "j": [
+   "Middle phalanx (DIP joint); its tuft supports the nail bed",
+   "السلامى الوسطى (المفصل القاصي)؛ حافتها العريضة تسند سرير الظفر"
+  ]
+ },
+ "distal-phalanx-fourth-toe": {
+  "t": [
+   "Distal phalanx of the fourth toe",
+   "السلامى القاصية لـالإصبع الرابع"
+  ],
+  "j": [
+   "Middle phalanx (DIP joint); its tuft supports the nail bed",
+   "السلامى الوسطى (المفصل القاصي)؛ حافتها العريضة تسند سرير الظفر"
+  ]
+ },
+ "distal-phalanx-little-toe": {
+  "t": [
+   "Distal phalanx of the little toe",
+   "السلامى القاصية لـخنصر القدم"
+  ],
+  "j": [
+   "Middle phalanx (DIP joint); its tuft supports the nail bed",
+   "السلامى الوسطى (المفصل القاصي)؛ حافتها العريضة تسند سرير الظفر"
   ]
  }
 }

@@ -1,10 +1,14 @@
 {
- "_note": "Extra labelled radiographs for خريطة-جديدة.html (same format as data/xray.json). The pelvis lesson also shows the existing views listed in \"reuse\" (pelvis-ap, pelvis-ap2, hip-lat) from data/xray.json. On AP films the image's left is the patient's right, so points on the image's left use the \"-right\" 3D keys.",
+ "_note": "Extra labelled radiographs for خريطة-جديدة.html (same format as data/xray.json). The pelvis lesson also shows the existing views listed in \"reuse\" (pelvis-ap, pelvis-ap2, hip-lat) from data/xray.json. On AP films the image's left is the patient's right, so points on the image's left use the \"-right\" 3D keys. Abdomen: point keys may be prefixed with the lesson tab (\"organs:liver\", \"muscles:psoas-major\"); no prefix = bones. The abdomen lesson also reuses the lumbar AP and lateral views.",
  "reuse": {
   "pelvis": [
    "pelvis-ap2",
    "pelvis-ap",
    "hip-lat"
+  ],
+  "abdomen": [
+   "lumbar-ap",
+   "lumbar-lat"
   ]
  },
  "views": [
@@ -422,6 +426,263 @@
      null,
      "Gastric air bubble",
      "فقاعة هواء المعدة"
+    ]
+   ]
+  },
+  {
+   "id": "abdomen-supine",
+   "region": "abdomen",
+   "img": "img/xray/extra/abdomen-supine.jpg",
+   "w": 2000,
+   "h": 2000,
+   "en": "Abdomen — AP supine (second case)",
+   "ar": "البطن — أمامي خلفي مستلقٍ (حالة ثانية)",
+   "credit": [
+    "Case courtesy of Craig Hacking, Radiopaedia.org, rID: 40900",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/40900"
+   ],
+   "pos": {
+    "patient": [
+     "Supine, midsagittal plane centred, arms by the sides, legs extended.",
+     "مستلقٍ على ظهره، المستوى السهمي الأوسط بالنص، الذراعين جنب الجسم والرجلين ممدودة."
+    ],
+    "cr": [
+     "Perpendicular to the level of the iliac crests at the midline (centre of the IR).",
+     "عمودي على مستوى العرفين الحرقفيين بالخط الأوسط (وسط الكاسيت)."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp · suspended expiration (diaphragm up, abdomen not compressed).",
+     "مسافة 100 سم · حوالي 70–80 kVp · حبس النفس بعد الزفير (الحجاب يصعد والبطن ما ينضغط)."
+    ],
+    "eval": [
+     "Upper abdomen to the symphysis pubis included (two films if the patient is tall); no rotation: spinous processes in the centre of the vertebral bodies and iliac wings symmetrical; psoas outlines, lower liver edge and transverse processes visible.",
+     "من أعلى البطن للارتفاق العاني (فلمين إذا المريض طويل)؛ بلا دوران: النواتئ الشوكية بنص أجسام الفقرات وجناحي الحرقفة متناظرين؛ حواف القطنية والحافة السفلى للكبد والنواتئ المستعرضة واضحة."
+    ]
+   },
+   "pts": [
+    [
+     420,
+     360,
+     "organs:liver",
+     "Liver shadow",
+     "ظل الكبد"
+    ],
+    [
+     310,
+     255,
+     "10th-rib-right",
+     "Lower ribs",
+     "الأضلاع السفلى"
+    ],
+    [
+     1300,
+     330,
+     "organs:transverse-colon",
+     "Transverse colon / splenic flexure gas",
+     "غاز القولون المستعرض / الثنية الطحالية"
+    ],
+    [
+     490,
+     900,
+     "organs:ascending-colon",
+     "Ascending colon (faeces and gas)",
+     "القولون الصاعد (براز وغاز)"
+    ],
+    [
+     530,
+     1240,
+     "organs:ileocecal-junction",
+     "Caecum (right iliac fossa)",
+     "الأعور (الحفرة الحرقفية اليمنى)"
+    ],
+    [
+     1510,
+     800,
+     "organs:descending-colon",
+     "Descending colon (faeces and gas)",
+     "القولون النازل (براز وغاز)"
+    ],
+    [
+     1120,
+     880,
+     "l3-vertebra",
+     "L3 transverse process (the longest)",
+     "الناتئ المستعرض للفقرة L3 (الأطول)"
+    ],
+    [
+     960,
+     1070,
+     "l4-vertebra",
+     "L4 vertebral body (iliac crest level)",
+     "جسم الفقرة L4 (مستوى العرف الحرقفي)"
+    ],
+    [
+     690,
+     950,
+     "muscles:psoas-major-right",
+     "Right psoas outline",
+     "حافة العضلة القطنية اليمنى"
+    ],
+    [
+     1250,
+     950,
+     "muscles:psoas-major",
+     "Left psoas outline",
+     "حافة العضلة القطنية اليسرى"
+    ],
+    [
+     420,
+     1120,
+     "hip-bone-right",
+     "Iliac crest",
+     "العرف الحرقفي"
+    ],
+    [
+     1545,
+     1125,
+     "hip-bone",
+     "Iliac crest",
+     "العرف الحرقفي"
+    ],
+    [
+     780,
+     1280,
+     "sacrum",
+     "Sacroiliac joint",
+     "المفصل العجزي الحرقفي"
+    ],
+    [
+     955,
+     1400,
+     "sacrum",
+     "Sacrum",
+     "العجز"
+    ],
+    [
+     612,
+     1580,
+     "hip-bone-right",
+     "Pelvic brim (iliopectineal line)",
+     "حافة الحوض (الخط الحرقفي العاني)"
+    ],
+    [
+     835,
+     1710,
+     "organs:rectum",
+     "Rectosigmoid gas and faeces",
+     "غاز وبراز المستقيم والسيني"
+    ]
+   ]
+  },
+  {
+   "id": "abdomen-erect",
+   "region": "abdomen",
+   "img": "img/xray/extra/abdomen-erect.jpg",
+   "w": 2000,
+   "h": 1907,
+   "en": "Abdomen — AP erect",
+   "ar": "البطن — أمامي خلفي واقف",
+   "credit": [
+    "Case courtesy of Craig Hacking, Radiopaedia.org, rID: 40900",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/40900"
+   ],
+   "pos": {
+    "patient": [
+     "Erect (standing or sitting), back against the IR, arms away from the body; stay upright 5–10 min before the exposure so free air can rise.",
+     "واقف أو گاعد، الظهر على الكاسيت، الذراعين بعيد عن الجسم؛ يبقى واقف 5–10 دقايق قبل التصوير حتى يصعد الهواء الحر."
+    ],
+    "cr": [
+     "Horizontal beam, about 5 cm above the iliac crests so the diaphragm is included.",
+     "شعاع أفقي، حوالي 5 سم فوق العرفين الحرقفيين حتى يدخل الحجاب الحاجز."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp · suspended expiration.",
+     "مسافة 100 سم · حوالي 70–80 kVp · حبس النفس بعد الزفير."
+    ],
+    "eval": [
+     "Both hemidiaphragms included (to look for free air under them); air–fluid levels need a horizontal beam; no rotation.",
+     "القبتين داخل الصورة (حتى ندوّر على هواء حر تحتها)؛ مستويات الهواء–السائل تحتاج شعاع أفقي؛ بلا دوران."
+    ]
+   },
+   "pts": [
+    [
+     545,
+     182,
+     null,
+     "Right lung base",
+     "قاعدة الرئة اليمنى"
+    ],
+    [
+     545,
+     300,
+     "muscles:diaphragm",
+     "Right hemidiaphragm",
+     "القبة اليمنى للحجاب الحاجز"
+    ],
+    [
+     600,
+     360,
+     null,
+     "No free gas under the diaphragm (normal)",
+     "ماكو هواء حر تحت الحجاب (طبيعي)"
+    ],
+    [
+     1309,
+     222,
+     "muscles:diaphragm",
+     "Left hemidiaphragm",
+     "القبة اليسرى للحجاب الحاجز"
+    ],
+    [
+     1273,
+     364,
+     "organs:stomach",
+     "Gastric fundus gas",
+     "غاز قاع المعدة"
+    ],
+    [
+     1273,
+     425,
+     "organs:stomach",
+     "Air–fluid level in the stomach",
+     "مستوى هواء–سائل بالمعدة"
+    ],
+    [
+     455,
+     636,
+     "organs:liver",
+     "Liver",
+     "الكبد"
+    ],
+    [
+     1309,
+     727,
+     "organs:transverse-colon",
+     "Transverse colon (faeces and gas)",
+     "القولون المستعرض (براز وغاز)"
+    ],
+    [
+     1455,
+     1273,
+     "organs:descending-colon",
+     "Descending colon",
+     "القولون النازل"
+    ],
+    [
+     309,
+     1500,
+     "hip-bone-right",
+     "Iliac crest",
+     "العرف الحرقفي"
+    ],
+    [
+     1636,
+     1527,
+     "hip-bone",
+     "Iliac crest",
+     "العرف الحرقفي"
     ]
    ]
   }
