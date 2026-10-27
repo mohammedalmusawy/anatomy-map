@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="build" content="20261027182602">
+<title>X-ray Physics — اختبر نفسك</title>
+<meta name="theme-color" content="#3B4A8C" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10141F" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="../../../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../../../assets/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../assets/app.css">
+</head><body><div class="wrap">
+
+<header class="top"><a class="back" href="../">‹ الفيزياء</a><span class="crumb">X-ray</span></header>
+<h1 class="h1-en">🎯 X-ray physics quiz</h1><p class="sub">اختبر نفسك: فيزياء الأشعة السينية</p>
+<section id="play">
+  <div class="progress"><span id="count"></span></div>
+  <div class="bar"><i id="bar"></i></div>
+  <div class="q"><div class="qen" id="qen"></div><div class="qar" id="qar"></div></div>
+  <div class="opts" id="opts"></div>
+  <div class="fb hidden" id="fb"></div>
+  <button class="next hidden" id="next">السؤال التالي</button>
+</section>
+<section id="result" class="result hidden">
+  <div class="score" id="score"></div>
+  <p class="msg" id="msg"></p>
+  <div class="actions">
+    <button class="btn" id="retry-wrong">أعد الأسئلة التي أخطأت فيها</button>
+    <button class="btn ghost" id="retry-all">أعد الاختبار</button>
+    <a class="btn plain" href="../">ارجع للفيزياء</a>
+  </div>
+</section>
+</div>
+<script type="application/json" id="quiz-data">{"questions": [{"q_en": "Which part of the X-ray tube releases electrons?", "q_ar": "أي جزء من أنبوب الأشعة يطلق الإلكترونات؟", "options": [{"en": "Anode", "ar": "الأنود"}, {"en": "Cathode filament", "ar": "سلك الكاثود"}, {"en": "Collimator", "ar": "المحدِّد"}, {"en": "Grid", "ar": "الشبكة"}], "answer": 1, "why": "سلك الكاثود يُسخَّن فيطلق الإلكترونات (thermionic emission)."}, {"q_en": "Most of the electron energy in the tube becomes:", "q_ar": "معظم طاقة الإلكترونات في الأنبوب تتحول إلى:", "options": [{"en": "X-rays", "ar": "أشعة سينية"}, {"en": "Light", "ar": "ضوء"}, {"en": "Heat", "ar": "حرارة"}, {"en": "Sound", "ar": "صوت"}], "answer": 2, "why": "حوالي 99% حرارة وحوالي 1% فقط أشعة سينية، لذلك يحتاج الأنود إلى تبريد."}, {"q_en": "Why does bone appear white on a radiograph?", "q_ar": "لماذا يظهر العظم أبيض في صورة الأشعة؟", "options": [{"en": "It absorbs more X-rays", "ar": "يمتص أشعة أكثر"}, {"en": "It contains air", "ar": "يحتوي هواء"}, {"en": "It emits light", "ar": "يطلق ضوءاً"}, {"en": "It is less dense", "ar": "كثافته أقل"}], "answer": 0, "why": "العظم كثيف ويمتص الأشعة (توهين عالٍ) فلا يصل منها إلا القليل إلى الكاشف."}, {"q_en": "The lungs look dark on a chest X-ray because they contain:", "q_ar": "تبدو الرئتان داكنتين في صورة الصدر لأنها تحتوي:", "options": [{"en": "Calcium", "ar": "كالسيوم"}, {"en": "Fat", "ar": "دهون"}, {"en": "Muscle", "ar": "عضلات"}, {"en": "Air", "ar": "هواء"}], "answer": 3, "why": "الهواء يمرّر معظم الأشعة فيصل الكثير منها إلى الكاشف فيظهر أسود."}, {"q_en": "Reduction of the X-ray beam as it passes through tissue is called:", "q_ar": "نقصان شدة الحزمة أثناء مرورها في النسيج يسمى:", "options": [{"en": "Emission", "ar": "الانبعاث"}, {"en": "Attenuation", "ar": "التوهين"}, {"en": "Resonance", "ar": "الرنين"}, {"en": "Echo", "ar": "الصدى"}], "answer": 1, "why": "التوهين (Attenuation) هو نقص شدة الأشعة بسبب الامتصاص والتشتت في النسيج."}]}</script>
+<script src="../../../../assets/quiz.js"></script>
+<script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../../../../sw.js", { updateViaCache: "none" });</script>
+</body></html>
