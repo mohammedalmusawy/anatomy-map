@@ -50,7 +50,7 @@
 
   // 🚦 صعوبة السؤال (من نسب الغلط الحقيقية، أو «تقديري»)
   let stats = null;
-  if (document.getElementById("quiz-data")) get("question_stats", "select=qkey,rate,estimated").then((r) => {
+  if (document.getElementById("opts")) get("question_stats", "select=qkey,rate,estimated").then((r) => {
     stats = Object.fromEntries((r || []).map((x) => [x.qkey, x]));
   });
   document.addEventListener("quiz:show", (ev) => {
@@ -75,6 +75,6 @@
     (c.querySelector(".acts") || c).insertAdjacentHTML("beforeend", `<button class="repb" data-report="${esc(c.id)}">🚩 بلّغ عن خطأ</button>`);
   });
   const qp = document.getElementById("play");
-  if (qp && document.getElementById("quiz-data")) qp.insertAdjacentHTML("beforeend", `<button class="repb" data-report="" id="repq">🚩 بلّغ عن خطأ بهذا السؤال</button>`);
+  if (qp && document.getElementById("opts")) qp.insertAdjacentHTML("beforeend", `<button class="repb" data-report="" id="repq">🚩 بلّغ عن خطأ بهذا السؤال</button>`);
   document.addEventListener("quiz:show", (ev) => { const b = document.getElementById("repq"); if (b) b.dataset.report = (ev.detail.q.q_en || "").slice(0, 200); });
 })();
