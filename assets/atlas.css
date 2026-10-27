@@ -73,6 +73,7 @@ svg.body.mini .sp { display: none; }
 .case h3 { margin: 0 0 10px; font-size: 18px; line-height: 1.35; }
 .case h3 .en { display: block; direction: ltr; text-align: left; font-size: 19px; }
 .case h3 .ar { display: block; font-size: 16px; color: var(--muted); font-weight: 600; }
+.case .badge { font-style: normal; font-size: 12px; font-weight: 700; color: var(--brand-ink); background: var(--g-paeds); border-radius: 99px; padding: 1px 10px; margin-inline-start: 8px; }
 .case .gt { font-style: normal; font-size: 12px; font-weight: 600; color: var(--g); }
 .xr { margin: 0 0 8px; }
 .xi { position: relative; background: #000; border-radius: 12px; overflow: hidden; cursor: zoom-in; }
