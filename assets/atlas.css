@@ -2,19 +2,19 @@
 :root {
   --g-normal: #2E8B57; --g-fracture: #D9711C; --g-dislocation: #8E44AD; --g-lung: #2E73B8;
   --g-heart: #C0392B; --g-infection: #B08A0B; --g-joint: #8D6E63; --g-tumour: #455A64;
-  --g-variant: #C2185B; --g-paeds: #5C6BC0; --g-device: #7C8B23; --g-bowel: #6D4C41; --g-stone: #78909C; --mark: #FFD400;
+  --g-variant: #C2185B; --g-paeds: #5C6BC0; --g-device: #7C8B23; --g-bowel: #6D4C41; --g-stone: #78909C; --g-metabolic: #7B2D3A; --mark: #FFD400;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --g-normal: #5CC98A; --g-fracture: #F0A060; --g-dislocation: #C08AE0; --g-lung: #7FB2EE;
     --g-heart: #F07B6E; --g-infection: #E3C04D; --g-joint: #C4A49A; --g-tumour: #A9B8C2;
-    --g-variant: #F07AAE; --g-paeds: #9AA6F0; --g-device: #BDCB5E; --g-bowel: #C9A99C; --g-stone: #CFD8DC;
+    --g-variant: #F07AAE; --g-paeds: #9AA6F0; --g-device: #BDCB5E; --g-bowel: #C9A99C; --g-stone: #CFD8DC; --g-metabolic: #E6A1AE;
   }
 }
 .g-normal { --g: var(--g-normal); } .g-fracture { --g: var(--g-fracture); } .g-dislocation { --g: var(--g-dislocation); }
 .g-lung { --g: var(--g-lung); } .g-heart { --g: var(--g-heart); } .g-infection { --g: var(--g-infection); }
 .g-joint { --g: var(--g-joint); } .g-tumour { --g: var(--g-tumour); } .g-variant { --g: var(--g-variant); }
-.g-paeds { --g: var(--g-paeds); } .g-device { --g: var(--g-device); } .g-bowel { --g: var(--g-bowel); } .g-stone { --g: var(--g-stone); }
+.g-paeds { --g: var(--g-paeds); } .g-device { --g: var(--g-device); } .g-bowel { --g: var(--g-bowel); } .g-stone { --g: var(--g-stone); } .g-metabolic { --g: var(--g-metabolic); }
 
 .disc { display: inline-block; font-size: 13px; color: var(--muted); background: var(--brand-soft); border-radius: 99px; padding: 2px 12px; margin: 0 0 14px; }
 .h1en { font-size: 16px; color: var(--muted); font-weight: 500; }
@@ -86,6 +86,7 @@ svg.body.mini .sp { display: none; }
 .marks text { fill: var(--mark); font-family: Inter, system-ui, sans-serif; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
 .src { font-size: 11.5px; color: var(--muted); direction: ltr; text-align: left; margin-top: 4px; line-height: 1.5; }
 .src a { color: var(--brand); }
+.src .srcmark { display: block; direction: rtl; text-align: right; }
 .legend { margin: 4px 0 8px; padding-inline-start: 22px; font-size: 13.5px; line-height: 1.6; }
 .legend li { margin-bottom: 4px; }
 .legend .en { display: block; font-weight: 600; direction: ltr; text-align: right; }

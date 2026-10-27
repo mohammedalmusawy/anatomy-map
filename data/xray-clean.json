@@ -37,9 +37,9 @@
   {
    "id": "wrist-pa",
    "region": "hand",
-   "img": "img/xray/hd/wrist-pa.jpg",
-   "w": 1050,
-   "h": 1600,
+   "img": "img/xray/orig/wrist-pa.jpg",
+   "w": 690,
+   "h": 1000,
    "en": "Wrist — PA",
    "ar": "الرسغ — خلفي أمامي (PA)",
    "credit": [
@@ -103,9 +103,9 @@
   {
    "id": "thumb-pa",
    "region": "hand",
-   "img": "img/xray/hd/thumb-pa.jpg",
-   "w": 1256,
-   "h": 1600,
+   "img": "img/xray/orig/thumb-pa.jpg",
+   "w": 1280,
+   "h": 1635,
    "en": "Thumb — PA",
    "ar": "الإبهام — خلفي أمامي (PA)",
    "credit": [
@@ -235,9 +235,9 @@
   {
    "id": "elbow-ap",
    "region": "forearm",
-   "img": "img/xray/hd/elbow-ap.jpg",
-   "w": 1194,
-   "h": 1600,
+   "img": "img/xray/orig/elbow-ap.jpg",
+   "w": 849,
+   "h": 1138,
    "en": "Elbow — AP",
    "ar": "المرفق — أمامي خلفي (AP)",
    "credit": [
@@ -268,9 +268,9 @@
   {
    "id": "elbow-lat",
    "region": "forearm",
-   "img": "img/xray/hd/elbow-lat.jpg",
-   "w": 1591,
-   "h": 1600,
+   "img": "img/xray/orig/elbow-lat.jpg",
+   "w": 1086,
+   "h": 1103,
    "en": "Elbow — lateral",
    "ar": "المرفق — جانبي",
    "credit": [
@@ -301,9 +301,9 @@
   {
    "id": "forearm-ap",
    "region": "forearm",
-   "img": "img/xray/hd/forearm-ap.jpg",
-   "w": 504,
-   "h": 1600,
+   "img": "img/xray/orig/forearm-ap.jpg",
+   "w": 271,
+   "h": 861,
    "en": "Forearm — AP",
    "ar": "الساعد — أمامي خلفي",
    "credit": [
@@ -466,9 +466,9 @@
   {
    "id": "shoulder-y",
    "region": "arm",
-   "img": "img/xray/hd/shoulder-y.jpg",
-   "w": 1136,
-   "h": 1600,
+   "img": "img/xray/orig/shoulder-y.jpg",
+   "w": 1064,
+   "h": 1498,
    "en": "Shoulder — scapular Y",
    "ar": "الكتف — منظر Y للوح",
    "credit": [
@@ -499,9 +499,9 @@
   {
    "id": "shoulder-axial",
    "region": "arm",
-   "img": "img/xray/hd/shoulder-axial.jpg",
-   "w": 1600,
-   "h": 1332,
+   "img": "img/xray/orig/shoulder-axial.jpg",
+   "w": 1466,
+   "h": 1220,
    "en": "Shoulder — axillary",
    "ar": "الكتف — إبطي",
    "credit": [
@@ -532,9 +532,9 @@
   {
    "id": "pelvis-ap2",
    "region": "thigh",
-   "img": "img/xray/hd/pelvis-ap2.jpg",
-   "w": 1600,
-   "h": 1600,
+   "img": "img/xray/orig/pelvis-ap2.jpg",
+   "w": 1524,
+   "h": 1524,
    "en": "Pelvis and hips — AP (high resolution)",
    "ar": "الحوض والوركين — أمامي خلفي (دقة عالية)",
    "credit": [
@@ -565,9 +565,9 @@
   {
    "id": "pelvis-ap",
    "region": "thigh",
-   "img": "img/xray/hd/pelvis-ap.jpg",
-   "w": 1600,
-   "h": 1119,
+   "img": "img/xray/orig/pelvis-ap.jpg",
+   "w": 1280,
+   "h": 895,
    "en": "Pelvis — AP",
    "ar": "الحوض — أمامي خلفي (AP)",
    "credit": [
@@ -739,9 +739,9 @@
   {
    "id": "hip-lat",
    "region": "thigh",
-   "img": "img/xray/hd/hip-lat.jpg",
-   "w": 1583,
-   "h": 1600,
+   "img": "img/xray/orig/hip-lat.jpg",
+   "w": 1508,
+   "h": 1524,
    "en": "Hip — lateral",
    "ar": "الورك — جانبي",
    "credit": [
@@ -838,9 +838,9 @@
   {
    "id": "tibfib-ap",
    "region": "leg",
-   "img": "img/xray/hd/tibfib-ap.jpg",
-   "w": 427,
-   "h": 1600,
+   "img": "img/xray/orig/tibfib-ap.jpg",
+   "w": 219,
+   "h": 821,
    "en": "Tibia and fibula — AP",
    "ar": "الظنبوب والشظية — أمامي خلفي",
    "credit": [
@@ -871,9 +871,9 @@
   {
    "id": "tibfib-lat",
    "region": "leg",
-   "img": "img/xray/hd/tibfib-lat.jpg",
-   "w": 572,
-   "h": 1600,
+   "img": "img/xray/orig/tibfib-lat.jpg",
+   "w": 308,
+   "h": 861,
    "en": "Tibia and fibula — lateral",
    "ar": "الظنبوب والشظية — جانبي",
    "credit": [
@@ -904,9 +904,9 @@
   {
    "id": "ankle-mortise",
    "region": "leg",
-   "img": "img/xray/hd/ankle-mortise.jpg",
-   "w": 782,
-   "h": 1600,
+   "img": "img/xray/orig/ankle-mortise.jpg",
+   "w": 740,
+   "h": 1515,
    "en": "Ankle — mortise (15° internal rotation)",
    "ar": "الكاحل — منظر النقر (دوران داخلي 15°)",
    "credit": [
@@ -1036,9 +1036,9 @@
   {
    "id": "calc-axial",
    "region": "foot",
-   "img": "img/xray/hd/calc-axial.jpg",
-   "w": 1169,
-   "h": 1600,
+   "img": "img/xray/orig/calc-axial.jpg",
+   "w": 837,
+   "h": 1146,
    "en": "Calcaneus — axial (plantodorsal)",
    "ar": "العقب — محوري",
    "credit": [
@@ -1069,9 +1069,9 @@
   {
    "id": "calc-lat",
    "region": "foot",
-   "img": "img/xray/hd/calc-lat.jpg",
-   "w": 1600,
-   "h": 1486,
+   "img": "img/xray/orig/calc-lat.jpg",
+   "w": 1478,
+   "h": 1373,
    "en": "Calcaneus — lateral",
    "ar": "العقب — جانبي",
    "credit": [
@@ -1201,9 +1201,9 @@
   {
    "id": "cspine-odont",
    "region": "spine",
-   "img": "img/xray/hd/cspine-odont.jpg",
-   "w": 1600,
-   "h": 1388,
+   "img": "img/xray/orig/cspine-odont.jpg",
+   "w": 1280,
+   "h": 1109,
    "en": "Odontoid — open-mouth AP",
    "ar": "السنّ — أمامي خلفي بالفم المفتوح",
    "credit": [
@@ -1234,9 +1234,9 @@
   {
    "id": "thoracic-ap",
    "region": "spine",
-   "img": "img/xray/hd/thoracic-ap.jpg",
-   "w": 559,
-   "h": 1600,
+   "img": "img/xray/orig/thoracic-ap.jpg",
+   "w": 349,
+   "h": 999,
    "en": "Thoracic spine — AP",
    "ar": "الفقرات الصدرية — أمامي خلفي",
    "credit": [
@@ -1267,9 +1267,9 @@
   {
    "id": "thoracic-lat",
    "region": "spine",
-   "img": "img/xray/hd/thoracic-lat.jpg",
-   "w": 642,
-   "h": 1600,
+   "img": "img/xray/orig/thoracic-lat.jpg",
+   "w": 411,
+   "h": 1007,
    "en": "Thoracic spine — lateral",
    "ar": "الفقرات الصدرية — جانبي",
    "credit": [
@@ -1300,9 +1300,9 @@
   {
    "id": "lumbar-ap",
    "region": "spine",
-   "img": "img/xray/hd/lumbar-ap.jpg",
-   "w": 902,
-   "h": 1600,
+   "img": "img/xray/orig/lumbar-ap.jpg",
+   "w": 521,
+   "h": 924,
    "en": "Lumbar spine — AP",
    "ar": "الفقرات القطنية — أمامي خلفي (AP)",
    "credit": [
@@ -1333,9 +1333,9 @@
   {
    "id": "lumbar-lat",
    "region": "spine",
-   "img": "img/xray/hd/lumbar-lat.jpg",
-   "w": 940,
-   "h": 1600,
+   "img": "img/xray/orig/lumbar-lat.jpg",
+   "w": 540,
+   "h": 919,
    "en": "Lumbar spine — lateral",
    "ar": "الفقرات القطنية — جانبي",
    "credit": [

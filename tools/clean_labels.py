@@ -138,10 +138,35 @@ SOURCE_PTS = {
 }
 
 
+HD_LOG = json.load(open(os.path.join(ROOT, "img/xray/hd/log.json"), encoding="utf-8"))
+
+
+def no_upscale(v):
+    """ممنوع أي تكبير (قرار محمد 28/10): صور img/xray/hd/ اللي انكبرت (s > 1 بـ log.json) ترجع لحجمها الأصلي
+    بـ img/xray/orig/: الملف الأصلي img/xray/<id>.jpg إذا موجود، وإلا تصغير عادي للنسخة المكبّرة بنفس النسبة.
+    النقاط (إذا بقت) تتحوّل: الأصلي = نقطة hd / s + القص (cx, cy)."""
+    L = HD_LOG.get(v["id"])
+    if not v["img"].startswith("img/xray/hd/") or not L or L.get("s", 1) <= 1.0001:
+        return
+    from PIL import Image
+    s, cx, cy = L["s"], L.get("cx", 0), L.get("cy", 0)
+    src, dst = os.path.join(ROOT, f'img/xray/{v["id"]}.jpg'), os.path.join(ROOT, f'img/xray/orig/{v["id"]}.jpg')
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    if os.path.exists(src):
+        im, off = Image.open(src), (cx, cy)
+    else:
+        hd = Image.open(os.path.join(ROOT, v["img"]))
+        im, off = hd.resize((round(hd.width / s), round(hd.height / s)), Image.LANCZOS), (0, 0)
+    im.convert("RGB").save(dst, "JPEG", quality=90)
+    v["pts"] = [[round(p[0] / s + off[0]), round(p[1] / s + off[1])] + p[2:] for p in v["pts"]]
+    v["img"], (v["w"], v["h"]) = f'img/xray/orig/{v["id"]}.jpg', im.size
+
+
 def clean(views):
     for v in views:
         v.update(REPLACE.get(v["id"], {}))
         v["pts"] = SOURCE_PTS.get(v["id"]) or [p for p in v["pts"] if len(p) > 5 and v["id"] not in REPLACE]
+        no_upscale(v)
     return views
 
 
