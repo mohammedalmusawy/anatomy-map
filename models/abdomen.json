@@ -1,0 +1,711 @@
+[
+ {
+  "key": "l1-vertebra",
+  "en": "L1 vertebra",
+  "ar": "الفقرة القطنية الأولى",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   -0.0146,
+   0.3451,
+   0.008
+  ]
+ },
+ {
+  "key": "l2-vertebra",
+  "en": "L2 vertebra",
+  "ar": "الفقرة القطنية الثانية",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   -0.0031,
+   0.2499,
+   0.0239
+  ]
+ },
+ {
+  "key": "l3-vertebra",
+  "en": "L3 vertebra",
+  "ar": "الفقرة القطنية الثالثة",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   0.0047,
+   0.0959,
+   0.0377
+  ]
+ },
+ {
+  "key": "l4-vertebra",
+  "en": "L4 vertebra",
+  "ar": "الفقرة القطنية الرابعة",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   -0.0134,
+   -0.0273,
+   0.0216
+  ]
+ },
+ {
+  "key": "l5-vertebra",
+  "en": "L5 vertebra",
+  "ar": "الفقرة القطنية الخامسة",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "lumbar",
+  "layer": "bone",
+  "pin": [
+   0.0049,
+   -0.1694,
+   -0.0254
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l1-l2",
+  "en": "Intervertebral disc L1–L2",
+  "ar": "القرص بين الفقرات L1–L2",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   -0.0022,
+   0.2828,
+   0.0285
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l2-l3",
+  "en": "Intervertebral disc L2–L3",
+  "ar": "القرص بين الفقرات L2–L3",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   0.0009,
+   0.1528,
+   0.0442
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l3-l4",
+  "en": "Intervertebral disc L3–L4",
+  "ar": "القرص بين الفقرات L3–L4",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   0.0004,
+   0.0151,
+   0.0313
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l4-l5",
+  "en": "Intervertebral disc L4–L5",
+  "ar": "القرص بين الفقرات L4–L5",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   -0.0361,
+   -0.13,
+   -0.0162
+  ]
+ },
+ {
+  "key": "intervertebral-disc-l5-s1",
+  "en": "Intervertebral disc L5–S1",
+  "ar": "القرص بين الفقرات L5–S1",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "disc",
+  "layer": "bone",
+  "pin": [
+   -0.0007,
+   -0.2811,
+   -0.0613
+  ]
+ },
+ {
+  "key": "10th-rib-left",
+  "en": "10th rib (left)",
+  "ar": "الضلع العاشر الأيسر",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "rib-false",
+  "layer": "bone",
+  "pin": [
+   0.0744,
+   0.7355,
+   -0.2151
+  ]
+ },
+ {
+  "key": "11th-rib-left",
+  "en": "11th rib (left)",
+  "ar": "الضلع الحادي عشر الأيسر",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "rib-floating",
+  "layer": "bone",
+  "pin": [
+   0.0891,
+   0.5905,
+   -0.2009
+  ]
+ },
+ {
+  "key": "12th-rib-left",
+  "en": "12th rib (left)",
+  "ar": "الضلع الثاني عشر الأيسر",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "rib-floating",
+  "layer": "bone",
+  "pin": [
+   0.0898,
+   0.4392,
+   -0.1693
+  ]
+ },
+ {
+  "key": "10th-rib-right",
+  "en": "10th rib (right)",
+  "ar": "الضلع العاشر الأيمن",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "rib-false",
+  "layer": "bone",
+  "pin": [
+   -0.0782,
+   0.7386,
+   -0.2139
+  ]
+ },
+ {
+  "key": "11th-rib-right",
+  "en": "11th rib (right)",
+  "ar": "الضلع الحادي عشر الأيمن",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "rib-floating",
+  "layer": "bone",
+  "pin": [
+   -0.0904,
+   0.5901,
+   -0.2006
+  ]
+ },
+ {
+  "key": "12th-rib-right",
+  "en": "12th rib (right)",
+  "ar": "الضلع الثاني عشر الأيمن",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "rib-floating",
+  "layer": "bone",
+  "pin": [
+   -0.093,
+   0.4396,
+   -0.169
+  ]
+ },
+ {
+  "key": "hip-bone",
+  "en": "Hip bone (left)",
+  "ar": "عظم الورك الأيسر (الحرقفة + الإسك + العانة)",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   0.5379,
+   -0.2685,
+   0.1177
+  ]
+ },
+ {
+  "key": "hip-bone-right",
+  "en": "Hip bone (right)",
+  "ar": "عظم الورك الأيمن (الحرقفة + الإسك + العانة)",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "bone",
+  "layer": "bone",
+  "pin": [
+   -0.5436,
+   -0.2724,
+   0.1216
+  ]
+ },
+ {
+  "key": "sacrum",
+  "en": "Sacrum",
+  "ar": "العجز",
+  "kind": "bone",
+  "region": "abdomen",
+  "grp": "sacral",
+  "layer": "bone",
+  "pin": [
+   -0.2347,
+   -0.3899,
+   -0.1509
+  ]
+ },
+ {
+  "key": "external-oblique-left",
+  "en": "External oblique (left)",
+  "ar": "المائلة الظاهرة (يسار)",
+  "kind": "muscle",
+  "region": "abdomen",
+  "grp": "abd-wall",
+  "layer": "sup",
+  "pin": [
+   0.2232,
+   0.6613,
+   0.4691
+  ]
+ },
+ {
+  "key": "external-oblique-right",
+  "en": "External oblique (right)",
+  "ar": "المائلة الظاهرة (يمين)",
+  "kind": "muscle",
+  "region": "abdomen",
+  "grp": "abd-wall",
+  "layer": "sup",
+  "pin": [
+   -0.2232,
+   0.6614,
+   0.4691
+  ]
+ },
+ {
+  "key": "diaphragm",
+  "en": "Diaphragm",
+  "ar": "الحجاب الحاجز",
+  "kind": "muscle",
+  "region": "abdomen",
+  "grp": "respiratory",
+  "layer": "deep",
+  "pin": [
+   0.1999,
+   0.6241,
+   0.4084
+  ]
+ },
+ {
+  "key": "psoas-major",
+  "en": "Psoas major (left)",
+  "ar": "القطنية الكبرى (يسار)",
+  "kind": "muscle",
+  "region": "abdomen",
+  "grp": "iliopsoas",
+  "layer": "deep",
+  "pin": [
+   0.1743,
+   -0.1533,
+   -0.0115
+  ]
+ },
+ {
+  "key": "psoas-major-right",
+  "en": "Psoas major (right)",
+  "ar": "القطنية الكبرى (يمين)",
+  "kind": "muscle",
+  "region": "abdomen",
+  "grp": "iliopsoas",
+  "layer": "deep",
+  "pin": [
+   -0.1743,
+   -0.1533,
+   -0.0115
+  ]
+ },
+ {
+  "key": "iliacus",
+  "en": "Iliacus (left)",
+  "ar": "الحرقفية (يسار)",
+  "kind": "muscle",
+  "region": "abdomen",
+  "grp": "iliopsoas",
+  "layer": "deep",
+  "pin": [
+   0.535,
+   -0.1917,
+   0.0349
+  ]
+ },
+ {
+  "key": "iliacus-right",
+  "en": "Iliacus (right)",
+  "ar": "الحرقفية (يمين)",
+  "kind": "muscle",
+  "region": "abdomen",
+  "grp": "iliopsoas",
+  "layer": "deep",
+  "pin": [
+   -0.535,
+   -0.1917,
+   0.0349
+  ]
+ },
+ {
+  "key": "liver",
+  "en": "Liver",
+  "ar": "الكبد",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "liver",
+  "layer": "organ",
+  "tint": "#9a4a3c",
+  "pin": [
+   0.0771,
+   0.6479,
+   0.408
+  ]
+ },
+ {
+  "key": "gallbladder",
+  "en": "Gallbladder",
+  "ar": "المرارة",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "biliary",
+  "layer": "organ",
+  "tint": "#5f9a55",
+  "pin": [
+   -0.199,
+   0.3768,
+   0.307
+  ]
+ },
+ {
+  "key": "stomach",
+  "en": "Stomach",
+  "ar": "المعدة",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "gi",
+  "layer": "organ",
+  "tint": "#df9c95",
+  "pin": [
+   0.1939,
+   0.4547,
+   0.3744
+  ]
+ },
+ {
+  "key": "spleen",
+  "en": "Spleen",
+  "ar": "الطحال",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "spleen",
+  "layer": "organ",
+  "tint": "#8a3f5f",
+  "pin": [
+   0.437,
+   0.4843,
+   0.0819
+  ]
+ },
+ {
+  "key": "jejunum",
+  "en": "Jejunum",
+  "ar": "الصائم",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "gi",
+  "layer": "organ",
+  "tint": "#eab7a6",
+  "pin": [
+   0.0878,
+   0.0064,
+   0.3286
+  ]
+ },
+ {
+  "key": "ileum",
+  "en": "Ileum",
+  "ar": "اللفائفي",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "gi",
+  "layer": "organ",
+  "tint": "#e3a88f",
+  "pin": [
+   0.0885,
+   -0.227,
+   0.3131
+  ]
+ },
+ {
+  "key": "ileocecal-junction",
+  "en": "Ileocaecal junction (caecum region)",
+  "ar": "الوصل اللفائفي الأعوري (منطقة الأعور)",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "colon",
+  "layer": "organ",
+  "tint": "#cf9a72",
+  "pin": [
+   -0.2928,
+   -0.3825,
+   0.1505
+  ]
+ },
+ {
+  "key": "appendix",
+  "en": "Vermiform appendix",
+  "ar": "الزائدة الدودية",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "colon",
+  "layer": "organ",
+  "tint": "#d9a77f",
+  "pin": [
+   -0.339,
+   -0.4168,
+   0.0568
+  ]
+ },
+ {
+  "key": "transverse-colon",
+  "en": "Transverse colon",
+  "ar": "القولون المستعرض",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "colon",
+  "layer": "organ",
+  "tint": "#c98f68",
+  "pin": [
+   0.0523,
+   0.2239,
+   0.3671
+  ]
+ },
+ {
+  "key": "duodenum",
+  "en": "Duodenum",
+  "ar": "الاثنا عشري",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "gi",
+  "layer": "retro",
+  "tint": "#e7b09c",
+  "pin": [
+   -0.1133,
+   0.3773,
+   0.2118
+  ]
+ },
+ {
+  "key": "pancreas",
+  "en": "Pancreas",
+  "ar": "البنكرياس",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "pancreas",
+  "layer": "retro",
+  "tint": "#e8c47c",
+  "pin": [
+   -0.0066,
+   0.3453,
+   0.1678
+  ]
+ },
+ {
+  "key": "ascending-colon",
+  "en": "Ascending colon",
+  "ar": "القولون الصاعد",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "colon",
+  "layer": "retro",
+  "tint": "#c98f68",
+  "pin": [
+   -0.3456,
+   -0.3142,
+   0.1353
+  ]
+ },
+ {
+  "key": "descending-colon",
+  "en": "Descending colon",
+  "ar": "القولون النازل",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "colon",
+  "layer": "retro",
+  "tint": "#c98f68",
+  "pin": [
+   0.242,
+   -0.4626,
+   0.1508
+  ]
+ },
+ {
+  "key": "rectum",
+  "en": "Rectum",
+  "ar": "المستقيم",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "colon",
+  "layer": "retro",
+  "tint": "#b97c5d",
+  "pin": [
+   -0.0644,
+   -0.5343,
+   -0.1461
+  ]
+ },
+ {
+  "key": "kidney-right",
+  "en": "Right kidney",
+  "ar": "الكلية اليمنى",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "urinary",
+  "layer": "retro",
+  "tint": "#a2493c",
+  "pin": [
+   -0.1761,
+   0.1279,
+   0.0226
+  ]
+ },
+ {
+  "key": "kidney-left",
+  "en": "Left kidney",
+  "ar": "الكلية اليسرى",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "urinary",
+  "layer": "retro",
+  "tint": "#a2493c",
+  "pin": [
+   0.2631,
+   0.3149,
+   -0.0362
+  ]
+ },
+ {
+  "key": "adrenal-right",
+  "en": "Right suprarenal (adrenal) gland",
+  "ar": "الغدة الكظرية اليمنى",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "urinary",
+  "layer": "retro",
+  "tint": "#e0a54a",
+  "pin": [
+   -0.1549,
+   0.4,
+   -0.0265
+  ]
+ },
+ {
+  "key": "adrenal-left",
+  "en": "Left suprarenal (adrenal) gland",
+  "ar": "الغدة الكظرية اليسرى",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "urinary",
+  "layer": "retro",
+  "tint": "#e0a54a",
+  "pin": [
+   0.1722,
+   0.4648,
+   -0.0989
+  ]
+ },
+ {
+  "key": "ureter-right",
+  "en": "Right ureter",
+  "ar": "الحالب الأيمن",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "urinary",
+  "layer": "retro",
+  "tint": "#e9d58a",
+  "pin": [
+   -0.1206,
+   0.1078,
+   -0.0051
+  ]
+ },
+ {
+  "key": "ureter-left",
+  "en": "Left ureter",
+  "ar": "الحالب الأيسر",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "urinary",
+  "layer": "retro",
+  "tint": "#e9d58a",
+  "pin": [
+   0.1366,
+   0.1672,
+   -0.0395
+  ]
+ },
+ {
+  "key": "urinary-bladder",
+  "en": "Urinary bladder",
+  "ar": "المثانة البولية",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "urinary",
+  "layer": "retro",
+  "tint": "#ebc77a",
+  "pin": [
+   0.0086,
+   -0.6653,
+   0.0802
+  ]
+ },
+ {
+  "key": "abdominal-aorta",
+  "en": "Abdominal aorta",
+  "ar": "الأبهر البطني",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "vessel",
+  "layer": "retro",
+  "tint": "#d0392b",
+  "pin": [
+   0.0398,
+   0.5619,
+   0.0213
+  ]
+ },
+ {
+  "key": "inferior-vena-cava",
+  "en": "Inferior vena cava",
+  "ar": "الوريد الأجوف السفلي",
+  "kind": "organ",
+  "region": "abdomen",
+  "grp": "vessel",
+  "layer": "retro",
+  "tint": "#3c55a0",
+  "pin": [
+   -0.0639,
+   0.9174,
+   0.0891
+  ]
+ }
+]

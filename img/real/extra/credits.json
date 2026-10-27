@@ -64,5 +64,17 @@
   "page": "https://commons.wikimedia.org/wiki/File:Cranium_-_mandibula_(lateral_view).jpg",
   "license": "CC0",
   "artist": "MAKY.OREL"
+ },
+ "extra/l4-vert-sup": {
+  "file": "File:Vertebra - lumbales (superior).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Vertebra_-_lumbales_(superior).jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
+ },
+ "extra/ribs-facets": {
+  "file": "File:Costae - articular facets.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Costae_-_articular_facets.jpg",
+  "license": "CC0",
+  "artist": "MAKY.OREL"
  }
 }
