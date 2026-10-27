@@ -1,6 +1,6 @@
 // يخلّي الموقع يشتغل كتطبيق، ويفتح الاختبارات اللي انفتحت قبل حتى بدون إنترنت.
-// يتعامل بس مع صفحات الدروس (lessons, quiz, learn, atlas + روابطها العربية القديمة)؛ خريطة التشريح وملفاتها الكبيرة تمشي عادي بدون كاش.
-const VERSION = "20261027182602";
+// يتعامل بس مع صفحات الدروس (lessons, quiz, learn, atlas, devices, contrast, terms + روابطها العربية القديمة)؛ خريطة التشريح وملفاتها الكبيرة تمشي عادي بدون كاش.
+const VERSION = "20261027185402";
 const CACHE = "dars-" + VERSION;
 const CORE = ["lessons/", "assets/app.css", "assets/quiz.js", "manifest.webmanifest", "assets/icon-192.png"];
 const BASE = new URL(self.registration.scope).pathname;
@@ -9,7 +9,7 @@ function mine(url) {
   if (!url.pathname.startsWith(BASE)) return false;
   const rel = decodeURIComponent(url.pathname.slice(BASE.length));
   return rel === "manifest.webmanifest" || rel.startsWith("assets/") ||
-    ["lessons", "quiz", "learn", "atlas", "دروس", "اختبار", "تعلم", "أطلس"].some((p) => rel.startsWith(p));
+    ["lessons", "quiz", "learn", "atlas", "devices", "contrast", "terms", "دروس", "اختبار", "تعلم", "أطلس"].some((p) => rel.startsWith(p));
 }
 
 self.addEventListener("install", (e) => {
@@ -38,6 +38,6 @@ self.addEventListener("fetch", (e) => {
         }
         return res;
       })
-      .catch(() => caches.match(req).then((r) => r || caches.match("lessons/")))
+      .catch(() => caches.match(req, { ignoreSearch: true }).then((r) => r || caches.match("lessons/")))
   );
 });
