@@ -164,5 +164,5 @@
     show();
   }
   // رابط البطاقة نسبةً لـ ATLAS_BASE (مسار الصورة يبدأ باسم مجلد المنطقة)
-  function caseUrl(c) { return c.img.split("/img/")[0] + "/#c-" + c.id; }
+  function caseUrl(c) { return c.u || c.img.split("/img/")[0] + "/#c-" + c.id; }
 })();
