@@ -1,0 +1,1646 @@
+{
+ "_note": "Cleaned copy of data/xray.json for خريطة-جديدة.html (made by tools/clean_labels.py). Only labels whose position comes from the image's own source are kept (p[5] = source); all labels that were placed by eye were removed. data/xray.json (live map) is unchanged.",
+ "views": [
+  {
+   "id": "hand-pa",
+   "region": "hand",
+   "img": "img/xray/hd/hand-pa.jpg",
+   "w": 1250,
+   "h": 1818,
+   "en": "Hand — PA",
+   "ar": "اليد — خلفي أمامي (PA)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_hand_by_dorsoplantar_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Seated at the table; hand pronated flat on the IR, fingers slightly spread.",
+     "يجلس المريض بجانب الطاولة، واليد بوضع الكبّ (الكف للأسفل) مسطّحة على الكاسيت، مع تباعد الأصابع قليلًا."
+    ],
+    "cr": [
+     "Perpendicular to the 3rd MCP joint.",
+     "عمودي على المفصل المشطي السلامي الثالث."
+    ],
+    "exp": [
+     "SID 100 cm · about 50–60 kVp (varies with equipment).",
+     "مسافة 100 سم · حوالي 50–60 kVp (تختلف بحسب الجهاز)."
+    ],
+    "eval": [
+     "All phalanges, metacarpals, carpals and distal radius/ulna included; no rotation (equal concavity on both sides of the shafts); MCP and IP joints open; fingers separated; the thumb appears oblique.",
+     "تظهر جميع السلاميات والأمشاط وعظام الرسغ ونهايتا الكعبرة والزند؛ لا دوران (تقعّر متساوٍ على جانبي أجسام العظام)؛ المفاصل المشطية السلامية وبين السلامية مفتوحة؛ الأصابع متباعدة؛ ويظهر الإبهام بوضع مائل."
+    ]
+   }
+  },
+  {
+   "id": "wrist-pa",
+   "region": "hand",
+   "img": "img/xray/hd/wrist-pa.jpg",
+   "w": 1050,
+   "h": 1600,
+   "en": "Wrist — PA",
+   "ar": "الرسغ — خلفي أمامي (PA)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_wrist_by_dorsoplantar_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Hand pronated, fingers lightly flexed so the wrist touches the IR.",
+     "اليد بوضع الكبّ، والأصابع مثنية قليلًا ليلامس الرسغ الكاسيت."
+    ],
+    "cr": [
+     "Perpendicular to the midcarpal area.",
+     "عمودي على منتصف الرسغ."
+    ],
+    "exp": [
+     "SID 100 cm · about 55–60 kVp.",
+     "مسافة 100 سم · حوالي 55–60 kVp."
+    ],
+    "eval": [
+     "Distal radius and ulna, carpals and proximal metacarpals included; no rotation (distal radioulnar joint slightly open); intercarpal spaces visible.",
+     "تظهر نهايتا الكعبرة والزند وعظام الرسغ وبدايات الأمشاط؛ لا دوران (المفصل الكعبري الزندي القاصي مفتوح قليلًا)؛ المسافات بين عظام الرسغ واضحة."
+    ]
+   }
+  },
+  {
+   "id": "wrist-lat",
+   "region": "hand",
+   "img": "img/xray/hd/wrist-lat.jpg",
+   "w": 543,
+   "h": 1756,
+   "en": "Wrist — lateral",
+   "ar": "الرسغ — جانبي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_wrist_by_lateral_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Elbow flexed 90°; ulnar side of the wrist on the IR, hand and forearm in a true lateral position.",
+     "المرفق مثني 90°، والجهة الزندية للرسغ على الكاسيت، واليد والساعد بوضع جانبي تام."
+    ],
+    "cr": [
+     "Perpendicular to the midcarpal area.",
+     "عمودي على منتصف الرسغ."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–65 kVp.",
+     "مسافة 100 سم · حوالي 60–65 kVp."
+    ],
+    "eval": [
+     "Distal radius and ulna superimposed; metacarpals superimposed; lunate sits in the radial concavity and the capitate in the lunate.",
+     "نهايتا الكعبرة والزند متراكبتان؛ الأمشاط متراكبة؛ الهلالي مستقر في تقعّر الكعبرة، والكبير مستقر في الهلالي."
+    ]
+   }
+  },
+  {
+   "id": "thumb-pa",
+   "region": "hand",
+   "img": "img/xray/hd/thumb-pa.jpg",
+   "w": 1256,
+   "h": 1600,
+   "en": "Thumb — PA",
+   "ar": "الإبهام — خلفي أمامي (PA)",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_thumb_of_an_18_year_old_male_-_posteroanterior.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Hand in a near-lateral position on its ulnar side, thumb slightly abducted with its long axis parallel to the IR.",
+     "اليد بوضع شبه جانبي على جهتها الزندية، والإبهام مُبعَد قليلًا ومحوره الطولي موازٍ للكاسيت."
+    ],
+    "cr": [
+     "Perpendicular to the 1st MCP joint.",
+     "عمودي على المفصل المشطي السلامي الأول."
+    ],
+    "exp": [
+     "SID 100 cm · about 50–60 kVp.",
+     "مسافة 100 سم · حوالي 50–60 kVp."
+    ],
+    "eval": [
+     "Whole thumb from the distal phalanx to the trapezium included; no rotation (equal concavity on both sides of the shafts); IP and MCP joints open. The PA thumb is slightly magnified because the thumb is away from the IR.",
+     "يظهر الإبهام كاملًا من السلامى القاصية إلى المربع المنحرف؛ لا دوران (تقعّر متساوٍ على جانبي أجسام العظام)؛ المفصلان بين السلامي والمشطي السلامي مفتوحان. صورة PA مكبّرة قليلًا لأن الإبهام بعيد عن الكاسيت."
+    ]
+   }
+  },
+  {
+   "id": "thumb-lat",
+   "region": "hand",
+   "img": "img/xray/hd/thumb-lat.jpg",
+   "w": 977,
+   "h": 1820,
+   "en": "Thumb — lateral",
+   "ar": "الإبهام — جانبي",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_thumb_of_an_18_year_old_male_-_lateral.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Hand pronated with the fingers slightly flexed, then rotated until the thumb is in a true lateral position.",
+     "اليد مكبوبة والأصابع مثنية قليلًا، ثم تُدار حتى يصير الإبهام بوضع جانبي تام."
+    ],
+    "cr": [
+     "Perpendicular to the 1st MCP joint.",
+     "عمودي على المفصل المشطي السلامي الأول."
+    ],
+    "exp": [
+     "SID 100 cm · about 50–60 kVp.",
+     "مسافة 100 سم · حوالي 50–60 kVp."
+    ],
+    "eval": [
+     "True lateral: anterior surfaces of the proximal phalanx and metacarpal are concave and the posterior surfaces straighter; IP and MCP joints open; trapezium included.",
+     "جانبي تام: الوجه الأمامي للسلامى الدانية والمشط مقعّر والخلفي أكثر استقامة؛ المفصلان مفتوحان؛ ويظهر المربع المنحرف."
+    ]
+   }
+  },
+  {
+   "id": "hand-obl",
+   "region": "hand",
+   "img": "img/xray/hd/hand-obl.jpg",
+   "w": 865,
+   "h": 2000,
+   "en": "Hand — PA oblique",
+   "ar": "اليد — مائل",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_hand_by_oblique_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Hand pronated then rotated laterally 45° (fingers spread, supported on a 45° sponge).",
+     "الكف للأسفل ثم يندار وحشياً 45° (الأصابع مفتوحة ومسنودة على إسفنجة 45°)."
+    ],
+    "cr": [
+     "Perpendicular to the 3rd metacarpophalangeal joint.",
+     "عمودي على المفصل المشطي السلامي الثالث."
+    ],
+    "exp": [
+     "SID 100 cm · about 55–60 kVp.",
+     "مسافة 100 سم · حوالي 55–60 kVp."
+    ],
+    "eval": [
+     "Mid-shafts of the 3rd–5th metacarpals slightly overlap; 2nd and 3rd do not; interphalangeal joints open.",
+     "أجسام الأمشاط 3–5 متراكبة شوية؛ الثاني والثالث ما متراكبين؛ مفاصل السلاميات مفتوحة."
+    ]
+   }
+  },
+  {
+   "id": "hand-lat",
+   "region": "hand",
+   "img": "img/xray/hd/hand-lat.jpg",
+   "w": 646,
+   "h": 2000,
+   "en": "Hand — lateral",
+   "ar": "اليد — جانبي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_hand_by_lateral_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Hand on its ulnar side, fingers extended and superimposed, thumb in front and free.",
+     "اليد على جهة الخنصر، الأصابع ممدودة ومتراكبة، والإبهام لقدام وحر."
+    ],
+    "cr": [
+     "Perpendicular to the 2nd metacarpophalangeal joint.",
+     "عمودي على المفصل المشطي السلامي الثاني."
+    ],
+    "exp": [
+     "SID 100 cm · about 55–60 kVp.",
+     "مسافة 100 سم · حوالي 55–60 kVp."
+    ],
+    "eval": [
+     "Metacarpals and phalanges superimposed; distal radius and ulna superimposed; thumb seen without overlap.",
+     "الأمشاط والسلاميات متراكبة؛ الكعبرة والزند متراكبين؛ الإبهام بدون تراكب."
+    ]
+   }
+  },
+  {
+   "id": "elbow-ap",
+   "region": "forearm",
+   "img": "img/xray/hd/elbow-ap.jpg",
+   "w": 1194,
+   "h": 1600,
+   "en": "Elbow — AP",
+   "ar": "المرفق — أمامي خلفي (AP)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_elbow_by_anteroposterior_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Arm fully extended, hand supinated, epicondyles parallel to the IR.",
+     "الذراع ممدود بالكامل، والكف بوضع البطح (للأعلى)، واللقيمتان موازيتان للكاسيت."
+    ],
+    "cr": [
+     "Perpendicular to the mid-elbow joint (about 2 cm distal to the midpoint between the epicondyles).",
+     "عمودي على منتصف مفصل المرفق (نحو 2 سم أسفل منتصف المسافة بين اللقيمتين)."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–70 kVp.",
+     "مسافة 100 سم · حوالي 60–70 kVp."
+    ],
+    "eval": [
+     "No rotation: epicondyles in profile; radial head slightly superimposed on the ulna; joint space open.",
+     "لا دوران: اللقيمتان ظاهرتان في المحيط؛ رأس الكعبرة متراكب قليلًا على الزند؛ مسافة المفصل مفتوحة."
+    ]
+   }
+  },
+  {
+   "id": "elbow-lat",
+   "region": "forearm",
+   "img": "img/xray/hd/elbow-lat.jpg",
+   "w": 1591,
+   "h": 1600,
+   "en": "Elbow — lateral",
+   "ar": "المرفق — جانبي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_elbow_by_lateral_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Elbow flexed 90°, forearm and hand lateral (thumb up), humerus flat on the table at shoulder level.",
+     "المرفق مثني 90°، والساعد واليد بوضع جانبي (الإبهام للأعلى)، والعضد مسطّح على الطاولة بمستوى الكتف."
+    ],
+    "cr": [
+     "Perpendicular to the mid-elbow joint.",
+     "عمودي على منتصف مفصل المرفق."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–70 kVp.",
+     "مسافة 100 سم · حوالي 60–70 kVp."
+    ],
+    "eval": [
+     "Flexed 90°; three concentric arcs (trochlear sulcus, capitulum, trochlear notch); olecranon in profile; radial head partly over the coronoid process.",
+     "مثني 90°؛ ثلاثة أقواس متحدة المركز (ميزاب البكرة، والرُّؤَيس، والثلمة البكرية)؛ الزُّج ظاهر في المحيط؛ رأس الكعبرة متراكب جزئيًا على الناتئ الإكليلي."
+    ]
+   }
+  },
+  {
+   "id": "forearm-ap",
+   "region": "forearm",
+   "img": "img/xray/hd/forearm-ap.jpg",
+   "w": 504,
+   "h": 1600,
+   "en": "Forearm — AP",
+   "ar": "الساعد — أمامي خلفي",
+   "credit": [
+    "Case courtesy of Ian Bickle, Radiopaedia.org, rID: 46402",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/46402"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Seated, forearm flat on the IR, hand supinated; include wrist and elbow.",
+     "جالس، الساعد على الكاسيت والكف بوضع البطح؛ لازم يبين الرسغ والمرفق."
+    ],
+    "cr": [
+     "Perpendicular to the mid-forearm.",
+     "عمودي على منتصف الساعد."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–70 kVp.",
+     "مسافة 100 سم · حوالي 60–70 kVp."
+    ],
+    "eval": [
+     "Both joints included; radius and ulna nearly parallel with slight overlap at the ends; epicondyles in profile.",
+     "المفصلين ظاهرين؛ الكعبرة والزند شبه متوازيين مع تراكب خفيف بالأطراف؛ اللقيمتان بالمحيط."
+    ]
+   }
+  },
+  {
+   "id": "forearm-lat",
+   "region": "forearm",
+   "img": "img/xray/hd/forearm-lat.jpg",
+   "w": 740,
+   "h": 2000,
+   "en": "Forearm — lateral",
+   "ar": "الساعد — جانبي",
+   "credit": [
+    "Case courtesy of Ian Bickle, Radiopaedia.org, rID: 46995",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/46995"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Elbow flexed 90°, forearm on its ulnar side, thumb up; shoulder and elbow on the same level.",
+     "المرفق مثني 90°، الساعد على جهة الزند، والإبهام للأعلى؛ الكتف والمرفق بنفس المستوى."
+    ],
+    "cr": [
+     "Perpendicular to the mid-forearm.",
+     "عمودي على منتصف الساعد."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–70 kVp.",
+     "مسافة 100 سم · حوالي 60–70 kVp."
+    ],
+    "eval": [
+     "Distal radius and ulna superimposed; humeral epicondyles superimposed; radial head over the coronoid process.",
+     "الكعبرة والزند متراكبين من تحت؛ اللقيمتان متراكبتين؛ رأس الكعبرة فوق الناتئ المنقاري."
+    ]
+   }
+  },
+  {
+   "id": "shoulder-ap",
+   "region": "arm",
+   "img": "img/xray/hd/shoulder-ap.jpg",
+   "w": 842,
+   "h": 1742,
+   "en": "Shoulder & proximal humerus — AP (external rotation)",
+   "ar": "الكتف وأعلى العضد — أمامي خلفي (دوران خارجي)",
+   "credit": [
+    "Hellerhoff",
+    "CC BY-SA 4.0",
+    "https://commons.wikimedia.org/wiki/File:Tuberositas_deltoidea_71W_-_CR_-_001.jpg"
+   ],
+   "pts": [
+    [
+     596,
+     1289,
+     "humerus",
+     "Deltoid tuberosity",
+     "الحدبة الدالية",
+     "Hellerhoff, Wikimedia «Tuberositas deltoidea 71W - CR - 001 - Annotation.jpg»"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Erect or supine, body slightly rotated toward the affected side; arm slightly abducted in external rotation (epicondyles parallel to the IR).",
+     "واقف أو مستلقٍ، والجسم مستدير قليلًا نحو الجهة المصابة؛ والذراع مُبعَد قليلًا بدوران خارجي (اللقيمتان موازيتان للكاسيت)."
+    ],
+    "cr": [
+     "Perpendicular to about 2.5 cm inferior to the coracoid process.",
+     "عمودي على نقطة نحو 2.5 سم أسفل الناتئ الغرابي."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp · suspended respiration.",
+     "مسافة 100 سم · حوالي 70–80 kVp · حبس النفس."
+    ],
+    "eval": [
+     "Greater tubercle in profile on the lateral side (external rotation); humeral head slightly overlaps the glenoid; proximal humerus and lateral clavicle included.",
+     "الحديبة الكبرى ظاهرة في المحيط الوحشي (دوران خارجي)؛ رأس العضد متراكب قليلًا على الحقّانية؛ يظهر أعلى العضد والطرف الوحشي للترقوة."
+    ]
+   }
+  },
+  {
+   "id": "humerus-ap",
+   "region": "arm",
+   "img": "img/xray/hd/humerus-ap.jpg",
+   "w": 1177,
+   "h": 1780,
+   "en": "Humerus — AP",
+   "ar": "العضد — أمامي خلفي",
+   "credit": [
+    "Case courtesy of Piotr Gołofit, Radiopaedia.org, rID: 53034",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/53034"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine or erect, arm abducted slightly, hand supinated; epicondyles parallel to the IR. Include shoulder and elbow.",
+     "مستلقٍ أو واقف، الذراع مبعدة شوية والكف بوضع البطح؛ اللقيمتان موازيتان للكاسيت. لازم يبين الكتف والمرفق."
+    ],
+    "cr": [
+     "Perpendicular to the mid-humerus.",
+     "عمودي على منتصف العضد."
+    ],
+    "exp": [
+     "SID 100 cm · about 65–75 kVp · suspended respiration.",
+     "مسافة 100 سم · حوالي 65–75 kVp · حبس النفس."
+    ],
+    "eval": [
+     "Whole humerus with both joints; greater tubercle in profile laterally; epicondyles seen without rotation.",
+     "العضد كامل ويّا المفصلين؛ الحدبة الكبرى ظاهرة بالمحيط من الجهة الوحشية؛ اللقيمتان بدون دوران."
+    ]
+   }
+  },
+  {
+   "id": "humerus-lat",
+   "region": "arm",
+   "img": "img/xray/hd/humerus-lat.jpg",
+   "w": 1512,
+   "h": 1812,
+   "en": "Humerus — lateral",
+   "ar": "العضد — جانبي",
+   "credit": [
+    "Case courtesy of Piotr Gołofit, Radiopaedia.org, rID: 53034",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/53034"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Elbow flexed 90°, hand pronated on the hip (internal rotation); epicondyles perpendicular to the IR.",
+     "المرفق مثني 90°، والكف على الورك (دوران داخلي)؛ اللقيمتان عمودية على الكاسيت."
+    ],
+    "cr": [
+     "Perpendicular to the mid-humerus.",
+     "عمودي على منتصف العضد."
+    ],
+    "exp": [
+     "SID 100 cm · about 65–75 kVp · suspended respiration.",
+     "مسافة 100 سم · حوالي 65–75 kVp · حبس النفس."
+    ],
+    "eval": [
+     "Epicondyles superimposed; lesser tubercle in profile medially; elbow seen in true lateral.",
+     "اللقيمتان متراكبتان؛ الحدبة الصغرى بالمحيط إنسياً؛ المرفق جانبي صحيح."
+    ]
+   }
+  },
+  {
+   "id": "shoulder-y",
+   "region": "arm",
+   "img": "img/xray/hd/shoulder-y.jpg",
+   "w": 1136,
+   "h": 1600,
+   "en": "Shoulder — scapular Y",
+   "ar": "الكتف — منظر Y للوح",
+   "credit": [
+    "Case courtesy of Dai Roberts, Radiopaedia.org, rID: 80415",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/80415"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Erect, anterior oblique 45–60°, affected shoulder against the IR; arm relaxed by the side.",
+     "واقف، مائل أمامي 45–60°، والكتف المصاب على الكاسيت؛ الذراع مرتخية جنب الجسم."
+    ],
+    "cr": [
+     "Perpendicular to the glenohumeral joint (about 5–6 cm below the top of the shoulder).",
+     "عمودي على المفصل الكتفي العضدي (نحو 5–6 سم تحت قمة الكتف)."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp · suspended respiration.",
+     "مسافة 100 سم · حوالي 70–80 kVp · حبس النفس."
+    ],
+    "eval": [
+     "Scapula seen edge-on as a Y; humeral head centred over the junction (normal). Anterior or posterior displacement means dislocation.",
+     "اللوح يبين من حافته بشكل Y؛ رأس العضد بنص الملتقى (طبيعي). إذا انزاح لقدام أو لورا = خلع."
+    ]
+   }
+  },
+  {
+   "id": "shoulder-axial",
+   "region": "arm",
+   "img": "img/xray/hd/shoulder-axial.jpg",
+   "w": 1600,
+   "h": 1332,
+   "en": "Shoulder — axillary",
+   "ar": "الكتف — إبطي",
+   "credit": [
+    "Case courtesy of Dai Roberts, Radiopaedia.org, rID: 80414",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/80414"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, arm abducted 90° (as far as tolerated), IR above the shoulder against the neck.",
+     "مستلقٍ، الذراع مبعدة 90° (قدر ما يتحمل)، والكاسيت فوق الكتف ملاصق للرقبة."
+    ],
+    "cr": [
+     "Horizontal through the axilla toward the glenohumeral joint, angled 15–30° medially.",
+     "أفقي من الإبط باتجاه المفصل، ميلان 15–30° إنسياً."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp.",
+     "مسافة 100 سم · حوالي 70–80 kVp."
+    ],
+    "eval": [
+     "Humeral head sits on the glenoid; coracoid anterior and acromion posterior; joint space open.",
+     "رأس العضد قاعد على الحُق؛ الناتئ الغرابي لقدام والأخرم لورا؛ المسافة المفصلية مفتوحة."
+    ]
+   }
+  },
+  {
+   "id": "pelvis-ap2",
+   "region": "thigh",
+   "img": "img/xray/hd/pelvis-ap2.jpg",
+   "w": 1600,
+   "h": 1600,
+   "en": "Pelvis and hips — AP (high resolution)",
+   "ar": "الحوض والوركين — أمامي خلفي (دقة عالية)",
+   "credit": [
+    "Case courtesy of Andrew Dixon, Radiopaedia.org, rID: 36680",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/36680"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, legs extended and internally rotated 15–20° so the femoral necks are elongated; pelvis not rotated (ASISs equidistant from the table).",
+     "مستلقٍ على الظهر، والساقان ممدودتان ومدوّرتان للداخل 15–20° حتى يطول عنقا الفخذ؛ والحوض غير مستدير (الشوكتان الحرقفيتان الأماميتان العلويتان على بُعد متساوٍ من الطاولة)."
+    ],
+    "cr": [
+     "Perpendicular, midway between the level of the ASISs and the pubic symphysis (about 5 cm below the ASIS level).",
+     "عمودي على منتصف المسافة بين مستوى الشوكتين الحرقفيتين الأماميتين العلويتين والارتفاق العاني (نحو 5 سم أسفل مستوى الشوكتين)."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–85 kVp · suspended respiration · gonadal shielding when it does not cover the area of interest.",
+     "مسافة 100 سم · حوالي 75–85 kVp · حبس النفس · واقي الغدد التناسلية إذا لم يغطِّ منطقة الفحص."
+    ],
+    "eval": [
+     "Whole pelvis, L5, sacrum and proximal femurs included; no rotation (symmetric iliac wings and obturator foramina, sacrum centred over the symphysis); greater trochanters in profile and lesser trochanters small or not seen (correct internal rotation).",
+     "يظهر الحوض كاملًا مع L5 والعجز وأعلى الفخذين؛ لا دوران (تناظر جناحي الحرقفة والثقبتين السدّاديتين، والعجز في منتصف الارتفاق)؛ المدوَّران الكبيران في المحيط، والمدوَّران الصغيران صغيران أو غير ظاهرين (دوران داخلي صحيح)."
+    ]
+   }
+  },
+  {
+   "id": "pelvis-ap",
+   "region": "thigh",
+   "img": "img/xray/hd/pelvis-ap.jpg",
+   "w": 1600,
+   "h": 1119,
+   "en": "Pelvis — AP",
+   "ar": "الحوض — أمامي خلفي (AP)",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_pelvis_of_an_18_year_old_male_-_case_3_-_anteroposterior.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, legs extended and internally rotated 15–20° so the femoral necks are elongated; pelvis not rotated (ASISs equidistant from the table).",
+     "مستلقٍ على الظهر، والساقان ممدودتان ومدوّرتان للداخل 15–20° حتى يطول عنقا الفخذ؛ والحوض غير مستدير (الشوكتان الحرقفيتان الأماميتان العلويتان على بُعد متساوٍ من الطاولة)."
+    ],
+    "cr": [
+     "Perpendicular, midway between the level of the ASISs and the pubic symphysis (about 5 cm below the ASIS level).",
+     "عمودي على منتصف المسافة بين مستوى الشوكتين الحرقفيتين الأماميتين العلويتين والارتفاق العاني (نحو 5 سم أسفل مستوى الشوكتين)."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–85 kVp · suspended respiration · gonadal shielding when it does not cover the area of interest.",
+     "مسافة 100 سم · حوالي 75–85 kVp · حبس النفس · واقي الغدد التناسلية إذا لم يغطِّ منطقة الفحص."
+    ],
+    "eval": [
+     "Whole pelvis, L5, sacrum and proximal femurs included; no rotation (symmetric iliac wings and obturator foramina, sacrum centred over the symphysis); greater trochanters in profile and lesser trochanters small or not seen (correct internal rotation).",
+     "يظهر الحوض كاملًا مع L5 والعجز وأعلى الفخذين؛ لا دوران (تناظر جناحي الحرقفة والثقبتين السدّاديتين، والعجز في منتصف الارتفاق)؛ المدوَّران الكبيران في المحيط، والمدوَّران الصغيران صغيران أو غير ظاهرين (دوران داخلي صحيح)."
+    ]
+   }
+  },
+  {
+   "id": "knee-ap",
+   "region": "thigh",
+   "img": "img/xray/hd/knee-ap.jpg",
+   "w": 1067,
+   "h": 1913,
+   "en": "Knee — AP",
+   "ar": "الركبة — أمامي خلفي (AP)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_a_normal_knee_by_anteroposterior_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, leg extended and rotated about 3–5° internally so the femoral epicondyles are parallel to the IR.",
+     "مستلقٍ على الظهر، والساق ممدودة ومدوّرة للداخل نحو 3–5° حتى تكون لقيمتا الفخذ موازيتين للكاسيت."
+    ],
+    "cr": [
+     "About 1.25 cm distal to the apex of the patella; 0–5° cephalic or caudal depending on the ASIS-to-table distance.",
+     "نحو 1.25 سم أسفل قمة الرضفة؛ بزاوية 0–5° نحو الرأس أو نحو القدم حسب سُمك الحوض."
+    ],
+    "exp": [
+     "SID 100 cm · about 65–75 kVp.",
+     "مسافة 100 سم · حوالي 65–75 kVp."
+    ],
+    "eval": [
+     "No rotation: femoral and tibial condyles symmetric, tibia partly overlapping the fibular head; joint space open; patella over the femur.",
+     "لا دوران: لقمتا الفخذ والظنبوب متناظرتان، والظنبوب متراكب جزئيًا على رأس الشظيّة؛ مسافة المفصل مفتوحة؛ الرضفة فوق الفخذ."
+    ]
+   }
+  },
+  {
+   "id": "knee-lat",
+   "region": "thigh",
+   "img": "img/xray/hd/knee-lat.jpg",
+   "w": 1133,
+   "h": 1939,
+   "en": "Knee — lateral",
+   "ar": "الركبة — جانبي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_a_normal_knee_by_lateral_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Lateral recumbent on the affected side; knee flexed 20–30°.",
+     "مستلقٍ على الجانب المصاب؛ والركبة مثنية 20–30°."
+    ],
+    "cr": [
+     "5–7° cephalic, to about 2.5 cm distal to the medial epicondyle.",
+     "بزاوية 5–7° نحو الرأس، على نقطة نحو 2.5 سم أسفل اللقيمة الإنسية."
+    ],
+    "exp": [
+     "SID 100 cm · about 65–75 kVp.",
+     "مسافة 100 سم · حوالي 65–75 kVp."
+    ],
+    "eval": [
+     "Femoral condyles superimposed; patellofemoral joint space open; fibular head slightly overlapped by the tibia.",
+     "لقمتا الفخذ متراكبتان؛ المسافة الرضفية الفخذية مفتوحة؛ رأس الشظيّة متراكب قليلًا مع الظنبوب."
+    ]
+   }
+  },
+  {
+   "id": "femur-dist",
+   "region": "thigh",
+   "img": "img/xray/hd/femur-dist.jpg",
+   "w": 1081,
+   "h": 2000,
+   "en": "Femur — AP (distal half)",
+   "ar": "عظم الفخذ — أمامي خلفي (النصف السفلي)",
+   "credit": [
+    "Case courtesy of Piotr Gołofit, Radiopaedia.org, rID: 53033",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/53033"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, leg internally rotated 5° so the patella faces up; for the distal femur the knee joint is included.",
+     "مستلقٍ، الساق مدارة للداخل 5° حتى تكون الرضفة للأعلى؛ للنصف السفلي لازم يبين مفصل الركبة."
+    ],
+    "cr": [
+     "Perpendicular to the mid-point of the IR (distal femur).",
+     "عمودي على منتصف الكاسيت (النصف السفلي للفخذ)."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–80 kVp · anode heel toward the hip.",
+     "مسافة 100 سم · حوالي 75–80 kVp · كعب الأنود باتجاه الورك."
+    ],
+    "eval": [
+     "Femoral condyles symmetrical; patella over the centre of the femur; knee joint space open.",
+     "اللقمتان متناظرتان؛ الرضفة بنص الفخذ؛ مسافة الركبة مفتوحة."
+    ]
+   }
+  },
+  {
+   "id": "femur-lat",
+   "region": "thigh",
+   "img": "img/xray/hd/femur-lat.jpg",
+   "w": 1737,
+   "h": 2000,
+   "en": "Femur — lateral (proximal half)",
+   "ar": "عظم الفخذ — جانبي (النصف العلوي)",
+   "credit": [
+    "Case courtesy of Piotr Gołofit, Radiopaedia.org, rID: 53033",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/53033"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Lateral recumbent on the affected side, hip and knee flexed (or frog-leg); opposite leg behind.",
+     "مستلقٍ على الجهة المصابة، الورك والركبة مثنية (أو وضع الضفدع)؛ الرجل الثانية لورا."
+    ],
+    "cr": [
+     "Perpendicular to the mid-femur (proximal half: include the hip joint).",
+     "عمودي على منتصف الفخذ (للنصف العلوي لازم يبين مفصل الورك)."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–85 kVp.",
+     "مسافة 100 سم · حوالي 75–85 kVp."
+    ],
+    "eval": [
+     "Hip joint included; femoral head and neck seen; shaft in true lateral without the other leg overlapping.",
+     "مفصل الورك ظاهر؛ رأس وعنق الفخذ واضحين؛ الجسم جانبي صحيح بدون تراكب الرجل الثانية."
+    ]
+   }
+  },
+  {
+   "id": "hip-lat",
+   "region": "thigh",
+   "img": "img/xray/hd/hip-lat.jpg",
+   "w": 1583,
+   "h": 1600,
+   "en": "Hip — lateral",
+   "ar": "الورك — جانبي",
+   "credit": [
+    "Case courtesy of Andrew Dixon, Radiopaedia.org, rID: 36680",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/36680"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, knee and hip flexed, thigh abducted 45° (frog-leg), sole against the opposite knee.",
+     "مستلقٍ، الركبة والورك مثنية، والفخذ مبعد 45° (وضع الضفدع)، وباطن القدم على الركبة الثانية."
+    ],
+    "cr": [
+     "Perpendicular to the femoral neck (midway between the ASIS and the symphysis pubis).",
+     "عمودي على عنق الفخذ (بالنص بين الشوكة الحرقفية الأمامية العلوية والارتفاق العاني)."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–80 kVp.",
+     "مسافة 100 سم · حوالي 75–80 kVp."
+    ],
+    "eval": [
+     "Femoral head and neck seen with the greater trochanter overlapping the neck; lesser trochanter seen medially.",
+     "رأس وعنق الفخذ واضحين والمدور الكبير متراكب على العنق؛ المدور الصغير يبين إنسياً."
+    ]
+   }
+  },
+  {
+   "id": "ankle-ap",
+   "region": "leg",
+   "img": "img/xray/hd/ankle-ap.jpg",
+   "w": 728,
+   "h": 1631,
+   "en": "Ankle — AP",
+   "ar": "الكاحل — أمامي خلفي (AP)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_ankle_-_frontal.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, leg extended; foot dorsiflexed so its long axis is vertical.",
+     "مستلقٍ والساق ممدودة؛ والقدم معطوفة ظهريًا ومحورها الطولي عمودي."
+    ],
+    "cr": [
+     "Perpendicular, midway between the malleoli.",
+     "عمودي على منتصف المسافة بين الكعبين."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–70 kVp.",
+     "مسافة 100 سم · حوالي 60–70 kVp."
+    ],
+    "eval": [
+     "Medial mortise open; lateral mortise not fully open (normal fibula–talus overlap); distal tibia and fibula, malleoli and talus included.",
+     "المسافة الإنسية للنقرة مفتوحة؛ والوحشية غير مفتوحة بالكامل (تراكب طبيعي للشظيّة مع الكاحل)؛ يظهر أسفل الظنبوب والشظيّة والكعبان والكاحل."
+    ]
+   }
+  },
+  {
+   "id": "ankle-lat",
+   "region": "leg",
+   "img": "img/xray/hd/ankle-lat.jpg",
+   "w": 908,
+   "h": 1636,
+   "en": "Ankle — lateral",
+   "ar": "الكاحل — جانبي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_ankle_-_lateral.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Lateral recumbent; lateral side of the ankle on the IR, foot dorsiflexed.",
+     "مستلقٍ على الجانب؛ والجهة الوحشية للكاحل على الكاسيت، والقدم معطوفة ظهريًا."
+    ],
+    "cr": [
+     "Perpendicular to the medial malleolus.",
+     "عمودي على الكعب الإنسي."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–70 kVp.",
+     "مسافة 100 سم · حوالي 60–70 kVp."
+    ],
+    "eval": [
+     "Fibula over the posterior half of the tibia; talar dome superimposed; distal tibia/fibula, talus, calcaneus and base of 5th metatarsal included.",
+     "الشظيّة فوق النصف الخلفي للظنبوب؛ قبّة الكاحل متراكبة؛ يظهر أسفل الظنبوب والشظيّة والكاحل والعقب وقاعدة المشط الخامس."
+    ]
+   }
+  },
+  {
+   "id": "tibfib-ap",
+   "region": "leg",
+   "img": "img/xray/hd/tibfib-ap.jpg",
+   "w": 427,
+   "h": 1600,
+   "en": "Tibia and fibula — AP",
+   "ar": "الظنبوب والشظية — أمامي خلفي",
+   "credit": [
+    "Case courtesy of Ian Bickle, Radiopaedia.org, rID: 46596",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/46596"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, leg extended, foot vertical; include knee and ankle (diagonal on the IR if needed).",
+     "مستلقٍ، الساق ممدودة والقدم عمودية؛ لازم يبين الركبة والكاحل (بشكل قطري على الكاسيت إذا احتاج)."
+    ],
+    "cr": [
+     "Perpendicular to the mid-leg.",
+     "عمودي على منتصف الساق."
+    ],
+    "exp": [
+     "SID 100 cm · about 65–75 kVp · anode heel toward the knee.",
+     "مسافة 100 سم · حوالي 65–75 kVp · كعب الأنود باتجاه الركبة."
+    ],
+    "eval": [
+     "Both joints included; fibula slightly overlaps the tibia at both ends; no rotation.",
+     "المفصلين ظاهرين؛ الشظية متراكبة شوية على الظنبوب بالطرفين؛ لا دوران."
+    ]
+   }
+  },
+  {
+   "id": "tibfib-lat",
+   "region": "leg",
+   "img": "img/xray/hd/tibfib-lat.jpg",
+   "w": 572,
+   "h": 1600,
+   "en": "Tibia and fibula — lateral",
+   "ar": "الظنبوب والشظية — جانبي",
+   "credit": [
+    "Case courtesy of Ian Bickle, Radiopaedia.org, rID: 46597",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/46597"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Lying on the affected side, knee flexed about 45°; patella perpendicular to the IR.",
+     "مستلقٍ على الجهة المصابة، الركبة مثنية حوالي 45°؛ الرضفة عمودية على الكاسيت."
+    ],
+    "cr": [
+     "Perpendicular to the mid-leg.",
+     "عمودي على منتصف الساق."
+    ],
+    "exp": [
+     "SID 100 cm · about 65–75 kVp.",
+     "مسافة 100 سم · حوالي 65–75 kVp."
+    ],
+    "eval": [
+     "Both joints included; distal fibula over the posterior tibia; femoral condyles superimposed.",
+     "المفصلين ظاهرين؛ الشظية السفلى فوق الجزء الخلفي للظنبوب؛ اللقمتان متراكبتين."
+    ]
+   }
+  },
+  {
+   "id": "ankle-mortise",
+   "region": "leg",
+   "img": "img/xray/hd/ankle-mortise.jpg",
+   "w": 782,
+   "h": 1600,
+   "en": "Ankle — mortise (15° internal rotation)",
+   "ar": "الكاحل — منظر النقر (دوران داخلي 15°)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_ankle_-_15_degrees_internal_rotation.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, leg extended, foot dorsiflexed; whole leg rotated internally 15–20° (intermalleolar line parallel to the IR).",
+     "مستلقٍ، الساق ممدودة والقدم مثنية للأعلى؛ الرجل كلها مدارة للداخل 15–20° (الخط بين الكعبين موازي للكاسيت)."
+    ],
+    "cr": [
+     "Perpendicular to midway between the malleoli.",
+     "عمودي على النص بين الكعبين."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–70 kVp.",
+     "مسافة 100 سم · حوالي 60–70 kVp."
+    ],
+    "eval": [
+     "Whole mortise open with equal joint space medially, superiorly and laterally; no overlap of the talus on the lateral malleolus.",
+     "النقر كله مفتوح بمسافة متساوية إنسياً وفوق ووحشياً؛ القعب ما متراكب على الكعب الوحشي."
+    ]
+   }
+  },
+  {
+   "id": "foot-dp",
+   "region": "foot",
+   "img": "img/xray/hd/foot-dp.jpg",
+   "w": 873,
+   "h": 2000,
+   "en": "Foot — AP (dorsoplantar)",
+   "ar": "القدم — أمامي خلفي (ظهري أخمصي)",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_right_foot_by_dorsoplantar_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine with the knee flexed; plantar surface flat on the IR.",
+     "مستلقٍ والركبة مثنية؛ وباطن القدم مسطّح على الكاسيت."
+    ],
+    "cr": [
+     "10° toward the heel, to the base of the 3rd metatarsal.",
+     "بزاوية 10° نحو العقب، على قاعدة المشط الثالث."
+    ],
+    "exp": [
+     "SID 100 cm · about 55–65 kVp.",
+     "مسافة 100 سم · حوالي 55–65 kVp."
+    ],
+    "eval": [
+     "Whole foot from toes to tarsals included; slight overlap of the bases of metatarsals 2–5; joint spaces open.",
+     "تظهر القدم من الأصابع إلى عظام الرصغ؛ تراكب خفيف لقواعد الأمشاط 2–5؛ مسافات المفاصل مفتوحة."
+    ]
+   }
+  },
+  {
+   "id": "foot-lat",
+   "region": "foot",
+   "img": "img/xray/hd/foot-lat.jpg",
+   "w": 1920,
+   "h": 962,
+   "en": "Foot — lateral",
+   "ar": "القدم — جانبي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_right_foot_by_lateral_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Lying on the lateral side (mediolateral), foot dorsiflexed 90°, plantar surface perpendicular to the IR.",
+     "مستلقٍ على الجهة الوحشية، القدم مثنية 90°، والباطن عمودي على الكاسيت."
+    ],
+    "cr": [
+     "Perpendicular to the medial cuneiform (base of the 3rd metatarsal).",
+     "عمودي على الإسفيني الإنسي (قاعدة المشط الثالث)."
+    ],
+    "exp": [
+     "SID 100 cm · about 55–65 kVp.",
+     "مسافة 100 سم · حوالي 55–65 kVp."
+    ],
+    "eval": [
+     "Metatarsals superimposed; fibula over the posterior tibia; ankle joint and calcaneus included.",
+     "الأمشاط متراكبة؛ الشظية فوق خلف الظنبوب؛ يبين الكاحل والعقب."
+    ]
+   }
+  },
+  {
+   "id": "foot-obl",
+   "region": "foot",
+   "img": "img/xray/hd/foot-obl.jpg",
+   "w": 1062,
+   "h": 2000,
+   "en": "Foot — medial oblique",
+   "ar": "القدم — مائل إنسي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_normal_right_foot_by_oblique_projection.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, knee flexed, sole on the IR then the leg rotated medially 30–40° (plantar surface 30° to the IR).",
+     "مستلقٍ، الركبة مثنية والباطن على الكاسيت ثم تندار الرجل للداخل 30–40°."
+    ],
+    "cr": [
+     "Perpendicular to the base of the 3rd metatarsal.",
+     "عمودي على قاعدة المشط الثالث."
+    ],
+    "exp": [
+     "SID 100 cm · about 55–65 kVp.",
+     "مسافة 100 سم · حوالي 55–65 kVp."
+    ],
+    "eval": [
+     "Bases of the 3rd–5th metatarsals free of overlap; cuboid and its joints open; sinus tarsi seen.",
+     "قواعد الأمشاط 3–5 بدون تراكب؛ النردي ومفاصله مفتوحة؛ الجيب الرصغي يبين."
+    ]
+   }
+  },
+  {
+   "id": "calc-axial",
+   "region": "foot",
+   "img": "img/xray/hd/calc-axial.jpg",
+   "w": 1169,
+   "h": 1600,
+   "en": "Calcaneus — axial (plantodorsal)",
+   "ar": "العقب — محوري",
+   "credit": [
+    "Case courtesy of Bruno Di Muzio, Radiopaedia.org, rID: 44539",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/44539"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, leg extended, foot dorsiflexed (a strap around the forefoot held by the patient).",
+     "مستلقٍ، الساق ممدودة، والقدم مثنية للأعلى (حزام حول مقدم القدم يمسكه المريض)."
+    ],
+    "cr": [
+     "40° cephalic to the long axis of the foot, entering at the base of the 3rd metatarsal.",
+     "40° باتجاه الرأس على المحور الطولي للقدم، يدخل عند قاعدة المشط الثالث."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–75 kVp.",
+     "مسافة 100 سم · حوالي 70–75 kVp."
+    ],
+    "eval": [
+     "Whole calcaneus from the tuberosity to the talocalcaneal joint; not distorted (correct angle).",
+     "العقب كامل من الحدبة للمفصل القعبي العقبي؛ بدون تشويه (الزاوية صحيحة)."
+    ]
+   }
+  },
+  {
+   "id": "calc-lat",
+   "region": "foot",
+   "img": "img/xray/hd/calc-lat.jpg",
+   "w": 1600,
+   "h": 1486,
+   "en": "Calcaneus — lateral",
+   "ar": "العقب — جانبي",
+   "credit": [
+    "Case courtesy of Bruno Di Muzio, Radiopaedia.org, rID: 44539",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/44539"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Lying on the affected side, foot dorsiflexed 90°, plantar surface perpendicular to the IR.",
+     "مستلقٍ على الجهة المصابة، القدم مثنية 90°، والباطن عمودي على الكاسيت."
+    ],
+    "cr": [
+     "Perpendicular to the mid-calcaneus (about 2.5 cm below the medial malleolus).",
+     "عمودي على منتصف العقب (حوالي 2.5 سم تحت الكعب الإنسي)."
+    ],
+    "exp": [
+     "SID 100 cm · about 60–65 kVp.",
+     "مسافة 100 سم · حوالي 60–65 kVp."
+    ],
+    "eval": [
+     "Calcaneus in profile with the subtalar joint and sinus tarsi open; Böhler angle can be measured.",
+     "العقب بالمحيط والمفصل تحت القعب والجيب الرصغي مفتوحين؛ تقدر تقيس زاوية بوهلر."
+    ]
+   }
+  },
+  {
+   "id": "whole-spine",
+   "region": "spine",
+   "img": "img/xray/whole-spine.jpg",
+   "w": 1920,
+   "h": 3880,
+   "en": "Whole spine — AP (standing)",
+   "ar": "العمود الفقري كاملًا — أمامي خلفي (وقوف)",
+   "credit": [
+    "Hollandmjuk",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:AP_Whole_spine_with_piercing.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Erect, back (or front for PA) against the long IR, arms by the sides, weight on both feet, no rotation; remove all metal and jewellery.",
+     "وقوف، والظهر (أو الصدر بوضعية PA) على الكاسيت الطويل، والذراعان بجانب الجسم، والوزن على القدمين بالتساوي، بلا دوران؛ ويُنزع كل معدن وحُليّ."
+    ],
+    "cr": [
+     "Perpendicular to the centre of the long IR (about T12–L1 for C7-to-sacrum coverage), or stitched exposures.",
+     "عمودي على منتصف الكاسيت الطويل (نحو T12–L1 لتغطية من C7 إلى العجز)، أو بعدة صور تُدمج معًا."
+    ],
+    "exp": [
+     "SID about 180 cm · about 80–90 kVp · compensating filter for the thinner upper body; shielding as per local protocol.",
+     "مسافة نحو 180 سم · حوالي 80–90 kVp · مرشّح تعويضي للجزء العلوي الأرق؛ والواقيات حسب بروتوكول القسم."
+    ],
+    "eval": [
+     "Whole spine from the lower cervical region to the sacrum and iliac crests included (for scoliosis assessment); spinous processes in the midline; no jewellery over the spine. In this image the navel piercing was left on — a common error.",
+     "يظهر العمود من أسفل الرقبة إلى العجز والعرفين الحرقفيين (لتقييم الجنف)؛ النواتئ الشوكية في الخط الأوسط؛ لا حُليّ فوق العمود. في هذه الصورة بقيت حلقة السُّرة — خطأ شائع."
+    ]
+   }
+  },
+  {
+   "id": "cspine-lat",
+   "region": "spine",
+   "img": "img/xray/hd/cspine-lat.jpg",
+   "w": 1269,
+   "h": 2000,
+   "en": "Cervical spine — lateral",
+   "ar": "الفقرات الرقبية — جانبي",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_cervical_spine_of_a_20_year_old_male_-_lateral.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Erect lateral, shoulders relaxed and pulled down (holding weights helps), chin slightly raised.",
+     "وقوف جانبي، والكتفان مرخيّان ومسحوبان للأسفل (حمل أثقال يساعد)، والذقن مرفوع قليلًا."
+    ],
+    "cr": [
+     "Horizontal, to C4 (level of the upper thyroid cartilage).",
+     "أفقي على C4 (مستوى أعلى الغضروف الدرقي)."
+    ],
+    "exp": [
+     "SID 150–180 cm (to reduce magnification) · about 70–80 kVp · suspended expiration.",
+     "مسافة 150–180 سم (لتقليل التكبير) · حوالي 70–80 kVp · حبس النفس بعد الزفير."
+    ],
+    "eval": [
+     "C1 to C7 (ideally the C7–T1 junction) included; no rotation (articular pillars superimposed); disc spaces open; if C7 is hidden by the shoulders a swimmer's view is needed.",
+     "تظهر الفقرات من C1 إلى C7 (والأفضل ملتقى C7–T1)؛ لا دوران (الأعمدة المفصلية متراكبة)؛ مسافات الأقراص مفتوحة؛ وإذا اختفت C7 خلف الكتفين نحتاج وضعية السبّاح."
+    ]
+   }
+  },
+  {
+   "id": "cspine-ap",
+   "region": "spine",
+   "img": "img/xray/hd/cspine-ap.jpg",
+   "w": 1280,
+   "h": 1999,
+   "en": "Cervical spine — AP (axial)",
+   "ar": "الفقرات الرقبية — أمامي خلفي (محوري)",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_cervical_spine_of_a_20_year_old_male_-_anteroposterior.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Erect or supine, head in neutral position; the line from the lower edge of the upper incisors to the mastoid tip is perpendicular to the IR.",
+     "وقوف أو استلقاء، والرأس بوضع محايد؛ والخط من الحافة السفلية للقواطع العلوية إلى قمة الناتئ الخشّائي عمودي على الكاسيت."
+    ],
+    "cr": [
+     "15–20° cephalic, entering at C4 (thyroid cartilage).",
+     "بزاوية 15–20° نحو الرأس، يدخل عند C4 (الغضروف الدرقي)."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp.",
+     "مسافة 100 سم · حوالي 70–80 kVp."
+    ],
+    "eval": [
+     "C3 to T2 shown; spinous processes in the midline (no rotation); intervertebral disc spaces open; mandible over the upper cervical spine.",
+     "تظهر الفقرات من C3 إلى T2؛ النواتئ الشوكية في الخط الأوسط (لا دوران)؛ مسافات الأقراص مفتوحة؛ والفك السفلي فوق الفقرات الرقبية العلوية."
+    ]
+   }
+  },
+  {
+   "id": "cspine-odont",
+   "region": "spine",
+   "img": "img/xray/hd/cspine-odont.jpg",
+   "w": 1600,
+   "h": 1388,
+   "en": "Odontoid — open-mouth AP",
+   "ar": "السنّ — أمامي خلفي بالفم المفتوح",
+   "credit": [
+    "Department of Radiology, UC San Diego Health",
+    "Public domain",
+    "https://commons.wikimedia.org/wiki/File:X-ray_of_the_cervical_spine_of_a_20_year_old_male_-_odontoid.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, mouth wide open; the line from the lower edge of the upper incisors to the base of the skull (mastoid tip) is perpendicular to the IR.",
+     "مستلقٍ والفم مفتوح على أوسعه؛ والخط من الحافة السفلية للقواطع العلوية إلى قاعدة الجمجمة (قمة الناتئ الخشّائي) عمودي على الكاسيت."
+    ],
+    "cr": [
+     "Perpendicular, through the centre of the open mouth; ask the patient to say “ah” to keep the tongue down.",
+     "عمودي على منتصف الفم المفتوح؛ ويُطلب من المريض قول «آه» ليبقى اللسان للأسفل."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp.",
+     "مسافة 100 سم · حوالي 70–80 kVp."
+    ],
+    "eval": [
+     "Dens and the C1–C2 lateral masses seen through the open mouth; equal spaces on both sides of the dens (no rotation); upper incisors and occiput superimposed.",
+     "يظهر السن والكتلتان الجانبيتان لـC1–C2 من خلال الفم المفتوح؛ مسافتان متساويتان على جانبي السن (لا دوران)؛ القواطع العلوية والعظم القذالي متراكبان."
+    ]
+   }
+  },
+  {
+   "id": "thoracic-ap",
+   "region": "spine",
+   "img": "img/xray/hd/thoracic-ap.jpg",
+   "w": 559,
+   "h": 1600,
+   "en": "Thoracic spine — AP",
+   "ar": "الفقرات الصدرية — أمامي خلفي",
+   "credit": [
+    "Case courtesy of Ian Bickle, Radiopaedia.org, rID: 46581",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/46581"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine (or erect), back against the table, midsagittal plane centred, knees flexed to reduce the kyphosis; arms by the sides.",
+     "مستلقٍ على ظهره (أو واقف)، المستوى السهمي الأوسط بالمنتصف، الركبتان مثنية لتقليل التحدب؛ الذراعان جنب الجسم."
+    ],
+    "cr": [
+     "Perpendicular to T7 — about 8–10 cm below the jugular notch (midway between the jugular notch and the xiphoid).",
+     "عمودي على T7 — نحو 8–10 سم تحت الثلمة الوداجية (بالنص بين الثلمة الوداجية والناتئ الخنجري)."
+    ],
+    "exp": [
+     "SID 100 cm · about 80–85 kVp · suspended expiration (less air = more even density); anode heel toward the head.",
+     "مسافة 100 سم · حوالي 80–85 kVp · حبس النفس بعد الزفير (هواء أقل = كثافة متجانسة)؛ كعب الأنود باتجاه الرأس."
+    ],
+    "eval": [
+     "C7 to L1 included; spinous processes midway between the pedicles (no rotation); disc spaces open; ribs and transverse processes seen on both sides.",
+     "تظهر من C7 إلى L1؛ النواتئ الشوكية بالنص بين السويقات (لا دوران)؛ مسافات الأقراص مفتوحة؛ الأضلاع والنواتئ المستعرضة واضحة بالجهتين."
+    ]
+   }
+  },
+  {
+   "id": "thoracic-lat",
+   "region": "spine",
+   "img": "img/xray/hd/thoracic-lat.jpg",
+   "w": 642,
+   "h": 1600,
+   "en": "Thoracic spine — lateral",
+   "ar": "الفقرات الصدرية — جانبي",
+   "credit": [
+    "Case courtesy of Ian Bickle, Radiopaedia.org, rID: 46580",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/46580"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Lateral recumbent (left side down), arms raised at right angles, hips and knees flexed; a support under the waist so the spine is parallel to the table.",
+     "مستلقٍ على الجانب (الأيسر للأسفل)، الذراعان مرفوعة بزاوية قائمة، الوركان والركبتان مثنية؛ إسناد تحت الخصر حتى يصير العمود موازي للطاولة."
+    ],
+    "cr": [
+     "Perpendicular to T7 (inferior angle of the scapula); angle 10–15° cephalad if the spine is not parallel.",
+     "عمودي على T7 (عند الزاوية السفلى للوح الكتف)؛ ميلان 10–15° باتجاه الرأس إذا العمود مو موازي."
+    ],
+    "exp": [
+     "SID 100 cm · about 80–90 kVp · breathing technique (long exposure, gentle breathing blurs the ribs and lung markings).",
+     "مسافة 100 سم · حوالي 80–90 kVp · تقنية التنفس (تعريض طويل مع تنفس هادئ حتى تتغبش الأضلاع وعلامات الرئة)."
+    ],
+    "eval": [
+     "T1/T3 to L1 included (upper levels hidden by the shoulders); intervertebral foramina open; posterior ribs superimposed (no rotation); disc spaces open.",
+     "تظهر من T3 تقريباً إلى L1 (الفقرات العليا تغطيها الأكتاف)؛ الثقوب بين الفقرات مفتوحة؛ الأضلاع الخلفية متراكبة (لا دوران)؛ مسافات الأقراص مفتوحة."
+    ]
+   }
+  },
+  {
+   "id": "lumbar-ap",
+   "region": "spine",
+   "img": "img/xray/hd/lumbar-ap.jpg",
+   "w": 902,
+   "h": 1600,
+   "en": "Lumbar spine — AP",
+   "ar": "الفقرات القطنية — أمامي خلفي (AP)",
+   "credit": [
+    "Couraco",
+    "CC BY-SA 3.0",
+    "https://commons.wikimedia.org/wiki/File:LWS_ap.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine with hips and knees flexed to flatten the lumbar curve; spine in the midline of the table.",
+     "مستلقٍ والوركان والركبتان مثنية لتقليل الانحناء القطني؛ والعمود في منتصف الطاولة."
+    ],
+    "cr": [
+     "Perpendicular to L4 (iliac crest level) for a large IR, or L3 (about 4 cm above the crest) for a smaller one.",
+     "عمودي على L4 (مستوى العرف الحرقفي) مع كاسيت كبير، أو على L3 (نحو 4 سم فوق العرف) مع كاسيت أصغر."
+    ],
+    "exp": [
+     "SID 100 cm · about 80–90 kVp · suspended expiration.",
+     "مسافة 100 سم · حوالي 80–90 kVp · حبس النفس بعد الزفير."
+    ],
+    "eval": [
+     "T12 to the sacrum included; no rotation (spinous processes centred, pedicles symmetric, SI joints equidistant); disc spaces open.",
+     "تظهر الفقرات من T12 إلى العجز؛ لا دوران (النواتئ الشوكية في الوسط، والسويقات متناظرة، والمفصلان العجزيان الحرقفيان على مسافة متساوية)؛ مسافات الأقراص مفتوحة."
+    ]
+   }
+  },
+  {
+   "id": "lumbar-lat",
+   "region": "spine",
+   "img": "img/xray/hd/lumbar-lat.jpg",
+   "w": 940,
+   "h": 1600,
+   "en": "Lumbar spine — lateral",
+   "ar": "الفقرات القطنية — جانبي",
+   "credit": [
+    "Couraco",
+    "CC BY-SA 3.0",
+    "https://commons.wikimedia.org/wiki/File:LWS_seitlich.jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Lateral recumbent, hips and knees flexed, spine parallel to the table (a support under the waist if needed).",
+     "مستلقٍ على الجانب، والوركان والركبتان مثنية، والعمود موازٍ للطاولة (مع إسناد تحت الخصر عند الحاجة)."
+    ],
+    "cr": [
+     "Perpendicular to L4 (iliac crest level) or L3 (about 4 cm above the crest).",
+     "عمودي على L4 (مستوى العرف الحرقفي) أو L3 (نحو 4 سم فوق العرف)."
+    ],
+    "exp": [
+     "SID 100 cm · about 85–95 kVp · suspended expiration.",
+     "مسافة 100 سم · حوالي 85–95 kVp · حبس النفس بعد الزفير."
+    ],
+    "eval": [
+     "T12 to the sacrum included; intervertebral foramina open; no rotation (posterior margins of the vertebral bodies superimposed); disc spaces open.",
+     "تظهر الفقرات من T12 إلى العجز؛ الثقوب بين الفقرات مفتوحة؛ لا دوران (الحواف الخلفية لأجسام الفقرات متراكبة)؛ مسافات الأقراص مفتوحة."
+    ]
+   }
+  },
+  {
+   "id": "chest-pa",
+   "region": "chest",
+   "img": "img/xray/hd/chest-pa.jpg",
+   "w": 2000,
+   "h": 1919,
+   "en": "Chest — PA",
+   "ar": "الصدر — خلفي أمامي",
+   "credit": [
+    "Case courtesy of Liz Silverstone, Radiopaedia.org, rID: 231508",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/231508"
+   ],
+   "pts": [
+    [
+     873,
+     456,
+     "clavicle-right",
+     "Medial end of right clavicle",
+     "النهاية الإنسية للترقوة اليمنى",
+     "Radiopaedia 231508 (annotation)"
+    ],
+    [
+     1083,
+     444,
+     "clavicle-left",
+     "Medial end of left clavicle",
+     "النهاية الإنسية للترقوة اليسرى",
+     "Radiopaedia 231508 (annotation)"
+    ],
+    [
+     988,
+     425,
+     null,
+     "Spinous process",
+     "الناتئ الشوكي",
+     "Radiopaedia 231508 (annotation)"
+    ],
+    [
+     691,
+     479,
+     "1st-costal-cartilage-right",
+     "Ossified 1st costochondral junction (right)",
+     "تعظّم الوصل الضلعي الغضروفي الأول (يمين)",
+     "Radiopaedia 231508 (annotation)"
+    ],
+    [
+     1236,
+     518,
+     "1st-costal-cartilage-left",
+     "Ossified 1st costochondral junction (left)",
+     "تعظّم الوصل الضلعي الغضروفي الأول (يسار)",
+     "Radiopaedia 231508 (annotation)"
+    ],
+    [
+     190,
+     1021,
+     null,
+     "Right chest wall (soft tissue)",
+     "جدار الصدر الأيمن (الأنسجة الرخوة)",
+     "Radiopaedia 231508 (annotation)"
+    ],
+    [
+     1789,
+     1063,
+     null,
+     "Left chest wall (soft tissue)",
+     "جدار الصدر الأيسر (الأنسجة الرخوة)",
+     "Radiopaedia 231508 (annotation)"
+    ],
+    [
+     620,
+     1405,
+     null,
+     "Lung vessels in posterior costophrenic recess",
+     "أوعية الرئة بالزاوية الضلعية الحجابية الخلفية",
+     "Radiopaedia 231508 (annotation)"
+    ],
+    [
+     1338,
+     1587,
+     null,
+     "Gas in gastric fundus",
+     "هواء بقاع المعدة",
+     "Radiopaedia 231508 (annotation)"
+    ],
+    [
+     1539,
+     1672,
+     null,
+     "Gas in splenic flexure",
+     "هواء بالثنية الطحالية للقولون",
+     "Radiopaedia 231508 (annotation)"
+    ]
+   ],
+   "pos": {
+    "patient": [
+     "Erect, chest against the IR, chin up, hands on the hips and shoulders rolled forward (to move the scapulae off the lungs).",
+     "واقف، الصدر على الكاسيت، الذقن مرفوعة، اليدين على الورك والأكتاف مدفوعة لقدام (حتى يطلع لوح الكتف من الرئة)."
+    ],
+    "cr": [
+     "Perpendicular to T7 (about the inferior angle of the scapula).",
+     "عمودي على T7 (حوالي الزاوية السفلى للوح الكتف)."
+    ],
+    "exp": [
+     "SID 180 cm · about 110–125 kVp · full inspiration (second breath).",
+     "مسافة 180 سم · حوالي 110–125 kVp · شهيق كامل (بالنفس الثاني)."
+    ],
+    "eval": [
+     "10 posterior ribs above the diaphragm; medial ends of the clavicles equidistant from the spinous processes; scapulae outside the lungs; both costophrenic angles included.",
+     "10 أضلاع خلفية فوق الحجاب؛ نهايتا الترقوتين على بعد متساوي من النواتئ الشوكية؛ لوح الكتف برا الرئة؛ الزاويتين الضلعيتين الحجابيتين ظاهرتين."
+    ]
+   }
+  },
+  {
+   "id": "chest-lat",
+   "region": "chest",
+   "img": "img/xray/hd/chest-lat.jpg",
+   "w": 1442,
+   "h": 2000,
+   "en": "Chest — lateral",
+   "ar": "الصدر — جانبي",
+   "credit": [
+    "Mikael Häggström, M.D.",
+    "CC0",
+    "https://commons.wikimedia.org/wiki/File:Normal_lateral_chest_radiograph_(X-ray).jpg"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Erect, left side against the IR, arms raised above the head, midcoronal plane perpendicular to the IR.",
+     "واقف، الجهة اليسرى على الكاسيت، الذراعين فوق الرأس، والمستوى التاجي الأوسط عمودي على الكاسيت."
+    ],
+    "cr": [
+     "Perpendicular to T7 at the midcoronal plane.",
+     "عمودي على T7 بالمستوى التاجي الأوسط."
+    ],
+    "exp": [
+     "SID 180 cm · about 120–130 kVp · full inspiration.",
+     "مسافة 180 سم · حوالي 120–130 kVp · شهيق كامل."
+    ],
+    "eval": [
+     "Posterior ribs nearly superimposed; arms out of the lung fields; lung apices to the costophrenic angles included.",
+     "الأضلاع الخلفية شبه متراكبة؛ الذراعين برا الرئة؛ من قمة الرئة للزوايا الضلعية الحجابية."
+    ]
+   }
+  },
+  {
+   "id": "abdomen-ap",
+   "region": "abdomen",
+   "img": "img/xray/hd/abdomen-ap.jpg",
+   "w": 1638,
+   "h": 2000,
+   "en": "Abdomen — AP supine (KUB)",
+   "ar": "البطن — أمامي خلفي مستلقٍ (KUB)",
+   "credit": [
+    "Case courtesy of Ian Bickle, Radiopaedia.org, rID: 50355",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/50355"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Supine, midsagittal plane centred, arms by the sides, legs extended; gonad shielding where it does not hide anatomy.",
+     "مستلقٍ على ظهره، المستوى السهمي الأوسط بالنص، الذراعين جنب الجسم والرجلين ممدودة؛ واقي الغدد التناسلية إذا ما يغطي التشريح."
+    ],
+    "cr": [
+     "Perpendicular to the iliac crest level at the midline.",
+     "عمودي على مستوى العرف الحرقفي بالخط الأوسط."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp · suspended expiration.",
+     "مسافة 100 سم · حوالي 70–80 kVp · حبس النفس بعد الزفير."
+    ],
+    "eval": [
+     "Kidneys to the symphysis pubis included; no rotation (iliac wings and obturator foramina symmetrical); psoas outlines and transverse processes seen.",
+     "من الكلى للارتفاق العاني؛ لا دوران (جناحي الحرقفة والثقبتين متناظرة)؛ حواف العضلة القطنية والنواتئ المستعرضة واضحة."
+    ]
+   }
+  },
+  {
+   "id": "skull-pa",
+   "region": "head",
+   "img": "img/xray/hd/skull-pa.jpg",
+   "w": 1693,
+   "h": 1856,
+   "en": "Skull — PA",
+   "ar": "الجمجمة — خلفي أمامي",
+   "credit": [
+    "Case courtesy of Mohd Radhwan Bin Abidin, Radiopaedia.org, rID: 150811",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/150811"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Prone or erect, forehead and nose touching the IR; orbitomeatal line (OML) perpendicular to the IR; no rotation.",
+     "منبطح أو واقف، الجبهة والأنف على الكاسيت؛ الخط المحجري الصماخي عمودي على الكاسيت؛ بدون دوران."
+    ],
+    "cr": [
+     "Perpendicular, exiting at the nasion (or 15° caudal for Caldwell).",
+     "عمودي، يطلع من نقطة الأنف (أو 15° باتجاه القدم لوضعية كالدويل)."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–85 kVp · suspended respiration.",
+     "مسافة 100 سم · حوالي 75–85 kVp · حبس النفس."
+    ],
+    "eval": [
+     "Equal distance from the lateral orbital margins to the skull edge on both sides (no rotation); petrous ridges fill the orbits (PA 0°).",
+     "مسافة متساوية بين حافة المحجر الوحشية وحافة الجمجمة بالجهتين (لا دوران)؛ حواف الصخرة تملي المحجرين (PA 0°)."
+    ]
+   }
+  },
+  {
+   "id": "skull-lat",
+   "region": "head",
+   "img": "img/xray/hd/skull-lat.jpg",
+   "w": 1717,
+   "h": 1722,
+   "en": "Skull — lateral",
+   "ar": "الجمجمة — جانبي",
+   "credit": [
+    "Case courtesy of Mohd Radhwan Bin Abidin, Radiopaedia.org, rID: 150811",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/150811"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Semi-prone or erect, affected side against the IR; midsagittal plane parallel and interpupillary line perpendicular to the IR.",
+     "شبه منبطح أو واقف، الجهة المصابة على الكاسيت؛ المستوى السهمي الأوسط موازي والخط بين الحدقتين عمودي على الكاسيت."
+    ],
+    "cr": [
+     "Perpendicular, 5 cm superior to the external acoustic meatus.",
+     "عمودي، 5 سم فوق فتحة الأذن الخارجية."
+    ],
+    "exp": [
+     "SID 100 cm · about 70–80 kVp · suspended respiration.",
+     "مسافة 100 سم · حوالي 70–80 kVp · حبس النفس."
+    ],
+    "eval": [
+     "Orbital roofs, mandibular rami and greater wings of the sphenoid superimposed; sella turcica in profile.",
+     "سقفي المحجرين وفرعي الفك والجناحين الكبيرين للوتدي متراكبة؛ السرج التركي بالمحيط."
+    ]
+   }
+  },
+  {
+   "id": "facial-om",
+   "region": "head",
+   "img": "img/xray/hd/facial-om.jpg",
+   "w": 1600,
+   "h": 1536,
+   "en": "Facial bones — occipitomental (Waters)",
+   "ar": "عظام الوجه — قذالي ذقني (ووترز)",
+   "credit": [
+    "Case courtesy of Bruno Di Muzio, Radiopaedia.org, rID: 48270",
+    "CC BY-NC-SA 3.0",
+    "https://radiopaedia.org/cases/48270"
+   ],
+   "pts": [],
+   "pos": {
+    "patient": [
+     "Erect or prone, chin on the IR; orbitomeatal line at 37° to the IR (mentomeatal line perpendicular).",
+     "واقف أو منبطح، الذقن على الكاسيت؛ الخط المحجري الصماخي بزاوية 37° على الكاسيت (الخط الذقني الصماخي عمودي)."
+    ],
+    "cr": [
+     "Perpendicular, exiting at the acanthion.",
+     "عمودي، يطلع من نقطة تحت الأنف (الأكانثيون)."
+    ],
+    "exp": [
+     "SID 100 cm · about 75–80 kVp · suspended respiration.",
+     "مسافة 100 سم · حوالي 75–80 kVp · حبس النفس."
+    ],
+    "eval": [
+     "Petrous ridges just below the maxillary sinuses; orbits and zygomatic arches symmetrical (no rotation).",
+     "حواف الصخرة تحت الجيبين الفكيين مباشرة؛ المحجرين والقوسين الوجنيين متناظرة (لا دوران)."
+    ]
+   }
+  }
+ ]
+}

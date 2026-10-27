@@ -62,9 +62,24 @@ rep('hypothenar:"بارزة الخنصر (Hypothenar)",central:"العضلات �
 
 # ٦. الأشعة: نضيف data/xray-extra.json، والحوض يعرض كمان صوره القديمة (reuse)
 rep('const xrayReady=fetch("data/xray.json").then(r=>r.json()).then(j=>XRAY=j);',
-    'const xrayReady=Promise.all([fetch("data/xray.json").then(r=>r.json()),fetch("data/xray-extra.json").then(r=>r.json()).catch(()=>({views:[],reuse:{}}))])\n  .then(([a,b])=>XRAY={...a,views:[...b.views,...a.views],reuse:b.reuse||{}});')
+    'const xrayReady=Promise.all([fetch("data/xray-clean.json").then(r=>r.json()),fetch("data/xray-extra.json").then(r=>r.json()).catch(()=>({views:[],reuse:{}}))])\n  .then(([a,b])=>XRAY={...a,views:[...b.views,...a.views],reuse:b.reuse||{}});')
 rep('const views=XRAY.views.filter(v=>v.region===r);',
     'const views=XRAY.views.filter(v=>v.region===r||(XRAY.reuse[r]||[]).includes(v.id));')
+
+# ٦ب. التأشير (قرار محمد 27/10/2026): الخريطة الجديدة تقرا data/xray-clean.json (من tools/clean_labels.py)
+# بيه بس التسميات اللي موضعها من مصدر الصورة نفسه؛ اللي انحطت بالتقدير انشالت. الصورة اللي ما بقى بيها
+# تأشير تنعرض بدون نقاط، وزرّي «الأسماء» و«اختبر نفسك» والقائمة يختفون (ما يبقى زر يشتغل على فراغ).
+rep('''        <button id="x-test">❓ اختبر نفسك</button>
+      </div>''', '''        <button id="x-test">❓ اختبر نفسك</button>
+      </div>
+      <p class="xnote" id="xnote" hidden>هاي الصورة بدون تأشير: التسميات اللي انحطت بالتقدير انشالت، وتبقى بس التسميات اللي مأشّرها مصدر الصورة نفسه.</p>''')
+rep('.xtools button.on{', '.xnote{font-size:12.5px;opacity:.75;margin:0 0 8px;line-height:1.6}\n.xtools button.on{')
+rep('''  $("xlegend").innerHTML=v.pts.map((p,i)=>`<li data-i="${i}"><b class="en">${p[3]}</b><span>${p[4]}</span></li>`).join("");
+  xInfo(null,v);''', '''  $("xlegend").innerHTML=v.pts.map((p,i)=>`<li data-i="${i}"><b class="en">${p[3]}</b><span>${p[4]}</span></li>`).join("");
+  const np=v.pts.length, srcs=[...new Set(v.pts.map(p=>p[5]).filter(Boolean))];
+  $("x-names").hidden=!np; $("x-test").hidden=np<4; $("xlegend").hidden=!np; $("xnote").hidden=!!np;
+  if(srcs.length) $("x-credit").innerHTML+=` · Labels from source: ${srcs.join(", ")}`;
+  xInfo(null,v);''')
 
 # ٧. المجسّم
 rep('const RNAME={arm:"العضد",forearm:"الساعد",hand:"اليد",thigh:"الفخذ",leg:"الساق",foot:"القدم",spine:"العمود الفقري"};',
