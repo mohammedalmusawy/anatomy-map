@@ -2,3 +2,9 @@
 .DS_Store
 tools/__pycache__/
 تجميع الصور/
+
+# ملف دخول حساب تليكرام الشخصي: ما يترفع أبداً
+*.session
+*.session-journal
+bot.env
+user_api.env
