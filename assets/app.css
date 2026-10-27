@@ -107,7 +107,9 @@ h1 { font-size: 26px; line-height: 1.4; margin: 10px 0 4px; }
 .slides { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none; border-radius: 16px; }
 .slides::-webkit-scrollbar { display: none; }
 .slide { flex: 0 0 100%; scroll-snap-align: center; scroll-snap-stop: always; }
-.slide img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; border-radius: 16px; border: 1px solid var(--line); background: #fff; }
+.slide { align-self: center; }
+.slide img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--line); background: #fff; }
+.scap { font-size: 13px; color: var(--muted); text-align: center; margin: 6px 0 0; direction: ltr; }
 .snav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 12px 0 16px; }
 .snav button { font: 700 16px "IBM Plex Sans Arabic", system-ui, sans-serif; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 12px; padding: 10px 16px; cursor: pointer; }
 .snav button:disabled { opacity: .35; cursor: default; }
