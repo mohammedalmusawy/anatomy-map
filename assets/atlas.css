@@ -129,3 +129,7 @@ svg.body.mini .sp { display: none; }
 .gz .fb { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; font-size: 15px; }
 .gz .next { width: 100%; margin-top: 12px; font: inherit; font-size: 17px; font-weight: 700; border: 0; border-radius: 14px; padding: 14px; background: var(--brand); color: var(--brand-ink); cursor: pointer; }
 .gz .go { display: inline-block; margin-top: 6px; color: var(--brand); font-weight: 600; }
+/* مجموعات CT/الرنين/السونار (28/10) */
+:root { --g-brain: #6A4C9C; --g-vascular: #B23A48; --g-organ: #8A6D3B; --g-obgyn: #C2577F; }
+@media (prefers-color-scheme: dark) { :root { --g-brain: #B9A3E3; --g-vascular: #EE8E99; --g-organ: #D8BE8A; --g-obgyn: #F0A3C0; } }
+.g-brain { --g: var(--g-brain); } .g-vascular { --g: var(--g-vascular); } .g-organ { --g: var(--g-organ); } .g-obgyn { --g: var(--g-obgyn); }
