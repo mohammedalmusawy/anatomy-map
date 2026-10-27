@@ -1,6 +1,6 @@
 // يخلّي الموقع يشتغل كتطبيق، ويفتح الاختبارات اللي انفتحت قبل حتى بدون إنترنت.
 // يتعامل بس مع صفحات الدروس (lessons, quiz, learn, atlas + روابطها العربية القديمة)؛ خريطة التشريح وملفاتها الكبيرة تمشي عادي بدون كاش.
-const VERSION = "20261027132614";
+const VERSION = "20261027140127";
 const CACHE = "dars-" + VERSION;
 const CORE = ["lessons/", "assets/app.css", "assets/quiz.js", "manifest.webmanifest", "assets/icon-192.png"];
 const BASE = new URL(self.registration.scope).pathname;
@@ -28,9 +28,9 @@ self.addEventListener("fetch", (e) => {
   const req = e.request;
   const url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== location.origin || !mine(url)) return;
-  // من الشبكة أول (حتى الأسئلة الجديدة توصل)، وإذا ماكو إنترنت من الكاش
+  // من الشبكة أول، ويسأل السيرفر كل مرة (no-cache) حتى أي تعديل يوصل فوراً؛ وإذا ماكو إنترنت من الكاش (آخر نسخة نزلت)
   e.respondWith(
-    fetch(req)
+    fetch(req, { cache: "no-cache" })
       .then((res) => {
         if (res.ok) {
           const copy = res.clone();
