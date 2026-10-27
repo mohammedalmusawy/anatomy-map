@@ -307,3 +307,17 @@ table.adm th, table.adm td { border: 1px solid var(--line); padding: 5px 6px; te
 .alert { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; margin: 0 0 8px; }
 #admin input, #admin textarea, #admin select { font-family: inherit; font-size: 15px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); max-width: 100%; }
 #admin label { display: block; margin: 6px 0; }
+/* 🔊 لفظ المصطلحات (27/10): أزرار كبيرة للمس (44px) */
+.sayb { display: inline-flex; gap: 4px; vertical-align: middle; margin-inline-start: 6px; }
+.say1, .term .say { min-width: 44px; min-height: 44px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; font-size: 18px; cursor: pointer; line-height: 1; }
+.say1.on, .term .say.on { background: var(--brand-soft); border-color: var(--brand); }
+.say1:focus-visible, .term .say:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.pron { display: block; font-size: 13.5px; color: var(--muted); margin: 2px 0 4px; }
+.pron .pa u { text-decoration-thickness: 2px; text-underline-offset: 3px; color: var(--ink); }
+.pron .pi { direction: ltr; font-size: 12px; opacity: .8; }
+/* 🆕 شنو الجديد · 🏆 التحدي · 🔁 المراجعة (27/10) */
+.news { margin: 14px 4px 0; font-size: 13px; color: var(--muted); text-align: center; line-height: 1.7; }
+.board { margin: 8px 0 0; padding-inline-start: 20px; }
+.rvrow { margin: 0 0 8px; }
+.qotd .score { font-size: 30px; font-weight: 700; text-align: center; margin: 6px 0; }
+.qotd input { font-family: inherit; font-size: 15px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; width: 100%; box-sizing: border-box; margin: 6px 0; background: var(--card); color: var(--ink); }

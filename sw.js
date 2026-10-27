@@ -1,6 +1,6 @@
 // يخلّي الموقع يشتغل كتطبيق، ويفتح الاختبارات اللي انفتحت قبل حتى بدون إنترنت.
 // يتعامل بس مع صفحات الدروس (lessons, quiz, learn, atlas, devices, contrast, terms + روابطها العربية القديمة)؛ خريطة التشريح وملفاتها الكبيرة تمشي عادي بدون كاش.
-const VERSION = "20261027224837";
+const VERSION = "20261028003048";
 const CACHE = "dars-" + VERSION;
 const CORE = ["lessons/", "assets/app.css", "assets/quiz.js", "manifest.webmanifest", "assets/icon-192.png"];
 const BASE = new URL(self.registration.scope).pathname;
@@ -9,7 +9,7 @@ function mine(url) {
   if (!url.pathname.startsWith(BASE)) return false;
   const rel = decodeURIComponent(url.pathname.slice(BASE.length));
   return rel === "manifest.webmanifest" || rel.startsWith("assets/") ||
-    ["lessons", "quiz", "learn", "atlas", "devices", "contrast", "terms", "دروس", "اختبار", "تعلم", "أطلس"].some((p) => rel.startsWith(p));
+    ["lessons", "quiz", "learn", "atlas", "devices", "contrast", "terms", "search", "assistant", "exams", "study", "دروس", "اختبار", "تعلم", "أطلس"].some((p) => rel.startsWith(p));
 }
 
 self.addEventListener("install", (e) => {
@@ -28,6 +28,11 @@ self.addEventListener("fetch", (e) => {
   const req = e.request;
   const url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== location.origin || !mine(url)) return;
+  // 🔊 ملفات الصوت ما تتغير: من الكاش أول (تشتغل بلا نت بعد أول سماع)
+  if (url.pathname.includes("/assets/audio/") && url.pathname.endsWith(".mp3")) {
+    e.respondWith(caches.match(req).then((r) => r || fetch(req).then((res) => { if (res.ok) { const c = res.clone(); caches.open(CACHE).then((x) => x.put(req, c)); } return res; })));
+    return;
+  }
   // من الشبكة أول، ويسأل السيرفر كل مرة (no-cache) حتى أي تعديل يوصل فوراً؛ وإذا ماكو إنترنت من الكاش (آخر نسخة نزلت)
   e.respondWith(
     fetch(req, { cache: "no-cache" })

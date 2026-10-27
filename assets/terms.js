@@ -19,7 +19,8 @@
     const list = idx[set].filter(({ t, s }) => (!subj || t.s === subj) && words.every((w) => s.includes(w)));
     $("#tn").textContent = `${list.length} مصطلح`;
     $("#tl").innerHTML = list.slice(0, 400).map(({ t }) => `<article class="term">
-      <div class="th"><bdi class="te">${esc(t.en)}</bdi><button class="say" data-say="${esc(t.en)}" aria-label="انطق ${esc(t.en)}">🔊</button></div>
+      <div class="th"><bdi class="te">${esc(t.en)}</bdi><button class="say" data-say="${esc(t.en)}" title="اضغط للسماع" aria-label="انطق ${esc(t.en)}">🔊</button><button class="say slow" data-say="${esc(t.en)}" data-r="0.75" title="لفظ بطيء" aria-label="لفظ بطيء ${esc(t.en)}">🐢</button></div>
+      ${window.Say && Say.info(t.en) ? `<span class="pron"><span class="pa">${Say.info(t.en).ar}</span> <bdi class="pi">${esc(Say.info(t.en).ipa)}</bdi></span>` : ""}
       <b class="ta">${esc(t.ar)}</b>${t.d ? `<p>${esc(t.d)}</p>` : ""}
       ${t.s ? `<span class="ts">${esc(t.s)}${t.sa ? " · " + esc(t.sa) : ""}</span>` : ""}
       ${t.c ? `<a class="seecase" href="${esc(t.c)}">🩻 شوف الحالة</a>` : ""}</article>`).join("");
@@ -50,6 +51,7 @@
     const b = ev.target.closest("button.say");
     if (!b) return;
     if (!window.speechSynthesis) { b.textContent = "🔇"; return; }
+    if (window.Say && Say.has(b.dataset.say)) { Say.play(b.dataset.say, +(b.dataset.r || 1), b); return; } // 🔊 ملف صوتي جاهز (27/10)
     if (!voice) pick(); // iOS/Android: قائمة الأصوات أحياناً تتحمّل متأخرة
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(b.dataset.say);
@@ -61,5 +63,6 @@
     speechSynthesis.speak(u);
   });
   if (set === "general") document.querySelectorAll("#tt a").forEach((x) => x.classList.toggle("on", x.dataset.set === "general"));
+  document.addEventListener("say:ready", render);
   chips(); render();
 })();
