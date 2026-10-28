@@ -321,3 +321,31 @@ table.adm th, table.adm td { border: 1px solid var(--line); padding: 5px 6px; te
 .rvrow { margin: 0 0 8px; }
 .qotd .score { font-size: 30px; font-weight: 700; text-align: center; margin: 6px 0; }
 .qotd input { font-family: inherit; font-size: 15px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; width: 100%; box-sizing: border-box; margin: 6px 0; background: var(--card); color: var(--ink); }
+
+/* 🎧 المحاضرة مسموعة — 3 مستويات (28/10) */
+.listen { margin-top: 28px; position: relative; }
+.listen h2 { margin: 0 0 4px; }
+.lctl { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding: 8px 0; }
+.lctl .btn { min-height: 44px; width: auto; flex: 1 1 auto; margin: 0; padding: 6px 10px; font-size: 14px; }
+.lctl .on, .lplay.on { background: var(--brand-soft); border-color: var(--brand); color: var(--ink); }
+.lsec { border: 1px solid var(--line); border-radius: 14px; background: var(--card); margin-bottom: 10px; padding: 0 12px; }
+.lsec > summary { cursor: pointer; padding: 12px 0; min-height: 44px; font-weight: 700; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.lsec > summary::-webkit-details-marker { display: none; }
+.lsec > summary small { font-weight: 400; color: var(--muted); }
+.lsec[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 10px; }
+.lsec .lplay { margin-bottom: 8px; min-height: 44px; }
+.lu { direction: ltr; text-align: left; display: flex; gap: 8px; align-items: flex-start; margin: 0 0 8px; line-height: 1.75; }
+.lu bdi { min-width: 0; overflow-wrap: anywhere; }
+.lbtn { flex: none; min-width: 44px; min-height: 44px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; font-size: 18px; cursor: pointer; }
+.ls { cursor: pointer; border-radius: 6px; padding: 1px 2px; transition: background .2s; }
+.ls:hover { background: var(--brand-soft); }
+.ls.on { background: var(--hl); box-shadow: 0 0 0 2px var(--hl); }
+.ls.err { opacity: .6; }
+.ls:focus-visible, .tm:focus-visible, .lbtn:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.tm { text-decoration: underline dotted; text-decoration-color: var(--muted); text-underline-offset: 3px; text-decoration-thickness: 1.5px; cursor: help; }
+.tm:hover { text-decoration-color: var(--brand); }
+.tpop { position: absolute; z-index: 20; max-width: min(320px, 100%); background: var(--card); border: 1px solid var(--brand); border-radius: 12px; padding: 10px 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.18); display: flex; flex-direction: column; gap: 4px; }
+.tpop .ar { font-weight: 700; }
+.tpop .pr { color: var(--muted); font-size: 14px; }
+.tpop .pb { display: flex; gap: 6px; margin-top: 4px; }

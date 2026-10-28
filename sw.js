@@ -1,7 +1,8 @@
 // يخلّي الموقع يشتغل كتطبيق، ويفتح الاختبارات اللي انفتحت قبل حتى بدون إنترنت.
 // يتعامل بس مع صفحات الدروس (lessons, quiz, learn, atlas, devices, contrast, terms + روابطها العربية القديمة)؛ خريطة التشريح وملفاتها الكبيرة تمشي عادي بدون كاش.
-const VERSION = "20261028045107";
+const VERSION = "20261028075327";
 const CACHE = "dars-" + VERSION;
+const AUDIO = "audio-v1";   // الصوت بكاش ثابت: ما ينمسح مع كل تحديث للموقع (الملفات نفسها ما تتغير)
 const CORE = ["lessons/", "assets/app.css", "assets/quiz.js", "manifest.webmanifest", "assets/icon-192.png"];
 const BASE = new URL(self.registration.scope).pathname;
 
@@ -30,7 +31,7 @@ self.addEventListener("fetch", (e) => {
   if (req.method !== "GET" || url.origin !== location.origin || !mine(url)) return;
   // 🔊 ملفات الصوت ما تتغير: من الكاش أول (تشتغل بلا نت بعد أول سماع)
   if (url.pathname.includes("/assets/audio/") && url.pathname.endsWith(".mp3")) {
-    e.respondWith(caches.match(req).then((r) => r || fetch(req).then((res) => { if (res.ok) { const c = res.clone(); caches.open(CACHE).then((x) => x.put(req, c)); } return res; })));
+    e.respondWith(caches.match(req).then((r) => r || fetch(req).then((res) => { if (res.ok && res.status === 200) { const c = res.clone(); caches.open(AUDIO).then((x) => x.put(req, c)); } return res; })));
     return;
   }
   // من الشبكة أول، ويسأل السيرفر كل مرة (no-cache) حتى أي تعديل يوصل فوراً؛ وإذا ماكو إنترنت من الكاش (آخر نسخة نزلت)

@@ -20,7 +20,7 @@
     if (!audio) audio = new Audio();             // عنصر واحد يُعاد استعماله: يشتغل من أول ضغطة حتى بالآيفون
     if (cur) cur.classList.remove("on");
     audio.pause();
-    audio.src = root + "assets/audio/" + s + ".mp3";
+    audio.src = root + "assets/audio/terms/" + s + ".mp3";
     audio.playbackRate = rate; audio.defaultPlaybackRate = rate;
     cur = btn; if (btn) btn.classList.add("on");
     audio.onended = audio.onerror = () => { if (btn) btn.classList.remove("on"); };
@@ -50,7 +50,7 @@
     ev.preventDefault(); ev.stopPropagation();
     play(b.dataset.t, +(b.dataset.r || 1), b);
   }, true);
-  fetch(root + "assets/audio/index.json").then((r) => r.ok ? r.json() : {}).then((d) => {
+  fetch(root + "assets/audio/terms/index.json").then((r) => r.ok ? r.json() : {}).then((d) => {
     IDX = d; decorate(document); document.dispatchEvent(new Event("say:ready"));
     new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => n.nodeType === 1 && decorate(n.parentElement || n))))
       .observe(document.body, { childList: true, subtree: true });
