@@ -1,6 +1,7 @@
 // 🎧 المحاضرة مسموعة — 3 مستويات (قرار محمد 28/10/2026):
 // أ) مصطلح (.tm، خط منقّط): ضغطة = لفظه بس + معناه العربي واللفظ بحروف عربية + 🐢؛ تمرير الماوس يبيّن المعنى.
-// ب) جملة (.ls): ضغطة = تنقرا هي بس وتتلوّن، من بدايتها لنهايتها (ملف صوت لكل جملة).
+// ب) جملة (.ls): ضغطة = تنقرا هي بس وتتلوّن، من بدايتها لنهايتها: ملف واحد لكل قسم (data-src على .lsec)،
+//    والجملة بتوقيتها داخله (data-s / data-e بالثانية) — نفس الصوت ما يتخزن مرتين.
 // ج) قسم أو المحاضرة كاملة: جملة ورا جملة، الحالية تتلوّن والصفحة تنزل وياها؛ ⏸️ إيقاف/متابعة و🐢 أبطأ.
 // الملفات تنزل بس وقت الضغط، والـ service worker يحفظها (تشتغل بلا نت بعدين). نص الأستاذ ما يتغير: كل هذا طبقة فوقه.
 (function () {
@@ -23,7 +24,7 @@
   // الآيفون: أول ضغطة «تفتح» عناصر الصوت حتى يشتغل الملف بعد ما ينزل
   const SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
   let unlocked = false;
-  const unlock = () => { if (unlocked) return; unlocked = true; [main, word].forEach((a) => { a.src = SILENT; a.play().catch(() => {}); }); };
+  const unlock = () => { if (unlocked) return; unlocked = true; [main, word].forEach((a) => { a.src = SILENT; a.play().catch(() => {}); }); file = null; };
   const esc = (x) => String(x || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   function marks() {
     slowBtn.classList.toggle("on", slow); slowBtn.setAttribute("aria-pressed", slow);
@@ -32,32 +33,50 @@
     allBtn.classList.toggle("on", mode === "all");
     box.querySelectorAll(".lplay").forEach((b) => b.classList.toggle("on", mode === b.closest(".lsec")));
   }
+  let file = null, raf = 0;
+  const srcOf = (el) => new URL(el.closest(".lsec").dataset.src, location.href).href;
+  function tick() {   // يوقف بنهاية الجملة بالضبط، أو يكمل للي بعدها بنفس الملف بدون قفزة
+    raf = 0;
+    if (!cur || main.paused) return;
+    if (main.currentTime >= +cur.dataset.e - 0.03) { next(); return; }
+    raf = requestAnimationFrame(tick);
+  }
   function stop() {
     main.pause(); queue = []; mode = null;
     if (cur) cur.classList.remove("on");
     cur = null; marks();
   }
   function next() {
+    const prev = cur;
     if (cur) cur.classList.remove("on");
     cur = queue.shift() || null;
-    if (!cur) { mode = null; marks(); return; }
+    if (!cur) { main.pause(); mode = null; marks(); return; }
     const sec = cur.closest("details");
     if (sec && !sec.open) sec.open = true;
     cur.classList.add("on");
     if (mode) cur.scrollIntoView({ block: "center", behavior: "smooth" });
-    const me = cur;
-    load(new URL(cur.dataset.src, location.href).href).then((b) => {
+    const me = cur, src = srcOf(cur), s0 = +cur.dataset.s;
+    const contiguous = prev && file === src && !main.paused && Math.abs(+prev.dataset.e - s0) < 0.05;
+    if (contiguous) { marks(); if (!raf) raf = requestAnimationFrame(tick); return; }
+    load(src).then((b) => {
       if (cur !== me) return;
-      main.src = b;
-      main.playbackRate = main.defaultPlaybackRate = rate();
-      main.play().catch(() => stop());
-      if (queue[0]) load(new URL(queue[0].dataset.src, location.href).href).catch(() => {});   // الجملة الجاية جاهزة
+      const go = () => {
+        main.currentTime = s0;
+        main.playbackRate = main.defaultPlaybackRate = rate();
+        main.play().then(() => { if (!raf) raf = requestAnimationFrame(tick); }).catch(() => stop());
+      };
+      if (file === src && main.readyState >= 1) go();
+      else { file = src; main.src = b; main.addEventListener("loadedmetadata", go, { once: true }); }
+      // القسم الجاي جاهز (المحاضرة كاملة)
+      const nx = queue.find((x) => srcOf(x) !== src);
+      if (nx) load(srcOf(nx)).catch(() => {});
     }).catch(() => { if (cur === me) { cur.classList.add("err"); next(); } });
     marks();
   }
   main.onended = () => { if (!main.src.startsWith("data:")) next(); };
-  main.onerror = () => { if (main.src.startsWith("data:")) return; if (cur) cur.classList.add("err"); next(); };
-  main.onpause = main.onplay = marks;
+  main.onerror = () => { if (main.src.startsWith("data:")) return; file = null; if (cur) cur.classList.add("err"); next(); };
+  main.onpause = marks;
+  main.onplay = () => { marks(); if (cur && !raf) raf = requestAnimationFrame(tick); };
   function play(list, m) { word.pause(); hidePop(); stop(); queue = list; mode = m; next(); }
 
   // أ) المصطلح
