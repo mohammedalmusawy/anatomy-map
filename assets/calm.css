@@ -2,9 +2,10 @@
    حدود رفيعة بدل الظلال، Cairo للعناوين وIBM Plex Sans Arabic للنص، قراءة مريحة (17–18px، سطر 1.8، ≤ 70 حرف).
    تنحمّل بعد app.css وتبدّل متغيراته بس + مكوّنات الصفحات الجديدة. تباين كل نص ≥ 4.5:1 (مفحوص). */
 :root {
+  color-scheme: light;
   --bg: #F6F2EA; --card: #FCFAF5; --ink: #2B2F38; --muted: #636874; --line: #E7E0D3;
   --brand: #4B5A8A; --brand-ink: #FCFAF5; --brand-soft: #ECEDF4; --accent: #8C6A3A; --accent-soft: #F3EBDD;
-  --ok: #3F7350; --ok-soft: #E4EEE5; --hl: #F1E3C4;
+  --ok: #3F7350; --ok-soft: #E4EEE5; --hl: #F1E3C4; --bad: #A2453A; --bad-soft: #F6E4E0;
   --title-font: "Cairo", "IBM Plex Sans Arabic", system-ui, sans-serif;
   --fs: 1; --r: 18px; --r-sm: 12px;
   /* ألوان المواد: باهتة من نفس العائلة */
@@ -12,15 +13,15 @@
   --s-protection: #E7EEE5; --s-protection-ink: #46664A; --s-examinations: #ECE7F3; --s-examinations-ink: #5D4C88;
   --s-ct: #F2EBDD; --s-ct-ink: #765C2E; --s-equipment: #E9E9EE; --s-equipment-ink: #4C5266;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
+/* الليلي اختياري بزر 🌙 بس (الافتراضي فاتح دائماً حتى لو الموبايل ليلي — قرار محمد 29/10) */
+:root[data-theme="dark"] {
+  color-scheme: dark;
     --bg: #1D2027; --card: #252932; --ink: #ECE7DD; --muted: #A9ACB5; --line: #363B47;
     --brand: #A9B6E3; --brand-ink: #1D2027; --brand-soft: #2D3346; --accent: #D9B57E; --accent-soft: #352E24;
-    --ok: #8CC59B; --ok-soft: #22302A; --hl: #4A3F28;
+    --ok: #8CC59B; --ok-soft: #22302A; --hl: #4A3F28; --bad: #E9A196; --bad-soft: #3A2622;
     --s-anatomy: #3A2A27; --s-anatomy-ink: #E7B9AC; --s-radiography: #262C3B; --s-radiography-ink: #AFC0E6;
     --s-protection: #26302A; --s-protection-ink: #ABC9AE; --s-examinations: #2D2838; --s-examinations-ink: #C3B5E6;
     --s-ct: #332D23; --s-ct-ink: #E0C796; --s-equipment: #2A2C33; --s-equipment-ink: #BFC3D3;
-  }
 }
 html { font-size: calc(17px * var(--fs)); }
 @media (min-width: 900px) { html { font-size: calc(18px * var(--fs)); } }
@@ -173,3 +174,33 @@ body.calm { font: 400 1rem/1.8 "IBM Plex Sans Arabic", system-ui, sans-serif; ba
   .blk h3 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
   .blk h3 .en { margin: 0; }
 }
+
+/* الشريط الثابت: 🔍 البحث + 👤 مساحتي + 🌙، والمساعد العائم 🤖 */
+.cbar .tools { display: inline-flex; gap: 6px; align-items: center; }
+.tbtn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); cursor: pointer; font-size: 1rem; }
+.tbtn .ico { width: 1.2rem; height: 1.2rem; }
+.fab { position: fixed; inset-inline-start: max(16px, env(safe-area-inset-left)); bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 40; display: inline-flex; align-items: center; gap: 8px;
+  min-height: 52px; padding: 0 18px; border-radius: 999px; background: var(--brand); color: var(--brand-ink); font: 700 .9rem var(--title-font); border: 0; box-shadow: 0 6px 18px rgba(43,47,56,.16); }
+body.calm { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+/* انتقالات ناعمة جداً (وتنطفي لمن يفضّل حركة أقل) */
+.ccard, .lcard, .ltab, .ctab, .chip2, .tbtn, .resume { transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease; }
+.ccard:active, .lcard:active { transform: scale(.99); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+/* 🔒 أقسام الطلاب */
+.lock { display: inline-flex; align-items: center; gap: 4px; font-size: .72rem; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; margin-top: 6px; }
+body[data-role="student"] .lock { display: none; }
+.gatedlg { position: fixed; inset: 0; z-index: 70; background: rgba(29,32,39,.38); display: flex; align-items: flex-end; justify-content: center; padding: 16px; }
+.gatedlg[hidden] { display: none; }
+.gatedlg .box { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 20px; max-width: 440px; width: 100%; display: grid; gap: 12px; margin-bottom: env(safe-area-inset-bottom); }
+.gatedlg b { font: 800 1.1rem var(--title-font); }
+@media (min-width: 640px) { .gatedlg { align-items: center; } }
+.calm [hidden] { display: none !important; }
+@media (max-width: 639px) {
+  .fab { width: 56px; height: 56px; min-height: 56px; padding: 0; justify-content: center; border-radius: 50%; }
+  .fab .fl { display: none; }
+  .fab .ico { width: 1.6rem; height: 1.6rem; }
+  .idn h1 .dash { display: none; }
+  .idn h1 .st { display: block; font-size: .78em; color: var(--brand); }
+}
+
+.ctab { white-space: nowrap; font-size: .9rem; padding: 0 6px; }

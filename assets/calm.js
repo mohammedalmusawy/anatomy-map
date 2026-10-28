@@ -9,6 +9,37 @@
   const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+  // ── 🌙 الوضع الليلي: اختياري بزر، ويتذكّر (الافتراضي فاتح) ──
+  const setTheme = (t) => { if (t === "dark") document.documentElement.dataset.theme = "dark"; else delete document.documentElement.dataset.theme; };
+  setTheme(LS.get("theme", "light"));
+  document.addEventListener("click", (ev) => {
+    if (!ev.target.closest("[data-theme-toggle]")) return;
+    const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; LS.set("theme", t); setTheme(t);
+  });
+
+  // ── 🎓 أقسام الطلاب (بالمعاينة: زر «زائر / طالب» للعرض؛ بالموقع الحقيقي الدور من الجلسة) ──
+  const role = LS.get("pv-role", "visitor"); document.body.dataset.role = role;
+  $$("[data-name-only]").forEach((el) => { el.hidden = role !== "student"; });
+  $$("[data-visitor-only]").forEach((el) => { el.hidden = role === "student"; });
+  document.addEventListener("click", (ev) => {
+    const r = ev.target.closest("[data-role-set]"); if (r) { LS.set("pv-role", r.dataset.roleSet); location.reload(); return; }
+    const l = ev.target.closest("[data-locked]");
+    if (!l || document.body.dataset.role === "student") return;
+    ev.preventDefault();
+    const dlg = $("#gatedlg"); if (!dlg) return;
+    $("#gatego", dlg).href = $("#gatego", dlg).dataset.base + "?next=" + encodeURIComponent(new URL(l.getAttribute("href") || "", location.href).pathname);
+    dlg.hidden = false; $("#gatego", dlg).focus();
+  });
+  // صفحة لطلابنا انفتحت مباشرة بدون كود ← نفس النافذة، و«تمام» يرجّعه للرئيسية
+  if (document.body.dataset.gated && role !== "student" && $("#gatedlg")) {
+    const dlg = $("#gatedlg"), go = $("#gatego", dlg);
+    go.href = go.dataset.base + "?next=" + encodeURIComponent(location.pathname);
+    $("[data-close]", dlg).addEventListener("click", () => { location.href = go.dataset.base.replace(/login\/$/, "home/"); });
+    dlg.hidden = false;
+  }
+  document.addEventListener("click", (ev) => { const d = ev.target.closest("#gatedlg"); if (d && (ev.target === d || ev.target.closest("[data-close]"))) d.hidden = true; });
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && $("#gatedlg")) $("#gatedlg").hidden = true; });
+
   // ── حجم الخط: 4 درجات، يتذكّر اختيار الطالب ──
   const SIZES = [0.92, 1, 1.1, 1.22];
   let fs = LS.get("fs", 1);
