@@ -74,7 +74,7 @@
     if (ids.includes(h)) show(h);
     else if (h && document.getElementById(h) && document.getElementById(h).closest("#p-listen")) {
       show("listen"); const d = document.getElementById(h); if (d.tagName === "DETAILS") d.open = true; setTimeout(() => d.scrollIntoView({ block: "start" }), 50);
-    } else show("read");
+    } else show(ids.includes("read") ? "read" : ids[0]);
     window.addEventListener("hashchange", () => { const x = location.hash.slice(1); if (ids.includes(x)) show(x); });
   }
   // [النص | السلايدات] داخل «اقرأ»
