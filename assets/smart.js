@@ -66,6 +66,8 @@
     const box = $("#rec"); box.classList.remove("hidden");
     const d = await data();
     const state = { subj: subj && d[subj] ? subj : "", lecs: new Set(), time: "" };
+    // 📅 (29/10) ?lecs=theory/1,theory/2 من بطاقة «الامتحان القادم» ← المحاضرات المشمولة مختارة جاهزة.
+    if (state.subj && params.get("lecs")) { const want = params.get("lecs").split(","); d[state.subj].lectures.forEach((L, i) => { if (want.includes(`${L.type}/${L.num}`)) state.lecs.add(String(i)); }); }
     const draw = () => {
       let h = DISC + `<p><b>${mode === "summary" ? "📝 لخّصلي" : "🎯 رشّحلي"}</b></p><p class="q1">أي مادة؟</p>` +
         chips("subj", Object.entries(d).map(([k, v]) => [k, v.name]));
@@ -186,16 +188,17 @@
     $("#exams").innerHTML = ex.map((x) => {
       const S = d[x.subject]; if (!S) return "";
       const when = x.postponed_to || x.exam_date, left = Math.ceil((day(when) - new Date()) / 864e5);
-      const inc = x.lectures && x.lectures.length ? S.lectures.filter((L) => x.lectures.includes(`${L.type}/${L.num}`)) : S.lectures;
+      const sure = !!(x.lectures && x.lectures.length);   // (29/10) فارغ = «ما متأكدين بعد»: نعرض المحاضرات للمراجعة بس، مو كأنها المشمولة
+      const inc = sure ? S.lectures.filter((L) => x.lectures.includes(`${L.type}/${L.num}`)) : S.lectures.filter((L) => !x.type || L.type === x.type);
       const qs = inc.flatMap((L) => L.questions.map((q) => ({ q, L, s: st[qk(q)] }))).filter((r) => r.s);
       qs.sort((a, b) => b.s.rate - a.s.rate);
       const top = qs[0];
-      return `<section class="exam"><h2>${esc(S.name)} <bdi class="en">${esc(S.en)}</bdi></h2>
+      return `<section class="exam"><h2>${esc(S.name)}${x.type ? ` (${x.type === "theory" ? "نظري" : "عملي"})` : ""} <bdi class="en">${esc(S.en)}</bdi></h2>
         <p class="when">🗓️ ${esc(when)} · ${left > 0 ? `باقي <b>${left}</b> يوم` : left === 0 ? "<b>اليوم</b>" : "خلص"}</p>
         ${x.postponed_to ? `<p class="post">⏩ تأجلت المادة إلى يوم ${esc(x.postponed_to)}</p>` : ""}
-        <p class="inc">📚 المحاضرات: ${inc.map((L) => `${esc(L.type_ar)} م${L.num}`).join("، ")}</p>
+        ${sure ? `<p class="inc">📚 المشمول: ${inc.map((L) => `${esc(L.type_ar)} م${L.num}`).join("، ")}</p>` : `<p class="inc">📚 المشمول: ما متأكدين بعد — نحدّثه أول ما يوصل خبر.<br><small>لحد ما يتأكد، المراجعة تحت من المحاضرات اللي نزلت لحد هسه.</small></p>`}
         ${top ? `<div class="topq">⭐ <b>السؤال الأكثر غلط</b>${qcard(top.q, top.L, ai, top.s)}</div>` : ""}
-        <a class="btn" href="${root}assistant/?mode=recommend&subject=${esc(x.subject)}">🎯 رشّحلي لهالمادة</a>
+        <a class="btn" href="${root}assistant/?mode=recommend&subject=${esc(x.subject)}${sure ? "&lecs=" + encodeURIComponent(x.lectures.join(",")) : ""}">🎯 رشّحلي لهالمادة</a>
         ${qs.length ? `<h3>🔥 أصعب الأسئلة — راجعوها</h3>${qs.slice(0, 10).map((r) => qcard(r.q, r.L, ai, r.s)).join("")}` : ""}
         ${qs.some((r) => r.s.hint_ar) ? `<h3>🧠 المفاهيم اللي الطلاب يغلطون بيها</h3><ul>${qs.filter((r) => r.s.hint_ar).slice(0, 8).map((r) => `<li><span class="en">${esc(r.s.hint_en)}</span>${esc(r.s.hint_ar)} <a href="${root}${esc(r.L.learn)}">📖</a></li>`).join("")}</ul>` : ""}
         <h3>📝 ملخص النقاط المهمة</h3>${inc.map((L) => `<details class="rsum"><summary>${esc(L.type_ar)} م${L.num} — ${esc(L.title_ar)}</summary>${L.summary.length ? `<ul>${L.summary.map((y) => `<li><span class="en">${esc(y.en)}</span>${esc(y.ar)}</li>`).join("")}</ul>` : ""}<a class="btn alt" href="${root}${esc(L.learn)}">📖 افتح</a></details>`).join("")}

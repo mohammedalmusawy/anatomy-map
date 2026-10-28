@@ -81,36 +81,72 @@
     document.getElementById("bs").onclick = async () => { await sb.from("settings").upsert({ key: "assistant_budget", value: { monthly_usd: +document.getElementById("bm").value, daily_per_device: +document.getElementById("bd").value } }); alert("انحفظ"); };
   }
   const SUBJ = { anatomy: "تشريح", radiography: "التصوير الشعاعي", protection: "الوقاية", examinations: "الفحوصات الشعاعية", ct: "أجهزة التصوير المقطعي", equipment: "أجهزة الأشعة التقليدية" };
+  // 📅 الامتحانات (27/10، نص + نوع + المشمول 29/10): صورة أو نص ← قراءة (exam-reader) ← مراجعة ← «تأكيد وحفظ». المشمول من قائمة المحاضرات الحقيقية.
   async function exams() {
-    const { data } = await sb.from("exams").select("*").eq("archived", false).order("exam_date");
-    const row = (x, i) => `<tr data-i="${i}"><td><select class="es">${Object.entries(SUBJ).map(([k, v]) => `<option value="${k}" ${x.subject === k ? "selected" : ""}>${v}</option>`).join("")}</select></td>
-      <td><input class="ed" type="date" value="${esc(x.exam_date || x.date || "")}"></td><td><input class="ep" type="date" value="${esc(x.postponed_to || "")}"></td>
-      <td><input class="el" placeholder="theory/1,theory/2 (فارغ = الكل)" value="${esc((x.lectures || []).join(","))}" dir="ltr"></td><td>${esc(x.note || "")}</td></tr>`;
-    pane.innerHTML = `<h2>📷 اقرأ الجدول من صورة</h2><input type="file" id="img" accept="image/*"><p class="hint" id="rd"></p>
-      <h2>📅 الجدول</h2><select id="term"><option value="midterm">مِدترم</option><option value="final">نهائي</option></select>
-      <table class="adm" id="et"><tr><th>المادة</th><th>التاريخ</th><th>تأجلت إلى</th><th>المحاضرات</th><th>ملاحظة</th></tr>${(data || []).map(row).join("")}</table>
-      <button class="btn ghost" id="add">+ مادة</button> <button class="btn" id="save">✅ تأكيد وحفظ</button> <button class="btn ghost" id="arch">📦 للأرشيف (خلصت الامتحانات)</button>`;
-    let rows = data || [];
-    document.getElementById("add").onclick = () => { rows.push({}); document.getElementById("et").insertAdjacentHTML("beforeend", row({}, rows.length - 1)); };
+    const [{ data }, LEC] = await Promise.all([
+      sb.from("exams").select("*").eq("archived", false).order("exam_date"),
+      fetch(new URL("../study/data.json", location.href)).then((r) => r.json()).catch(() => ({})),
+    ]);
+    const TYP = [["", "غير محدد"], ["theory", "نظري"], ["practical", "عملي"]];
+    const lecBox = (subj, sel) => {
+      const L = (LEC[subj] || {}).lectures || [];
+      return L.length ? L.map((l) => { const id = `${l.type}/${l.num}`;
+        return `<label class="exl"><input type="checkbox" value="${esc(id)}" ${sel.includes(id) ? "checked" : ""}><span>${esc(l.type_ar)} م${l.num} — ${esc(l.title_ar)}</span></label>`; }).join("")
+        : `<p class="hint">${subj ? "ماكو محاضرات منزّلة لهالمادة بعد." : "اختار المادة أول."}</p>`;
+    };
+    const count = (div) => { const n = div.querySelectorAll(".exls input:checked").length; div.querySelector(".exn").textContent = n ? `${n} محاضرة` : "ما متأكدين بعد"; };
+    const card = (x) => `<div class="exrow" data-note="${esc(x.note || "")}">
+      <label>المادة<select class="es"><option value="" ${x.subject ? "" : "selected"}>— اختار المادة —</option>${Object.entries(SUBJ).map(([k, v]) => `<option value="${k}" ${x.subject === k ? "selected" : ""}>${v}</option>`).join("")}</select></label>
+      <label>النوع<select class="ety">${TYP.map(([k, v]) => `<option value="${k}" ${(x.type || "") === k ? "selected" : ""}>${v}</option>`).join("")}</select></label>
+      <label>التاريخ<input class="ed" type="date" value="${esc(x.exam_date || x.date || "")}"></label>
+      <label>تأجل إلى<input class="ep" type="date" value="${esc(x.postponed_to || "")}"></label>
+      <details class="exlec"><summary>📚 المشمول: <b class="exn"></b></summary><p class="hint">فارغ = «ما متأكدين بعد» (يطلع للطلاب هيچ). حدّد بس اللي متأكد منه.</p><div class="exls">${lecBox(x.subject || "", x.lectures || [])}</div></details>
+      ${x.note ? `<p class="hint exnote">📝 ${esc(x.note)}</p>` : ""}
+      <button type="button" class="btn ghost exdel">✕ شيل هذا الصف من الجدول</button></div>`;
+    pane.innerHTML = `<h2>📷 اقرأ الجدول من صورة</h2><input type="file" id="img" accept="image/*">
+      <h2>📋 أو الصق الجدول كنص</h2><textarea id="etx" rows="5" placeholder="مثلاً: الوقاية نظري الأحد 3/11 من محاضرة 1 لـ 3"></textarea>
+      <button class="btn ghost exbtn" id="rtx">📖 اقرأ النص</button><p class="hint" id="rd"></p>
+      <h2>📅 الجدول</h2><label>الفصل<select id="term"><option value="midterm">مِدترم</option><option value="final">نهائي</option></select></label>
+      <div id="et" class="exlist"></div>
+      <div class="exacts"><button class="btn ghost exbtn" id="add">+ مادة</button><button class="btn exbtn" id="save">✅ تأكيد وحفظ</button><button class="btn ghost exbtn" id="arch">📦 للأرشيف (خلصت الامتحانات)</button></div>
+      <p class="hint">💡 تگدر تدز الجدول (صورة أو نص) للبوت @mohammed_almusawy_bot بالخاص، ويرجعلك الصفوف حتى تأكدها.</p>`;
+    const et = document.getElementById("et"), rd = document.getElementById("rd");
+    if (data && data[0]) document.getElementById("term").value = data[0].term || "midterm";
+    const draw = (rows) => { et.innerHTML = rows.length ? rows.map(card).join("") : '<p class="hint">ماكو امتحانات بالجدول هسه.</p>'; et.querySelectorAll(".exrow").forEach(count); };
+    draw(data || []);
+    et.addEventListener("change", (ev) => {
+      const div = ev.target.closest(".exrow"); if (!div) return;
+      if (ev.target.classList.contains("es")) div.querySelector(".exls").innerHTML = lecBox(ev.target.value, []);
+      count(div);
+    });
+    et.addEventListener("click", (ev) => { const b = ev.target.closest(".exdel"); if (b) b.closest(".exrow").remove(); });
+    document.getElementById("add").onclick = () => { et.querySelector(".exrow") || (et.innerHTML = ""); et.insertAdjacentHTML("beforeend", card({})); count(et.lastElementChild); };
+    const read = async (body) => {
+      rd.textContent = "جاري القراءة…";
+      const { data: out, error } = await sb.functions.invoke("exam-reader", { body });
+      if (error || !out || out.disabled || out.error || !(out.rows || []).length) { rd.textContent = "ما گدرت أقراه (المفتاح أو الصورة/النص). اكتبه يدوياً بـ «+ مادة»."; return; }
+      document.getElementById("term").value = out.term || "midterm";
+      draw(out.rows.map((r) => ({ subject: r.subject, type: r.type, exam_date: r.date, postponed_to: r.postponed_to, lectures: r.lectures || [],
+        note: [r.subject ? "" : `«${r.name_in_source}»`, r.note].filter(Boolean).join(" · ") })));
+      rd.textContent = "✅ انقرت — بعدها ما انحفظت. راجعها وصلّح أي شي (المادة، النوع، التاريخ، المشمول)، بعدين «تأكيد وحفظ».";
+    };
     document.getElementById("img").onchange = async (e) => {
       const f = e.target.files[0]; if (!f) return;
-      document.getElementById("rd").textContent = "جاري القراءة…";
       const b64 = await new Promise((r) => { const fr = new FileReader(); fr.onload = () => r(String(fr.result).split(",")[1]); fr.readAsDataURL(f); });
-      const { data: out, error } = await sb.functions.invoke("exam-reader", { body: { image: b64, media_type: f.type } });
-      if (error || !out || out.disabled || out.error) { document.getElementById("rd").textContent = "ما گدرت أقراها (المفتاح أو الصورة). اكتبها يدوياً."; return; }
-      document.getElementById("term").value = out.term || "midterm";
-      rows = out.rows.map((r) => ({ subject: r.subject, exam_date: r.date, note: r.note || r.name_in_image }));
-      document.getElementById("et").innerHTML = '<tr><th>المادة</th><th>التاريخ</th><th>تأجلت إلى</th><th>المحاضرات</th><th>ملاحظة</th></tr>' + rows.map(row).join("");
-      document.getElementById("rd").textContent = "✅ انقرت. راجعها وصلّح أي شي، بعدين «تأكيد وحفظ».";
+      read({ image: b64, media_type: f.type });
     };
+    document.getElementById("rtx").onclick = () => { const t = document.getElementById("etx").value.trim(); if (t) read({ text: t }); };
     document.getElementById("save").onclick = async () => {
       const term = document.getElementById("term").value;
-      const list = [...document.querySelectorAll("#et tr[data-i]")].map((tr) => ({
-        term, subject: tr.querySelector(".es").value, exam_date: tr.querySelector(".ed").value || null, postponed_to: tr.querySelector(".ep").value || null,
-        lectures: tr.querySelector(".el").value.split(",").map((s) => s.trim()).filter(Boolean), confirmed: true, archived: false,
-      })).filter((x) => x.exam_date);
+      const all = [...et.querySelectorAll(".exrow")].map((div) => ({
+        term, subject: div.querySelector(".es").value, type: div.querySelector(".ety").value || null,
+        exam_date: div.querySelector(".ed").value || null, postponed_to: div.querySelector(".ep").value || null,
+        lectures: [...div.querySelectorAll(".exls input:checked")].map((i) => i.value), note: div.dataset.note || null, confirmed: true, archived: false,
+      }));
+      const list = all.filter((x) => x.exam_date && x.subject);
+      if (all.length > list.length && !confirm(`${all.length - list.length} صف بلا مادة أو تاريخ ما راح ينحفظ. نكمّل؟`)) return;
       await sb.from("exams").update({ archived: true }).eq("archived", false);
-      if (list.length) await sb.from("exams").insert(list);
+      if (list.length) { const { error } = await sb.from("exams").insert(list); if (error) return alert(error.message); }
       await setSection("exams", true); alert("انحفظ، وقسم الامتحانات تفعّل."); exams();
     };
     document.getElementById("arch").onclick = async () => { if (!confirm("خلصت الامتحانات؟ ينتقل الجدول للأرشيف وتختفي الأيقونة.")) return;

@@ -420,3 +420,35 @@ h2, h3, .case h3 .en { font-weight: 700; }
 .tgapp .item small { display: block; color: var(--muted); font-size: 13px; }
 .tgapp .tgf { margin: 18px 0; text-align: center; }
 .tgapp .listen { margin-top: 10px; }
+
+/* ───────── 📅 الامتحان القادم (29/10) — بطاقة nextexam.js + صفوف تبويب الامتحانات بلوحة الإدارة ───────── */
+.nexam { background: var(--card); border: 1px solid var(--line); border-inline-start: 4px solid var(--brand); border-radius: 14px; padding: 12px 14px; margin: 0 0 16px; font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
+.nexam p { margin: 0 0 6px; }
+.nexam-h b { color: var(--brand); }
+.nexam-k { color: var(--muted); font-weight: 600; }
+.nexam-d { font-weight: 700; }
+.nexam-d.nexam-soon { display: inline; color: var(--brand); background: var(--brand-soft); border-radius: 99px; padding: 0 8px; }
+.nexam-w { white-space: nowrap; }
+.nexam-p { color: var(--ink); font-weight: 600; }
+.nexam-p small { color: var(--muted); font-weight: 500; font-size: 13px; }
+.nexam-l a { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
+.nexam-hint { color: var(--muted); font-size: 14px; }
+.nexam-hint a { color: var(--brand); }
+.nexam-b { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
+.nexam-btn { flex: 1 1 130px; min-height: 44px; display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 12px; padding: 8px 12px; font-weight: 700; font-size: 15px; background: var(--brand); color: var(--brand-ink); border: 1px solid var(--brand); text-decoration: none; }
+.nexam-btn.alt { background: var(--brand-soft); color: var(--brand); border-color: transparent; }
+.nexam-btn:focus-visible, .nexam a:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.nexam-x { display: flex; flex-wrap: wrap; align-items: center; gap: 0 4px; min-height: 44px; color: var(--muted); font-size: 13px; text-decoration: none; }
+.nexam-x b { color: var(--ink); }
+#admin .exlist { display: flex; flex-direction: column; gap: 10px; margin: 8px 0 12px; }
+#admin .exrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+#admin .exrow > label { margin: 0; font-size: 13px; color: var(--muted); font-weight: 600; }
+#admin .exrow select, #admin .exrow input[type="date"] { display: block; width: 100%; min-height: 44px; margin-top: 2px; }
+#admin .exlec, #admin .exnote, #admin .exrow .exdel { grid-column: 1 / -1; }
+#admin .exlec summary { min-height: 44px; display: flex; align-items: center; gap: 4px; cursor: pointer; font-weight: 600; }
+#admin .exl { display: flex; align-items: flex-start; gap: 8px; min-height: 44px; padding: 6px 0; border-top: 1px solid var(--line); margin: 0; }
+#admin .exl input { width: 22px; height: 22px; flex: none; margin-top: 2px; }
+#admin textarea#etx { display: block; width: 100%; box-sizing: border-box; }
+#admin .exbtn, #admin .exrow .exdel { min-height: 44px; width: auto; padding: 8px 14px; margin: 6px 0; font-size: 15px; }
+#admin .exacts { display: flex; flex-wrap: wrap; gap: 8px; }
+#admin .exacts .btn { flex: 1 1 150px; }
