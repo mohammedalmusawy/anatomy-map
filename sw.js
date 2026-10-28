@@ -1,6 +1,6 @@
 // يخلّي الموقع يشتغل كتطبيق، ويفتح الاختبارات اللي انفتحت قبل حتى بدون إنترنت.
 // يتعامل بس مع صفحات الدروس (lessons, quiz, learn, atlas, devices, contrast, terms + روابطها العربية القديمة)؛ خريطة التشريح وملفاتها الكبيرة تمشي عادي بدون كاش.
-const VERSION = "20261028003048";
+const VERSION = "20261028041442";
 const CACHE = "dars-" + VERSION;
 const CORE = ["lessons/", "assets/app.css", "assets/quiz.js", "manifest.webmanifest", "assets/icon-192.png"];
 const BASE = new URL(self.registration.scope).pathname;

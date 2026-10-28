@@ -45,7 +45,8 @@
         <button class="btn" data-al="${a.id}" data-s="approved">${a.kind === "exam_activity" ? "فعّل الامتحانات" : "تمام"}</button>
         <button class="btn ghost" data-al="${a.id}" data-s="dismissed">تجاهل</button></div>`).join("")}
       <div class="kpis"><div><b>${(daily.data || [])[0]?.visitors ?? 0}</b><span>زوار اليوم</span></div><div><b>${week}</b><span>زوار الأسبوع (مجموع يومي)</span></div>
-        <div><b>${u.reduce((a, r) => a + r.n, 0)}</b><span>أسئلة المساعد (30 يوم)</span></div></div>
+        <div><b>${u.reduce((a, r) => a + r.n, 0)}</b><span>أسئلة المساعد (30 يوم)</span></div>
+        <div><b>$${u.reduce((a, r) => a + (r.tokens_in * 0.1 + r.tokens_out * 0.5) / 1e6, 0).toFixed(2)}</b><span>كلفة المساعد (30 يوم، تقريبي · Haiku 5.5)</span></div></div>
       <h2>📄 أكثر الصفحات (7 أيام)</h2>${table(pages.data, [["page", "الصفحة"], ["views", "مشاهدات"]])}
       <h2>🔥 أصعب الأسئلة (نسبة الغلط)</h2>${table(hard.data, [["qkey", "السؤال"], [(r) => Math.round(r.rate * 100) + "%" + (r.estimated ? " تقديري" : ""), "الغلط"], ["attempts", "محاولات"], ["quiz", "المحاضرة"]])}
       <h2>🔎 بحثوا عنه وما لگوه</h2>${table(empty.data, [["query", "البحث"], ["n", "مرات"]])}

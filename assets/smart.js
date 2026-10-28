@@ -154,7 +154,7 @@
       if (r.limit) return say("bot", "وصلت حد اليوم (20 سؤال). ارجع باچر 🌙 — وهسه تگدر تستعمل 🎯 رشّحلي.");
       if (r.budget || r.error) return say("bot", "المساعد مو متوفر هسه. البحث و«رشّحلي» يشتغلون عادي.");
       if (r.intent === "exams") { say("bot", `📅 <a href="${root}exams/">افتح قسم الامتحانات</a>`); return; }
-      if (r.intent === "recommend") recommender("recommend", params.get("subject"));
+      if (r.intent === "recommend") { recommender("recommend", params.get("subject")); return; }
       if (r.intent === "summary") recommender("summary", params.get("subject"));
       let h = `<p class="ai">🤖 رد ذكاء اصطناعي</p><p><b>${esc(r.short)}</b></p>` + (r.explain ? `<p>${esc(r.explain)}</p>` : "") +
         (r.key_en || r.key_ar ? `<p class="key">⭐ <span class="en">${esc(r.key_en)}</span>${esc(r.key_ar)}</p>` : "") +
