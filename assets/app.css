@@ -386,3 +386,24 @@ h1, h2, h3, .case h3 .en, .case h3 .ar, .tile .gn, .ht b, .btn, .btn2, .vtog but
 h1 { font-weight: 800; letter-spacing: 0; }
 h2, h3, .case h3 .en { font-weight: 700; }
 .btn, .btn2, .vtog button { font-weight: 700; }
+
+/* 🙏 شكر وتقدير (28/10) */
+.thxcard { display: flex; align-items: center; gap: 10px; margin: 10px 0 0; padding: 12px 14px; min-height: 44px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); text-decoration: none; }
+.thxcard b { font-family: var(--title-font); font-weight: 700; }
+.thxcard small { color: var(--muted); flex: 1; font-size: 13px; }
+.thxcard .go { color: var(--muted); }
+.thxin { line-height: 1.9; }
+.thxlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 16px 0; }
+.thx-doc { display: flex; gap: 12px; align-items: flex-start; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+.thx-ic { font-size: 26px; width: 48px; height: 48px; flex: none; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: var(--brand-soft); }
+.thx-doc h3 { margin: 0 0 2px; font-size: 18px; }
+.thx-doc p { margin: 0; color: var(--muted); font-size: 14px; }
+.thx-doc .thx-sec { color: var(--brand); font-weight: 600; margin-top: 4px; }
+.thx { font-size: 13.5px; color: var(--muted); text-align: center; margin: 6px 0 18px; }
+.thx a { color: var(--brand); font-weight: 600; }
+.thl { list-style: none; padding: 0; margin: 0 0 16px; display: flex; flex-direction: column; gap: 8px; }
+.thr { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 8px; }
+.thr input:not([type]), .thr select { flex: 1 1 140px; min-height: 40px; border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; font: inherit; background: var(--bg); color: var(--ink); }
+.thr .btn { width: auto; padding: 8px 12px; }
+.thr .drag { cursor: grab; font-size: 20px; color: var(--muted); padding: 0 6px; }
+.thr.dragging { opacity: .5; }

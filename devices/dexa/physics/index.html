@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="20261028111317">
+<meta name="build" content="20261028114736">
 <title>DEXA Physics — الفيزياء</title>
 <meta name="theme-color" content="#3B4A8C" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#10141F" media="(prefers-color-scheme: dark)">
@@ -12,24 +12,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&family=IBM+Plex+Sans+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../assets/app.css?v=20261028111317">
+<link rel="stylesheet" href="../../../assets/app.css?v=20261028114736">
 </head><body><div class="wrap">
 
 <header class="top"><a class="back" href="../../">‹ الأجهزة</a><span class="crumb">Devices · الأجهزة</span></header>
 <h1 class="dh">🦴 <bdi>DEXA</bdi></h1><p class="sub">قياس كثافة العظام</p>
 <nav class="dtabs" aria-label="DEXA"><a class="" href="../../../devices/dexa/guide/">Guide<span class="ar">الدليل</span></a><a class="on" href="../../../devices/dexa/physics/">Physics<span class="ar">الفيزياء</span></a></nav>
 <section class="step"><h2><bdi>How it works</bdi> <span class="gh-ar">فكرة الجهاز ببساطة</span></h2><div class="rich"><p>يُرسل الجهاز أشعة سينية بـ<b>طاقتين</b> مختلفتين: <span class="en">low keV</span> و<span class="en">high keV</span>.</p><p>العظم والأنسجة الرخوة يمتصّان الطاقتين بنِسب مختلفة.</p><p>بمقارنة القياسين يحذف الحاسوب جزء الأنسجة الرخوة، فيبقى <b>العظم وحده</b>.</p><p>النتيجة رقم: كثافة العظم <span class="en">BMD</span> بوحدة <span class="en">g/cm²</span>، ثم تُحوَّل إلى <span class="en">T-score</span> و<span class="en">Z-score</span>. الجرعة قليلة جداً.</p></div></section>
-<figure class="photo dev-photo"><img src="img/phys-dexa.jpg" width="900" height="600" loading="lazy" alt="DEXA scan in progress on the screen"><figcaption><bdi>DEXA scan in progress on the screen</bdi> — فحص DEXA على الشاشة<span class="src">Nick Smith photography · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:DEXA_scan_screen_ALSPAC.jpg" target="_blank" rel="noopener">Wikimedia Commons</a></span></figcaption></figure>
+<figure class="photo dev-photo"><img src="img/phys-dexa.jpg" width="900" height="503" loading="lazy" alt="DEXA scan in progress on the screen"><figcaption><bdi>DEXA scan in progress on the screen</bdi> — فحص DEXA على الشاشة<span class="src">Nick Smith photography · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:DEXA_scan_screen_ALSPAC.jpg" target="_blank" rel="noopener">Wikimedia Commons</a> · قُصّت لإخفاء بيانات المريض</span></figcaption></figure>
 <figure class="diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 210" font-family="system-ui, -apple-system, Segoe UI, Arial, sans-serif" font-size="13" fill="currentColor" role="img" aria-label="DEXA two energies"><rect x="30" y="8" width="120" height="20" rx="5" fill="var(--muted)"/><text x="90" y="22" text-anchor="middle" font-size="11">Detector</text><polygon points="78,176 40,30 90,30" fill="var(--brand)" opacity="0.35"/><polygon points="102,176 90,30 140,30" fill="var(--brand-soft)" opacity="0.9"/><rect x="20" y="80" width="140" height="44" rx="10" fill="var(--line)" stroke="currentColor"/><rect x="72" y="90" width="36" height="24" rx="4" fill="var(--card)" stroke="currentColor" stroke-width="2"/><text x="90" y="106" text-anchor="middle" font-size="10">bone</text><text x="34" y="74" font-size="10">soft tissue</text><line x1="10" y1="134" x2="170" y2="134" stroke="currentColor" stroke-width="3"/><rect x="70" y="176" width="40" height="20" rx="4" fill="var(--brand)"/><text x="90" y="208" text-anchor="middle" font-size="11">X-ray source</text><text x="44" y="158" text-anchor="middle" font-size="11">Low keV</text><text x="138" y="158" text-anchor="middle" font-size="11">High keV</text><text x="190" y="40" font-size="12">2 energies</text><text x="190" y="58" font-size="12">absorbed differently</text><text x="190" y="88" font-size="12">Remove soft</text><text x="190" y="106" font-size="12">tissue part</text><rect x="186" y="128" width="120" height="40" rx="8" fill="var(--brand-soft)" stroke="currentColor"/><text x="246" y="146" text-anchor="middle" font-size="12" font-weight="700">Bone only</text><text x="246" y="162" text-anchor="middle" font-size="11">BMD g/cm²</text><line x1="246" y1="112" x2="246" y2="124" stroke="currentColor" stroke-width="2"/></svg><figcaption>مصدر تحت الطاولة يرسل طاقتين منخفضة وعالية، والكاشف فوق المريض، ثم يحذف الحاسوب الأنسجة الرخوة ليبقى العظم.</figcaption></figure>
 <section class="step top3"><h2>⭐ <bdi>Top 3 points</bdi> <span class="gh-ar">أهم 3 نقاط</span></h2><ol><li>طاقتان من الأشعة السينية بدل طاقة واحدة.</li><li>الفرق بينهما يفصل العظم عن الأنسجة الرخوة.</li><li>الناتج رقم (BMD g/cm²) وليس صورة تشخيصية عادية، وبجرعة قليلة جداً.</li></ol></section>
 <a class="btn wide" href="quiz/">🎯 اختبر نفسك: 5 أسئلة</a>
 <details class="srcs"><summary>المصادر</summary><ul><li><a href="https://en.wikipedia.org/wiki/Dual-energy_X-ray_absorptiometry" target="_blank" rel="noopener">Wikipedia: Dual-energy X-ray absorptiometry (principle)</a></li><li><a href="https://radiopaedia.org/articles/dual-energy-x-ray-absorptiometry" target="_blank" rel="noopener">Radiopaedia: Dual-energy x-ray absorptiometry</a></li><li><a href="https://iscd.org/wp-content/uploads/2025/10/1-ISCD-Patient-Resources-What-to-expect-when-you-are-having-a-DXA-scan.pdf" target="_blank" rel="noopener">ISCD Patient Resources (DXA dose 5–7 µSv)</a></li></ul></details>
 </div>
-<script src="../../../assets/cloud-config.js?v=20261028111317"></script>
-<script src="../../../assets/cloud.js?v=20261028111317"></script>
-<script src="../../../assets/tools.js?v=20261028111317"></script>
+<script src="../../../assets/cloud-config.js?v=20261028114736"></script>
+<script src="../../../assets/cloud.js?v=20261028114736"></script>
+<script src="../../../assets/tools.js?v=20261028114736"></script>
 
-<script src="../../../assets/voice.js?v=20261028111317" defer></script>
-<script src="../../../assets/say.js?v=20261028111317" defer></script>
+<script src="../../../assets/voice.js?v=20261028114736" defer></script>
+<script src="../../../assets/say.js?v=20261028114736" defer></script>
 <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../../../sw.js", { updateViaCache: "none" });</script>
 </body></html>

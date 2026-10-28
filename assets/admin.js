@@ -23,7 +23,7 @@
   const { data: isAdmin } = await sb.rpc("is_admin");
   if (!isAdmin) { box.innerHTML = '<p class="hint">هذا الحساب مو حساب الإدارة.</p>'; await sb.auth.signOut(); return; }
 
-  const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات" };
+  const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات", thanks: "🙏 الشكر" };
   box.innerHTML = `<nav class="dtabs">${Object.entries(tabs).map(([k, v]) => `<a href="#${k}" data-t="${k}">${v}</a>`).join("")}</nav><div id="pane"></div>
     <p class="hint"><button class="btn ghost" id="out">خروج</button></p>`;
   document.getElementById("out").onclick = async () => { await sb.auth.signOut(); location.reload(); };
@@ -116,6 +116,50 @@
     document.getElementById("arch").onclick = async () => { if (!confirm("خلصت الامتحانات؟ ينتقل الجدول للأرشيف وتختفي الأيقونة.")) return;
       await sb.from("exams").update({ archived: true }).eq("archived", false); await setSection("exams", false); exams(); };
   }
-  const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams }[t] || stats)(); };
+
+  // 🙏 شكر وتقدير (28/10): إضافة/تعديل/حذف/ترتيب (سحب) + «وافق على ذكر اسمه ✅». التغيير يطلع بالموقع فوراً (RLS: الطلاب يشوفون الموافقين بس).
+  async function thanks() {
+    const SEC = { "chest-abdomen": "🫁 أشعة الصدر والبطن", "spine-joints": "🦴 الفقرات والمفاصل", "fractures": "🩼 الكسور", "paeds": "🧒 أشعة الأطفال" };
+    const { data, error } = await sb.from("thanks").select("*").order("sort");
+    if (error) { pane.innerHTML = `<p class="hint">${esc(error.message)}</p>`; return; }
+    const opt = (v) => Object.entries(SEC).map(([k, t]) => `<option value="${k}" ${v === k ? "selected" : ""}>${t}</option>`).join("") + `<option value="" ${v ? "" : "selected"}>— بلا قسم —</option>`;
+    const row = (d) => `<li class="thr" draggable="true" data-id="${esc(d.id)}"><span class="drag" title="اسحب للترتيب">⠿</span>
+      <input class="tn" value="${esc(d.name)}" placeholder="الاسم"><input class="ts" value="${esc(d.specialty)}" placeholder="الاختصاص">
+      <select class="tq">${opt(d.section)}</select>
+      <label class="tc"><input type="checkbox" ${d.consent ? "checked" : ""}> وافق على ذكر اسمه ✅</label>
+      <button class="btn ghost tsave">حفظ</button><button class="btn ghost tdel">حذف</button></li>`;
+    pane.innerHTML = `<h2>🙏 شكر وتقدير</h2><p class="hint">الاسم ما يطلع بالموقع إلا إذا «وافق ✅» مفعّل. اسحب ⠿ للترتيب.</p>
+      <ul id="thl" class="thl">${(data || []).map(row).join("")}</ul>
+      <h3>➕ طبيب جديد</h3><div class="thr"><input id="nn" placeholder="د. …"><input id="ns" placeholder="الاختصاص"><select id="nq">${opt("")}</select><button class="btn" id="nadd">إضافة</button></div>`;
+    const ul = document.getElementById("thl");
+    const save = async (li) => {
+      const { error } = await sb.from("thanks").update({ name: li.querySelector(".tn").value.trim(), specialty: li.querySelector(".ts").value.trim(),
+        section: li.querySelector(".tq").value, consent: li.querySelector(".tc input").checked, updated_at: new Date().toISOString() }).eq("id", li.dataset.id);
+      li.querySelector(".tsave").textContent = error ? "✗ " + error.message : "✓ انحفظ";
+    };
+    ul.addEventListener("click", async (ev) => {
+      const li = ev.target.closest(".thr"); if (!li) return;
+      if (ev.target.closest(".tsave")) save(li);
+      if (ev.target.closest(".tdel")) {
+        const b = ev.target.closest(".tdel");
+        if (b.dataset.sure !== "1") { b.dataset.sure = "1"; b.textContent = "متأكد؟ اضغط مرة ثانية"; return; }
+        const { error } = await sb.from("thanks").delete().eq("id", li.dataset.id); if (!error) li.remove();
+      }
+    });
+    ul.addEventListener("change", (ev) => { const li = ev.target.closest(".thr"); if (li && ev.target.closest(".tc")) save(li); });
+    let drag = null;
+    ul.addEventListener("dragstart", (ev) => { drag = ev.target.closest(".thr"); drag.classList.add("dragging"); });
+    ul.addEventListener("dragover", (ev) => { ev.preventDefault(); const over = ev.target.closest(".thr"); if (over && over !== drag) { const r = over.getBoundingClientRect(); ul.insertBefore(drag, ev.clientY < r.top + r.height / 2 ? over : over.nextSibling); } });
+    ul.addEventListener("dragend", async () => { drag.classList.remove("dragging"); drag = null;
+      const ids = [...ul.children].map((li) => li.dataset.id);
+      await Promise.all(ids.map((id, i) => sb.from("thanks").update({ sort: i + 1 }).eq("id", id))); });
+    document.getElementById("nadd").onclick = async () => {
+      const name = document.getElementById("nn").value.trim(); if (!name) return;
+      const id = "d-" + Date.now().toString(36);
+      const { error } = await sb.from("thanks").insert({ id, name, specialty: document.getElementById("ns").value.trim(), section: document.getElementById("nq").value, consent: false, sort: (data || []).length + 1 });
+      if (error) return alert(error.message); thanks();
+    };
+  }
+  const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, thanks }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();
 })();
