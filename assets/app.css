@@ -379,3 +379,10 @@ table.adm th, table.adm td { border: 1px solid var(--line); padding: 5px 6px; te
 .sxk .sxc { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
 .sxk .sxc bdi { font-weight: 600; direction: ltr; }
 .sxk .sxc .sxa { color: var(--muted); }
+
+/* خط العناوين Cairo مثل الغدير (قرار محمد 28/10): عناوين الصفحات وأسماء البطاقات والأزرار الرئيسية؛ النص يبقى IBM Plex Sans Arabic */
+:root { --title-font: "Cairo", "IBM Plex Sans Arabic", system-ui, sans-serif; }
+h1, h2, h3, .case h3 .en, .case h3 .ar, .tile .gn, .ht b, .btn, .btn2, .vtog button, .sxb > summary, .lsec > summary bdi { font-family: var(--title-font); }
+h1 { font-weight: 800; letter-spacing: 0; }
+h2, h3, .case h3 .en { font-weight: 700; }
+.btn, .btn2, .vtog button { font-weight: 700; }
