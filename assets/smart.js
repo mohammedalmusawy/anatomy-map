@@ -11,7 +11,7 @@
     .replace(/[^a-z0-9؀-ۿ]+/g, " ").trim();
   const LS = (k, d) => { try { return JSON.parse(localStorage.getItem("t:" + k)) ?? d; } catch (e) { return d; } };
   const params = new URLSearchParams(location.search);
-  const DISC = '<p class="rev-only">⚠️ <b>للمراجعة فقط — مو أسئلة الامتحان المتوقعة</b></p>';
+  const DISC = '<p class="rev-only">⚠️ <b>للمراجعة فقط — مو توقّع لأسئلة الامتحان</b></p>';
   let DATA = null, STATS = null;
   const data = () => DATA ? Promise.resolve(DATA) : fetch(root + "study/data.json").then((r) => r.json()).then((d) => (DATA = d));
   const stats = () => STATS ? Promise.resolve(STATS) : rest("question_stats", "select=qkey,rate,estimated,hint_en,hint_ar,attempts").then((r) => (STATS = Object.fromEntries((r || []).map((x) => [x.qkey, x]))));
@@ -126,7 +126,7 @@
         h += `<h3>${esc(L.type_ar)} م${L.num} — ${esc(L.title_ar)}</h3>` + qs.map((q) => qcard(q, L, ai)).join("");
       }
       hard.sort((a, b) => b.s.rate - a.s.rate);
-      if (hard.length) h += `<h2>🔥 الأكثر غلط عند الطلاب</h2>` + hard.slice(0, 8).map(({ q, L, s }) => qcard(q, L, ai, s)).join("");
+      if (hard.length) h += `<h2>🔥 الأكثر غلط عند الطلاب</h2>${DISC}` + hard.slice(0, 8).map(({ q, L, s }) => qcard(q, L, ai, s)).join("");
     }
     $("#recout").innerHTML = h;
     $("#recout").scrollIntoView({ behavior: "smooth" });
@@ -197,9 +197,9 @@
         <p class="when">🗓️ ${esc(when)} · ${left > 0 ? `باقي <b>${left}</b> يوم` : left === 0 ? "<b>اليوم</b>" : "خلص"}</p>
         ${x.postponed_to ? `<p class="post">⏩ تأجلت المادة إلى يوم ${esc(x.postponed_to)}</p>` : ""}
         ${sure ? `<p class="inc">📚 المشمول: ${inc.map((L) => `${esc(L.type_ar)} م${L.num}`).join("، ")}</p>` : `<p class="inc">📚 المشمول: ما متأكدين بعد — نحدّثه أول ما يوصل خبر.<br><small>لحد ما يتأكد، المراجعة تحت من المحاضرات اللي نزلت لحد هسه.</small></p>`}
-        ${top ? `<div class="topq">⭐ <b>السؤال الأكثر غلط</b>${qcard(top.q, top.L, ai, top.s)}</div>` : ""}
+        ${top ? `<div class="topq">⭐ <b>السؤال الأكثر غلط</b>${DISC}${qcard(top.q, top.L, ai, top.s)}</div>` : ""}
         <a class="btn" href="${root}assistant/?mode=recommend&subject=${esc(x.subject)}${sure ? "&lecs=" + encodeURIComponent(x.lectures.join(",")) : ""}">🎯 رشّحلي لهالمادة</a>
-        ${qs.length ? `<h3>🔥 أصعب الأسئلة — راجعوها</h3>${qs.slice(0, 10).map((r) => qcard(r.q, r.L, ai, r.s)).join("")}` : ""}
+        ${qs.length ? `<h3>🔥 أصعب الأسئلة — راجعوها</h3>${DISC}${qs.slice(0, 10).map((r) => qcard(r.q, r.L, ai, r.s)).join("")}` : ""}
         ${qs.some((r) => r.s.hint_ar) ? `<h3>🧠 المفاهيم اللي الطلاب يغلطون بيها</h3><ul>${qs.filter((r) => r.s.hint_ar).slice(0, 8).map((r) => `<li><span class="en">${esc(r.s.hint_en)}</span>${esc(r.s.hint_ar)} <a href="${root}${esc(r.L.learn)}">📖</a></li>`).join("")}</ul>` : ""}
         <h3>📝 ملخص النقاط المهمة</h3>${inc.map((L) => `<details class="rsum"><summary>${esc(L.type_ar)} م${L.num} — ${esc(L.title_ar)}</summary>${L.summary.length ? `<ul>${L.summary.map((y) => `<li><span class="en">${esc(y.en)}</span>${esc(y.ar)}</li>`).join("")}</ul>` : ""}<a class="btn alt" href="${root}${esc(L.learn)}">📖 افتح</a></details>`).join("")}
         <h3>❓ أسئلة وأجوبة</h3>${inc.map((L) => `<details class="rsum"><summary>${esc(L.type_ar)} م${L.num} (${L.questions.length})</summary>${L.questions.map((q) => qcard(q, L, ai, st[qk(q)])).join("")}</details>`).join("")}

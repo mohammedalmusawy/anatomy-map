@@ -210,6 +210,8 @@
   // ── الضغط (ماوس، لمس، كيبورد) ──
   function act(t) {
     if (t.closest(".tclose")) { hidePop(); return true; }
+    const pb = t.closest(".perrb");   // ⚠️ احتمال خطأ: يفتح/يسد بطاقته (29/10)
+    if (pb) { const c = document.getElementById(pb.dataset.for); if (c) { c.hidden = !c.hidden; pb.setAttribute("aria-expanded", !c.hidden); } return true; }
     const k1 = t.closest(".say1[data-k]");
     if (k1) { sayTerm(k1.dataset.k, +(k1.dataset.r || 1), k1); return true; }
     const tm = t.closest(".tm");

@@ -67,6 +67,13 @@
         <div class="ans">الإجابة الصحيحة: <span class="en">${esc(a.en)}</span>${esc(a.ar)}</div>
         <div class="why">💡 ${esc(q.why)}</div>`;
     }
+    if (q.perr) {   // ⚠️ احتمال خطأ بالمحاضرة (29/10): الجواب حسب المحاضرة يبقى الأساسي، وتحته الأصح علمياً ويّا المصدر
+      const p = q.perr, src = p.source || {};
+      fb.insertAdjacentHTML("beforeend", `<div class="perr" role="note"><b>⚠️ احتمال خطأ بالمحاضرة</b><span>المحاضرة: ${esc(p.lecture_says || "")}</span>` +
+        `<span>الأصح علمياً: ${esc(p.correct_ar || "")}${p.correct_en ? ` <bdi>(${esc(p.correct_en)})</bdi>` : ""}</span>` +
+        `<small>المصدر: <a href="${esc(src.url || "")}" target="_blank" rel="noopener">${esc(src.title || "")}</a> · جواب الامتحان يبقى حسب المحاضرة</small></div>`);
+      fb.classList.remove("hidden");
+    }
     const last = pos === round.length - 1;
     $("next").textContent = last ? "النتيجة" : "السؤال التالي";
     $("next").classList.remove("hidden");

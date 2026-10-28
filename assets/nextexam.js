@@ -61,6 +61,7 @@
       ${x.postponed_to ? `<p class="nexam-p">⏩ تأجلت إلى ${esc(arDate(x.postponed_to))}${x.exam_date ? ` <small>(كان ${esc(arDate(x.exam_date))})</small>` : ""}</p>` : ""}
       ${sure ? `<p class="nexam-l">📚 المشمول: ${lecs}</p>`
         : `<p class="nexam-l">📚 المشمول: ما متأكدين بعد — نحدّثه أول ما يوصل خبر</p><p class="nexam-hint">لحد ما يتأكد، <a href="${subjLearn}">راجع المحاضرات اللي نزلت لحد هسه</a></p>`}
+      <p class="nexam-rev">للمراجعة فقط — مو توقّع لأسئلة الامتحان</p>
       <div class="nexam-b"><a class="nexam-btn" href="${review}">📝 راجع المشمول</a><a class="nexam-btn alt" href="${rec}">🎯 رشّحلي</a></div>
       ${c.examsOn ? `<a class="nexam-x" href="${root}exams/">📅 قسم الامتحانات${more > 0 ? ` (+${more} امتحان خلال أسبوعين)` : ""} · <b>للمراجعة فقط</b></a>` : ""}`;
     const at = document.querySelector(".wrap > .hero") || document.querySelector(".wrap > h1 + .sub") || document.querySelector(".wrap > h1") || document.querySelector(".wrap > header.top");
