@@ -452,3 +452,12 @@ h2, h3, .case h3 .en { font-weight: 700; }
 #admin .exbtn, #admin .exrow .exdel { min-height: 44px; width: auto; padding: 8px 14px; margin: 6px 0; font-size: 15px; }
 #admin .exacts { display: flex; flex-wrap: wrap; gap: 8px; }
 #admin .exacts .btn { flex: 1 1 150px; }
+
+/* 🎧 بطاقة المصطلح بالموبايل (29/10): ورقة صغيرة بأسفل الشاشة — ما تغطي العنوان ولا الأزرار */
+.tpop.sheet { position: fixed; top: auto !important; left: max(12px, env(safe-area-inset-left)) !important; right: max(12px, env(safe-area-inset-right));
+  bottom: calc(12px + env(safe-area-inset-bottom)); max-width: none; border-radius: 18px; padding: 14px 16px 16px; z-index: 80; animation: tpup .18s ease-out; }
+.tpop.sheet .pb { gap: 10px; }
+.tpop .tclose { position: absolute; top: 6px; left: 6px; width: 40px; height: 40px; border: 0; background: none; color: var(--muted); font-size: 1.1rem; cursor: pointer; border-radius: 10px; }
+.tpop.sheet { padding-top: 16px; } .tpop.sheet b { padding-left: 46px; }
+@keyframes tpup { from { transform: translateY(14px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .tpop.sheet { animation: none; } }

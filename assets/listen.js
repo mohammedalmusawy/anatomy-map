@@ -112,6 +112,7 @@
   }
 
   // البطاقة (وحدة بالصفحة)
+  const SHEET = window.matchMedia("(max-width: 639px), (hover: none)");
   const pop = document.createElement("div");
   pop.className = "tpop"; pop.id = "tpop"; pop.hidden = true; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-live", "polite");
   let popFor = null;
@@ -121,8 +122,19 @@
     pop.innerHTML = `<b dir="ltr">${esc(d[0])}</b><span class="ar">${esc(d[1])}</span><span class="pr">${d[2]} <bdi dir="ltr">${esc(d[3])}</bdi></span>` +
       `<span class="pb"><button type="button" class="say1" data-k="${el.dataset.k}" aria-label="اسمع لفظ ${esc(d[0])}">🔊</button>` +
       `<button type="button" class="say1 slow" data-k="${el.dataset.k}" data-r="0.75" aria-label="لفظ بطيء ${esc(d[0])}">🐢</button></span>`;
+    // الموبايل (29/10، ملاحظة محمد): ورقة صغيرة بأسفل الشاشة، ما تغطي العنوان ولا الأزرار؛ والكلمة تبقى ظاهرة فوقها
+    const sheet = SHEET.matches;
+    pop.classList.toggle("sheet", sheet);
+    if (sheet) pop.insertAdjacentHTML("afterbegin", '<button type="button" class="tclose" aria-label="سد">✕</button>');
     pop.hidden = false; popFor = el;
     const r = el.getBoundingClientRect(), W = document.documentElement.clientWidth;
+    if (sheet) {
+      pop.style.top = pop.style.left = "";
+      const cover = innerHeight - pop.offsetHeight - 16;   // الكلمة تحت مستوى الورقة ← تنزل الصفحة شوية
+      if (r.bottom > cover) window.scrollBy({ top: r.bottom - cover + 12, behavior: "smooth" });
+      return;
+    }
+    // الكمبيوتر: تحت الكلمة دائماً (مو فوقها)
     pop.style.top = r.bottom + window.scrollY + 6 + "px";
     pop.style.left = Math.max(8, Math.min(r.left + window.scrollX, W - pop.offsetWidth - 8 + window.scrollX)) + "px";
   }
@@ -197,6 +209,7 @@
 
   // ── الضغط (ماوس، لمس، كيبورد) ──
   function act(t) {
+    if (t.closest(".tclose")) { hidePop(); return true; }
     const k1 = t.closest(".say1[data-k]");
     if (k1) { sayTerm(k1.dataset.k, +(k1.dataset.r || 1), k1); return true; }
     const tm = t.closest(".tm");
@@ -229,7 +242,7 @@
     if ((ev.key === "Enter" || ev.key === " ") && ev.target instanceof Element && ev.target.matches(".ls, .tm")) { ev.preventDefault(); unlock(); act(ev.target); }
   });
   if (window.matchMedia("(hover: hover)").matches) {
-    document.addEventListener("mouseover", (ev) => { const tm = ev.target instanceof Element && ev.target.closest(".tm"); if (tm && tm !== popFor && !tm.classList.contains("demo")) showPop(tm); });
+    document.addEventListener("mouseover", (ev) => { const tm = ev.target instanceof Element && ev.target.closest(".tm"); if (tm && tm !== popFor && !tm.classList.contains("demo") && !SHEET.matches) showPop(tm); });
     document.addEventListener("mouseout", (ev) => {
       const tm = ev.target instanceof Element && ev.target.closest(".tm");
       if (tm && !pop.contains(ev.relatedTarget)) setTimeout(() => { if (!pop.matches(":hover") && !(tm.matches(":hover"))) hidePop(); }, 300);
