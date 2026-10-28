@@ -1,6 +1,6 @@
 // يخلّي الموقع يشتغل كتطبيق، ويفتح الاختبارات اللي انفتحت قبل حتى بدون إنترنت.
 // يتعامل بس مع صفحات الدروس (lessons, quiz, learn, atlas, devices, contrast, terms + روابطها العربية القديمة)؛ خريطة التشريح وملفاتها الكبيرة تمشي عادي بدون كاش.
-const VERSION = "20261028075327";
+const VERSION = "20261028085838";
 const CACHE = "dars-" + VERSION;
 const AUDIO = "audio-v1";   // الصوت بكاش ثابت: ما ينمسح مع كل تحديث للموقع (الملفات نفسها ما تتغير)
 const CORE = ["lessons/", "assets/app.css", "assets/quiz.js", "manifest.webmanifest", "assets/icon-192.png"];
