@@ -6,7 +6,8 @@
   const root = new URL(".", document.querySelector('link[rel="manifest"]').href).href;
   const C = window.STUDY_CLOUD || {}, ON = !!(C.url && C.anon);
   const H = { apikey: C.anon, Authorization: "Bearer " + C.anon, "Content-Type": "application/json" };
-  const rest = (t, q) => ON ? fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => r.json()).catch(() => []) : Promise.resolve([]);
+  const N = window.Net;   // 📡 net.js: كاش بمدة (إذا الصفحة ما حمّلته: طلب مباشر مثل قبل)
+  const rest = (t, q, ttl) => !ON ? Promise.resolve([]) : N ? N.get(t, q, ttl) : fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => r.json()).catch(() => []);
   const norm = (s) => String(s).toLowerCase().replace(/[ً-ْـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه")
     .replace(/[^a-z0-9؀-ۿ]+/g, " ").trim();
   const LS = (k, d) => { try { return JSON.parse(localStorage.getItem("t:" + k)) ?? d; } catch (e) { return d; } };
@@ -14,10 +15,10 @@
   const DISC = '<p class="rev-only">⚠️ <b>للمراجعة فقط — مو توقّع لأسئلة الامتحان</b></p>';
   let DATA = null, STATS = null;
   const data = () => DATA ? Promise.resolve(DATA) : fetch(root + "study/data.json").then((r) => r.json()).then((d) => (DATA = d));
-  const stats = () => STATS ? Promise.resolve(STATS) : rest("question_stats", "select=qkey,rate,estimated,hint_en,hint_ar,attempts").then((r) => (STATS = Object.fromEntries((r || []).map((x) => [x.qkey, x]))));
+  const stats = () => STATS ? Promise.resolve(STATS) : rest("question_stats", "select=qkey,rate,estimated,hint_en,hint_ar,attempts", 6 * 3600e3).then((r) => (STATS = Object.fromEntries((r || []).map((x) => [x.qkey, x]))));
   const qk = (q) => (q.q_en || "").slice(0, 120);
   const settings = () => window.STUDY_SETTINGS ? Promise.resolve(window.STUDY_SETTINGS)
-    : rest("settings", "select=key,value").then((r) => Object.fromEntries((r || []).map((x) => [x.key, x.value])).sections || {});
+    : (N && ON ? N.settings() : rest("settings", "select=key,value").then((r) => Object.fromEntries((r || []).map((x) => [x.key, x.value])))).then((S) => S.sections || {});
 
   // ───────── 🔎 البحث الذكي ─────────
   function lev(a, b) {
@@ -180,7 +181,7 @@
   if ($("#exams")) (async () => {
     const s = await settings();
     if (!ON || !s.exams) return;
-    const [ex, d, st] = await Promise.all([rest("exams", "select=*&confirmed=eq.true&archived=eq.false"), data(), stats()]);
+    const [ex, d, st] = await Promise.all([rest("exams", "select=*&confirmed=eq.true&archived=eq.false", 15 * 60e3), data(), stats()]);
     if (!ex.length) return;
     const day = (x) => new Date(x + "T00:00:00");
     ex.sort((a, b) => day(a.postponed_to || a.exam_date) - day(b.postponed_to || b.exam_date));

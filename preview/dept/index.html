@@ -1,0 +1,209 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">
+<title>لوحة متابعة القسم · معاينة</title><link rel="manifest" href="../../manifest.webmanifest"><link rel="icon" href="../../preview/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../../assets/fonts/plex-arabic-400.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="preload" href="../../assets/fonts/cairo-600-800.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="../../assets/fonts.css?v=1793220556">
+<link rel="stylesheet" href="../../assets/app.css?v=20261029001500"><link rel="stylesheet" href="../../assets/calm.css?v=1793220556"><style>
+@font-face{font-family:"Cairo";font-weight:600 800;font-display:swap;src:url("../../assets/fonts/cairo-600-800.woff2?v=1") format("woff2")}
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:400;font-display:swap;src:url("../../assets/fonts/plex-arabic-400.woff2?v=1") format("woff2")}
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:500;font-display:swap;src:url("../../assets/fonts/plex-arabic-500.woff2?v=1") format("woff2")}
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:600;font-display:swap;src:url("../../assets/fonts/plex-arabic-600.woff2?v=1") format("woff2")}
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:700;font-display:swap;src:url("../../assets/fonts/plex-arabic-700.woff2?v=1") format("woff2")}
+:root { --title-font: "Cairo", "Segoe UI", Tahoma, system-ui, sans-serif; }
+body.calm.dept { font-family: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, system-ui, sans-serif; }
+.dept .wrap { max-width: 1240px; }
+.fab { display: none !important; }
+.dhd { margin: 4px 0 10px; }
+.dhd .kick { display: inline-block; font: 700 var(--t-xs) var(--title-font); color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 2px 12px; }
+.dhd .hi { font: 700 var(--t-md) var(--title-font); color: var(--brand); margin: 8px 0 0; }
+.dtop { display: grid; gap: 8px 16px; align-items: center; }
+.demo { display: flex; gap: 8px; align-items: center; background: var(--hl); border: 1px dashed var(--accent); color: var(--ink); border-radius: 14px; padding: 8px 12px; font: 700 var(--t-sm) var(--title-font); margin: 0; }
+.priv { color: var(--muted); font-size: var(--t-xs); margin: 6px 0 12px; }
+.infob { min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--brand); font: 700 var(--t-xs) var(--title-font); cursor: pointer; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 12px; }
+.stats div { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 8px; text-align: center; }
+.stats b { display: block; font: 800 var(--t-xl)/1.2 var(--title-font); color: var(--brand); font-variant-numeric: tabular-nums; }
+.stats small { color: var(--muted); font-size: var(--t-xs); line-height: 1.4; display: block; }
+.dgrid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+.dcard { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; min-width: 0; }
+.dcard:focus-visible, .chip2:focus-visible, .seg button:focus-visible, .sw:focus-visible, .infob:focus-visible, .ann textarea:focus-visible, .dlg button:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.dcard h2 { margin: 0 0 8px; font-size: var(--t-md); display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.dcard h2 small { font: 500 var(--t-xs) "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif; color: var(--muted); }
+.seg { display: inline-flex; gap: 2px; padding: 3px; background: color-mix(in srgb, var(--line) 45%, var(--bg)); border-radius: 999px; }
+.seg button { min-height: 44px; min-width: 70px; border: 0; background: none; border-radius: 999px; font: 700 var(--t-xs) var(--title-font); color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--card); color: var(--brand); box-shadow: 0 0 0 1px var(--line); }
+svg.bars { display: block; width: 100%; height: auto; overflow: visible; }
+svg.bars .bb { fill: var(--brand); opacity: .45; }
+svg.bars .bb.last { opacity: 1; }
+svg.bars .base { stroke: var(--line); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+svg.bars .grid { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 4; vector-effect: non-scaling-stroke; }
+svg.bars text { font-family: "Cairo", "Segoe UI", Tahoma, sans-serif; fill: var(--muted); font-size: 12px; font-weight: 700; }
+svg.bars text.val { fill: var(--ink); font-size: 13px; }
+svg.bars text.val.last { fill: var(--brand); }
+.chips-row { display: flex; gap: 6px; flex-wrap: wrap; padding: 2px 0 10px; }
+.chip2 { min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); font: 600 var(--t-xs) var(--title-font); cursor: pointer; }
+.chip2[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); }
+.rk { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.rk li { display: grid; grid-template-columns: 28px 1fr auto; gap: 2px 10px; align-items: center; }
+.rk .n { grid-row: span 2; width: 28px; height: 28px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); font: 800 var(--t-xs) var(--title-font); display: flex; align-items: center; justify-content: center; }
+.rk b { font: 700 var(--t-sm)/1.45 var(--title-font); min-width: 0; }
+.rk .v { font: 800 var(--t-md) var(--title-font); color: var(--brand); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.rk .meta { grid-column: 2 / -1; display: flex; align-items: center; gap: 8px; font-size: var(--t-xs); color: var(--muted); }
+.rk .en { font-size: var(--t-xs); color: var(--muted); display: block; text-align: right; font-weight: 500; }
+.pbar { flex: 1; height: 6px; background: color-mix(in srgb, var(--line) 70%, transparent); border-radius: 999px; overflow: hidden; }
+.pbar i { display: block; height: 100%; background: var(--brand); border-radius: 999px; }
+.pbar.warm i { background: var(--accent); }
+.mq { border-top: 1px solid var(--line); padding: 10px 0 0; margin: 10px 0 0; }
+.mq:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.mq .qen { direction: ltr; text-align: left; font-weight: 600; font-size: var(--t-sm); display: block; }
+.mq .qar { font-size: var(--t-sm); display: block; }
+.mq .meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: var(--t-xs); color: var(--muted); margin-top: 4px; }
+.mq .pct { font: 800 var(--t-sm) var(--title-font); color: var(--accent); }
+.revline { font: 700 var(--t-xs) var(--title-font); color: var(--accent); background: var(--accent-soft); border-radius: 10px; padding: 6px 10px; margin: 0 0 10px; }
+.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 10px; }
+.cmp div { border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: center; background: var(--bg); }
+.cmp b { display: block; font: 800 var(--t-xl) var(--title-font); font-variant-numeric: tabular-nums; }
+.cmp small { color: var(--muted); font-size: var(--t-xs); }
+.off { display: inline-flex; align-items: center; font: 700 var(--t-xs) var(--title-font); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+.tg { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; }
+.sw { width: 52px; height: 30px; border-radius: 999px; background: var(--line); border: 0; position: relative; cursor: pointer; flex: none; }
+.sw::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 24px; height: 24px; border-radius: 50%; background: var(--card); box-shadow: 0 1px 2px rgba(0,0,0,.15); transition: inset-inline-start .2s; }
+.sw { box-sizing: content-box; border: 7px solid transparent; border-inline-width: 0; background-clip: padding-box; }   /* هدف لمس 44px */
+.sw[aria-checked="true"] { background: var(--brand); } .sw[aria-checked="true"]::after { inset-inline-start: 25px; }
+.ann textarea { width: 100%; min-height: 84px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--ink); font: inherit; padding: 10px; resize: vertical; box-sizing: border-box; }
+.ann textarea:disabled { opacity: .55; }
+.ann .cnt { font-size: var(--t-xs); color: var(--muted); text-align: left; direction: ltr; }
+.small { color: var(--muted); font-size: var(--t-xs); margin: 8px 0 0; }
+.dlg { border: 1px solid var(--line); border-radius: 18px; background: var(--card); color: var(--ink); padding: 18px; max-width: min(520px, calc(100vw - 32px)); }
+.dlg::backdrop { background: rgba(20, 22, 28, .45); }
+.dlg h2 { margin: 0 0 8px; font-size: var(--t-lg); }
+.dlg ul { margin: 0 0 14px; padding-inline-start: 1.2em; display: grid; gap: 6px; font-size: var(--t-sm); }
+.dlg .close { min-height: 44px; width: 100%; border: 0; border-radius: 12px; background: var(--brand); color: var(--brand-ink); font: 700 var(--t-sm) var(--title-font); cursor: pointer; }
+.skip { position: absolute; inset-inline-start: 8px; top: -60px; background: var(--brand); color: var(--brand-ink); padding: 8px 14px; border-radius: 10px; z-index: 20; font: 700 var(--t-sm) var(--title-font); }
+.skip:focus { top: 8px; }
+/* تابلت 768+: عمودين */
+@media (min-width: 760px) {
+  .dtop { grid-template-columns: 1fr auto; }
+  .stats b { font-size: var(--t-2xl); }
+  .dgrid { grid-template-columns: 1fr 1fr; }
+  .dgrid .c-act { grid-column: 1 / -1; }
+  .dgrid .ann { grid-column: 1 / -1; }
+}
+/* كمبيوتر 1200+ (1366 و1920): 3 أعمدة، أرقام أكبر */
+@media (min-width: 1200px) {
+  html { font-size: calc(17px * var(--fs)); }
+  .stats { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .stats div { padding: 16px; }
+  .stats b { font-size: var(--t-2xl); }
+  .stats small { font-size: var(--t-sm); }
+  .dgrid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .dgrid .c-act { grid-column: span 2; }
+  .dgrid .c-top { grid-column: span 1; }
+  .dcard { padding: 18px; }
+  .dcard h2 { font-size: var(--t-lg); }
+}
+@media (min-width: 1700px) { .dept .wrap { max-width: 1480px; } }
+</style>
+<script>try{if(localStorage.getItem("t:theme")==='"dark"')document.documentElement.dataset.theme="dark"}catch(e){}</script>
+</head><body class="calm dept"><a class="skip" href="#main">تخطَّ إلى اللوحة</a><div class="wrap">
+<div class="cbar"><a class="back" href="../home/"><span aria-hidden="true">‹</span><span class="bl">الرئيسية</span></a><span class="tools"><a class="tbtn" href="../../preview/search/" aria-label="البحث (ويّا 🎤)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></a><a class="tbtn" href="../../preview/me/" aria-label="👤 مساحتي" data-locked><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></svg></a><button type="button" class="tbtn" data-theme-toggle aria-label="الوضع الليلي"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg></button></span></div>
+<header class="dhd"><span class="kick">خاصة برئاسة القسم</span>
+<p class="hi">أهلاً د. حيدر سهيل النجم</p>
+<h1>لوحة متابعة القسم</h1><p class="sub">قسم تقنيات الأشعة — المرحلة الثانية · جامعة العين العراقية</p></header>
+<div class="dtop"><p class="demo" role="note">🧪 بيانات تجريبية — للعرض فقط، وليست أرقاماً حقيقية</p>
+<button type="button" class="infob" id="infobtn" aria-haspopup="dialog">كيف تُحسب الأرقام؟</button></div>
+<p class="priv">أرقام مجمّعة بلا أسماء ولا معرّفات. أي مجموعة أقل من 5 طلاب لا تظهر، ونسبة الخطأ لا تُحسب قبل 10 محاولات.</p>
+
+<main id="main" tabindex="-1">
+<section class="stats" aria-label="لمحة سريعة"><div><b id="k-today">–</b><small>نشطون اليوم</small></div><div><b id="k-week">–</b><small>نشطون هذا الأسبوع</small></div><div><b id="k-enr">–</b><small>مسجّلون بالكود</small></div></section>
+
+<div class="dgrid">
+<section class="dcard c-act" tabindex="0" aria-labelledby="h-act"><h2 id="h-act">الطلاب النشطون <span class="seg" role="group" aria-label="المدة"><button type="button" data-mode="d">يومي</button><button type="button" data-mode="w">أسبوعي</button></span></h2>
+<div id="act"></div><p class="small">«نشط» = فتح محاضرة أو اختباراً واحداً على الأقل في ذلك اليوم.</p></section>
+
+<section class="dcard c-top" tabindex="0" aria-labelledby="h-top"><h2 id="h-top">الأكثر قراءة في كل مادة <small>هذا الأسبوع</small></h2>
+<div class="chips-row" id="subs" role="group" aria-label="المادة"></div><ol class="rk" id="top"></ol></section>
+
+<section class="dcard" tabindex="0" aria-labelledby="h-hard"><h2 id="h-hard">الموضوعات الأصعب <small>نسبة الإجابات الخاطئة</small></h2>
+<p class="revline">للمراجعة فقط — مو توقّع لأسئلة الامتحان</p><ol class="rk" id="hard"></ol></section>
+
+<section class="dcard" tabindex="0" aria-labelledby="h-miss"><h2 id="h-miss">الأسئلة الأكثر خطأً <small>أول محاولة لكل طالب</small></h2><div id="missed"></div></section>
+
+<section class="dcard" tabindex="0" aria-labelledby="h-exam"><h2 id="h-exam">التفاعل وقت الامتحانات <span class="off">لا توجد امتحانات الآن</span></h2><div id="exam"></div>
+<p class="small">مثال من فترة امتحانات سابقة: كيف يرتفع النشاط كلما اقترب الامتحان.</p></section>
+
+<section class="dcard ann" tabindex="0" aria-labelledby="h-ann"><h2 id="h-ann">إعلان قصير للطلاب <small>اختياري</small></h2>
+<div class="tg"><span id="annst">مطفأ — لا يظهر للطلاب</span><button type="button" class="sw" id="annsw" role="switch" aria-checked="false" aria-label="تشغيل الإعلان"></button></div>
+<textarea id="anntx" maxlength="280" disabled aria-label="نص الإعلان" placeholder="مثال: تبدأ امتحانات نصف السنة يوم …، بالتوفيق للجميع."></textarea>
+<div class="cnt" id="anncnt">0 / 280</div></section>
+</div>
+<p class="small">مجموعات صغيرة مخفية حفاظاً على الخصوصية: <b id="hidn">–</b> · آخر تحديث: يومياً.</p>
+</main>
+<dialog class="dlg" id="info" aria-labelledby="h-info"><h2 id="h-info">كيف تُحسب الأرقام؟</h2><ul>
+<li>«نشط»: طالب بكود فتح محاضرة أو اختباراً واحداً على الأقل في اليوم.</li>
+<li>الأكثر قراءة: عدد الطلاب المختلفين الذين فتحوا المحاضرة هذا الأسبوع.</li>
+<li>نسبة الخطأ: الإجابات الخاطئة ÷ المحاولات، من أول محاولة لكل طالب، وبعد 10 محاولات على الأقل.</li>
+<li>أي مجموعة أقل من 5 طلاب لا تظهر، ولا أسماء في أي مكان.</li>
+<li>للمراجعة فقط — مو توقّع لأسئلة الامتحان.</li></ul>
+<button type="button" class="close">تمام</button></dialog>
+</div>
+<script>window.DEPT = {"demo": true, "generated_at": "2026-10-28T21:00:00+03:00", "stage": 2, "min_group": 5, "min_attempts": 10, "active": {"today": 44, "week": 81, "enrolled": 112, "daily": [{"date": "2026-10-22", "active": 34}, {"date": "2026-10-23", "active": 41}, {"date": "2026-10-24", "active": 22}, {"date": "2026-10-25", "active": 38}, {"date": "2026-10-26", "active": 47}, {"date": "2026-10-27", "active": 52}, {"date": "2026-10-28", "active": 44}], "weekly": [{"week": "2026-W38", "active": 51}, {"week": "2026-W39", "active": 58}, {"week": "2026-W40", "active": 63}, {"week": "2026-W41", "active": 61}, {"week": "2026-W42", "active": 74}, {"week": "2026-W43", "active": 81}]}, "top_lectures": [{"subject": "anatomy", "subject_ar": "التشريح", "items": [{"lecture_id": "anatomy_t01", "title_ar": "الحوض العظمي", "title_en": "Bony Pelvis (Pelvic Girdle): Sacrum, Coccyx & Hip Bones", "kind": "theory", "num": 1, "readers_week": 53}, {"lecture_id": "anatomy_t04", "title_ar": "عظام القدم: الرصغ والأمشاط والسلاميات", "title_en": "Anatomy and Radiology of the Foot: Tarsals, Metatarsals & Phalanges", "kind": "theory", "num": 4, "readers_week": 22}]}, {"subject": "radiography", "subject_ar": "التصوير", "items": [{"lecture_id": "radiography_t02", "title_ar": "جودة الصورة وعوامل التعرض", "title_en": "Image Quality, Exposure Factors, Brightness, Contrast, Resolution, Distortion and Noise", "kind": "theory", "num": 2, "readers_week": 56}, {"lecture_id": "radiography_p01", "title_ar": "المصطلحات الأساسية والاتجاهات والوضعيات", "title_en": "Practical Lecture 1: Basic Terms, Directions and Positions", "kind": "practical", "num": 1, "readers_week": 56}, {"lecture_id": "radiography_t01", "title_ar": "المصطلحات الاتجاهية ومستويات الجسم والوضعيات", "title_en": "Directional Terminology, Body Planes, Main Positions & Terms Related to Movements", "kind": "theory", "num": 1, "readers_week": 40}]}, {"subject": "protection", "subject_ar": "الوقاية", "items": [{"lecture_id": "protection_t03", "title_ar": "مبادئ الوقاية من الإشعاع وحدود الجرعة", "title_en": "Principles of Radiological Protection & Dose Limits", "kind": "theory", "num": 3, "readers_week": 50}, {"lecture_id": "protection_p02", "title_ar": "وحدات قياس الإشعاع والوحدات الدولية", "title_en": "Radiation Measurement Units & International SI Units", "kind": "practical", "num": 2, "readers_week": 44}, {"lecture_id": "protection_p01", "title_ar": "تصنيف الإشعاع ومصادر الإشعاع المؤين", "title_en": "Classification of Radiation and Identification of Ionizing Radiation Sources", "kind": "practical", "num": 1, "readers_week": 43}]}, {"subject": "examinations", "subject_ar": "الفحوصات", "items": [{"lecture_id": "examinations_t02", "title_ar": "طرق تصوير الجهاز الهضمي", "title_en": "Methods of Imaging the GIT", "kind": "theory", "num": 2, "readers_week": 20}]}, {"subject": "ct", "subject_ar": "المفراس", "items": [{"lecture_id": "ct_p01", "title_ar": "مقدمة المفراس وحدود الأشعة التقليدية", "title_en": "Introduction to Computed Tomography & Limitations of Conventional Radiography", "kind": "practical", "num": 1, "readers_week": 24}]}, {"subject": "equipment", "subject_ar": "الأجهزة", "items": [{"lecture_id": "equipment_p01", "title_ar": "منظومة جهاز الأشعة السينية (التجربتان 1 و2)", "title_en": "X-Ray Machine System — Experiments 1 & 2 in Practice", "kind": "practical", "num": 1, "readers_week": 69}, {"lecture_id": "equipment_t02", "title_ar": "مولّدات الجهد العالي", "title_en": "High Voltage Generators", "kind": "theory", "num": 2, "readers_week": 59}, {"lecture_id": "equipment_t01", "title_ar": "منظومة جهاز الأشعة السينية ولوحة التحكم", "title_en": "X-Ray Machine System & the Operating Console", "kind": "theory", "num": 1, "readers_week": 46}]}], "hard_topics": [{"topic_en": "Sources of Ionizing Radiation", "topic_ar": "مصادر الإشعاع المؤيِّن", "lecture_id": "protection_p01", "subject_ar": "الوقاية", "error_rate": 0.53, "attempts": 74}, {"topic_en": "High Frequency Generator", "topic_ar": "المولّد عالي التردد", "lecture_id": "equipment_t02", "subject_ar": "الأجهزة", "error_rate": 0.51, "attempts": 89}, {"topic_en": "Comparison of Radiation Doses", "topic_ar": "مقارنة الجرعات الإشعاعية", "lecture_id": "protection_t01", "subject_ar": "الوقاية", "error_rate": 0.51, "attempts": 42}, {"topic_en": "General Body Positions", "topic_ar": "وضعيات الجسم العامة", "lecture_id": "radiography_t01", "subject_ar": "التصوير", "error_rate": 0.45, "attempts": 96}, {"topic_en": "Time", "topic_ar": "الوقت", "lecture_id": "protection_p03", "subject_ar": "الوقاية", "error_rate": 0.43, "attempts": 49}], "missed_questions": [{"q_en": "Which is a reason high-frequency generators are the most widely used?", "q_ar": "أي مما يلي سبب لكون المولّدات عالية التردد الأكثر استعمالاً؟", "lecture_id": "equipment_t02", "subject_ar": "الأجهزة", "error_rate": 0.65, "attempts": 42}, {"q_en": "The effective dose limit for members of the general public is:", "q_ar": "حد الجرعة الفعالة لأفراد عامة الناس هو:", "lecture_id": "protection_t04", "subject_ar": "الوقاية", "error_rate": 0.61, "attempts": 47}, {"q_en": "Alpha particles (α) are:", "q_ar": "جسيمات ألفا (α) هي:", "lecture_id": "protection_p01", "subject_ar": "الوقاية", "error_rate": 0.59, "attempts": 35}, {"q_en": "In a postero-anterior (PA) projection, the central ray:", "q_ar": "في الإسقاط الخلفي الأمامي (PA)، الشعاع المركزي:", "lecture_id": "radiography_t01", "subject_ar": "التصوير", "error_rate": 0.58, "attempts": 31}], "exam_period": {"active": false, "label": "امتحانات نصف السنة (مثال)", "normal_week_avg": 52, "exam_week_avg": 96, "days_before_exam": [{"d": -6, "active": 58}, {"d": -5, "active": 63}, {"d": -4, "active": 71}, {"d": -3, "active": 80}, {"d": -2, "active": 92}, {"d": -1, "active": 104}]}, "hidden_small_groups": 3, "announcement": {"enabled": false, "text": "", "max_chars": 280}};</script><script>
+(() => {
+  const D = window.DEPT, $ = (s, r = document) => r.querySelector(s), esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const DAYS = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+  // رسم أعمدة SVG بسيط: الترتيب من اليمين لليسار (الأقدم يمين، الأحدث يسار)، خطوط ثابتة السماكة
+  const bars = (rows, lab, el) => {
+    const W = Math.max(280, Math.round((el && el.clientWidth) || 600)), H = 230, top = 24, bot = 30, n = rows.length, gap = W / n, bw = Math.min(46, gap * 0.56);
+    const mx = Math.max(...rows.map((r) => r.v)) || 1, ch = H - top - bot;
+    let g = "";
+    [0.5, 1].forEach((f) => { const y = top + ch - ch * f; g += `<line class="grid" x1="0" x2="${W}" y1="${y}" y2="${y}"/>`; });
+    rows.forEach((r, i) => {
+      const cx = W - gap * (i + 0.5), h = Math.max(2, ch * r.v / mx), y = top + ch - h, last = i === n - 1 ? " last" : "";
+      g += `<rect class="bb${last}" x="${cx - bw / 2}" y="${y}" width="${bw}" height="${h}" rx="5"/>` +
+           `<text class="val${last}" x="${cx}" y="${y - 7}" text-anchor="middle">${r.v}</text>` +
+           `<text x="${cx}" y="${H - 8}" text-anchor="middle">${esc(r.l)}</text>`;
+    });
+    g += `<line class="base" x1="0" x2="${W}" y1="${top + ch}" y2="${top + ch}"/>`;
+    return `<svg class="bars" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(lab)}: ${rows.map((r) => r.l + " " + r.v).join("، ")}">${g}</svg>`;
+  };
+  const act = (mode) => {
+    const rows = mode === "w" ? D.active.weekly.map((x, i, a) => ({ v: x.active, l: i === a.length - 1 ? "هذا الأسبوع" : "أسبوع " + (i + 1) }))
+                              : D.active.daily.map((x) => ({ v: x.active, l: DAYS[new Date(x.date + "T12:00:00").getDay()] }));
+    $("#act").innerHTML = bars(rows, mode === "w" ? "الطلاب النشطون أسبوعياً" : "الطلاب النشطون يومياً", $("#act")); MODE = mode;
+    document.querySelectorAll("[data-mode]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.mode === mode));
+  };
+  const tops = (i) => {
+    const s = D.top_lectures[i], mx = Math.max(...s.items.map((x) => x.readers_week));
+    $("#top").innerHTML = s.items.map((x, k) => `<li><span class="n">${k + 1}</span><b>${esc(x.title_ar)}<span class="en" lang="en">${esc(x.title_en)}</span></b><span class="v">${x.readers_week}</span>` +
+      `<span class="meta">${x.kind === "theory" ? "نظري" : "عملي"} · م${x.num}<span class="pbar"><i style="width:${Math.round(x.readers_week / mx * 100)}%"></i></span>طالب</span></li>`).join("");
+    document.querySelectorAll("[data-sub]").forEach((b) => b.setAttribute("aria-pressed", +b.dataset.sub === i));
+  };
+  $("#subs").innerHTML = D.top_lectures.map((s, i) => `<button type="button" class="chip2" data-sub="${i}">${esc(s.subject_ar)}</button>`).join("");
+  $("#hard").innerHTML = D.hard_topics.map((x, k) => `<li><span class="n">${k + 1}</span><b>${esc(x.topic_ar || x.topic_en)}<span class="en" lang="en">${esc(x.topic_en)}</span></b><span class="v">${Math.round(x.error_rate * 100)}%</span>` +
+    `<span class="meta">${esc(x.subject_ar)}<span class="pbar warm"><i style="width:${Math.round(x.error_rate * 100)}%"></i></span>${x.attempts} محاولة</span></li>`).join("");
+  $("#missed").innerHTML = D.missed_questions.map((x) => `<div class="mq"><span class="qen" lang="en">${esc(x.q_en)}</span><span class="qar">${esc(x.q_ar)}</span>` +
+    `<span class="meta"><span class="pct">${Math.round(x.error_rate * 100)}% إجابات خاطئة</span>· ${x.attempts} محاولة · ${esc(x.subject_ar)}</span></div>`).join("");
+  const ex = D.exam_period;
+  const examChart = () => { $("#exch").innerHTML = bars(ex.days_before_exam.map((r) => ({ v: r.active, l: r.d === -1 ? "قبل يوم" : "قبل " + -r.d })), "النشاط في الأيام التي تسبق الامتحان", $("#exch")); };
+  $("#exam").innerHTML = `<div class="cmp"><div><b>${ex.normal_week_avg}</b><small>متوسط النشاط في أسبوع عادي</small></div><div><b>${ex.exam_week_avg}</b><small>متوسط النشاط في أسبوع الامتحانات</small></div></div><div id="exch"></div>`;
+  examChart();
+  $("#k-today").textContent = D.active.today; $("#k-week").textContent = D.active.week; $("#k-enr").textContent = D.active.enrolled;
+  $("#hidn").textContent = D.hidden_small_groups;
+  const dlg = $("#info");
+  document.addEventListener("click", (ev) => {
+    const m = ev.target.closest("[data-mode]"); if (m) act(m.dataset.mode);
+    const s = ev.target.closest("[data-sub]"); if (s) tops(+s.dataset.sub);
+    const w = ev.target.closest("#annsw"); if (w) { const on = w.getAttribute("aria-checked") !== "true"; w.setAttribute("aria-checked", on); $("#anntx").disabled = !on; $("#annst").textContent = on ? "سيظهر للطلاب أعلى الصفحة الرئيسية (في المعاينة لا يُنشر شيء)" : "مطفأ — لا يظهر للطلاب"; }
+    if (ev.target.closest("#infobtn")) { dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", ""); dlg.querySelector(".close").focus(); }
+    if (ev.target.closest("#info .close") || ev.target === dlg) { dlg.close ? dlg.close() : dlg.removeAttribute("open"); $("#infobtn").focus(); }
+  });
+  // Esc يسكّر أي نافذة مفتوحة (dialog يسكّر وحده، وهذا احتياط للمتصفحات القديمة ولنافذة الكود)
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key !== "Escape") return;
+    if (dlg.open) { dlg.close ? dlg.close() : dlg.removeAttribute("open"); $("#infobtn").focus(); }
+    const g = $("#gatedlg"); if (g && !g.hidden) g.hidden = true;
+  });
+  const tx = $("#anntx"); tx.addEventListener("input", () => { $("#anncnt").textContent = tx.value.length + " / " + D.announcement.max_chars; });
+  let MODE = "d", rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { act(MODE); examChart(); }, 120); });
+  act("d"); tops(0);
+})();
+</script><a class="fab" href="../../preview/assistant/" aria-label="اسأل المساعد"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="11" rx="4"/><path d="M12 4v3.5M9 12.5h.01M15 12.5h.01M9.5 15.5h5"/></svg><span class="fl">اسأل المساعد</span><span class="fs" aria-hidden="true">اسأل</span></a><div class="gatedlg" id="gatedlg" hidden role="dialog" aria-modal="true" aria-labelledby="gatet"><div class="box"><b id="gatet"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="10.5" width="13" height="9" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg> هذا القسم لطلاب المرحلة الثانية — جامعة العين</b><span>إذا أنت منهم، أدخل كودك مرة وحدة، وبعدها الموقع يتذكّرك ويرجّعك لنفس المكان.</span><a class="cbtn" id="gatego" data-base="../../preview/login/" href="../../preview/login/">عندي كود</a><button type="button" class="cbtn ghost" data-reqcode aria-expanded="false">ما عندي كود — اطلب كودك</button><div class="reqnote" data-reqnote hidden><p>طلب الكود من الموقع يتفعّل قريباً. لحد ذاك، اطلبه من محمد الموسوي مباشرة (بالكلية أو من <a href="https://t.me/almusawy_radiology" rel="noopener">قناة التليغرام</a>).</p><button type="button" class="cbtn ghost" disabled aria-disabled="true">📨 اطلب من البوت · قريباً</button></div><span class="gfree">الأطلس والفحوصات الملوّنة والأجهزة والمصطلحات العامة مفتوحة لأي أحد.</span><button type="button" class="cbtn plain" data-close>مو هسه</button></div></div><script src="../../assets/calm.js?v=1793220556" defer></script></body></html>

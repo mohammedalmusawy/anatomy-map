@@ -135,7 +135,10 @@
       <button class="btn alt" id="chgo">${done != null ? "شوف اللوحة" : "ابدأ التحدي"}</button><div id="chbox"></div>`;
     ch.classList.remove("hidden");
     const C = window.STUDY_CLOUD || {}, H = { apikey: C.anon, Authorization: "Bearer " + C.anon, "Content-Type": "application/json" };
-    const board = () => C.url ? fetch(`${C.url}/rest/v1/challenge_board?week=eq.${wk}&order=score.desc,at.asc&limit=10`, { headers: H }).then((r) => r.json()).then((rows) =>
+    // 📡 net.js: اللوحة بكاش 5 دقايق؛ بعد ما الطالب يحفظ نتيجته ← طلب جديد (fresh) حتى يشوف نفسه
+    const BQ = `week=eq.${wk}&order=score.desc,at.asc&limit=10`;
+    const board = (fresh) => C.url ? (window.Net ? Net.get("challenge_board", BQ, fresh === true ? 0 : 5 * 60e3)
+      : fetch(`${C.url}/rest/v1/challenge_board?${BQ}`, { headers: H }).then((r) => r.json())).then((rows) =>
       document.getElementById("chbox").insertAdjacentHTML("beforeend", rows.length ? `<ol class="board">${rows.map((r) => `<li><b>${esc(r.nick)}</b> — ${r.score}/10</li>`).join("")}</ol>` : '<p class="hint">ماكو أحد باللوحة بعد هالأسبوع.</p>')).catch(() => {}) : null;
     document.getElementById("chgo").onclick = () => {
       if (done != null) { board(); return; }
@@ -150,7 +153,8 @@
             box.innerHTML = `<p class="score">${ok}<small> / 10</small></p><p>تحب تحط لقب باللوحة؟ (اختياري، لا تكتب اسمك الحقيقي)</p><input id="nick" maxlength="20" placeholder="لقب، مثلاً: نجم الأشعة"><button class="btn" id="nk">حفظ</button>`;
             document.getElementById("nk").onclick = () => {
               const nick = document.getElementById("nick").value.trim().slice(0, 20);
-              if (C.url && window.Cloud) fetch(`${C.url}/rest/v1/challenge`, { method: "POST", headers: { ...H, Prefer: "return=minimal" }, body: JSON.stringify({ device: Cloud.dev, week: wk, nick: nick || null, score: ok }) }).then(board);
+              const row = { device: Cloud.dev, week: wk, nick: nick || null, score: ok };
+              if (C.url && window.Cloud) (window.Net ? Net.post("challenge", row) : fetch(`${C.url}/rest/v1/challenge`, { method: "POST", headers: { ...H, Prefer: "return=minimal" }, body: JSON.stringify(row) })).then(() => board(true));
               box.querySelector("#nk").disabled = true;
             };
             return;

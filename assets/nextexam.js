@@ -22,12 +22,15 @@
 
   async function load() {
     try { const c = JSON.parse(localStorage.getItem(KEY) || "null"); if (c && Date.now() - c.at < TTL) return c; } catch (e) {}
+    if (navigator.onLine === false) throw 0;                 // بلا نت وماكو نسخة حديثة ← ما نعرض تاريخ ممكن تأجّل
     const q = (t, p) => fetch(`${C.url}/rest/v1/${t}?${p}`, { headers: H }).then((r) => { if (!r.ok) throw 0; return r.json(); });
-    const [rows, set] = await Promise.all([
+    const N = window.Net;   // 📡 net.js: settings مشترك ويّا cloud.js (طلب واحد كل 10 دقايق بدل طلبين بكل صفحة)
+    const [rows, examsOn] = await Promise.all([
       q("exams", "select=term,subject,type,exam_date,postponed_to,lectures&confirmed=eq.true&archived=eq.false"),
-      q("settings", "select=value&key=eq.sections").catch(() => []),
+      (N ? N.settings().then((S) => S.sections) : q("settings", "select=value&key=eq.sections").then((s) => s && s[0] && s[0].value))
+        .then((sec) => !!(sec && sec.exams)).catch(() => false),
     ]);
-    const c = { at: Date.now(), rows: rows || [], examsOn: !!(set && set[0] && set[0].value && set[0].value.exams) };
+    const c = { at: Date.now(), rows: rows || [], examsOn };
     try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {}
     return c;
   }

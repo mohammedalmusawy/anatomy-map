@@ -2,35 +2,36 @@
 <html lang="ar" dir="rtl"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="20261028220943">
+<meta name="build" content="20261029001442">
 <title>PET Physics — الفيزياء</title>
+<meta name="description" content="PET Physics — الفيزياء — دروس تقنيات الأشعة للمرحلة الثانية: محاضرات مسموعة، أسئلة، أطلس حالات.">
 <meta name="theme-color" content="#3B4A8C" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#10141F" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="../../../manifest.webmanifest">
 <link rel="apple-touch-icon" href="../../../assets/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&family=IBM+Plex+Sans+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../assets/app.css?v=20261028220943">
+<link rel="stylesheet" href="../../../assets/app.min.css?v=b82fe5524f">
+<link rel="preload" href="../../../assets/fonts/cairo-600-800.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="preload" href="../../../assets/fonts/plex-arabic-500.woff2?v=1" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:"Cairo";font-style:normal;font-weight:600 800;font-display:swap;src:url("../../../assets/fonts/cairo-600-800.woff2?v=1") format("woff2")}@font-face{font-family:"IBM Plex Sans Arabic";font-style:normal;font-weight:400;font-display:swap;src:url("../../../assets/fonts/plex-arabic-400.woff2?v=1") format("woff2")}@font-face{font-family:"IBM Plex Sans Arabic";font-style:normal;font-weight:500;font-display:swap;src:url("../../../assets/fonts/plex-arabic-500.woff2?v=1") format("woff2")}@font-face{font-family:"IBM Plex Sans Arabic";font-style:normal;font-weight:600;font-display:swap;src:url("../../../assets/fonts/plex-arabic-600.woff2?v=1") format("woff2")}@font-face{font-family:"IBM Plex Sans Arabic";font-style:normal;font-weight:700;font-display:swap;src:url("../../../assets/fonts/plex-arabic-700.woff2?v=1") format("woff2")}</style>
+<link rel="icon" href="../../../assets/icon-192.png">
 </head><body><div class="wrap">
 
 <header class="top"><a class="back" href="../../">‹ الأجهزة</a><span class="crumb">Devices · الأجهزة</span></header>
 <h1 class="dh">☢️ <bdi>PET</bdi></h1><p class="sub">التصوير بالإصدار البوزيتروني</p>
 <nav class="dtabs" aria-label="PET"><a class="" href="../../../devices/pet/cases/">Cases<span class="ar">الحالات</span></a><a class="on" href="../../../devices/pet/physics/">Physics<span class="ar">الفيزياء</span></a></nav>
 <section class="step"><h2><bdi>How it works</bdi> <span class="gh-ar">فكرة الجهاز ببساطة</span></h2><div class="rich"><p>يُحقن المريض <b>مادة مشعة</b> <span class="en">(tracer)</span>، أشهرها <b><span class="en">FDG</span></b>: سكر مرتبط بـ<span class="en">F<bdi>-18</bdi></span>.</p><p>المادة تُطلق <b><span class="en">positron</span></b> يلتقي بإلكترون فيختفيان، ويخرج <b>فوتونا غاما</b> (511 keV) باتجاهين متعاكسين.</p><p><b>حلقة الكواشف</b> تلتقط الفوتونين معاً، فيحدد الحاسوب مكان المصدر.</p><p>الخلايا التي تستهلك سكراً كثيراً (مثل كثير من الأورام) تظهر <b>بقعاً ساطعة</b>. يُدمج عادةً مع المفراس (PET/CT).</p></div></section>
-<figure class="photo dev-photo"><img src="img/phys-pet.jpg" width="900" height="675" loading="lazy" alt="PET-CT scanner"><figcaption><bdi>PET-CT scanner</bdi> — جهاز PET-CT<span class="src">Partynia · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:PET-CT-Philips.jpg" target="_blank" rel="noopener">Wikimedia Commons</a></span></figcaption></figure>
+<figure class="photo dev-photo"><picture><source type="image/webp" srcset="img/phys-pet-480.webp 480w, img/phys-pet-900.webp 900w" sizes="(max-width: 760px) 100vw, 760px"><img fetchpriority="high" decoding="async" src="img/phys-pet.jpg" width="900" height="675" loading="eager" alt="PET-CT scanner"></picture><figcaption><bdi>PET-CT scanner</bdi> — جهاز PET-CT<span class="src">Partynia · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:PET-CT-Philips.jpg" target="_blank" rel="noopener">Wikimedia Commons</a></span></figcaption></figure>
 <figure class="diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 210" font-family="system-ui, -apple-system, Segoe UI, Arial, sans-serif" font-size="13" fill="currentColor" role="img" aria-label="PET positron annihilation and detector ring"><circle cx="105" cy="105" r="88" fill="none" stroke="var(--line)" stroke-width="16" stroke-dasharray="14 4"/><ellipse cx="105" cy="105" rx="46" ry="34" fill="var(--muted)"/><line x1="35" y1="52" x2="175" y2="158" stroke="var(--brand)" stroke-width="2.5" stroke-dasharray="6 3"/><circle cx="105" cy="105" r="8" fill="var(--brand)"/><rect x="24" y="40" width="20" height="20" rx="3" fill="var(--brand)" transform="rotate(37 34 50)"/><rect x="166" y="150" width="20" height="20" rx="3" fill="var(--brand)" transform="rotate(37 176 160)"/><text x="60" y="96" font-size="11">γ</text><text x="146" y="128" font-size="11">γ</text><text x="210" y="30" font-size="12" font-weight="700">FDG (F-18)</text><text x="210" y="56" font-size="12">e⁺ + e⁻ →</text><text x="210" y="74" font-size="12">2 γ (511 keV)</text><text x="210" y="92" font-size="12">opposite, 180°</text><text x="210" y="124" font-size="12">Ring detects</text><text x="210" y="142" font-size="12">both at once</text><text x="210" y="176" font-size="12">Hot spot =</text><text x="210" y="194" font-size="12">high glucose use</text></svg><figcaption>المادة المشعة داخل الجسم تطلق فوتوني غاما متعاكسين، وحلقة الكواشف تلتقطهما معاً.</figcaption></figure>
 <section class="step top3"><h2>⭐ <bdi>Top 3 points</bdi> <span class="gh-ar">أهم 3 نقاط</span></h2><ol><li>مادة مشعة (FDG) تُحقن وتتجمع حيث يُستهلك السكر.</li><li>بوزيترون + إلكترون = فوتونا غاما متعاكسان تلتقطهما حلقة الكواشف.</li><li>يبيّن وظيفة النسيج: الأورام، الدماغ، القلب، والالتهابات.</li></ol></section>
 <a class="btn wide" href="quiz/">🎯 اختبر نفسك: 5 أسئلة</a>
 <details class="srcs"><summary>المصادر</summary><ul><li><a href="https://radiopaedia.org/articles/positron-emission-tomography" target="_blank" rel="noopener">Radiopaedia: Positron emission tomography</a></li><li><a href="https://www.radiologyinfo.org/en/info/pet" target="_blank" rel="noopener">RadiologyInfo: PET/CT</a></li></ul></details>
 </div>
-<script src="../../../assets/cloud-config.js?v=20261028220943"></script>
-<script src="../../../assets/cloud.js?v=20261028220943"></script>
-<script src="../../../assets/tools.js?v=20261028220943"></script>
+<script src="../../../assets/cloud-config.min.js?v=275841b2a6"></script>
+<script src="../../../assets/net.min.js?v=b38f4438db"></script>
+<script src="../../../assets/cloud.min.js?v=82ba066fd8"></script>
+<script src="../../../assets/tools.min.js?v=f7ee3d51fe"></script>
 
-<script src="../../../assets/voice.js?v=20261028220943" defer></script>
-<script src="../../../assets/listen.js?v=20261028220943" defer></script>
-<script src="../../../assets/nextexam.js?v=20261028220943" defer></script>
+<script src="../../../assets/voice.min.js?v=a36331dc76" defer></script>
+<script src="../../../assets/listen.min.js?v=67ba7f1847" defer></script>
+<script src="../../../assets/nextexam.min.js?v=f1b4efb551" defer></script>
 <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../../../sw.js", { updateViaCache: "none" });</script>
 </body></html>

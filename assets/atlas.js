@@ -37,6 +37,12 @@
       if (img.dataset.marked) {
         img.dataset.plain = img.dataset.plain || img.getAttribute("src");
         img.src = on ? img.dataset.marked : img.dataset.plain;
+        // <picture>: الـ <source> يغلب src، فنبدّل srcset ويّاه (الفارغ = يرجع للـ JPEG المعلَّم)
+        if (img.parentElement && img.parentElement.tagName === "PICTURE") img.parentElement.querySelectorAll("source").forEach((so) => {
+          if (so.dataset.plainSrcset == null) so.dataset.plainSrcset = so.getAttribute("srcset") || "";
+          const v = on ? (so.dataset.markedSrcset || "") : so.dataset.plainSrcset;
+          if (v) so.setAttribute("srcset", v); else so.removeAttribute("srcset");
+        });
       }
       const lg = card.querySelector(".legend");
       if (lg) lg.hidden = !on;

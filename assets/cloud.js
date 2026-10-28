@@ -4,14 +4,25 @@
   const C = window.STUDY_CLOUD || {};
   const ON = !!(C.url && C.anon);
   const root = new URL(".", document.querySelector('link[rel="manifest"]').href).href;
-  const rel = location.href.split("#")[0].slice(root.length);
+  // 🔒 M6 (29/10): الكود/التوكن ما ينسجّل أبداً بـ events (?code= ?token= ?k= …) — والقاعدة تشيلها هم (دفاع ثاني)
+  const SECRET_QS = /^(code|token|k|token_hash|access_token|refresh_token)$/i;
+  const clean = (u) => { const s = String(u), h = s.indexOf("#"), body = h < 0 ? s : s.slice(0, h), hash = h < 0 ? "" : s.slice(h), i = body.indexOf("?");
+    if (i < 0) return s;
+    const kept = body.slice(i + 1).split("&").filter((x) => x && !SECRET_QS.test(x.split("=")[0]));
+    return body.slice(0, i) + (kept.length ? "?" + kept.join("&") : "") + hash; };
+  const rel = clean(location.href.split("#")[0].slice(root.length));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   let dev = null;
   try { dev = localStorage.getItem("t:device"); if (!dev) { dev = crypto.randomUUID(); localStorage.setItem("t:device", dev); } } catch (e) { dev = crypto.randomUUID(); }
   const H = { apikey: C.anon, Authorization: "Bearer " + C.anon, "Content-Type": "application/json" };
-  const ins = (t, row) => ON && fetch(`${C.url}/rest/v1/${t}`, { method: "POST", headers: { ...H, Prefer: "return=minimal" }, body: JSON.stringify({ device: dev, ...row }) }).catch(() => {});
-  const get = (t, q) => ON ? fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => r.json()).catch(() => []) : Promise.resolve([]);
-  window.Cloud = { on: ON, dev, log: (kind, ref) => ins("events", { kind, page: rel.slice(0, 300), ref: String(ref || "").slice(0, 300) }), root };
+  // 📡 net.js (29/10): كاش بمدة + الزيارات دفعة كل 30 ث + طابور بلا نت. إذا الصفحة ما حمّلته (معاينات): الطريقة القديمة.
+  const N = window.Net;
+  const direct = (t, row) => fetch(`${C.url}/rest/v1/${t}`, { method: "POST", headers: { ...H, Prefer: "return=minimal" }, body: JSON.stringify(row) }).catch(() => {});
+  const ins = (t, row) => ON && (N ? N.post(t, { device: dev, ...row }) : direct(t, { device: dev, ...row }));
+  const get = (t, q, ttl) => !ON ? Promise.resolve([]) : N ? N.get(t, q, ttl)
+    : fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => r.json()).catch(() => []);
+  const log = (kind, ref) => { if (!ON) return; const row = { device: dev, kind, page: rel.slice(0, 300), ref: String(ref || "").slice(0, 300) }; N ? N.log(row) : direct("events", row); };
+  window.Cloud = { on: ON, dev, log, root };
   if (!ON) return;
 
   // زيارة (مرة لكل صفحة بالجلسة)
@@ -22,7 +33,7 @@
     const { q, ok } = ev.detail, qkey = (q.q_en || "").slice(0, 120);
     let first = false;
     try { const s = JSON.parse(localStorage.getItem("t:answered") || "{}"); if (!s[qkey]) { s[qkey] = 1; first = true; localStorage.setItem("t:answered", JSON.stringify(s)); } } catch (e) {}
-    ins("answers", { qkey, quiz: rel.slice(0, 200), correct: ok, first });
+    if (first) ins("answers", { qkey, quiz: rel.slice(0, 200), correct: ok, first });   // كل الإحصائيات تحسب أول محاولة بس (where first)
     if (!ok && window.STUDY_SETTINGS && STUDY_SETTINGS.assistant) {
       const fb = document.getElementById("fb");
       if (fb && !fb.querySelector(".whywrong")) fb.insertAdjacentHTML("beforeend",
@@ -31,8 +42,7 @@
   });
 
   // الإعدادات العامة: شريط إعلان، الأقسام (الامتحانات، المساعد)
-  get("settings", "select=key,value").then((rows) => {
-    const S = Object.fromEntries((rows || []).map((r) => [r.key, r.value]));
+  (N ? N.settings() : get("settings", "select=key,value").then((rows) => Object.fromEntries((rows || []).map((r) => [r.key, r.value])))).then((S) => {
     const sec = S.sections || {};
     window.STUDY_SETTINGS = sec;
     const a = S.announcement || {};
@@ -50,7 +60,7 @@
 
   // 🚦 صعوبة السؤال (من نسب الغلط الحقيقية، أو «تقديري»)
   let stats = null;
-  if (document.getElementById("opts")) get("question_stats", "select=qkey,rate,estimated").then((r) => {
+  if (document.getElementById("opts")) get("question_stats", "select=qkey,rate,estimated,hint_en,hint_ar,attempts", 6 * 3600e3).then((r) => {   // نفس طلب smart.js = كاش واحد
     stats = Object.fromEntries((r || []).map((x) => [x.qkey, x]));
   });
   document.addEventListener("quiz:show", (ev) => {

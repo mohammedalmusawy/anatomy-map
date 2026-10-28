@@ -5,8 +5,10 @@
   const C = window.STUDY_CLOUD;
   const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const local = () => fetch(root + "assets/thanks.json", { cache: "no-cache" }).then((r) => r.json());
-  const live = () => !C ? Promise.reject() : fetch(`${C.url}/rest/v1/thanks?select=id,name,specialty,section,sort&consent=eq.true&order=sort`,
-    { headers: { apikey: C.anon, Authorization: "Bearer " + C.anon } }).then((r) => { if (!r.ok) throw r.status; return r.json(); });
+  const Q = "select=id,name,specialty,section,sort&consent=eq.true&order=sort";
+  // 📡 net.js: كاش 60 دقيقة (القائمة تتغير نادراً). [] = ما وصل ← النسخة المنشورة
+  const live = () => !C ? Promise.reject() : window.Net ? Net.get("thanks", Q, 60 * 60e3).then((r) => (r && r.length ? r : null))
+    : fetch(`${C.url}/rest/v1/thanks?${Q}`, { headers: { apikey: C.anon, Authorization: "Bearer " + C.anon } }).then((r) => { if (!r.ok) throw r.status; return r.json(); });
   Promise.all([local().catch(() => ({ sections: {}, doctors: [] })), live().catch(() => null)]).then(([L, D]) => {
     const docs = D || L.doctors || [], S = L.sections || {};
     const list = document.getElementById("thanks");

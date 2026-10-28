@@ -1,6 +1,6 @@
 // 👤 مساحتي — «اليوم» (29/10/2026 — نايم: ما ينحمّل بأي صفحة حيّة لحد «وافقت»؛ بس /preview/me/).
 // 4 أزرار كبيرة بس: ⏰ ذكّرني · 📍 وين وصلت · 💪 قِس قوتك · 📝 ملاحظة سريعة — وتحتها خطة اليوم، والتبويبات 📈 تقدّمي · 🗓️ خطتي · 📝 ملاحظاتي.
-// أول مرة: جولة 3 خطوات (تخطّي / التالي)، وما ترجع إلا بزر «؟».
+// أول مرة: بطاقة جولة 3 خطوات داخل الصفحة (تخطّي / التالي، مو نافذة تغطي)، وما ترجع إلا بزر «؟».
 // كلشي بجهاز الطالب (t:reminders · t:strength · t:tour)، وما ينرسل شي. MySpace.exportAll()/importAll() تجمع كل الوحدات للمزامنة ويّا الحساب
 // (window.Account من account.js إذا موجود — نقرا منه الاسم بس، وما نعدّله).
 // pickQuiz / scoreQuiz / dueReminders دوال صافية تشتغل بـ node (tests/myspace.test.js).
@@ -39,19 +39,36 @@
     const tm = new Date(n); tm.setDate(n.getDate() + 1);
     return `${same ? "اليوم" : d.toDateString() === tm.toDateString() ? "باچر" : `${d.getDate()}/${d.getMonth() + 1}`} ${pad(d.getHours())}:${pad(d.getMinutes())}`; };
   // التنبيه المحلي: بس إذا الطالب سمح قبل (ما نطلب الإذن وحدنا)؛ والصفحة مفتوحة. التنبيه الحقيقي (البوت + الموقع) بعدين.
+  // التذكيرات من مكانين: ⏰ ذكّرني (t:reminders) + ملاحظات «⏰ تذكير» (Notes) — نفس الطابور
+  const allDue = () => {
+    const N = G("Notes");
+    const a = reminders().filter((r) => !r.done).map((r) => ({ src: "r", id: r.id, at: r.at, text: r.text }));
+    const b = N ? N.reminders(Date.now()).map((r) => ({ src: "n", id: r.id, at: r.at, text: r.text })) : [];
+    return a.concat(b).sort((x, y) => x.at - y.at);
+  };
+  const markDone = (x) => {
+    if (x.src === "r") { const list = reminders(), r = list.find((y) => y.id === x.id); if (r) { r.done = true; LS.set(RKEY, list); } }
+    else { const N = G("Notes"); if (N) N.update(x.id, (n) => { if (n.remind) n.remind.done = true; }); }
+  };
+  const MAXT = 2 ** 31 - 1;
   let notifTimer = 0;
   function armNotifications() {
     if (typeof window === "undefined") return;
     clearTimeout(notifTimer);
-    const next = reminders().filter((r) => !r.done).sort((a, b) => a.at - b.at)[0];
+    const q = allDue(), now = Date.now();
+    // اللي فات وقتها والصفحة مسدودة ← «فاتك تذكير» مرة وحدة (مو إشعار لكل وحدة)
+    const missed = q.filter((x) => x.at <= now - 60e3);
+    if (missed.length) { missed.forEach(markDone); document.dispatchEvent(new CustomEvent("reminder:due", { detail: { missed: true, list: missed } })); }
+    const next = q.find((x) => x.at > now - 60e3);
     if (!next) return;
+    const wait = Math.max(0, next.at - now);
+    if (wait > MAXT) { notifTimer = setTimeout(armNotifications, MAXT); return; }   // بعيد ← نعيد الجدولة بس
     notifTimer = setTimeout(() => {
-      const list = reminders(), r = list.find((x) => x.id === next.id); if (!r) return;
-      r.done = true; LS.set(RKEY, list);
-      if ("Notification" in window && Notification.permission === "granted") try { new Notification("⏰ تذكير", { body: r.text }); } catch (e) {}
-      document.dispatchEvent(new CustomEvent("reminder:due", { detail: r }));
+      markDone(next);
+      if ("Notification" in window && Notification.permission === "granted") try { new Notification("⏰ تذكير", { body: next.text }); } catch (e) {}
+      document.dispatchEvent(new CustomEvent("reminder:due", { detail: { missed: false, list: [next] } }));
       armNotifications();
-    }, Math.max(0, Math.min(next.at - Date.now(), 2 ** 31 - 1)));
+    }, wait);
   }
 
   // ── 💪 قِس قوتك: 10 أسئلة من المحاضرات اللي قراها (إذا ماكو ← من كلها)، موزّعة بالتساوي ──
@@ -107,11 +124,17 @@
   function mountToday(el, o = {}) {
     const root = o.root || "";
     el.innerHTML = `<div class="big4" role="group" aria-label="أزرار اليوم">
-      <button type="button" class="big" data-open="remind" aria-expanded="false"><span aria-hidden="true">⏰</span><b>ذكّرني</b></button>
-      <button type="button" class="big" data-open="resume" aria-expanded="false"><span aria-hidden="true">📍</span><b>وين وصلت</b></button>
-      <button type="button" class="big" data-open="test" aria-expanded="false"><span aria-hidden="true">💪</span><b>قِس قوتك</b></button>
-      <button type="button" class="big" data-open="note" aria-expanded="false"><span aria-hidden="true">📝</span><b>ملاحظة سريعة</b></button></div>
-      <div class="bigsheet" data-sheet hidden></div>`;
+      <button type="button" class="big" data-open="remind" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a1.8 1.8 0 0 0 1.8-1.6h-3.6A1.8 1.8 0 0 0 12 21z"/><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/></svg><b>ذكّرني</b><small>بوقت تختاره</small></button>
+      <button type="button" class="big" data-open="resume" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><b>وين وصلت</b><small>كمّل آخر محاضرة</small></button>
+      <button type="button" class="big" data-open="test" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5h16"/><path d="M6.5 16v-4M11 16V8M15.5 16v-6M20 16V5"/></svg><b>قِس قوتك</b><small>10 أسئلة سريعة</small></button>
+      <button type="button" class="big" data-open="note" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h10l4 4V19.5H5z"/><path d="M15 4.5v4h4M8.5 12.5h7M8.5 16h5"/></svg><b>ملاحظة سريعة</b><small>اكتب أو احچي</small></button></div>
+      <div class="bigsheet" data-sheet hidden></div><p class="slim" data-toast role="status" aria-live="polite" hidden></p>`;
+    const toast = el.querySelector("[data-toast]");
+    document.addEventListener("reminder:due", (ev) => {
+      const d = ev.detail || {}, l = d.list || [];
+      toast.textContent = (d.missed ? `⏰ فاتك ${l.length === 1 ? "تذكير" : l.length + " تذكيرات"}: ` : "⏰ تذكير: ") + l.map((x) => x.text).join(" · ");
+      toast.hidden = false;
+    });
     const sheet = el.querySelector("[data-sheet]");
     let open = null;
     const close = () => { sheet.hidden = true; sheet.innerHTML = ""; open = null; el.querySelectorAll("[data-open]").forEach((b) => b.setAttribute("aria-expanded", "false")); };
@@ -125,23 +148,23 @@
       remind() {
         const list = reminders().filter((r) => !r.done).sort((a, b) => a.at - b.at);
         const perm = typeof Notification !== "undefined" && Notification.permission === "default";
-        return { title: "⏰ ذكّرني", body: `<p class="sub" id="rm-w">إمتى؟</p><div class="chips-row" role="group" aria-labelledby="rm-w">${Object.entries(WHEN).map(([k, v], i) => `<button type="button" class="chip2" data-when="${k}" aria-pressed="${i === 0}">${v}</button>`).join("")}</div>
+        return { title: "ذكّرني", body: `<p class="sub" id="rm-w">إمتى؟</p><div class="chips-row" role="group" aria-labelledby="rm-w">${Object.entries(WHEN).map(([k, v], i) => `<button type="button" class="chip2" data-when="${k}" aria-pressed="${i === 0}">${v}</button>`).join("")}</div>
           <input type="datetime-local" data-custom hidden aria-label="الوقت">
           <div class="row-in"><input type="text" data-voice data-rtext maxlength="200" placeholder="شنو؟ مثلاً: راجع محاضرة الوقاية" aria-label="شنو أذكّرك؟"></div>
           <button type="button" class="cbtn" data-rsave>حفظ التذكير</button>
-          <p class="sub">راح نذكّرك هنا وبالبوت (التنبيه بالبوت يشتغل بعد تفعيل الحسابات).</p>
+          <p class="sub">التذكير يطلعلك بهالجهاز وقت الموقع مفتوح. وإذا سمحت بالتنبيهات، يوصلك تنبيه حتى لو كنت بصفحة ثانية بالموقع.</p>
           ${perm ? `<button type="button" class="cbtn ghost" data-perm>🔔 خلّي هالجهاز ينبّهني</button>` : ""}
           <div data-rlist>${list.map((r) => `<p class="slim">⏰ ${esc(fmt(r.at))} · ${esc(r.text)}</p>`).join("")}</div>` };
       },
       resume() {
         const last = LS.get("t:last", null);
-        if (!last || !last.url) return { title: "📍 وين وصلت", body: `<p class="sub">بعدك ما فتحت محاضرة. ابدأ من <a href="${esc(root)}learn/">المحاضرات ‹</a></p>` };
+        if (!last || !last.url) return { title: "وين وصلت", body: `<p class="sub">بعدك ما فتحت محاضرة. ابدأ من <a href="${esc(root)}learn/">المحاضرات ‹</a></p>` };
         const href = /^https?:/.test(last.url) ? last.url : root + last.url.replace(/^\//, "");
         const tab = { read: "📖 اقرأ", listen: "🎧 اسمع", quiz: "📝 اختبر", terms: "📚 المصطلحات" }[last.tab] || "";
-        return { title: "📍 وين وصلت", body: `<a class="resume" href="${esc(href)}"><span><small>آخر شي فتحته${tab ? " · " + tab : ""}</small><b>${esc(last.title)}</b>${last.sub ? `<small>${esc(last.sub)}</small>` : ""}</span><span class="go">كمّل ‹</span></a>` };
+        return { title: "وين وصلت", body: `<a class="resume" href="${esc(href)}"><span><small>آخر شي فتحته${tab ? " · " + tab : ""}</small><b>${esc(last.title)}</b>${last.sub ? `<small>${esc(last.sub)}</small>` : ""}</span><span class="go">كمّل ‹</span></a>` };
       },
-      test() { return { title: "💪 قِس قوتك", body: `<p class="sub">10 أسئلة سريعة من المحاضرات اللي قريتها. <b>للمراجعة فقط — مو توقّع لأسئلة الامتحان.</b></p><div data-quiz></div>` }; },
-      note() { return { title: "📝 ملاحظة سريعة", body: `<div class="row-in"><textarea rows="3" data-voice data-qn maxlength="2000" placeholder="اكتب أو احچي…" aria-label="الملاحظة"></textarea></div><button type="button" class="cbtn" data-qnsave>حفظ</button><p class="sub" data-qnmsg aria-live="polite"></p>` }; },
+      test() { return { title: "قِس قوتك", body: `<p class="sub">10 أسئلة سريعة من المحاضرات اللي قريتها. <b>للمراجعة فقط — مو توقّع لأسئلة الامتحان.</b></p><div data-quiz></div>` }; },
+      note() { return { title: "ملاحظة سريعة", body: `<div class="row-in"><textarea rows="3" data-voice data-qn maxlength="2000" placeholder="اكتب أو احچي…" aria-label="الملاحظة"></textarea></div><button type="button" class="cbtn" data-qnsave>حفظ</button><p class="okmsg" data-qnmsg role="status" aria-live="polite"></p>` }; },
     };
     let when = "h1";
     const runQuiz = (box) => {
@@ -162,7 +185,7 @@
         }
         const it = items[i], q = it.q;
         box.innerHTML = `<p class="sub" aria-live="polite">سؤال ${i + 1} من ${items.length}</p><p class="qen" dir="ltr">${esc(q.q_en)}</p><p class="qar">${esc(q.q_ar)}</p>
-          <div class="qo">${q.options.map((op, k) => `<button type="button" class="qopt" data-k="${k}"><span dir="ltr">${esc(op.en)}</span><small>${esc(op.ar)}</small></button>`).join("")}</div><p class="qw" hidden></p>`;
+          <div class="qo">${q.options.map((op, k) => `<button type="button" class="qopt" data-k="${k}"><span dir="ltr">${esc(op.en)}</span><small>${esc(op.ar)}</small></button>`).join("")}</div><p class="qw" role="status" aria-live="polite" hidden></p>`;
         box.querySelector(".qopt").focus();
       };
       box.onclick = (ev) => {
@@ -173,7 +196,11 @@
         if (!ok) b.classList.add("wrong");
         const w = box.querySelector(".qw"); w.textContent = (ok ? "✅ " : "💡 ") + (it.q.why || ""); w.hidden = false;
         ans.push({ lec: it.lec, subject: it.subject, ok });
-        document.dispatchEvent(new CustomEvent("quiz:answer", { detail: { q: it.q, ok } }));   // أخطائي (tools.js إذا موجود)
+        // 📕 أخطائي: نفس قاعدة tools.js (صح مرتين ← ينشال)، بس الصفحة = اختبار المحاضرة نفسها (مو مساحتي)
+        const L = (o.lectures || []).find((x) => x.id === it.lec) || {}, mk = (it.q.q_en || "").slice(0, 120), mm = LS.get("t:mistakes", {});
+        if (!ok) mm[mk] = { q: it.q, page: L.quiz || "", title: L.title || "", streak: 0, t: Date.now() };
+        else if (mm[mk]) { mm[mk].streak = (mm[mk].streak || 0) + 1; if (mm[mk].streak >= 2) delete mm[mk]; }
+        LS.set("t:mistakes", mm);
         const nx = document.createElement("button"); nx.type = "button"; nx.className = "cbtn"; nx.textContent = i + 1 < items.length ? "التالي ‹" : "شوف النتيجة";
         nx.onclick = () => { i++; step(); }; w.after(nx); nx.focus();
       };
@@ -185,8 +212,9 @@
       if (b.hasAttribute("data-close-sheet")) { const k = open; close(); const t = el.querySelector(`[data-open="${k}"]`); if (t) t.focus(); return; }
       if (b.dataset.when) { when = b.dataset.when; sheet.querySelectorAll("[data-when]").forEach((x) => x.setAttribute("aria-pressed", x === b)); sheet.querySelector("[data-custom]").hidden = when !== "custom"; return; }
       if (b.hasAttribute("data-rsave")) {
-        const r = remind(sheet.querySelector("[data-rtext]").value, when, Date.now(), sheet.querySelector("[data-custom]").value);
-        sheet.querySelector("[data-rlist]").insertAdjacentHTML("afterbegin", `<p class="slim">✓ ⏰ ${esc(fmt(r.at))} · ${esc(r.text)}</p>`);
+        const cv = sheet.querySelector("[data-custom]").value, bad = when === "custom" && !(Date.parse(cv) > Date.now());
+        const r = remind(sheet.querySelector("[data-rtext]").value, when, Date.now(), cv);
+        sheet.querySelector("[data-rlist]").insertAdjacentHTML("afterbegin", `<p class="slim" role="status">✓ ⏰ ${esc(fmt(r.at))} · ${esc(r.text)}${bad ? " (الوقت ما كان واضح، خلّيناه بعد ساعة)" : ""}</p>`);
         sheet.querySelector("[data-rtext]").value = ""; armNotifications(); return;
       }
       if (b.hasAttribute("data-perm")) { Notification.requestPermission().then(() => b.remove()).catch(() => {}); return; }   // بضغطة الطالب بس
@@ -204,24 +232,28 @@
   // ── 👋 جولة أول مرة: 3 خطوات تتخطّى، وما ترجع إلا بزر «؟» ──
   const STEPS = [
     ["👋 هاي مساحتك", "كلشي هنا إلك بس: خطتك وتقدّمك وملاحظاتك."],
-    ["⏰ 📍 💪 📝", "4 أزرار تكفيك كل يوم: ذكّرني، وين وصلت، قِس قوتك، ملاحظة سريعة."],
-    ["🗓️ خطتي", "اختار المادة والوقت، وإحنا نرتّبلك يوم بيوم. فاتك يوم؟ تترتّب وحدها."],
+    ["4 أزرار تكفيك كل يوم", "ذكّرني، وين وصلت، قِس قوتك (10 أسئلة سريعة)، ملاحظة سريعة."],
+    ["خطتي", "اختار المادة والوقت، وإحنا نرتّبلك يوم بيوم. فاتك يوم؟ تترتّب وحدها."],
   ];
+  // v3b: بطاقة جولة داخل الصفحة (مو نافذة تغطي المحتوى) + تأشير خفيف على العنصر اللي تشرحه؛ تتخطّى وما ترجع إلا بزر «؟»
+  const COACH = [null, ".big4", "#t-plan"];
   function tour(force = false) {
-    if (typeof document === "undefined" || (!force && LS.get(TKEY, false))) return;
-    const prev = document.activeElement;
-    const d = document.createElement("div");
-    d.className = "gatedlg tour"; d.setAttribute("role", "dialog"); d.setAttribute("aria-modal", "true"); d.setAttribute("aria-labelledby", "tour-t");
+    if (typeof document === "undefined" || (!force && LS.get(TKEY, false)) || document.querySelector(".tour")) return;
+    const d = document.createElement("section");
+    d.className = "tourcard tour"; d.setAttribute("aria-labelledby", "tour-t");
     let i = 0;
-    const fin = () => { LS.set(TKEY, true); d.remove(); if (prev && prev.focus) prev.focus(); };
+    const unmark = () => document.querySelectorAll(".coach").forEach((x) => x.classList.remove("coach"));
+    const fin = () => { LS.set(TKEY, true); unmark(); d.remove(); };
     const paint = () => {
-      d.innerHTML = `<div class="box"><small class="sub">${i + 1} / ${STEPS.length}</small><b id="tour-t">${STEPS[i][0]}</b><span>${STEPS[i][1]}</span>
-        <div class="chips-row"><button type="button" class="cbtn" data-next>${i + 1 < STEPS.length ? "التالي" : "يلا نبدأ"}</button><button type="button" class="cbtn ghost" data-skip>تخطّي</button></div></div>`;
-      d.querySelector("[data-next]").focus();
+      unmark(); const t = COACH[i] && document.querySelector(COACH[i]); if (t) t.classList.add("coach");
+      d.innerHTML = `<small class="sub">${i + 1} من ${STEPS.length}</small><b id="tour-t">${STEPS[i][0]}</b><span>${STEPS[i][1]}</span>
+        <div class="chips-row"><button type="button" class="cbtn" data-next>${i + 1 < STEPS.length ? "التالي" : "يلا نبدأ"}</button><button type="button" class="cbtn ghost" data-skip>تخطّي</button></div>`;
     };
-    d.addEventListener("click", (ev) => { if (ev.target.closest("[data-skip]")) fin(); else if (ev.target.closest("[data-next]")) { if (++i >= STEPS.length) fin(); else paint(); } });
+    d.addEventListener("click", (ev) => { if (ev.target.closest("[data-skip]")) fin(); else if (ev.target.closest("[data-next]")) { if (++i >= STEPS.length) fin(); else { paint(); d.querySelector("[data-next]").focus(); } } });
     d.addEventListener("keydown", (ev) => { if (ev.key === "Escape") fin(); });
-    document.body.appendChild(d); paint();
+    const at = document.querySelector("#ltabs");
+    if (at && at.parentNode) at.parentNode.insertBefore(d, at); else document.body.appendChild(d);
+    paint(); if (force) d.querySelector("[data-next]").focus();
   }
 
   return { WHEN, whenAt, remind, reminders, dueReminders, armNotifications, pickQuiz, scoreQuiz, exportAll, importAll, studentName, mountToday, tour, STEPS };

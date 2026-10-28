@@ -22,6 +22,7 @@
   const addDays = (k, n) => { const d = parse(k); d.setDate(d.getDate() + n); return dayKey(d); };
   const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
   const KEEP_DAYS = 120, KEEP_LOG = 300;
+  const DEV_ORDER = ["xray", "ct", "mri", "ultrasound"];
   const OUT_TYPES = ["📗 كتاب", "🏫 محاضرة الكلية", "🏥 مستشفى/تدريب", "🩻 صور أشعة", "✏️ غيره"];
 
   // «محاضرة وحدة / محاضرتين / 3 محاضرات / 11 محاضرة»
@@ -167,7 +168,13 @@
       `<div><b>${S.fixed}</b><small>غلط تصلّح</small></div></div>` +
       `<h2>المحاضرات</h2><div class="bars">${S.subjects.map((s) => bar(s.name, `${s.done}/${s.total} · ${s.left ? `باقي ${s.left}` : "✓"}`, s.pct)).join("")}</div>` +
       `<p class="sub">${esc(S.subjects.filter((s) => s.left).map((s) => s.text).slice(0, 2).join(" · ") || "خلصت كل المحاضرات 👏")}. النسبة من الأقسام اللي فتحتها وسمعتها واختبرتها.</p>` +
-      Object.entries(groups).map(([dv, rs]) => `<h2>${esc(devName[dv] || dv)}</h2><div class="bars">${rs.filter((r) => r.total).map((r) => bar(r.name, `${r.seen}/${r.total}`, Math.round((r.seen / r.total) * 100))).join("")}</div>`).join("") +
+      // الأطلس: الأشعة أول، وبكل جهاز المناطق اللي شاف بيها حالات بس (الباقي سطر واحد) حتى الصفحة ما تطول
+      Object.keys(groups).sort((x, y) => DEV_ORDER.indexOf(x) - DEV_ORDER.indexOf(y)).map((dv) => {
+        const rs = groups[dv].filter((r) => r.total), seen = rs.filter((r) => r.seen), tot = rs.reduce((a, r) => a + r.total, 0), got = rs.reduce((a, r) => a + r.seen, 0);
+        return `<h2>${esc(devName[dv] || dv)} <small class="sub">${got}/${tot}</small></h2>` + (seen.length
+          ? `<div class="bars">${seen.map((r) => bar(r.name, `${r.seen}/${r.total}`, Math.round((r.seen / r.total) * 100))).join("")}</div>` + (rs.length > seen.length ? `<p class="sub">${rs.length - seen.length} منطقة بعدك ما فتحتها.</p>` : "")
+          : `<p class="sub">بعدك ما شفت حالات هنا.</p>`);
+      }).join("") +
       `<div class="stat3"><div><b>${S.terms.saved}</b><small>مصطلح محفوظ</small></div><div><b>${S.terms.reviewed}</b><small>مصطلح راجعته</small></div><div><b>${S.quiz.count}</b><small>اختبار خلصته</small></div></div>` +
       `<h2>وقت الدراسة هالأسبوع · ${hm(S.weekMin)}</h2>` +
       `<div class="wk" role="img" aria-label="وقت الدراسة آخر 7 أيام: ${esc(S.week.map((x) => `${x.label} ${x.min} دقيقة`).join("، "))}">${S.week.map((x) => `<i style="height:${Math.max(x.min ? 4 : 0, Math.round((x.min / mx) * 100))}%"${x.today ? ' class="today"' : ""}></i>`).join("")}</div>` +
@@ -202,11 +209,19 @@
   }
 
   // ── التخزين + الواجهة العامة ──
-  const load = () => { const s = LS.get(KEY, null); return s && s.v === 1 ? Object.assign(empty(), s) : empty(); };
-  let ST = null;
-  const st = () => (ST = ST || load());
-  const flush = () => { if (ST) LS.set(KEY, prune(ST)); };
-  const add = (x) => { const e = rec.outside(st(), x); flush(); emit(); return e; };
+  // نتأكد من شكل كل مفتاح (بيانات ناقصة أو مستوردة ما تكسر المجاميع)
+  const shape = (s) => {
+    const e = empty(); if (!s || s.v !== 1) return e;
+    for (const k of ["days", "lec", "atlas"]) if (s[k] && typeof s[k] === "object" && !Array.isArray(s[k])) e[k] = s[k];
+    for (const k of ["quiz", "outside"]) if (Array.isArray(s[k])) e[k] = s[k].filter((x) => x && typeof x === "object");
+    e.fixed = +s.fixed || 0; return e;
+  };
+  const load = () => shape(LS.get(KEY, null));
+  // كل تسجيل يقرا التخزين من جديد ويكتب فوراً، حتى تبويبين مفتوحين (محاضرة + مساحتي) ما يمسح واحد شغل الثاني
+  const mutate = (f) => { const s = load(); f(s); LS.set(KEY, prune(s)); return s; };
+  const st = () => load();
+  const flush = () => {};   // ما يحتاج (كل تسجيل ينكتب فوراً) — يبقى للتوافق
+  const add = (x) => { let e; mutate((s) => { e = rec.outside(s, x); }); emit(); return e; };
   const emit = () => { if (typeof document !== "undefined") document.dispatchEvent(new CustomEvent("track:change")); };
 
   // ── المراقبة بالمتصفح (تشتغل بس إذا الصفحة طلبتها: Track.start()) ──
@@ -222,35 +237,40 @@
     const region = am ? `${am[1]}/${am[2]}` : null;
 
     // ⏱️ الوقت الحقيقي: كل 5 ثواني، بس إذا الصفحة ظاهرة وآخر تفاعل خلال 60 ثانية (أو صوت المحاضرة شغّال)
-    let lastAct = Date.now(), lastSave = Date.now();
+    let lastAct = Date.now();
     const act = () => { lastAct = Date.now(); };
     ["pointerdown", "keydown", "scroll", "touchstart", "wheel"].forEach((e) => addEventListener(e, act, { passive: true, capture: true }));
     let mm = 0; addEventListener("mousemove", () => { const n = Date.now(); if (n - mm > 5000) { mm = n; act(); } }, { passive: true });
     setInterval(() => {
       const listening = !!document.querySelector(".listen .ls.on");
       if (document.visibilityState !== "visible" || (Date.now() - lastAct > 60e3 && !listening)) return;
-      rec.time(st(), 5, lecId);
-      if (Date.now() - lastSave > 30e3) { lastSave = Date.now(); flush(); }
+      mutate((s) => rec.time(s, 5, lecId));
     }, 5000);
-    const bye = () => flush();
-    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") bye(); });
-    addEventListener("pagehide", bye);
 
-    // 📖 الأقسام: تنعد إذا ظهرت 3 ثواني (35% منها أو من الشاشة) أو انفتحت
+    // 📖 الأقسام: تنعد إذا قطعت الشريط النصّي من الشاشة 3 ثواني (يشتغل حتى للقسم الأطول من الشاشة) أو انفتحت
     if (lecId) {
       const secs = [...document.querySelectorAll(".lsec[id], section[id^='r-s']")];
       const key = (el) => el.id.replace(/^r-/, "");
       const nsec = new Set(secs.map(key)).size;
-      const timers = new Map();
+      // كل جمل السمع من البداية، حتى نسبة السمع تنحسب من المحاضرة كلها مو بس الأقسام اللي بدا بيها
+      mutate((s) => document.querySelectorAll(".listen .lsec[id]").forEach((x) => {
+        const n = x.querySelectorAll(".ls").length;
+        if (n) { const L = (s.lec[lecId] = s.lec[lecId] || { open: {}, heard: {}, tot: {}, nsec: 0 }); L.tot[key(x)] = n; }
+      }));
+      const timers = new Map(), waiting = new Set();
+      const arm = (el) => { if (!timers.has(el)) timers.set(el, setTimeout(() => {
+        timers.delete(el);
+        if (document.visibilityState === "visible") { mutate((s) => rec.open(s, lecId, key(el), nsec, dayKey())); emit(); } else waiting.add(el);
+      }, 3000)); };
       if ("IntersectionObserver" in window) {
         const io = new IntersectionObserver((es) => es.forEach((e) => {
-          const vis = e.isIntersecting && (e.intersectionRatio >= 0.35 || e.intersectionRect.height >= innerHeight * 0.35);
-          if (vis && !timers.has(e.target)) timers.set(e.target, setTimeout(() => { if (document.visibilityState === "visible") { rec.open(st(), lecId, key(e.target), nsec); flush(); emit(); } }, 3000));
-          else if (!vis && timers.has(e.target)) { clearTimeout(timers.get(e.target)); timers.delete(e.target); }
-        }), { threshold: [0, 0.35, 0.6] });
+          if (e.isIntersecting) arm(e.target);
+          else { if (timers.has(e.target)) { clearTimeout(timers.get(e.target)); timers.delete(e.target); } waiting.delete(e.target); }
+        }), { rootMargin: "-30% 0px -30% 0px", threshold: 0 });
         secs.forEach((s) => io.observe(s));
+        document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { waiting.forEach(arm); waiting.clear(); } });
       }
-      document.addEventListener("toggle", (ev) => { const d = ev.target; if (d.open && d.matches && d.matches(".lsec[id]")) { rec.open(st(), lecId, key(d), nsec); flush(); } }, true);
+      document.addEventListener("toggle", (ev) => { const d = ev.target; if (d.open && d.matches && d.matches(".lsec[id]")) { mutate((s) => rec.open(s, lecId, key(d), nsec)); } }, true);
       // 🎧 السمع: listen.js يحط .on على الجملة اللي تنقرا — نراقب الكلاس بس (ما نلمس listen.js)
       const box = document.querySelector(".listen");
       if (box && "MutationObserver" in window) new MutationObserver((ms) => ms.forEach((m) => {
@@ -258,7 +278,7 @@
         if (!el.classList || !el.classList.contains("ls") || !el.classList.contains("on")) return;
         const sec = el.closest(".lsec"); if (!sec) return;
         const all = [...sec.querySelectorAll(".ls")];
-        rec.heard(st(), lecId, key(sec), all.indexOf(el), all.length); act();
+        mutate((s) => rec.heard(s, lecId, key(sec), all.indexOf(el), all.length)); act();
       })).observe(box, { subtree: true, attributes: true, attributeFilter: ["class"] });
     }
 
@@ -266,7 +286,7 @@
     if (region && "IntersectionObserver" in window) {
       const tm = new Map();
       const io = new IntersectionObserver((es) => es.forEach((e) => {
-        if (e.isIntersecting && e.intersectionRatio >= 0.5) { if (!tm.has(e.target)) tm.set(e.target, setTimeout(() => { rec.caseSeen(st(), region, e.target.id.replace(/^c-/, "")); flush(); emit(); }, 2500)); }
+        if (e.isIntersecting && e.intersectionRatio >= 0.5) { if (!tm.has(e.target)) tm.set(e.target, setTimeout(() => { mutate((s) => rec.caseSeen(s, region, e.target.id.replace(/^c-/, ""))); emit(); }, 2500)); }
         else if (tm.has(e.target)) { clearTimeout(tm.get(e.target)); tm.delete(e.target); }
       }), { threshold: [0, 0.5] });
       document.querySelectorAll("article.case[id]").forEach((a) => io.observe(a));
@@ -277,21 +297,21 @@
     let known = mk();
     document.addEventListener("quiz:answer", (ev) => {
       const q = ev.detail && ev.detail.q, k = q && (q.q_en || "").slice(0, 120);
-      setTimeout(() => { const now = mk(); if (ev.detail.ok && k && known.has(k) && !now.has(k)) { rec.fixed(st()); flush(); emit(); } known = now; }, 0);
+      setTimeout(() => { const now = mk(); if (ev.detail.ok && k && known.has(k) && !now.has(k)) { mutate((s) => rec.fixed(s)); emit(); } known = now; }, 0);
     });
     document.addEventListener("quiz:finish", (ev) => {
       const d = ev.detail || {}; const u = /^quiz\/(mistakes\/|[^/]+\/[^/]+\/\d+\/)$/.test(rel) ? rel : null;
-      if (u && d.n) { rec.quiz(st(), u, d.ok, d.n); flush(); emit(); }
+      if (u && d.n) { mutate((s) => rec.quiz(s, u, d.ok, d.n)); emit(); }
     });
     // 🔁 مراجعة المصطلحات (أزرار tools.js «عرفته / ما عرفته»)
-    document.addEventListener("click", (ev) => { if (ev.target.closest && ev.target.closest("#review-box [data-k]")) { rec.term(st()); flush(); } }, true);
+    document.addEventListener("click", (ev) => { if (ev.target.closest && ev.target.closest("#review-box [data-k]")) { mutate((s) => rec.term(s)); } }, true);
     if (opts.debug) window.__track = st;
   }
 
   return { KEY, OUT_TYPES, dayKey, addDays, arCount, empty, rec, prune, facts, ratios, streak, summarize, hm,
     renderProgress, renderOutside, start, load, add,
-    state: st, save: flush,
+    state: st, mutate, save: flush,
     facts_today: (progress) => facts(st(), dayKey(), progress),
     export: () => ({ track: st() }),
-    import: (d) => { if (d && d.track && d.track.v === 1) { ST = Object.assign(empty(), d.track); flush(); emit(); return true; } return false; } };
+    import: (d) => { if (d && d.track && d.track.v === 1) { LS.set(KEY, prune(shape(d.track))); emit(); return true; } return false; } };
 });

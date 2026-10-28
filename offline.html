@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>بلا إنترنت — دروس تقنيات الأشعة</title>
+<style>
+:root{--bg:#F7F8FC;--card:#fff;--ink:#1E2433;--muted:#5A6275;--brand:#3B4A8C;--line:#E3E6EF}
+@media (prefers-color-scheme:dark){:root{--bg:#10141F;--card:#181D2B;--ink:#E8EBF3;--muted:#A3AABB;--brand:#9DAAF0;--line:#2A3145}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "IBM Plex Sans Arabic",system-ui,sans-serif}
+.w{max-width:640px;margin:0 auto;padding:28px 16px}
+h1{font:800 24px/1.4 Cairo,"IBM Plex Sans Arabic",system-ui,sans-serif;margin:0 0 6px}
+p{color:var(--muted);margin:0 0 18px}
+a.i{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:8px 0;color:var(--ink);text-decoration:none;min-height:44px}
+a.i small{display:block;color:var(--muted);font-size:13px;direction:ltr;text-align:right}
+button{font:inherit;background:var(--brand);color:#fff;border:0;border-radius:12px;padding:10px 18px;min-height:44px;cursor:pointer}
+</style>
+</head>
+<body><main class="w">
+<h1>📴 ماكو إنترنت هسه</h1>
+<p>هاي الصفحة ما انفتحت قبل على هذا الجهاز. الصفحات اللي فتحتها قبل تشتغل بلا نت:</p>
+<div id="list"><p>…</p></div>
+<button onclick="location.reload()">🔄 حاول مرة ثانية</button>
+</main>
+<script>
+(async function () {
+  const box = document.getElementById("list");
+  try {
+    const c = await caches.open("anatomy-pages-v2"), keys = await c.keys(), seen = new Set(), rows = [];
+    for (const r of keys.reverse()) {
+      const u = new URL(r.url); u.search = ""; if (seen.has(u.href) || u.pathname.endsWith("offline.html")) continue; seen.add(u.href);
+      const res = await c.match(r), t = res ? ((await res.text()).match(/<title>([^<]*)<\/title>/) || [])[1] : "";
+      rows.push(`<a class="i" href="${u.href}">${(t || "صفحة").replace(/[<>&]/g, "")}<small>${decodeURIComponent(u.pathname)}</small></a>`);
+      if (rows.length >= 40) break;
+    }
+    box.innerHTML = rows.length ? rows.join("") : "<p>بعد ما فتحت صفحات. افتح المحاضرات مرة وحدة بالنت وبعدها تشتغل بلا نت.</p>";
+  } catch (e) {
+    let base = "../"; try { base = (await Promise.race([navigator.serviceWorker.ready, new Promise((_, no) => setTimeout(no, 1500))])).scope; } catch (x) {}   // الصفحة ممكن تنعرض بأي رابط
+    box.innerHTML = `<p><a href="${base}lessons/">الرئيسية</a></p>`;
+  }
+})();
+</script>
+</body></html>

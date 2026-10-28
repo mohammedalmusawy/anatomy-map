@@ -23,7 +23,7 @@
   const { data: isAdmin } = await sb.rpc("is_admin");
   if (!isAdmin) { box.innerHTML = '<p class="hint">هذا الحساب مو حساب الإدارة.</p>'; await sb.auth.signOut(); return; }
 
-  const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات", thanks: "🙏 الشكر" };
+  const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات", thanks: "🙏 الشكر", ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}) };
   box.innerHTML = `<nav class="dtabs">${Object.entries(tabs).map(([k, v]) => `<a href="#${k}" data-t="${k}">${v}</a>`).join("")}</nav><div id="pane"></div>
     <p class="hint"><button class="btn ghost" id="out">خروج</button></p>`;
   document.getElementById("out").onclick = async () => { await sb.auth.signOut(); location.reload(); };
@@ -196,6 +196,6 @@
       if (error) return alert(error.message); thanks();
     };
   }
-  const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, thanks }[t] || stats)(); };
+  const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, thanks, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats() }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();
 })();

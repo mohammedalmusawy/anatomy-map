@@ -1,0 +1,324 @@
+{
+ "demo": true,
+ "generated_at": "2026-10-28T21:00:00+03:00",
+ "stage": 2,
+ "min_group": 5,
+ "min_attempts": 10,
+ "active": {
+  "today": 44,
+  "week": 81,
+  "enrolled": 112,
+  "daily": [
+   {
+    "date": "2026-10-22",
+    "active": 34
+   },
+   {
+    "date": "2026-10-23",
+    "active": 41
+   },
+   {
+    "date": "2026-10-24",
+    "active": 22
+   },
+   {
+    "date": "2026-10-25",
+    "active": 38
+   },
+   {
+    "date": "2026-10-26",
+    "active": 47
+   },
+   {
+    "date": "2026-10-27",
+    "active": 52
+   },
+   {
+    "date": "2026-10-28",
+    "active": 44
+   }
+  ],
+  "weekly": [
+   {
+    "week": "2026-W38",
+    "active": 51
+   },
+   {
+    "week": "2026-W39",
+    "active": 58
+   },
+   {
+    "week": "2026-W40",
+    "active": 63
+   },
+   {
+    "week": "2026-W41",
+    "active": 61
+   },
+   {
+    "week": "2026-W42",
+    "active": 74
+   },
+   {
+    "week": "2026-W43",
+    "active": 81
+   }
+  ]
+ },
+ "top_lectures": [
+  {
+   "subject": "anatomy",
+   "subject_ar": "التشريح",
+   "items": [
+    {
+     "lecture_id": "anatomy_t01",
+     "title_ar": "الحوض العظمي",
+     "title_en": "Bony Pelvis (Pelvic Girdle): Sacrum, Coccyx & Hip Bones",
+     "kind": "theory",
+     "num": 1,
+     "readers_week": 53
+    },
+    {
+     "lecture_id": "anatomy_t04",
+     "title_ar": "عظام القدم: الرصغ والأمشاط والسلاميات",
+     "title_en": "Anatomy and Radiology of the Foot: Tarsals, Metatarsals & Phalanges",
+     "kind": "theory",
+     "num": 4,
+     "readers_week": 22
+    }
+   ]
+  },
+  {
+   "subject": "radiography",
+   "subject_ar": "التصوير",
+   "items": [
+    {
+     "lecture_id": "radiography_t02",
+     "title_ar": "جودة الصورة وعوامل التعرض",
+     "title_en": "Image Quality, Exposure Factors, Brightness, Contrast, Resolution, Distortion and Noise",
+     "kind": "theory",
+     "num": 2,
+     "readers_week": 56
+    },
+    {
+     "lecture_id": "radiography_p01",
+     "title_ar": "المصطلحات الأساسية والاتجاهات والوضعيات",
+     "title_en": "Practical Lecture 1: Basic Terms, Directions and Positions",
+     "kind": "practical",
+     "num": 1,
+     "readers_week": 56
+    },
+    {
+     "lecture_id": "radiography_t01",
+     "title_ar": "المصطلحات الاتجاهية ومستويات الجسم والوضعيات",
+     "title_en": "Directional Terminology, Body Planes, Main Positions & Terms Related to Movements",
+     "kind": "theory",
+     "num": 1,
+     "readers_week": 40
+    }
+   ]
+  },
+  {
+   "subject": "protection",
+   "subject_ar": "الوقاية",
+   "items": [
+    {
+     "lecture_id": "protection_t03",
+     "title_ar": "مبادئ الوقاية من الإشعاع وحدود الجرعة",
+     "title_en": "Principles of Radiological Protection & Dose Limits",
+     "kind": "theory",
+     "num": 3,
+     "readers_week": 50
+    },
+    {
+     "lecture_id": "protection_p02",
+     "title_ar": "وحدات قياس الإشعاع والوحدات الدولية",
+     "title_en": "Radiation Measurement Units & International SI Units",
+     "kind": "practical",
+     "num": 2,
+     "readers_week": 44
+    },
+    {
+     "lecture_id": "protection_p01",
+     "title_ar": "تصنيف الإشعاع ومصادر الإشعاع المؤين",
+     "title_en": "Classification of Radiation and Identification of Ionizing Radiation Sources",
+     "kind": "practical",
+     "num": 1,
+     "readers_week": 43
+    }
+   ]
+  },
+  {
+   "subject": "examinations",
+   "subject_ar": "الفحوصات",
+   "items": [
+    {
+     "lecture_id": "examinations_t02",
+     "title_ar": "طرق تصوير الجهاز الهضمي",
+     "title_en": "Methods of Imaging the GIT",
+     "kind": "theory",
+     "num": 2,
+     "readers_week": 20
+    }
+   ]
+  },
+  {
+   "subject": "ct",
+   "subject_ar": "المفراس",
+   "items": [
+    {
+     "lecture_id": "ct_p01",
+     "title_ar": "مقدمة المفراس وحدود الأشعة التقليدية",
+     "title_en": "Introduction to Computed Tomography & Limitations of Conventional Radiography",
+     "kind": "practical",
+     "num": 1,
+     "readers_week": 24
+    }
+   ]
+  },
+  {
+   "subject": "equipment",
+   "subject_ar": "الأجهزة",
+   "items": [
+    {
+     "lecture_id": "equipment_p01",
+     "title_ar": "منظومة جهاز الأشعة السينية (التجربتان 1 و2)",
+     "title_en": "X-Ray Machine System — Experiments 1 & 2 in Practice",
+     "kind": "practical",
+     "num": 1,
+     "readers_week": 69
+    },
+    {
+     "lecture_id": "equipment_t02",
+     "title_ar": "مولّدات الجهد العالي",
+     "title_en": "High Voltage Generators",
+     "kind": "theory",
+     "num": 2,
+     "readers_week": 59
+    },
+    {
+     "lecture_id": "equipment_t01",
+     "title_ar": "منظومة جهاز الأشعة السينية ولوحة التحكم",
+     "title_en": "X-Ray Machine System & the Operating Console",
+     "kind": "theory",
+     "num": 1,
+     "readers_week": 46
+    }
+   ]
+  }
+ ],
+ "hard_topics": [
+  {
+   "topic_en": "Sources of Ionizing Radiation",
+   "topic_ar": "مصادر الإشعاع المؤيِّن",
+   "lecture_id": "protection_p01",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.53,
+   "attempts": 74
+  },
+  {
+   "topic_en": "High Frequency Generator",
+   "topic_ar": "المولّد عالي التردد",
+   "lecture_id": "equipment_t02",
+   "subject_ar": "الأجهزة",
+   "error_rate": 0.51,
+   "attempts": 89
+  },
+  {
+   "topic_en": "Comparison of Radiation Doses",
+   "topic_ar": "مقارنة الجرعات الإشعاعية",
+   "lecture_id": "protection_t01",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.51,
+   "attempts": 42
+  },
+  {
+   "topic_en": "General Body Positions",
+   "topic_ar": "وضعيات الجسم العامة",
+   "lecture_id": "radiography_t01",
+   "subject_ar": "التصوير",
+   "error_rate": 0.45,
+   "attempts": 96
+  },
+  {
+   "topic_en": "Time",
+   "topic_ar": "الوقت",
+   "lecture_id": "protection_p03",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.43,
+   "attempts": 49
+  }
+ ],
+ "missed_questions": [
+  {
+   "q_en": "Which is a reason high-frequency generators are the most widely used?",
+   "q_ar": "أي مما يلي سبب لكون المولّدات عالية التردد الأكثر استعمالاً؟",
+   "lecture_id": "equipment_t02",
+   "subject_ar": "الأجهزة",
+   "error_rate": 0.65,
+   "attempts": 42
+  },
+  {
+   "q_en": "The effective dose limit for members of the general public is:",
+   "q_ar": "حد الجرعة الفعالة لأفراد عامة الناس هو:",
+   "lecture_id": "protection_t04",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.61,
+   "attempts": 47
+  },
+  {
+   "q_en": "Alpha particles (α) are:",
+   "q_ar": "جسيمات ألفا (α) هي:",
+   "lecture_id": "protection_p01",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.59,
+   "attempts": 35
+  },
+  {
+   "q_en": "In a postero-anterior (PA) projection, the central ray:",
+   "q_ar": "في الإسقاط الخلفي الأمامي (PA)، الشعاع المركزي:",
+   "lecture_id": "radiography_t01",
+   "subject_ar": "التصوير",
+   "error_rate": 0.58,
+   "attempts": 31
+  }
+ ],
+ "exam_period": {
+  "active": false,
+  "label": "امتحانات نصف السنة (مثال)",
+  "normal_week_avg": 52,
+  "exam_week_avg": 96,
+  "days_before_exam": [
+   {
+    "d": -6,
+    "active": 58
+   },
+   {
+    "d": -5,
+    "active": 63
+   },
+   {
+    "d": -4,
+    "active": 71
+   },
+   {
+    "d": -3,
+    "active": 80
+   },
+   {
+    "d": -2,
+    "active": 92
+   },
+   {
+    "d": -1,
+    "active": 104
+   }
+  ]
+ },
+ "hidden_small_groups": 3,
+ "announcement": {
+  "enabled": false,
+  "text": "",
+  "max_chars": 280
+ }
+}

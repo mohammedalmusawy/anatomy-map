@@ -21,7 +21,7 @@
   const dayKey = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
   // تطبيع للبحث والمطابقة: بلا تشكيل، الألف/الياء/التاء المربوطة موحّدة، الإنكليزي صغير
-  const norm = (s) => String(s || "").toLowerCase().replace(/[ً-ْٰـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه")
+  const norm = (s) => String(s || "").replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).toLowerCase().replace(/[ً-ْٰـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه")
     .replace(/[^a-z0-9؀-ۿ]+/g, " ").trim();
 
   const KINDS = {
@@ -49,7 +49,9 @@
   const TAG_SUBJ = { "#أجهزة": "equipment", "#وقاية": "protection", "#تشريح": "anatomy", "#وضعيات": "radiography", "#ملون": "examinations", "#مفراس": "ct" };
   const NT = Object.fromEntries(Object.entries(TAGS).map(([t, ws]) => [t, ws.map(norm)]));
   // كلمة إنكليزية قصيرة (ct، rib) لازم تكون كلمة كاملة؛ العربي جزء كلمة يكفي (الصدر، بالرئة)
-  const has = (nt, w) => (/^[a-z0-9 ]+$/.test(w) ? new RegExp(`(^| )${w}${w.length <= 3 ? "( |$)" : ""}`).test(nt) : nt.includes(w));
+  // الكلمة القصيرة (3 حروف أو أقل: ct، rib، قلب، جنب) لازم تكون كلمة كاملة (ويسمح بـ «ال/بال/وال» قبل العربي)؛ الأطول جزء كلمة يكفي
+  const has = (nt, w) => (/^[a-z0-9 ]+$/.test(w) ? new RegExp(`(^| )${w}${w.length <= 3 ? "( |$)" : ""}`).test(nt)
+    : w.length <= 3 ? new RegExp(`(^| )(و?(بال|لل|ال|ب|ل))?${w}( |$)`).test(nt) : nt.includes(w));
   function tags(text) {
     const nt = " " + norm(text) + " ";
     const out = Object.keys(NT).filter((t) => NT[t].some((w) => has(nt.trim(), w)));
@@ -92,10 +94,12 @@
       if ((ar.length >= 6 && nt.includes(ar)) || (en.length >= 8 && nt.includes(en)) || byNum)
         push({ type: "lecture", key: l.id, title: l.title, href: l.learn, subject: l.subject });
     });
-    ix.cs.forEach(({ c, en, ar }) => { if ((en.length >= 5 && nt.includes(en)) || (ar.length >= 5 && nt.includes(ar))) push({ type: "case", key: c.slug, title: c.ar || c.en, href: c.href, subject: null }); });
-    // الأطول أولاً حتى «Heel effect» يغلب «effect»
+    const names = new Set();   // نفس الحالة بجهازين (أشعة + مفراس) ← رابط واحد
+    ix.cs.forEach(({ c, en, ar }) => { if (((en.length >= 5 && nt.includes(en)) || (ar.length >= 5 && nt.includes(ar))) && !names.has(en)) { names.add(en); push({ type: "case", key: c.slug, title: c.ar || c.en, href: c.href, subject: null }); } });
+    // الأطول أولاً، والقصير اللي داخل مصطلح أطول انلگى ما يتكرر («Anode» داخل «Anode heel effect»)
+    const got = [];
     ix.terms.filter((t) => word(t.en) || (t.ar && nt.includes(t.ar))).sort((a, b) => (b.en || b.ar).length - (a.en || a.ar).length)
-      .forEach((t) => push({ type: "term", key: t.k, title: t.title, href: null, subject: null }));
+      .forEach((t) => { const f = t.en || t.ar; if (got.some((g) => g.includes(f))) return; got.push(f); push({ type: "term", key: t.k, title: t.title, href: null, subject: null }); });
     return out;
   }
 
@@ -186,15 +190,23 @@
   }
 
   // ── العرض (نفس كلاسات المعاينة: .note .qday .chips-row .row-in) ──
+  // روابط نسبية بس (أو https)، حتى بيانات مستوردة ما تحقن javascript:
+  const safeHref = (h) => { h = String(h || ""); return /^[a-z][a-z0-9+.-]*:/i.test(h) && !/^https:\/\//i.test(h) ? "#" : h; };
+  const clean = (n) => Object.assign({}, n, { text: String(n.text).slice(0, 2000), kind: KINDS[n.kind] ? n.kind : "free", color: Math.max(0, Math.min(3, (n.color | 0))),
+    pin: !!n.pin, t: +n.t || Date.now(), d: /^\d{4}-\d{2}-\d{2}$/.test(n.d) ? n.d : dayKey(new Date(+n.t || Date.now())),
+    tags: (Array.isArray(n.tags) ? n.tags : []).map(String).slice(0, 12), links: (Array.isArray(n.links) ? n.links : []).filter((l) => l && l.type && l.key).map((l) => ({ type: String(l.type), key: String(l.key), title: String(l.title || ""), href: l.href ? safeHref(l.href) : null, subject: l.subject || null })),
+    ctx: n.ctx && typeof n.ctx === "object" ? { kind: String(n.ctx.kind || ""), url: String(n.ctx.url || ""), title: String(n.ctx.title || "") } : null,
+    remind: n.remind && typeof n.remind === "object" ? { at: +n.remind.at || 0, label: String(n.remind.label || ""), done: !!n.remind.done } : null });
   function renderNote(n, root = "") {
+    n = clean(n);
     const k = KINDS[n.kind] || KINDS.free, when = new Date(n.t);
     const ago = n.d === dayKey() ? `اليوم ${pad(when.getHours())}:${pad(when.getMinutes())}` : n.d;
     const links = (n.links || []).map((l) => l.type === "term"
       ? `<span class="tm" tabindex="0" role="button" data-k="${esc(l.key)}" dir="ltr">${esc(l.title)} 🔊</span>`
-      : `<a href="${esc(root + l.href)}">افتح: ${esc(l.title)} ‹</a>`).join("");
+      : l.href ? `<a href="${esc(/^https:/.test(l.href) || l.href === "#" ? l.href : root + l.href)}">افتح: ${esc(l.title)} ‹</a>` : "").join("");
     return `<div class="note c${n.color || 0}" data-note="${esc(n.id)}"><div class="nh"><span>${n.pin ? "📌 مثبّتة · " : ""}${k.icon} ${k.label}${n.ctx ? " · " + esc(CTX[n.ctx.kind] || "") : ""}${n.remind ? ` · ⏰ ${esc(n.remind.label)}` : ""}</span><span>${esc(ago)}</span></div>` +
       `<p dir="auto">${esc(n.text).replace(/\n/g, "<br>")}</p><div class="tags">${(n.tags || []).map((t) => `<span>${esc(t)}</span>`).join("")}${links}</div>` +
-      `<div class="chips-row"><button type="button" class="ib" data-act="pin" aria-pressed="${!!n.pin}" aria-label="${n.pin ? "شيل التثبيت" : "ثبّت الملاحظة"}">📌</button>` +
+      `<div class="chips-row"><button type="button" class="ib" data-act="pin" aria-pressed="${!!n.pin}" aria-label="ثبّت الملاحظة">📌</button>` +
       `<button type="button" class="ib" data-act="color" aria-label="غيّر اللون">🎨</button><button type="button" class="ib" data-act="del" aria-label="امسح الملاحظة">🗑️</button></div></div>`;
   }
   // o = { root, ix, subjects:[[key,name]], examKnown, examDate }
@@ -233,16 +245,20 @@
       if (t.dataset.remk) { rem = t.dataset.remk; el.querySelectorAll("[data-remk]").forEach((x) => x.setAttribute("aria-pressed", x === t)); return; }
       if (t.hasAttribute("data-n-tidy")) { if (ta.value.trim()) { t.disabled = true; ta.value = await tidy(ta.value); t.disabled = false; ta.dispatchEvent(new Event("input")); } return; }
       if (t.hasAttribute("data-n-save")) {
-        const qd = el.querySelector(".qday[data-q]"), qid = qd && !qd.querySelector(".chip2") ? qd.dataset.q : null;   // سؤال المسا بلا أزرار ← الملاحظة جوابه
+        const qd = el.querySelector(".qday[data-q]"), qid = qd && !qd.querySelector(".chip2") && kind === "free" ? qd.dataset.q : null;   // سؤال المسا بلا أزرار ← الملاحظة جوابه
         const n = qid ? answer(qid, ta.value, { ix: o.ix, ctx: context() }) : add({ text: ta.value, kind, remind: rem, examDate: o.examDate, ix: o.ix, ctx: context() });
         if (n) { ta.value = ""; $("[data-n-hint]").innerHTML = ""; if (qid && qd) qd.remove(); list(); }
         return;
       }
       const card = t.closest("[data-note]"); if (!card) return;
       const id = card.dataset.note, a = t.dataset.act;
+      const nextId = card.nextElementSibling && card.nextElementSibling.dataset.note;
       if (a === "pin") pin(id); else if (a === "color") color(id);
       else if (a === "del" && (typeof confirm !== "function" || confirm("تمسح هاي الملاحظة؟"))) remove(id);
       list();
+      // الفوكس يرجع لنفس الزر (أو للملاحظة اللي بعدها إذا انمسحت)
+      const back = el.querySelector(`[data-note="${id}"] [data-act="${a}"]`) || (nextId && el.querySelector(`[data-note="${nextId}"] [data-act]`)) || $("[data-n-q]");
+      if (back) back.focus();
     });
     list();
   }
@@ -251,5 +267,5 @@
     answer, intentToday, examGuess, context, tidy, renderNote, mount, all,
     get assistant() { return assistant; }, set assistant(f) { assistant = typeof f === "function" ? f : null; },
     export: () => ({ notes: all() }),
-    import: (d) => { if (d && Array.isArray(d.notes)) { put(d.notes.filter((n) => n && n.id && n.text)); return true; } return false; } };
+    import: (d) => { if (d && Array.isArray(d.notes)) { put(d.notes.filter((n) => n && n.id && n.text).map((n) => Object.assign(clean(n), { id: String(n.id).slice(0, 40), q: n.q ? String(n.q) : null, subject: n.subject ? String(n.subject) : null }))); return true; } return false; } };
 });

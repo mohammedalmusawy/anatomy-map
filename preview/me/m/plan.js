@@ -136,9 +136,9 @@
     // المراجعات المتباعدة: بيوم راحة ← تنزاح لليوم اللي بعده؛ اللي توصل لآخر يوم ← «المراجعة السريعة» تغطيها
     const reviews = {};
     const addReviews = (id, date) => GAPS.forEach((g) => {
-      let i = at(addDays(date, g));
-      while (i < lastI && i >= 0 && days[i].kind === "rest") i++;
-      if (i < 0 || !isStudy(i)) return;
+      let i = Math.max(0, at(addDays(date, g)));            // مراجعة فات وقتها (قبل بداية الخطة) ← أول يوم
+      while (i < lastI && days[i].kind !== "study") i++;
+      if (!isStudy(i)) return;
       (reviews[i] = reviews[i] || []).push([id, g]);
     });
     for (const id in learned) if (L.some((l) => l.id === id)) addReviews(id, learned[id]);
@@ -159,7 +159,12 @@
       const day = days[i];
       if (day.kind !== "study") continue;
       let cap = daily - overhead;
-      (reviews[i] || []).slice(0, 3).forEach(([id, g]) => {
+      const due = reviews[i] || [];
+      if (due.length > 3) {   // أكثر من 3 باليوم ← الزايد يتأجّل لأول يوم دراسة بعده
+        let j = i + 1; while (j < lastI && !isStudy(j)) j++;
+        if (isStudy(j)) (reviews[j] = reviews[j] || []).unshift(...due.slice(3));
+      }
+      due.slice(0, 3).forEach(([id, g]) => {
         const l = byId[id]; if (!l) return;
         day.tasks.push(mk(day, "review", { lec: id, title: `راجع: ${l.title}`, sub: `${short(l)} · +${g} ${g === 1 ? "يوم" : "أيام"} · 10 أسئلة سريعة`, min: REVIEW_MIN, href: l.quiz, auto: { quiz: l.quiz } }));
         cap -= REVIEW_MIN;
@@ -174,7 +179,7 @@
         rem -= take; cap -= take; placed = true;
         if (rem > 0) break;
         const l = cur; cur = null;
-        if (est.listen && (daily >= 120 || cap >= est.listen + est.quiz)) {
+        if (est.listen && l.learn && (daily >= 120 || cap >= est.listen + est.quiz)) {
           day.tasks.push(mk(day, "listen", { lec: l.id, title: `اسمع: ${l.title}`, sub: short(l), min: est.listen, href: l.learn + "#listen", auto: { listen: l.id } }));
           cap -= est.listen;
         }
@@ -185,12 +190,13 @@
       }
     }
     // الوقت ما كفى: الباقي يتوزّع على أيام الدراسة (فوق الوقت اليومي) ونگول بهدوء
+    const partial = cur && rem < estimate(cur).read ? cur : null;   // محاضرة نصها انجدول ← الباقي بس
     const left = (cur ? [cur] : []).concat(queue);
     const studyIdx = days.map((d, i) => (d.kind === "study" ? i : -1)).filter((i) => i >= 0);
     const tight = left.length > 0 && tplKey !== "rush";
     if (tight && studyIdx.length) left.forEach((l, k) => {
       const day = days[studyIdx[k % studyIdx.length]], est = estimate(l);
-      day.tasks.push(mk(day, "read", { lec: l.id, title: `اقرأ: ${l.title}`, sub: `${short(l)} · بسرعة`, min: est.read, href: l.learn, auto: { read: l.id } }));
+      day.tasks.push(mk(day, "read", { lec: l.id, title: `اقرأ: ${l.title}`, sub: `${short(l)} · ${l === partial ? "الباقي" : "بسرعة"}`, min: l === partial ? rem : est.read, href: l.learn, auto: { read: l.id } }));
       if (est.quiz) day.tasks.push(mk(day, "quiz", { lec: l.id, title: `اختبر: ${l.title}`, sub: short(l), min: est.quiz, href: l.quiz, auto: { quiz: l.quiz } }));
       learned[l.id] = day.date;
     });
@@ -259,6 +265,7 @@
   // factsFor(date) ← حقائق ذاك اليوم. المحاضرة اللي خلصت كل قراءتها تبقى «متعلّمة» بتاريخها (حتى تكمل مراجعاتها).
   function rebalance(plan, today = dayKey(), factsFor = () => null) {
     if (!plan || !plan.days) return { plan, changed: false };
+    if (plan.exam && plan.exam.date && diff(today, plan.exam.date) < 0) return { plan, changed: false, over: true };   // الامتحان فات ← الخطة خلصت
     const past = plan.days.filter((d) => diff(d.date, today) > 0);
     if (!past.length) return { plan, changed: false };
     const learned = Object.assign({}, plan.learnedDone || {}), missed = new Set();
@@ -318,7 +325,14 @@
   // ── التخزين + خطاطيف المزامنة ──
   const load = () => LS.get(KEY, null);
   const save = (p) => { LS.set(KEY, p); if (typeof document !== "undefined") document.dispatchEvent(new CustomEvent("plan:change", { detail: p })); return p; };
-  const toggle = (taskId) => { const p = load(); if (!p) return null; p.done = p.done || {}; if (p.done[taskId]) delete p.done[taskId]; else p.done[taskId] = Date.now(); return save(p); };
+  const toggle = (taskId, f) => {
+    const p = load(); if (!p) return null;
+    const t = p.days.flatMap((d) => d.tasks).find((x) => x.id === taskId);
+    p.done = p.done || {};
+    if (t && f && !p.done[taskId] && autoDone(t, f)) return p;   // خالصة تلقائياً: ما نغيّر شي
+    if (p.done[taskId]) delete p.done[taskId]; else p.done[taskId] = Date.now();
+    return save(p);
+  };
   const exportData = () => ({ plan: load() });
   const importData = (d) => { if (d && d.plan && d.plan.v === 1 && Array.isArray(d.plan.days)) { save(d.plan); return true; } return false; };
   const today = (p, d = dayKey()) => (p && p.days || []).find((x) => x.date === d) || null;
@@ -336,9 +350,10 @@
     }
     const n = d.tasks.filter((t) => isDone(p, t, f)).length;
     el.innerHTML = note + `<h2>خطة اليوم · ${d.min} دقيقة <small class="sub">(${n}/${d.tasks.length})</small></h2>` + d.tasks.map((t) => {
-      const ok = isDone(p, t, f), auto = !!t.auto;
-      return `<div class="task${ok ? " done" : ""}" data-task="${esc(t.id)}"><button type="button" class="ck" aria-pressed="${ok}" aria-label="${ok ? "رجّعها ما خالصة" : "خلصت"}: ${esc(t.title)}">${ok ? "✓" : ""}</button>` +
-        `<span><b>${t.icon} ${esc(t.title)}</b><small>${t.min ? t.min + " دقيقة" : ""}${t.sub ? " · " + esc(t.sub) : ""}${auto ? " · ✓ تلقائي" : ""}</small></span>` +
+      const ok = isDone(p, t, f), auto = !!t.auto, byAuto = ok && !(p.done && p.done[t.id]);
+      // خلصت تلقائياً ← الزر ثابت (✓ تلقائي)؛ غيرها: label ثابت و aria-pressed يتغيّر بس
+      return `<div class="task${ok ? " done" : ""}" data-task="${esc(t.id)}"><button type="button" class="ck" aria-pressed="${ok}"${byAuto ? ' aria-disabled="true" title="انحسبت وحدها"' : ""} aria-label="خلصت: ${esc(t.title)}">${ok ? "✓" : ""}</button>` +
+        `<span><b>${t.icon} <bdi>${esc(t.title)}</bdi></b><small>${t.min ? t.min + " دقيقة" : ""}${t.sub ? " · " + esc(t.sub) : ""}${byAuto ? " · ✓ انحسبت وحدها" : auto ? " · تتأشّر وحدها" : ""}</small></span>` +
         (t.href ? `<a class="go" href="${href(root, t.href)}">افتح ‹</a>` : "<span></span>") + `</div>`;
     }).join("");
   }

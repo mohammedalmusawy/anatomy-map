@@ -464,12 +464,4 @@ h2, h3, .case h3 .en { font-weight: 700; }
 
 .nexam-rev { margin: 4px 0 8px; font-size: .78rem; color: var(--muted); }
 
-/* ⚠️ احتمال خطأ بالمحاضرة (29/10): هادئة ومحترمة، طبقة فوق النص */
-.perrb { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; padding: 0 4px; margin-inline-start: 2px;
-  border: 1px solid var(--line); border-radius: 10px; background: var(--card); font-size: .85rem; cursor: pointer; vertical-align: middle; }
-.perr { display: grid; gap: 4px; margin: 8px 0 12px; padding: 10px 12px; border: 1px solid var(--line); border-inline-start: 3px solid #C9A86A;
-  border-radius: 12px; background: var(--card); font-size: .92rem; direction: rtl; text-align: right; }
-.perr[hidden] { display: none; }
-.perr b { font-size: .9rem; }
-.perr small { color: var(--muted); }
-.perr a { color: var(--brand); text-decoration: underline; }
+.perr-in { font-size: .86em; color: #8C6A3A; text-decoration: none; border-bottom: 1px dotted currentColor; white-space: normal; }
