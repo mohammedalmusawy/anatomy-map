@@ -1,4 +1,5 @@
-// المصطلحات: قسمين (طلابنا/عامة)، بحث إنكليزي وعربي، فلتر حسب المادة، و🔊 نطق إنكليزي من المتصفح نفسه (بس لما يضغط الطالب).
+// المصطلحات: قسمين (طلابنا/عامة) + الأعراض، بحث إنكليزي وعربي، فلتر حسب المادة.
+// الصوت (29/10): المشغّل الموحّد listen.js — المصطلح نفسه منقّط: ضغطة ← لفظه + بطاقة المعنى و🐢 (ما بقت أزرار 🔊 ولا صوت المتصفح).
 (function () {
   const $ = (s) => document.querySelector(s);
   const D = JSON.parse($("#terms-data").textContent);
@@ -14,13 +15,14 @@
     $("#tf").innerHTML = ['<button class="chip' + (subj ? "" : " on") + '" data-s="">الكل</button>']
       .concat(subs.map((s) => `<button class="chip${s === subj ? " on" : ""}" data-s="${esc(s)}">${esc(s)}</button>`)).join("");
   }
+  const pron = (en) => { const i = window.Listen && Listen.find(en); return i ? `<span class="pron"><span class="pa">${i[2]}</span> <bdi class="pi">${esc(i[3])}</bdi></span>` : ""; };
   function render() {
     const words = norm(q).split(" ").filter(Boolean);
     const list = idx[set].filter(({ t, s }) => (!subj || t.s === subj) && words.every((w) => s.includes(w)));
     $("#tn").textContent = `${list.length} مصطلح`;
     $("#tl").innerHTML = list.slice(0, 400).map(({ t }) => `<article class="term">
-      <div class="th"><bdi class="te">${esc(t.en)}</bdi><button class="say" data-say="${esc(t.en)}" title="اضغط للسماع" aria-label="انطق ${esc(t.en)}">🔊</button><button class="say slow" data-say="${esc(t.en)}" data-r="0.75" title="لفظ بطيء" aria-label="لفظ بطيء ${esc(t.en)}">🐢</button></div>
-      ${window.Say && Say.info(t.en) ? `<span class="pron"><span class="pa">${Say.info(t.en).ar}</span> <bdi class="pi">${esc(Say.info(t.en).ipa)}</bdi></span>` : ""}
+      <div class="th"><bdi class="te">${esc(t.en)}</bdi></div>
+      ${pron(t.en)}
       <b class="ta">${esc(t.ar)}</b>${t.d ? `<p>${esc(t.d)}</p>` : ""}
       ${t.s ? `<span class="ts">${esc(t.s)}${t.sa ? " · " + esc(t.sa) : ""}</span>` : ""}
       ${t.c ? `<a class="seecase" href="${esc(t.c)}">🩻 شوف الحالة</a>` : ""}</article>`).join("");
@@ -40,29 +42,7 @@
     subj = b.dataset.s; chips(); render();
   });
   $("#tq").addEventListener("input", (ev) => { q = ev.target.value; render(); });
-  // 🔊 بس عند الضغط؛ صوت إنكليزي من المتصفح (بدون أي خدمة خارجية)
-  let voice = null;
-  const pick = () => {
-    const vs = window.speechSynthesis ? speechSynthesis.getVoices() : [];
-    voice = vs.find((v) => /^en(-|_)(GB|US)/i.test(v.lang)) || vs.find((v) => /^en/i.test(v.lang)) || null;
-  };
-  if (window.speechSynthesis) { pick(); speechSynthesis.onvoiceschanged = pick; }
-  $("#tl").addEventListener("click", (ev) => {
-    const b = ev.target.closest("button.say");
-    if (!b) return;
-    if (!window.speechSynthesis) { b.textContent = "🔇"; return; }
-    if (window.Say && Say.has(b.dataset.say)) { Say.play(b.dataset.say, +(b.dataset.r || 1), b); return; } // 🔊 ملف صوتي جاهز (27/10)
-    if (!voice) pick(); // iOS/Android: قائمة الأصوات أحياناً تتحمّل متأخرة
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(b.dataset.say);
-    u.lang = voice ? voice.lang : "en-GB";
-    if (voice) u.voice = voice;
-    u.rate = 0.9;
-    b.classList.add("on");
-    u.onend = u.onerror = () => b.classList.remove("on");
-    speechSynthesis.speak(u);
-  });
   if (set !== "ours") document.querySelectorAll("#tt a").forEach((x) => x.classList.toggle("on", x.dataset.set === set));
-  document.addEventListener("say:ready", render);
+  document.addEventListener("listen:ready", render);
   chips(); render();
 })();

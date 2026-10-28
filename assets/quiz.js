@@ -29,6 +29,7 @@
     const { q, order } = round[pos];
     $("count").textContent = `سؤال ${pos + 1} من ${round.length}`;
     $("bar").style.width = `${(pos / round.length) * 100}%`;
+    $("qen").classList.add("noterm");   // 🎧 المشغّل الموحّد (29/10): مصطلحات السؤال ما تتعلّم قبل الجواب (حتى البطاقة ما تكشف الجواب)
     $("qen").textContent = q.q_en;
     $("qar").textContent = q.q_ar;
     $("opts").innerHTML = order.map((k, i) => `
@@ -52,6 +53,7 @@
       if (+b.dataset.k === q.answer) b.classList.add("right");
     });
     document.dispatchEvent(new CustomEvent("quiz:answer", { detail: { q, ok: k === q.answer } })); // أدوات الطالب (tools.js)
+    $("qen").classList.remove("noterm"); if (window.Listen) Listen.mark($("qen"));
     const fb = $("fb");
     if (k === q.answer) {
       fb.className = "fb ok";
