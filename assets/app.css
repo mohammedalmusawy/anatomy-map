@@ -349,3 +349,33 @@ table.adm th, table.adm td { border: 1px solid var(--line); padding: 5px 6px; te
 .tpop .ar { font-weight: 700; }
 .tpop .pr { color: var(--muted); font-size: 14px; }
 .tpop .pb { display: flex; gap: 6px; margin-top: 4px; }
+
+/* 🩺 الأعراض بالبطاقة + حسب الجسم/حسب العَرَض (28/10) */
+.sxb { margin: 10px 0; border: 1px solid var(--line); border-radius: 12px; background: var(--card); padding: 0 12px; }
+.sxb > summary { cursor: pointer; padding: 10px 0; min-height: 44px; display: flex; align-items: center; gap: 8px; font-weight: 700; list-style: none; }
+.sxb > summary::-webkit-details-marker { display: none; }
+.sxb > summary .en { color: var(--muted); font-size: 13px; font-weight: 500; }
+.sxb[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.sxs { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.sxs li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.sxs .sxe { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; direction: ltr; }
+.sxs .sxa { color: var(--ink); flex-basis: 100%; padding-inline-start: 2px; }
+.sxb .rf { background: var(--bad-soft); border-radius: 10px; padding: 8px 10px; margin: 0 0 8px; }
+.sxb .rf b { color: var(--bad); }
+.sxb .rf ul { margin: 4px 0 0; padding-inline-start: 18px; }
+.sxb .why { margin: 0 0 6px; line-height: 1.7; }
+.sxdisc { color: var(--muted); font-size: 12.5px; margin: 0 0 10px; }
+.vtog { display: flex; gap: 0; margin: 12px 0; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--card); }
+.vtog button { flex: 1; min-height: 44px; border: 0; background: transparent; font: inherit; font-weight: 600; color: var(--ink); cursor: pointer; }
+.vtog button.on { background: var(--brand); color: #fff; }
+.vtog button:focus-visible { outline: 3px solid var(--brand); outline-offset: -3px; }
+.sxk { border-top: 1px solid var(--line); }
+.sxk > summary { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 8px 14px; min-height: 44px; cursor: pointer; list-style: none; }
+.sxk > summary::-webkit-details-marker { display: none; }
+.sxk > summary bdi { font-weight: 600; direction: ltr; }
+.sxk > summary .sxa { color: var(--muted); flex: 1; }
+.sxk > summary i { font-style: normal; font-size: 12px; background: var(--brand-soft); color: var(--brand); border-radius: 999px; padding: 2px 9px; }
+.sxk .sxl { display: flex; flex-direction: column; gap: 6px; padding: 0 14px 12px; }
+.sxk .sxc { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.sxk .sxc bdi { font-weight: 600; direction: ltr; }
+.sxk .sxc .sxa { color: var(--muted); }

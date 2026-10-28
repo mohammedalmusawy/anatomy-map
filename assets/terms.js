@@ -5,7 +5,7 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const norm = (s) => String(s).toLowerCase().replace(/[ً-ْـ]/g, "").replace(/[أإآ]/g, "ا")
     .replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/[^a-z0-9؀-ۿ]+/g, " ").trim();
-  let set = location.hash === "#general" ? "general" : "ours", subj = "", q = "";
+  let set = ["#general", "#symptoms"].includes(location.hash) ? location.hash.slice(1) : "ours", subj = "", q = "";
   const idx = {};
   for (const k in D) idx[k] = D[k].map((t) => ({ t, s: norm([t.en, t.ar, ...(t.k || [])].join(" ")) }));
 
@@ -62,7 +62,7 @@
     u.onend = u.onerror = () => b.classList.remove("on");
     speechSynthesis.speak(u);
   });
-  if (set === "general") document.querySelectorAll("#tt a").forEach((x) => x.classList.toggle("on", x.dataset.set === "general"));
+  if (set !== "ours") document.querySelectorAll("#tt a").forEach((x) => x.classList.toggle("on", x.dataset.set === set));
   document.addEventListener("say:ready", render);
   chips(); render();
 })();
