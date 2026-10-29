@@ -1,32 +1,209 @@
-// ⚙️ لوحة الإدارة /admin/ (27/10) — دخول بإيميل محمد بس (رمز يوصل للإيميل). RLS بالسيرفر يمنع غيره حتى لو دخل.
+// ⚙️ لوحة الإدارة /admin/ (27/10؛ الدخول والصلاحيات 29/10). صفحة دخول وحدة لكل الفريق، ماكو رابط إلها بالموقع:
+//   محمد (المالك): إيميل + كلمة سر + رمز «كلمات السر» (TOTP) عبر دالة staff-auth (عدّاد محاولات + قفل + تنبيه بالبوت).
+//     لحد ما يكمّل أول دخول كامل، دخول الرمز بالإيميل القديم يبقى (حتى ما ينقفل برا). الإعداد من «🔐 الأمان».
+//   المساعد (role supervisor) ← StaffPanel (supervisor.js) بالتبويبات اللي اختارها محمد بس.
+//   رئيس القسم (role dept) ← AdminDept.viewer (أرقام مجمّعة بس).
+//   الطالب: دخوله بـ account.js (مفتاح جلسة ثاني) — ما تغيّر شي.
+// كل الصلاحيات بالسيرفر (is_admin / staff_can / الدوال)؛ هذا الملف واجهة بس. ولا كلمة سر ولا رمز ينحفظ هنا.
 (async function () {
   const C = window.STUDY_CLOUD || {}, box = document.getElementById("admin");
-  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   if (!C.url || !C.anon || !window.supabase) { box.innerHTML = '<p class="hint">Supabase مو مربوط بعد. الخطوات بـ _النظام/supabase/README.md.</p>'; return; }
+  style();
+  const isRecovery = /type=recovery/.test(location.hash);
   const sb = supabase.createClient(C.url, C.anon);
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) {
-    box.innerHTML = `<p>دخول الإدارة:</p><input id="em" type="email" placeholder="الإيميل" dir="ltr"><button class="btn" id="send">أرسل رمز الدخول</button>
-      <div id="otp" class="hidden"><input id="code" inputmode="numeric" placeholder="الرمز" dir="ltr"><button class="btn" id="ok">دخول</button></div>`;
-    document.getElementById("send").onclick = async () => {
-      const email = document.getElementById("em").value.trim();
-      const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
-      if (error) return alert(error.message);
-      document.getElementById("otp").classList.remove("hidden");
-    };
-    document.getElementById("ok").onclick = async () => {
-      const { error } = await sb.auth.verifyOtp({ email: document.getElementById("em").value.trim(), token: document.getElementById("code").value.trim(), type: "email" });
-      if (error) return alert(error.message); location.reload();
-    };
-    return;
-  }
-  const { data: isAdmin } = await sb.rpc("is_admin");
-  if (!isAdmin) { box.innerHTML = '<p class="hint">هذا الحساب مو حساب الإدارة.</p>'; await sb.auth.signOut(); return; }
+  const fn = async (name, body, tok) => {
+    try {
+      const r = await fetch(`${C.url}/functions/v1/${name}`, { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + (tok || C.anon), "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      return { status: r.status, ...(await r.json().catch(() => ({}))) };
+    } catch (e) { return { status: 0, msg: "ماكو اتصال. تأكد من النت وجرّب مرة ثانية." }; }
+  };
+  const DEV = { get: () => { try { return localStorage.getItem("adm:dev") || ""; } catch (e) { return ""; } }, set: (t) => { try { if (t) localStorage.setItem("adm:dev", t); } catch (e) { /* */ } } };
+  const say = (el, t, ok) => { el.textContent = t || ""; el.className = "lg-msg" + (ok ? " ok" : t ? " bad" : ""); };
+  const k0 = new URLSearchParams(location.search).get("k");
+  if (k0) history.replaceState(null, "", location.pathname + location.hash);   // الكود ما يبقى بالعنوان ولا بالسجل
 
-  const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات", thanks: "🙏 الشكر", ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "👥 الفريق" } : {}) };
-  box.innerHTML = `<nav class="dtabs">${Object.entries(tabs).map(([k, v]) => `<a href="#${k}" data-t="${k}">${v}</a>`).join("")}</nav><div id="pane"></div>
+  const { data: { session } } = await sb.auth.getSession();
+  if (isRecovery && session) return recoveryView();
+  if (!session) return loginView(k0 ? "staff" : "owner", k0 || "");
+  const role = (session.user.app_metadata || {}).role || "";
+  if (role === "supervisor") return assistantView();
+  if (role === "dept") { box.innerHTML = '<p class="hint">لحظة…</p>'; return window.AdminDept ? AdminDept.viewer(box, sb) : (box.innerHTML = '<p class="hint">اللوحة مو جاهزة.</p>'); }
+  if (role === "student") { await sb.auth.signOut({ scope: "local" }); return loginView("owner", "", "هذا حساب طالب؛ الطلاب يدخلون من «حسابي» بالموقع."); }
+  const { data: isAdmin } = await sb.rpc("is_admin");
+  const ost = await fn("staff-auth", { action: "owner_state" }, session.access_token);
+  if (!isAdmin) {
+    await sb.auth.signOut({ scope: "local" });
+    return loginView("owner", "", ost.owner ? "الحماية مفعّلة: ادخل بكلمة السر + رمز «كلمات السر»." : "هذا الحساب مو حساب الإدارة.");
+  }
+
+  // ───────── الدخول ─────────
+  function loginView(mode, code, note) {
+    box.innerHTML = `<div class="lg"><div class="lg-tabs" role="tablist">
+        <button type="button" role="tab" data-m="owner" aria-selected="${mode === "owner"}">محمد</button>
+        <button type="button" role="tab" data-m="staff" aria-selected="${mode === "staff"}">دخول بالكود</button></div>
+      <div id="lg-pane"></div></div>`;
+    box.querySelectorAll(".lg-tabs button").forEach((b) => b.onclick = () => loginView(b.dataset.m, "", ""));
+    const pane = box.querySelector("#lg-pane");
+    if (mode === "staff") return staffForm(pane, code, note);
+    ownerForm(pane, note);
+  }
+
+  async function ownerForm(pane, note) {
+    pane.innerHTML = `<form class="lg-form" id="of" autocomplete="on">
+        <label class="lg-f"><span>الإيميل</span><input id="oe" type="email" name="username" autocomplete="username" dir="ltr" required></label>
+        <label class="lg-f"><span>كلمة السر</span><input id="op" type="password" name="password" autocomplete="current-password" dir="ltr" required></label>
+        <button class="btn lg-go" type="submit">دخول</button></form>
+      <form class="lg-form hidden" id="mf" autocomplete="off">
+        <p class="hint">افتح «كلمات السر» بالآيفون ← حساب الموقع ← انسخ <b>رمز التحقق</b> (6 أرقام) واكتبه هنا.</p>
+        <label class="lg-f"><span>رمز التحقق</span><input id="oc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" dir="ltr" required></label>
+        <button class="btn lg-go" type="submit">تأكيد</button></form>
+      <p class="lg-msg" id="om" role="status" aria-live="polite"></p>
+      <p class="lg-links"><button type="button" class="lg-link" id="forgot">نسيت كلمة السر؟</button> <span id="ecode"></span></p>`;
+    const m = pane.querySelector("#om"); if (note) say(m, note);
+    let ticket = "";
+    const done = async (r) => {
+      DEV.set(r.device);
+      const { error } = await sb.auth.setSession({ access_token: r.session.access_token, refresh_token: r.session.refresh_token });
+      if (error) return say(m, "ما گدرنا نكمل الدخول. جرّب مرة ثانية.");
+      location.reload();
+    };
+    pane.querySelector("#of").onsubmit = async (e) => {
+      e.preventDefault(); say(m, "لحظة…", true);
+      const r = await fn("staff-auth", { action: "owner_login", email: pane.querySelector("#oe").value, password: pane.querySelector("#op").value, dev: DEV.get() });
+      pane.querySelector("#op").value = "";
+      if (r.status !== 200) return say(m, r.msg || "ما گدرنا ندخل.");
+      if (r.stage === "done") return done(r);
+      ticket = r.ticket; say(m, "");
+      pane.querySelector("#of").classList.add("hidden"); pane.querySelector("#mf").classList.remove("hidden"); pane.querySelector("#oc").focus();
+    };
+    pane.querySelector("#mf").onsubmit = async (e) => {
+      e.preventDefault(); say(m, "لحظة…", true);
+      const r = await fn("staff-auth", { action: "owner_mfa", ticket, code: pane.querySelector("#oc").value, dev: DEV.get() });
+      pane.querySelector("#oc").value = "";
+      if (r.status === 200) return done(r);
+      say(m, r.msg || "الرمز غلط.");
+      if (r.error === "expired" || r.error === "locked" || /من جديد/.test(r.msg || "")) { pane.querySelector("#mf").classList.add("hidden"); pane.querySelector("#of").classList.remove("hidden"); }
+    };
+    pane.querySelector("#forgot").onclick = async () => {
+      const email = pane.querySelector("#oe").value.trim();
+      if (!email) return say(m, "اكتب الإيميل أول، بعدين اضغط «نسيت كلمة السر؟».");
+      await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+      say(m, "إذا الإيميل صحيح، يوصلك رابط لتغيير كلمة السر. افتحه من نفس الجهاز.", true);
+    };
+    // الدخول برمز الإيميل: بس قبل ما تتفعّل الحماية (طريق الانتقال، حتى ما ينقفل محمد برا)
+    const st = await fn("staff-auth", { action: "status" });
+    if (st.email_code) {
+      const ec = pane.querySelector("#ecode");
+      ec.innerHTML = '· <button type="button" class="lg-link" id="emc">دخول برمز يوصل للإيميل (مؤقت لحد ما تكمّل الحماية)</button>';
+      ec.querySelector("#emc").onclick = () => emailCode(pane);
+    }
+  }
+  function emailCode(pane) {
+    pane.innerHTML = `<form class="lg-form" id="ef"><label class="lg-f"><span>الإيميل</span><input id="em" type="email" autocomplete="username" dir="ltr" required></label>
+      <button class="btn lg-go" type="submit">أرسل رمز الدخول</button></form>
+      <form class="lg-form hidden" id="ef2"><label class="lg-f"><span>الرمز اللي وصل للإيميل</span><input id="code" inputmode="numeric" autocomplete="one-time-code" dir="ltr" required></label>
+      <button class="btn lg-go" type="submit">دخول</button></form><p class="lg-msg" id="emm" role="status"></p>`;
+    const m = pane.querySelector("#emm");
+    pane.querySelector("#ef").onsubmit = async (e) => {
+      e.preventDefault();
+      const { error } = await sb.auth.signInWithOtp({ email: pane.querySelector("#em").value.trim(), options: { shouldCreateUser: false } });
+      if (error) return say(m, error.message);
+      pane.querySelector("#ef2").classList.remove("hidden"); say(m, "وصلك رمز بالإيميل.", true);
+    };
+    pane.querySelector("#ef2").onsubmit = async (e) => {
+      e.preventDefault();
+      const { error } = await sb.auth.verifyOtp({ email: pane.querySelector("#em").value.trim(), token: pane.querySelector("#code").value.trim(), type: "email" });
+      if (error) return say(m, error.message); location.reload();
+    };
+  }
+
+  function staffForm(pane, code, note) {
+    pane.innerHTML = `<form class="lg-form" id="sf" autocomplete="on">
+        <label class="lg-f"><span>الكود</span><input id="sc" name="username" autocomplete="username" dir="ltr" placeholder="SUP-XXXXXXXX أو DEP-XXXXXXXX" maxlength="20" required></label>
+        <label class="lg-f" id="spw"><span>كلمة السر</span><input id="sp" type="password" name="password" autocomplete="current-password" dir="ltr"></label>
+        <div id="snew" class="hidden"><p class="hint">أول دخول: اختار كلمة سر خاصة بيك (8 أحرف أو أكثر). خلّيها بمدير كلمات السر بجهازك.</p>
+          <label class="lg-f"><span>كلمة السر الجديدة</span><input id="sn1" type="password" name="new-password" autocomplete="new-password" dir="ltr" minlength="8"></label>
+          <label class="lg-f"><span>أعدها مرة ثانية</span><input id="sn2" type="password" autocomplete="new-password" dir="ltr" minlength="8"></label></div>
+        <button class="btn lg-go" type="submit">دخول</button></form>
+      <p class="lg-msg" id="sm" role="status" aria-live="polite"></p>
+      <p class="hint">نسيت كلمة السر؟ راسل محمد يصفّرها، وبعدها تختار وحدة جديدة بنفس الكود.</p>`;
+    const m = pane.querySelector("#sm"); if (note) say(m, note);
+    pane.querySelector("#sc").value = code || "";
+    let setting = false;
+    pane.querySelector("#sf").onsubmit = async (e) => {
+      e.preventDefault();
+      const body = { action: "staff_login", code: pane.querySelector("#sc").value, dev: DEV.get(), ua: navigator.userAgent.slice(0, 120) };
+      if (setting) {
+        const a = pane.querySelector("#sn1").value, b = pane.querySelector("#sn2").value;
+        if (a !== b) return say(m, "الكلمتين مو متطابقات.");
+        body.new_password = a;
+      } else body.password = pane.querySelector("#sp").value;
+      say(m, "لحظة…", true);
+      const r = await fn("staff-auth", body);
+      ["#sp", "#sn1", "#sn2"].forEach((s) => (pane.querySelector(s).value = ""));
+      if (r.stage === "set_password") {
+        setting = true; pane.querySelector("#spw").classList.add("hidden"); pane.querySelector("#snew").classList.remove("hidden");
+        say(m, `أهلاً ${r.name || ""} — ${r.msg || ""}`, true); pane.querySelector("#sn1").focus(); return;
+      }
+      if (r.status !== 200 || !r.token_hash) return say(m, r.msg || "ما گدرنا ندخل.");
+      DEV.set(r.device);
+      const { error } = await sb.auth.verifyOtp({ token_hash: r.token_hash, type: "magiclink" });
+      if (error) return say(m, "ما گدرنا نكمل الدخول. جرّب مرة ثانية.");
+      location.reload();
+    };
+    if (code) pane.querySelector("#sp").focus();
+  }
+
+  // رابط «نسيت كلمة السر» من الإيميل ← كلمة سر جديدة (وإذا عنده رمز: يكتبه هنا حتى يصير التغيير مسموح)
+  function recoveryView() {
+    box.innerHTML = `<div class="lg"><h2>🔑 كلمة سر جديدة</h2><form class="lg-form" id="rf">
+      <label class="lg-f"><span>كلمة السر الجديدة</span><input id="r1" type="password" autocomplete="new-password" dir="ltr" minlength="10" required></label>
+      <label class="lg-f"><span>أعدها مرة ثانية</span><input id="r2" type="password" autocomplete="new-password" dir="ltr" minlength="10" required></label>
+      <label class="lg-f hidden" id="rcw"><span>رمز «كلمات السر» (6 أرقام)</span><input id="rc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" dir="ltr"></label>
+      <button class="btn lg-go" type="submit">احفظ</button></form><p class="lg-msg" id="rm" role="status"></p></div>`;
+    const m = box.querySelector("#rm");
+    box.querySelector("#rf").onsubmit = async (e) => {
+      e.preventDefault();
+      const a = box.querySelector("#r1").value, b = box.querySelector("#r2").value;
+      if (a !== b) return say(m, "الكلمتين مو متطابقات.");
+      const code = box.querySelector("#rc").value.trim();
+      if (code) {
+        const { data } = await sb.auth.mfa.listFactors();
+        const f = (data && data.totp || []).find((x) => x.status === "verified");
+        if (f) { const { error } = await sb.auth.mfa.challengeAndVerify({ factorId: f.id, code }); if (error) return say(m, "الرمز غلط."); }
+      }
+      const { error } = await sb.auth.updateUser({ password: a });
+      if (error) {
+        if (/aal|AAL|assurance/i.test(error.message || error.code || "")) { box.querySelector("#rcw").classList.remove("hidden"); return say(m, "حسابك عليه رمز تحقق: اكتب الرمز من «كلمات السر» واضغط احفظ."); }
+        return say(m, error.message);
+      }
+      box.querySelector("#r1").value = box.querySelector("#r2").value = "";
+      await sb.auth.signOut({ scope: "local" });
+      history.replaceState(null, "", location.pathname);
+      loginView("owner", "", "✅ انحفظت كلمة السر الجديدة. ادخل بيها هسه.");
+    };
+  }
+
+  // ───────── المساعد ─────────
+  async function assistantView() {
+    box.innerHTML = '<p class="hint">لحظة…</p>';
+    const { data: { session: s } } = await sb.auth.getSession();
+    const me = await fn("supervisor", { action: "me" }, s && s.access_token);
+    if (me.status !== 200) { await sb.auth.signOut({ scope: "local" }); return loginView("staff", "", me.msg || "الجلسة انتهت أو الحساب موقوف. ادخل من جديد."); }
+    if (!window.StaffPanel) { box.innerHTML = '<p class="hint">اللوحة مو جاهزة.</p>'; return; }
+    StaffPanel.mount(box, sb, me);
+  }
+
+  // ───────── المالك ─────────
+  // «🙏 الشكر» القديم انشال من التبويبات (29/10): الشكر صار بجدول people ← «🙏 الفريق والشكر» (AdminPeople). الدالة thanks() تبقى بلا تبويب.
+  const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
+    ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "🔑 المساعدين" } : {}), ...(window.AdminDept ? { dept: "🏛️ رئيس القسم" } : {}),
+    ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), security: "🔐 الأمان" };
+  box.innerHTML = `${ost.mfa_required ? "" : '<div class="alert lg-warn"><b>🔐 كمّل حماية الدخول</b><p>هسه الدخول برمز الإيميل بس. من «🔐 الأمان»: حط كلمة سر، وضيف رمز التحقق بـ «كلمات السر» بالآيفون، وجرّب الدخول الجديد مرة وحدة — بعدها تتفعّل الحماية وحدها.</p><a class="btn" href="#security">🔐 الأمان</a></div>'}
+    <nav class="dtabs">${Object.entries(tabs).map(([k, v]) => `<a href="#${k}" data-t="${k}">${v}</a>`).join("")}</nav><div id="pane"></div>
     <p class="hint"><button class="btn ghost" id="out">خروج</button></p>`;
-  document.getElementById("out").onclick = async () => { await sb.auth.signOut(); location.reload(); };
+  document.getElementById("out").onclick = async () => { await sb.auth.signOut({ scope: "local" }); location.reload(); };
   const pane = document.getElementById("pane");
   const table = (rows, cols) => rows && rows.length ? `<table class="adm"><tr>${cols.map((c) => `<th>${esc(c[1])}</th>`).join("")}</tr>` +
     rows.map((r) => `<tr>${cols.map((c) => `<td>${esc(typeof c[0] === "function" ? c[0](r) : r[c[0]])}</td>`).join("")}</tr>`).join("") + "</table>" : '<p class="hint">ماكو بيانات بعد.</p>';
@@ -218,6 +395,110 @@
       if (error) return alert(error.message); thanks();
     };
   }
-  const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, thanks, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(), team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats() }[t] || stats)(); };
+  // 🔐 الأمان: كلمة السر ← رمز التحقق (كلمات السر بالآيفون) ← تجربة الدخول الجديد (بعدها الحماية تتفعّل وحدها)
+  async function security() {
+    pane.innerHTML = '<p class="hint">لحظة…</p>';
+    const { data: { session: s } } = await sb.auth.getSession();
+    const st = await fn("staff-auth", { action: "owner_state" }, s && s.access_token);
+    const li = (ok, t) => `<li>${ok ? "✅" : "⏳"} ${t}</li>`;
+    pane.innerHTML = `<h2>🔐 أمان الدخول</h2>
+      <ul class="sec-list">${li(st.has_password, "كلمة السر")}${li(st.has_totp, "رمز التحقق («كلمات السر» بالآيفون)")}${li(st.mfa_required, "الحماية مفعّلة: كلمة سر + رمز، ودخول الإيميل موقوف")}</ul>
+      <h3>1) كلمة السر</h3><p class="hint">اكتبها إنت بنفسك (12 حرف أو أكثر). خلّي الآيفون يقترح وحدة قوية ويحفظها.</p>
+      <form class="lg-form" id="pwf" autocomplete="on"><input type="email" name="username" autocomplete="username" value="${esc(s && s.user.email)}" hidden>
+        <label class="lg-f"><span>كلمة السر الجديدة</span><input id="p1" type="password" autocomplete="new-password" minlength="12" dir="ltr" required></label>
+        <label class="lg-f"><span>أعدها مرة ثانية</span><input id="p2" type="password" autocomplete="new-password" minlength="12" dir="ltr" required></label>
+        <label class="lg-f hidden" id="pnw"><span>الرمز اللي وصل للإيميل (تأكيد)</span><input id="pn" inputmode="numeric" autocomplete="one-time-code" dir="ltr"></label>
+        <button class="btn" type="submit">${st.has_password ? "غيّر كلمة السر" : "احفظ كلمة السر"}</button></form><p class="lg-msg" id="pwm" role="status"></p>
+      <h3>2) رمز التحقق بـ «كلمات السر»</h3>
+      ${st.has_totp && !security.replace ? `<p>✅ مضاف. كل دخول يطلب الرمز (6 أرقام يتبدل كل 30 ثانية).</p>${st.mfa_required ? '<p class="hint">تغيير الرمز مقفول بالسيرفر (حماية). إذا تحتاج تبدّله (آيفون جديد): <button class="btn ghost" id="unl" type="button">🔓 افتح التغيير 10 دقائق</button></p>' : ""}` : `<p class="hint">اضغط الزر يطلعلك QR. بالآيفون: الإعدادات ← كلمات السر (أو تطبيق «كلمات السر») ← افتح حساب الموقع (أو ضيفه) ← «إعداد رمز التحقق…» ← «مسح رمز QR ضوئياً» ← وجّه الكاميرا على الـ QR. بعدين اكتب الرمز الظاهر تحت.</p>
+        <button class="btn" id="en" type="button">➕ أضف رمز التحقق</button><div id="qr"></div>`}
+      <h3>3) جرّب الدخول الجديد</h3>
+      ${st.mfa_required ? "<p>✅ الحماية مفعّلة. الدخول بكلمة السر + الرمز بس، و5 محاولات غلط تقفل الدخول 15 دقيقة وتوصلك رسالة بالبوت.</p>"
+        : `<p class="hint">بعد الخطوتين: اطلع وادخل بالإيميل + كلمة السر + الرمز. أول ما ينجح، الحماية تتفعّل وحدها ودخول الإيميل يوگف.</p>
+           <button class="btn" id="try" type="button" ${st.has_password && st.has_totp ? "" : "disabled"}>🚪 اطلع وجرّب الدخول الجديد</button>`}
+      <h3>الأجهزة</h3><button class="btn ghost" id="allout" type="button">اطلع من كل الأجهزة</button>
+      <details><summary>إذا ضاع الآيفون (طريق الطوارئ)</summary><p class="hint">«كلمات السر» تنحفظ بـ iCloud، فتلگاها بأي جهاز Apple مسجّل بنفس الحساب (الماك: الإعدادات ← كلمات السر).
+        إذا ضاعت كلها: من الماك بالـ Terminal بمجلد _النظام شغّل: <code dir="ltr">supabase db query --linked --workdir . -f "supabase/طوارئ-دخول-المالك.sql"</code> (يرجّع دخول الإيميل)، وبعدها من لوحة Supabase ← Authentication ← Users ← حسابك ← احذف عامل الـ MFA، وضيف رمز جديد من هنا.</p></details>`;
+    const pm = pane.querySelector("#pwm");
+    pane.querySelector("#pwf").onsubmit = async (e) => {
+      e.preventDefault();
+      const a = pane.querySelector("#p1").value, b = pane.querySelector("#p2").value, nonce = pane.querySelector("#pn").value.trim();
+      if (a !== b) return say(pm, "الكلمتين مو متطابقات.");
+      say(pm, "لحظة…", true);
+      const { error } = await sb.auth.updateUser(nonce ? { password: a, nonce } : { password: a });
+      if (error) {
+        if (/reauth/i.test((error.code || "") + (error.message || ""))) {
+          await sb.auth.reauthenticate(); pane.querySelector("#pnw").classList.remove("hidden");
+          return say(pm, "للتأكيد وصلك رمز بالإيميل: اكتبه واضغط الزر مرة ثانية.", true);
+        }
+        return say(pm, /aal|assurance/i.test(error.message || "") ? "لازم تكون داخل بالرمز حتى تغيّرها." : error.message);
+      }
+      pane.querySelector("#p1").value = pane.querySelector("#p2").value = pane.querySelector("#pn").value = "";
+      say(pm, "✅ انحفظت. خلّي «كلمات السر» يحفظها لما يسألك.", true); setTimeout(security, 1500);
+    };
+    const en = pane.querySelector("#en");
+    if (en) en.onclick = async () => {
+      en.disabled = true;
+      const { data: lf } = await sb.auth.mfa.listFactors();
+      for (const f of (lf && lf.all) || []) if (f.status !== "verified") await sb.auth.mfa.unenroll({ factorId: f.id });
+      const { data, error } = await sb.auth.mfa.enroll({ factorType: "totp", friendlyName: "iPhone " + new Date().toISOString().slice(0, 10) + "-" + Math.random().toString(36).slice(2, 6), issuer: "Radiology Study" });
+      if (error || !data) { en.disabled = false; return say(pm, "ما گدرنا نضيف الرمز: " + ((error && error.message) || "")); }
+      const q = pane.querySelector("#qr");
+      q.innerHTML = `<div class="qr-box"><img alt="QR رمز التحقق — امسحه من «كلمات السر» بالآيفون" width="200" height="200"></div>
+        <p><a class="btn ghost" id="otp-link">📱 إذا إنت هسه على الآيفون: اضغط هنا يفتح «كلمات السر»</a></p>
+        <form class="lg-form" id="vf"><label class="lg-f"><span>الرمز الظاهر بـ «كلمات السر»</span><input id="vc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" dir="ltr" required></label>
+        <button class="btn" type="submit">✅ تأكيد</button></form><p class="lg-msg" id="vm" role="status"></p>`;
+      q.querySelector("img").src = data.totp.qr_code;      // الـ QR يطلع على شاشتك بس؛ ما ينحفظ بأي مكان
+      q.querySelector("#otp-link").href = data.totp.uri;
+      q.querySelector("#vf").onsubmit = async (e) => {
+        e.preventDefault();
+        const { error: ve } = await sb.auth.mfa.challengeAndVerify({ factorId: data.id, code: q.querySelector("#vc").value.trim() });
+        if (ve) return say(q.querySelector("#vm"), "الرمز غلط أو انتهى. اكتب الرمز الجديد.");
+        say(q.querySelector("#vm"), "✅ انضاف رمز التحقق.", true); setTimeout(security, 1200);
+      };
+    };
+    const unl = pane.querySelector("#unl");
+    if (unl) unl.onclick = async () => {
+      const r = await fn("staff-auth", { action: "owner_factor_unlock" }, s && s.access_token);
+      if (r.status !== 200) return say(pm, "ما انفتح (لازم تكون داخل بكلمة السر + الرمز).");
+      security.replace = true; await security(); security.replace = false;   // يطلع زر «أضف رمز التحقق»؛ الرمز القديم يبقى لحد ما تحذفه من لوحة Supabase أو يتبدل
+    };
+    const tr = pane.querySelector("#try");
+    if (tr) tr.onclick = async () => { await sb.auth.signOut({ scope: "local" }); location.hash = ""; location.reload(); };
+    pane.querySelector("#allout").onclick = async () => { if (!confirm("تطلع من كل الأجهزة (حتى هذا)؟")) return; await sb.auth.signOut({ scope: "global" }); location.reload(); };
+  }
+
+  const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(), team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
+    dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats() }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();
+
+  function style() {
+    if (document.getElementById("adm-auth-css")) return;
+    const st = document.createElement("style"); st.id = "adm-auth-css";
+    st.textContent = `
+#admin .dtabs{flex-wrap:wrap}#admin .dtabs a{flex:1 1 auto;min-width:104px;min-height:44px;display:flex;align-items:center;justify-content:center}
+.lg{max-width:440px;margin:8px auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.lg h2{margin-top:0}.lg-tabs{display:flex;gap:6px;margin:0 0 14px;background:var(--bg,transparent);border:1px solid var(--line);border-radius:12px;padding:4px}
+.lg-tabs button{flex:1;min-height:44px;border:0;border-radius:9px;background:transparent;color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.lg-tabs button[aria-selected=true]{background:var(--brand);color:var(--brand-ink)}
+.lg-form{display:grid;gap:10px;margin:0 0 6px}.lg-f{display:grid;gap:4px}.lg-f span{font-size:14px;color:var(--muted);font-weight:600}
+.lg-f input,#admin .tm-f input,#admin .tm-f select,#admin .tm-f textarea{width:100%;box-sizing:border-box;min-height:46px;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--card);color:var(--ink)}
+.lg-f input:focus-visible,.lg-tabs button:focus-visible,.lg-link:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.lg-go{min-height:48px;width:100%;font-size:16px}.lg-msg{min-height:1.4em;margin:6px 0;font-size:15px}.lg-msg.ok{color:var(--muted)}.lg-msg.bad{color:#B3261E;font-weight:700}
+.lg-links{font-size:14px;margin:4px 0 0}.lg-link{background:none;border:0;padding:6px 0;min-height:44px;color:var(--brand);font:inherit;text-decoration:underline;cursor:pointer}
+.lg-warn{border-color:var(--brand)}.sec-list{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px}
+.qr-box{background:#fff;display:inline-block;padding:10px;border-radius:12px;border:1px solid var(--line)}.qr-box img{display:block;width:200px;height:200px}
+#admin .tm-hello{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+#admin .tm-new{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;display:grid;gap:10px}
+#admin .tm-new h3{margin:0}#admin .tm-f{display:grid;gap:4px}#admin .tm-f span{font-size:14px;color:var(--muted);font-weight:600}
+#admin .tm-perms{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-wrap:wrap;gap:6px 14px}#admin .tm-perms label{min-height:40px;display:flex;align-items:center;gap:6px}
+#admin .tm-once{border:2px solid var(--brand);border-radius:12px;padding:10px;margin:8px 0}#admin .code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:17px;font-weight:700;letter-spacing:.5px}
+#admin .tm-exp,#admin .tm-req{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin:0 0 8px;display:grid;gap:4px}
+#admin .tm-chips{display:flex;flex-wrap:wrap;gap:6px}#admin .tm-chip{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:13px}
+#admin .tm-form{display:grid;gap:10px}#admin .tm-msg.bad{color:#B3261E;font-weight:700}
+#admin .ib{min-width:44px;min-height:44px}#admin .tm-cards{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}#admin .tm-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:10px}#admin .tm-card-h{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}#admin .tm-card-h small{display:block;color:var(--muted)}#admin .tm-card-r{display:flex;align-items:end;justify-content:space-between;gap:8px;flex-wrap:wrap}#admin .tm-exp-f{max-width:200px}#admin .tm-card-a{display:flex;flex-wrap:wrap;gap:6px}#admin .tm-perms legend{padding:0 4px}#admin .scroll-x{overflow-x:auto}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .lg-msg.bad,:root:not([data-theme=light]) #admin .tm-msg.bad{color:#FF8A80}}
+:root[data-theme=dark] .lg-msg.bad,:root[data-theme=dark] #admin .tm-msg.bad{color:#FF8A80}`;
+    document.head.appendChild(st);
+  }
 })();

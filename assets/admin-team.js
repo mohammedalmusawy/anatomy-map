@@ -1,4 +1,5 @@
-// 👥 تبويب «الفريق» بلوحة الإدارة (29/10/2026) — المشرف (منسّق المحاضرات): الحساب، الإيقاف بضغطة، طابور المراجعة، القائمة الرسمية، والسجل.
+// 🔑 تبويب «المساعدين» بلوحة الإدارة (29/10/2026، الدخول والصلاحيات) — حسابات المساعدين (كود + كلمة سر)، صلاحيات لكل واحد
+//   (المحاضرات · الأكواد · الفريق · الإعلانات)، الإيقاف بضغطة، الانتهاء، تصفير كلمة السر، طابور المراجعة، القائمة الرسمية، والسجل.
 // الربط (سطرين بـ admin.js + سطر بـ smart.py): tabs.team = "👥 الفريق" ← AdminTeam.mount(pane, sb). كل شي يمر بدالة supervisor (is_admin بالسيرفر).
 (function () {
   "use strict";
@@ -9,7 +10,8 @@
   const ACT = { login: "دخول", view_expected: "شاف المتوقعة", view_requests: "شاف طلبات الأكواد", flag_missing: "🚩 بلّغ عن ناقصة", upload_start: "📤 بدأ رفع",
     upload_done: "📤 رفع ملف", approve_request: "✅ وافق على كود", forward_request: "↪️ حوّل طلب", admin_feature: "🎛️ المفتاح العام", admin_create: "➕ حساب",
     admin_toggle: "⏸️/▶️ الصلاحية", admin_perms: "الصلاحيات", admin_rotate: "🔄 كود جديد", admin_delete: "🗑️ حذف حساب", admin_decide: "قرار بالطابور",
-    admin_roster_add: "➕ القائمة الرسمية", admin_roster_remove: "➖ القائمة الرسمية", admin_expected_set: "العدد المتوقع" };
+    admin_roster_add: "➕ القائمة الرسمية", admin_roster_remove: "➖ القائمة الرسمية", admin_expected_set: "العدد المتوقع",
+    set_password: "🔑 اختار كلمة سر", admin_expiry: "⌛ تاريخ الانتهاء", admin_reset_password: "🔑 صفّر كلمة السر", db_insert: "✏️ أضاف", db_update: "✏️ عدّل" };
   const t16 = (t) => String(t || "").replace("T", " ").slice(0, 16);
   const copy = async (s, b) => { try { await navigator.clipboard.writeText(s); const o = b.textContent; b.textContent = "✔️"; setTimeout(() => (b.textContent = o), 1200); } catch (e) { prompt("انسخ:", s); } };
 
@@ -20,37 +22,49 @@
         headers: { apikey: C.anon, Authorization: "Bearer " + (session ? session.access_token : ""), "Content-Type": "application/json" }, body: JSON.stringify(body) });
       return { status: r.status, ...(await r.json().catch(() => ({}))) };
     };
-    pane.innerHTML = `<h2>👥 الفريق — المشرف</h2>
-      <p class="hint">المشرف يرفع ملفات أو يبلّغ عن محاضرات ناقصة (تجيك هنا للمراجعة، ماكو نشر مباشر)، ويوافق بس على طلبات الأكواد اللي تطابق القائمة الرسمية، والباقي يتحوّل لك. ما يگدر يحذف ولا يغيّر إعدادات ولا يشوف ملاحظات الطلاب أو لوحة القسم.</p>
+    const PERM = [["can_lectures", "📚 المحاضرات"], ["can_codes", "🎓 الأكواد"], ["can_team", "👥 الفريق"], ["can_ads", "📣 الإعلانات"]];
+    pane.innerHTML = `<h2>🔑 المساعدين والصلاحيات</h2>
+      <p class="hint">كل مساعد يدخل بكود + كلمة سر يختارها بأول دخول، ويشوف بس الصلاحيات اللي تأشّرها هنا. <b>ممنوع على كل مساعد:</b> الحذف، الإعدادات، ملاحظات الطلاب، لوحة رئيس القسم، وإضافة مساعدين. كل فعل ينكتب بالسجل تحت.</p>
       <p id="tm-on"></p>
-      <h3>الحساب</h3><div class="scroll-x" id="tm-list">…</div>
-      <p><input id="tm-name" placeholder="الاسم (مثل: تحسين سليم السعيدي)"> <input id="tm-title" placeholder="الصفة" value="منسّق المحاضرات">
-      <button class="btn" id="tm-make">➕ سوّي حساب مشرف</button></p><div id="tm-out"></div>
-      <h3>📥 طابور المراجعة</h3><div class="scroll-x" id="tm-q">…</div>
+      <div class="tm-new"><h3>➕ مساعد جديد</h3>
+        <label class="tm-f"><span>الاسم</span><input id="tm-name" placeholder="مثل: تحسين سليم السعيدي" maxlength="120"></label>
+        <label class="tm-f"><span>الصفة</span><input id="tm-title" value="منسّق المحاضرات" maxlength="80"></label>
+        <fieldset class="tm-perms"><legend>الصلاحيات</legend>${PERM.map(([k, l]) => `<label class="sw"><input type="checkbox" data-np="${k.slice(4)}" ${k === "can_lectures" || k === "can_codes" ? "checked" : ""}> ${l}</label>`).join("")}</fieldset>
+        <label class="tm-f"><span>ينتهي (اختياري)</span><input id="tm-exp-new" type="date"></label>
+        <p><button class="btn" id="tm-make">➕ سوّي الحساب</button></p><div id="tm-out" aria-live="polite"></div></div>
+      <h3>المساعدين</h3><div class="scroll-x" id="tm-list">…</div>
+      <h3>📥 طابور مراجعة المحاضرات</h3><div class="scroll-x" id="tm-q">…</div>
       <h3>📚 المحاضرات المتوقعة (العدد الكلي لكل مادة)</h3><div class="scroll-x" id="tm-exp">…</div>
       <h3>🎓 القائمة الرسمية للطلاب</h3><p class="hint" id="tm-rn"></p>
       <details><summary>الصق أسماء (كل اسم ثلاثي بسطر)</summary><textarea id="tm-roster" rows="5" placeholder="الاسم الثلاثي"></textarea>
       <button class="btn ghost" id="tm-radd">➕ أضف للقائمة</button> <button class="btn ghost" id="tm-rshow">👁️ اعرض القائمة</button><div id="tm-rlist"></div></details>
-      <h3>🧾 سجل أفعال المشرف</h3><div class="scroll-x" id="tm-log">…</div><button class="btn ghost" id="tm-more" hidden>أقدم…</button>`;
+      <h3>🧾 سجل أفعال المساعدين</h3><div class="scroll-x" id="tm-log">…</div><button class="btn ghost" id="tm-more" hidden>أقدم…</button>`;
     const $ = (s) => pane.querySelector(s);
     let lastId = null;
+    const once = (r, what) => `<div class="tm-once"><b>✅ ${esc(what)} — ${esc(r.name || "")}</b>
+      <p>الكود: <span class="code" dir="ltr">${esc(r.code)}</span> <button class="ib" data-cp="${esc(r.code)}" title="نسخ الكود">📋</button>
+      <button class="ib" data-cp="${esc(r.link)}" title="نسخ رابط الدخول">🔗</button></p>
+      <p class="hint">⚠️ الكود يطلع <b>هسه بس</b> (ما ينحفظ بالصفحة). دزّه له بالخاص. بأول دخول يكتب الكود ويختار كلمة سر خاصة بيه.</p></div>`;
+    const st = (v) => !v.enabled ? "⏸️ موقوف" : v.expires_at && new Date(v.expires_at) <= new Date() ? "⌛ منتهي" : v.pw_set_at ? "✅ فعّال" : "⏳ بانتظار أول دخول";
 
     async function status() {
       const r = await api({ action: "admin_status" });
       if (r.status !== 200) { $("#tm-list").innerHTML = `<p class="hint">ما گدرت أجيب البيانات (${r.status}).</p>`; return; }
-      $("#tm-on").innerHTML = `${r.on ? "✅ دور المشرف مفعّل" : "⏸️ دور المشرف مطفي (يشتغل لما تگول «فعّل تحسين»)"} <button class="btn ghost" id="tm-feat">${r.on ? "⏸️ طفّيه للكل" : "▶️ فعّله"}</button>
-        ${r.forwarded ? ` · ↪️ ${r.forwarded} طلب كود محوّل لك (تبويب الطلاب)` : ""}`;
+      $("#tm-on").innerHTML = `${r.on ? "✅ حسابات المساعدين شغّالة" : "⏸️ حسابات المساعدين موقوفة للكل"} <button class="btn ghost" id="tm-feat">${r.on ? "⏸️ أوقف الكل" : "▶️ شغّلها"}</button>
+        ${r.forwarded ? ` · ↪️ ${r.forwarded} طلب كود محوّل لك` : ""}`;
       $("#tm-feat").onclick = async () => { await api({ action: "admin_feature", on: !r.on }); status(); log(true); };
-      $("#tm-rn").textContent = `بالقائمة: ${r.roster} اسم. المشرف ما يشوفها؛ الدالة تقارن الاسم الموحّد بس.`;
-      $("#tm-list").innerHTML = r.supervisors.length ? `<table class="adm"><thead><tr><th>الاسم</th><th>الكود</th><th>دزّه</th><th>آخر دخول</th><th>الصلاحيات</th><th>إدارة</th></tr></thead><tbody>` +
-        r.supervisors.map((v) => `<tr data-id="${esc(v.id)}" data-code="${esc(v.code || "")}" data-link="${esc(v.link || "")}" data-name="${esc(v.name)}">
-          <td><b>${esc(v.name)}</b><br><small>${esc(v.title)}</small></td><td><span class="code" dir="ltr">${esc(v.code || "؟")}</span></td>
-          <td><button class="ib" data-a="copy" title="نسخ الكود">📋</button> <button class="ib" data-a="link" title="رابط دخول">🔗</button></td>
-          <td>${t16(v.last_login) || "—"}</td>
-          <td><label class="sw"><input type="checkbox" data-p="can_uploads" ${v.can_uploads ? "checked" : ""}> 📤 رفع وتبليغ</label><br><label class="sw"><input type="checkbox" data-p="can_codes" ${v.can_codes ? "checked" : ""}> 🎓 الأكواد</label></td>
-          <td><button class="btn ${v.enabled ? "ghost" : ""}" data-a="toggle">${v.enabled ? "⏸️ أوقف صلاحيته" : "▶️ رجّع صلاحيته"}</button>
-          <button class="ib" data-a="rotate" title="كود جديد">🔄</button> <button class="ib" data-a="delete" title="حذف الحساب">🗑️</button></td></tr>`).join("") + "</tbody></table>"
-        : '<p class="hint">ماكو حساب مشرف بعد.</p>';
+      $("#tm-rn").textContent = `بالقائمة: ${r.roster} اسم. المساعد ما يشوفها؛ الدالة تقارن الاسم الموحّد بس.`;
+      // بطاقات بدل جدول (تنقرا زين بالموبايل 375px وبالشاشة الكبيرة)
+      $("#tm-list").innerHTML = r.supervisors.length ? `<div class="tm-cards">` +
+        r.supervisors.map((v) => `<div class="tm-card" data-id="${esc(v.id)}" data-name="${esc(v.name)}">
+          <div class="tm-card-h"><span><b>${esc(v.name)}</b> <small>${esc(v.title)}</small></span><span class="tm-st">${st(v)}</span></div>
+          <div class="tm-perms">${PERM.map(([k, l]) => `<label class="sw"><input type="checkbox" data-p="${k}" ${v[k] ? "checked" : ""}> ${l}</label>`).join("")}</div>
+          <div class="tm-card-r"><label class="tm-f tm-exp-f"><span>ينتهي</span><input type="date" data-a="exp" value="${esc(v.expires_at ? String(v.expires_at).slice(0, 10) : "")}"></label>
+            <small>آخر دخول: ${t16(v.last_login) || "—"}</small></div>
+          <div class="tm-card-a"><button class="btn ${v.enabled ? "ghost" : ""}" data-a="toggle">${v.enabled ? "⏸️ أوقفه" : "▶️ رجّعه"}</button>
+          <button class="btn ghost" data-a="resetpw" title="يختار كلمة سر جديدة بأول دخول">🔑 صفّر كلمة السر</button>
+          <button class="ib" data-a="rotate" title="كود جديد" aria-label="كود جديد">🔄</button> <button class="ib" data-a="delete" title="حذف الحساب" aria-label="حذف الحساب">🗑️</button></div></div>`).join("") + "</div>"
+        : '<p class="hint">ماكو مساعد بعد.</p>';
     }
     async function queue() {
       const r = await api({ action: "admin_queue" });
@@ -83,9 +97,10 @@
     }
 
     $("#tm-make").onclick = async () => {
-      const r = await api({ action: "admin_create", name: $("#tm-name").value, title: $("#tm-title").value });
-      if (r.status !== 200) return alert(r.msg || "صار خطأ");
-      $("#tm-out").innerHTML = `<p>✅ ${esc(r.name)}: <span class="code" dir="ltr">${esc(r.code)}</span> — <span dir="ltr">${esc(r.link)}</span></p>`;
+      const perms = {}; pane.querySelectorAll("[data-np]").forEach((c) => (perms[c.dataset.np] = c.checked));
+      const r = await api({ action: "admin_create", name: $("#tm-name").value, title: $("#tm-title").value, perms, expires_at: $("#tm-exp-new").value || null });
+      if (r.status !== 200) return alert(r.msg || "صار خطأ (الاسم؟)");
+      $("#tm-out").innerHTML = once(r, "انعمل الحساب");
       $("#tm-name").value = ""; status(); log(true);
     };
     $("#tm-more").onclick = () => log(false);
@@ -99,19 +114,20 @@
       $("#tm-rlist").innerHTML = (r.roster || []).map((x) => `<div data-k="${esc(x.name_key)}">${esc(x.full_name)} <button class="ib" data-r="rm" title="شيله من القائمة">➖</button></div>`).join("") || '<p class="hint">فارغة.</p>';
     };
     pane.addEventListener("change", async (ev) => {
-      const p = ev.target.dataset.p; if (!p) return;
-      const id = ev.target.closest("tr").dataset.id;
-      await api({ action: "admin_perms", id, [p]: ev.target.checked }); log(true);
+      const tr = ev.target.closest("[data-id]"); if (!tr) return;
+      const p = ev.target.dataset.p;
+      if (p) { await api({ action: "admin_perms", id: tr.dataset.id, [p]: ev.target.checked }); log(true); return; }
+      if (ev.target.dataset.a === "exp") { await api({ action: "admin_expiry", id: tr.dataset.id, expires_at: ev.target.value || null }); status(); log(true); }
     });
     pane.addEventListener("click", async (ev) => {
       const b = ev.target.closest("button"); if (!b) return;
-      const tr = b.closest("tr");
+      if (b.dataset.cp) return copy(b.dataset.cp, b);
+      const tr = b.closest("tr") || b.closest(".tm-card");
       if (b.dataset.a && tr && tr.dataset.id) {
         const id = tr.dataset.id, a = b.dataset.a;
-        if (a === "copy") return copy(tr.dataset.code, b);
-        if (a === "link") return copy(tr.dataset.link, b);
         if (a === "toggle") { await api({ action: "admin_toggle", id, enabled: b.textContent.includes("رجّع") }); status(); log(true); return; }
-        if (a === "rotate") { if (!confirm("كود جديد؟ القديم يبطل وتطلع كل أجهزته.")) return; const r = await api({ action: "admin_rotate", id }); if (r.code) $("#tm-out").innerHTML = `<p>🔄 <span class="code" dir="ltr">${esc(r.code)}</span></p>`; status(); log(true); return; }
+        if (a === "resetpw") { if (!confirm(`تصفّر كلمة سر «${tr.dataset.name}»؟ يطلع من كل أجهزته، وياخذ كود جديد يختار بيه كلمة سر جديدة.`)) return; const r = await api({ action: "admin_reset_password", id }); if (r.code) $("#tm-out").innerHTML = once({ ...r, name: tr.dataset.name }, "تصفّرت كلمة السر — كود جديد"); status(); log(true); return; }
+        if (a === "rotate") { if (!confirm("كود جديد؟ القديم يبطل، كلمة السر تتصفّر، ويطلع من كل أجهزته.")) return; const r = await api({ action: "admin_rotate", id }); if (r.code) $("#tm-out").innerHTML = once({ ...r, name: tr.dataset.name }, "كود جديد"); status(); log(true); return; }
         if (a === "delete") { const n = prompt(`حذف الحساب نهائياً (السجل يبقى). اكتب الاسم بالضبط للتأكيد:\n${tr.dataset.name}`); if (!n) return; const r = await api({ action: "admin_delete", id, confirm: true, confirm_name: n }); if (r.status !== 200) alert("ما انحذف (الاسم ما طابق؟)"); status(); log(true); return; }
       }
       if (b.dataset.d && tr && tr.dataset.q) {
