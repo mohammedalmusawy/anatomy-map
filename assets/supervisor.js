@@ -10,9 +10,9 @@
   const ST = { uploading: "⏳ ما كمل الرفع", new: "🕓 بانتظار محمد", invalid: "⚠️ الملف مو PDF", accepted: "✅ قبلها محمد", rejected: "✖️ ما انقبلت", done: "✔️ تمت" };
   const msg = (el, t, ok) => { el.textContent = t || ""; el.className = "tm-msg" + (ok ? " ok" : t ? " bad" : ""); };
 
-  // الصفحة القديمة /preview/supervisor/ ← تحوّل لصفحة الدخول الموحّدة (وتحافظ على ?k=)
+  // الصفحة القديمة /preview/supervisor/ ← ماكو رابط للإدارة بعد (29/10: الدخول من الباب المخفي بس)
   const old = document.getElementById("sup");
-  if (old) { old.innerHTML = '<p class="empty">صفحة المساعد انتقلت ← <a href="../../admin/' + esc(location.search) + '">صفحة الدخول</a></p>'; return; }
+  if (old) { old.innerHTML = '<p class="empty">هذي الصفحة انتقلت.</p>'; return; }
 
   function mount(root, sb, me) {
     const api = async (body) => {
@@ -26,7 +26,7 @@
       ...(P.codes ? [["codes", "🎓 طلبات الأكواد"]] : []), ...(P.team && window.AdminPeople ? [["team", "👥 الفريق"]] : []),
       ...(P.ads ? [["ads", "📣 الإعلانات"]] : [])];
     let subjects = [];
-    root.innerHTML = `<div class="tm-hello"><span>أهلاً <b>${esc(me.name)}</b> · ${esc(me.title)}</span><button class="btn ghost" id="sup-out" type="button">خروج</button></div>
+    root.innerHTML = `<div class="tm-hello"><span>أهلاً <b>${esc(me.name)}</b> · ${esc(me.title)}</span><span><button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button> <button class="btn ghost" id="sup-out" type="button">خروج</button></span></div>
       <p class="hint">كل شي ترفعه أو تبلّغ عنه يروح لمحمد للمراجعة، وما ينشر إلا بعد موافقته. وكل فعل ينكتب بالسجل.</p>
       ${tabs.length ? `<nav class="dtabs" role="tablist">${tabs.map(([k, l], i) => `<a href="#${k}" role="tab" data-t="${k}" class="${i === 0 ? "on" : ""}">${l}</a>`).join("")}</nav>` : '<p class="hint">ماكو صلاحيات مفعّلة لحسابك هسه. راسل محمد.</p>'}
       <div id="sup-pane" role="tabpanel"></div>`;

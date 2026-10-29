@@ -25,134 +25,142 @@
 
   const { data: { session } } = await sb.auth.getSession();
   if (isRecovery && session) return recoveryView();
-  if (!session) return loginView(k0 ? "staff" : "owner", k0 || "");
+  if (!session) return loginView("", k0 || "");
   const role = (session.user.app_metadata || {}).role || "";
   if (role === "supervisor") return assistantView();
   if (role === "dept") { box.innerHTML = '<p class="hint">لحظة…</p>'; return window.AdminDept ? AdminDept.viewer(box, sb) : (box.innerHTML = '<p class="hint">اللوحة مو جاهزة.</p>'); }
-  if (role === "student") { await sb.auth.signOut({ scope: "local" }); return loginView("owner", "", "هذا حساب طالب؛ الطلاب يدخلون من «حسابي» بالموقع."); }
+  if (role === "student") { await sb.auth.signOut({ scope: "local" }); return loginView("", "", "هذا حساب طالب؛ الطلاب يدخلون بالكود من الموقع نفسه."); }
   const { data: isAdmin } = await sb.rpc("is_admin");
   const ost = await fn("staff-auth", { action: "owner_state" }, session.access_token);
   if (!isAdmin) {
     await sb.auth.signOut({ scope: "local" });
-    return loginView("owner", "", ost.owner ? "الحماية مفعّلة: ادخل بكلمة السر + رمز «كلمات السر»." : "هذا الحساب مو حساب الإدارة.");
+    return loginView("", "", ost.owner ? "الحماية مفعّلة: ادخل بكلمة السر + رمز «كلمات السر»." : "هذا الحساب مو حساب الإدارة.");
   }
 
-  // ───────── الدخول ─────────
+  // ───────── الدخول الموحّد (29/10، طلب محمد): بطاقة وحدة لكل الفريق، بنفس شكل دخول الطلاب ─────────
+  // «الإيميل أو الكود» + «كلمة السر» ← الموقع يعرف منو: إيميل = محمد (بعدها رمز «كلمات السر» إذا مضاف) · SUP-/DEP- = مساعد / رئيس القسم.
+  // كلمة سر مؤقتة (من لوحة محمد) ← أول دخول يجبره يختار جديدة. ولا كلمة سر تنحفظ بالصفحة (المؤقتة بالذاكرة بس لحد ما تتغيّر).
   function loginView(mode, code, note) {
-    box.innerHTML = `<div class="lg"><div class="lg-tabs" role="tablist">
-        <button type="button" role="tab" data-m="owner" aria-selected="${mode === "owner"}">محمد</button>
-        <button type="button" role="tab" data-m="staff" aria-selected="${mode === "staff"}">دخول بالكود</button></div>
-      <div id="lg-pane"></div></div>`;
-    box.querySelectorAll(".lg-tabs button").forEach((b) => b.onclick = () => loginView(b.dataset.m, "", ""));
-    const pane = box.querySelector("#lg-pane");
-    if (mode === "staff") return staffForm(pane, code, note);
-    ownerForm(pane, note);
-  }
-
-  async function ownerForm(pane, note) {
-    pane.innerHTML = `<form class="lg-form" id="of" autocomplete="on">
-        <label class="lg-f"><span>الإيميل</span><input id="oe" type="email" name="username" autocomplete="username" dir="ltr" required></label>
-        <label class="lg-f"><span>كلمة السر</span><input id="op" type="password" name="password" autocomplete="current-password" dir="ltr" required></label>
-        <button class="btn lg-go" type="submit">دخول</button></form>
-      <form class="lg-form hidden" id="mf" autocomplete="off">
-        <p class="hint">افتح «كلمات السر» بالآيفون ← حساب الموقع ← انسخ <b>رمز التحقق</b> (6 أرقام) واكتبه هنا.</p>
-        <label class="lg-f"><span>رمز التحقق</span><input id="oc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" dir="ltr" required></label>
-        <button class="btn lg-go" type="submit">تأكيد</button></form>
-      <p class="lg-msg" id="om" role="status" aria-live="polite"></p>
-      <p class="lg-links"><button type="button" class="lg-link" id="forgot">نسيت كلمة السر؟</button> <span id="ecode"></span></p>`;
-    const m = pane.querySelector("#om"); if (note) say(m, note);
-    let ticket = "";
-    const done = async (r) => {
+    if (window.StaffDoor) StaffDoor.css();
+    box.innerHTML = `<div class="sd-card" id="lg">
+      <h1 id="lt">دخول الإدارة</h1>
+      <p class="sd-sub" id="ls">اكتب الإيميل أو الكود، وكلمة السر. الموقع يعرفك ويفتحلك صلاحياتك.</p>
+      <form id="lf" autocomplete="on" novalidate>
+        <label class="sd-lab" for="li">الإيميل أو الكود</label>
+        <input id="li" name="username" autocomplete="username" dir="ltr" autocapitalize="none" spellcheck="false" maxlength="200" placeholder="name@example.com · SUP-XXXXXXXX">
+        <label class="sd-lab" for="lp">كلمة السر</label>
+        <input id="lp" type="password" name="password" autocomplete="current-password" dir="ltr" maxlength="200">
+        <button class="sd-btn" type="submit">دخول</button></form>
+      <form id="mf" hidden autocomplete="off" novalidate>
+        <p class="sd-sub">افتح «كلمات السر» بالآيفون ← حساب الموقع ← انسخ <b>رمز التحقق</b> (6 أرقام) واكتبه هنا.</p>
+        <label class="sd-lab" for="oc">رمز التحقق</label>
+        <input id="oc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" dir="ltr">
+        <button class="sd-btn" type="submit">تأكيد</button></form>
+      <form id="cf" hidden autocomplete="on" novalidate>
+        <input type="text" name="username" autocomplete="username" id="cu" hidden>
+        <p class="sd-sub">أول دخول: اختار كلمة سر جديدة خاصة بيك (10 أحرف أو أكثر)، وخلّي مدير كلمات السر بجهازك يحفظها. المؤقتة تبطل بعدها.</p>
+        <label class="sd-lab" for="n1">كلمة السر الجديدة</label><input id="n1" type="password" name="new-password" autocomplete="new-password" dir="ltr" minlength="10" maxlength="128">
+        <label class="sd-lab" for="n2">أعدها مرة ثانية</label><input id="n2" type="password" autocomplete="new-password" dir="ltr" minlength="10" maxlength="128">
+        <button class="sd-btn" type="submit">احفظ وادخل</button></form>
+      <p class="sd-msg" id="lm" role="status" aria-live="polite"></p>
+      <p class="sd-links"><button type="button" class="sd-link" id="forgot">نسيت كلمة السر؟</button><span id="ecode"></span></p></div>`;
+    const $ = (q) => box.querySelector(q), m = $("#lm");
+    const msg = (t, ok) => { m.textContent = t || ""; m.className = "sd-msg" + (ok ? " ok" : t ? " bad" : ""); };
+    if (note) msg(note);
+    if (code) $("#li").value = code;
+    let ticket = "", tmp = "", who = "";
+    const show = (id) => { ["#lf", "#mf", "#cf"].forEach((f) => ($(f).hidden = f !== id)); $(".sd-links").hidden = id !== "#lf"; $("#ls").hidden = id !== "#lf"; };
+    const busy = (f, on) => { const b = $(f + " button[type=submit]"); if (b) b.disabled = on; };
+    const finishOwner = async (r) => {
       DEV.set(r.device);
       const { error } = await sb.auth.setSession({ access_token: r.session.access_token, refresh_token: r.session.refresh_token });
-      if (error) return say(m, "ما گدرنا نكمل الدخول. جرّب مرة ثانية.");
+      if (error) return msg("ما گدرنا نكمل الدخول. جرّب مرة ثانية.");
       location.reload();
     };
-    pane.querySelector("#of").onsubmit = async (e) => {
-      e.preventDefault(); say(m, "لحظة…", true);
-      const r = await fn("staff-auth", { action: "owner_login", email: pane.querySelector("#oe").value, password: pane.querySelector("#op").value, dev: DEV.get() });
-      pane.querySelector("#op").value = "";
-      if (r.status !== 200) return say(m, r.msg || "ما گدرنا ندخل.");
-      if (r.stage === "done") return done(r);
-      ticket = r.ticket; say(m, "");
-      pane.querySelector("#of").classList.add("hidden"); pane.querySelector("#mf").classList.remove("hidden"); pane.querySelector("#oc").focus();
-    };
-    pane.querySelector("#mf").onsubmit = async (e) => {
-      e.preventDefault(); say(m, "لحظة…", true);
-      const r = await fn("staff-auth", { action: "owner_mfa", ticket, code: pane.querySelector("#oc").value, dev: DEV.get() });
-      pane.querySelector("#oc").value = "";
-      if (r.status === 200) return done(r);
-      say(m, r.msg || "الرمز غلط.");
-      if (r.error === "expired" || r.error === "locked" || /من جديد/.test(r.msg || "")) { pane.querySelector("#mf").classList.add("hidden"); pane.querySelector("#of").classList.remove("hidden"); }
-    };
-    pane.querySelector("#forgot").onclick = async () => {
-      const email = pane.querySelector("#oe").value.trim();
-      if (!email) return say(m, "اكتب الإيميل أول، بعدين اضغط «نسيت كلمة السر؟».");
-      await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
-      say(m, "إذا الإيميل صحيح، يوصلك رابط لتغيير كلمة السر. افتحه من نفس الجهاز.", true);
-    };
-    // الدخول برمز الإيميل: بس قبل ما تتفعّل الحماية (طريق الانتقال، حتى ما ينقفل محمد برا)
-    const st = await fn("staff-auth", { action: "status" });
-    if (st.email_code) {
-      const ec = pane.querySelector("#ecode");
-      ec.innerHTML = '· <button type="button" class="lg-link" id="emc">دخول برمز يوصل للإيميل (مؤقت لحد ما تكمّل الحماية)</button>';
-      ec.querySelector("#emc").onclick = () => emailCode(pane);
-    }
-  }
-  function emailCode(pane) {
-    pane.innerHTML = `<form class="lg-form" id="ef"><label class="lg-f"><span>الإيميل</span><input id="em" type="email" autocomplete="username" dir="ltr" required></label>
-      <button class="btn lg-go" type="submit">أرسل رمز الدخول</button></form>
-      <form class="lg-form hidden" id="ef2"><label class="lg-f"><span>الرمز اللي وصل للإيميل</span><input id="code" inputmode="numeric" autocomplete="one-time-code" dir="ltr" required></label>
-      <button class="btn lg-go" type="submit">دخول</button></form><p class="lg-msg" id="emm" role="status"></p>`;
-    const m = pane.querySelector("#emm");
-    pane.querySelector("#ef").onsubmit = async (e) => {
-      e.preventDefault();
-      const { error } = await sb.auth.signInWithOtp({ email: pane.querySelector("#em").value.trim(), options: { shouldCreateUser: false } });
-      if (error) return say(m, error.message);
-      pane.querySelector("#ef2").classList.remove("hidden"); say(m, "وصلك رمز بالإيميل.", true);
-    };
-    pane.querySelector("#ef2").onsubmit = async (e) => {
-      e.preventDefault();
-      const { error } = await sb.auth.verifyOtp({ email: pane.querySelector("#em").value.trim(), token: pane.querySelector("#code").value.trim(), type: "email" });
-      if (error) return say(m, error.message); location.reload();
-    };
-  }
-
-  function staffForm(pane, code, note) {
-    pane.innerHTML = `<form class="lg-form" id="sf" autocomplete="on">
-        <label class="lg-f"><span>الكود</span><input id="sc" name="username" autocomplete="username" dir="ltr" placeholder="SUP-XXXXXXXX أو DEP-XXXXXXXX" maxlength="20" required></label>
-        <label class="lg-f" id="spw"><span>كلمة السر</span><input id="sp" type="password" name="password" autocomplete="current-password" dir="ltr"></label>
-        <div id="snew" class="hidden"><p class="hint">أول دخول: اختار كلمة سر خاصة بيك (8 أحرف أو أكثر). خلّيها بمدير كلمات السر بجهازك.</p>
-          <label class="lg-f"><span>كلمة السر الجديدة</span><input id="sn1" type="password" name="new-password" autocomplete="new-password" dir="ltr" minlength="8"></label>
-          <label class="lg-f"><span>أعدها مرة ثانية</span><input id="sn2" type="password" autocomplete="new-password" dir="ltr" minlength="8"></label></div>
-        <button class="btn lg-go" type="submit">دخول</button></form>
-      <p class="lg-msg" id="sm" role="status" aria-live="polite"></p>
-      <p class="hint">نسيت كلمة السر؟ راسل محمد يصفّرها، وبعدها تختار وحدة جديدة بنفس الكود.</p>`;
-    const m = pane.querySelector("#sm"); if (note) say(m, note);
-    pane.querySelector("#sc").value = code || "";
-    let setting = false;
-    pane.querySelector("#sf").onsubmit = async (e) => {
-      e.preventDefault();
-      const body = { action: "staff_login", code: pane.querySelector("#sc").value, dev: DEV.get(), ua: navigator.userAgent.slice(0, 120) };
-      if (setting) {
-        const a = pane.querySelector("#sn1").value, b = pane.querySelector("#sn2").value;
-        if (a !== b) return say(m, "الكلمتين مو متطابقات.");
-        body.new_password = a;
-      } else body.password = pane.querySelector("#sp").value;
-      say(m, "لحظة…", true);
-      const r = await fn("staff-auth", body);
-      ["#sp", "#sn1", "#sn2"].forEach((s) => (pane.querySelector(s).value = ""));
-      if (r.stage === "set_password") {
-        setting = true; pane.querySelector("#spw").classList.add("hidden"); pane.querySelector("#snew").classList.remove("hidden");
-        say(m, `أهلاً ${r.name || ""} — ${r.msg || ""}`, true); pane.querySelector("#sn1").focus(); return;
-      }
-      if (r.status !== 200 || !r.token_hash) return say(m, r.msg || "ما گدرنا ندخل.");
+    const finishStaff = async (r) => {
       DEV.set(r.device);
       const { error } = await sb.auth.verifyOtp({ token_hash: r.token_hash, type: "magiclink" });
-      if (error) return say(m, "ما گدرنا نكمل الدخول. جرّب مرة ثانية.");
+      if (error) return msg("ما گدرنا نكمل الدخول. جرّب مرة ثانية.");
       location.reload();
     };
-    if (code) pane.querySelector("#sp").focus();
+    $("#lf").onsubmit = async (e) => {
+      e.preventDefault();
+      const id = $("#li").value.trim(), pw = $("#lp").value;
+      if (!id || !pw) return msg("اكتب الإيميل أو الكود، وكلمة السر.");
+      busy("#lf", true); msg("لحظة…", true);
+      if (id.includes("@")) {
+        const r = await fn("staff-auth", { action: "owner_login", email: id, password: pw, dev: DEV.get() });
+        $("#lp").value = ""; busy("#lf", false);
+        if (r.status !== 200) return msg(r.msg || "ما گدرنا ندخل.");
+        if (r.stage === "done") return finishOwner(r);
+        ticket = r.ticket; msg(""); show("#mf"); $("#oc").focus(); return;
+      }
+      const r = await fn("staff-auth", { action: "staff_login", code: id, password: pw, dev: DEV.get(), ua: navigator.userAgent.slice(0, 120) });
+      $("#lp").value = ""; busy("#lf", false);
+      if (r.stage === "change_password") {
+        tmp = pw; who = id; $("#cu").value = id;
+        $("#lt").textContent = `أهلاً ${r.name || ""}`; msg(r.msg || "", true); show("#cf"); $("#n1").focus(); return;
+      }
+      if (r.status !== 200 || !r.token_hash) return msg(r.msg || "ما گدرنا ندخل.");
+      finishStaff(r);
+    };
+    $("#mf").onsubmit = async (e) => {
+      e.preventDefault(); busy("#mf", true); msg("لحظة…", true);
+      const r = await fn("staff-auth", { action: "owner_mfa", ticket, code: $("#oc").value, dev: DEV.get() });
+      $("#oc").value = ""; busy("#mf", false);
+      if (r.status === 200) return finishOwner(r);
+      msg(r.msg || "الرمز غلط.");
+      if (r.error === "expired" || r.error === "locked" || /من جديد/.test(r.msg || "")) show("#lf");
+    };
+    $("#cf").onsubmit = async (e) => {
+      e.preventDefault();
+      const a = $("#n1").value, b = $("#n2").value;
+      if (a !== b) return msg("الكلمتين مو متطابقات.");
+      if (a.length < 10) return msg("كلمة السر لازم 10 أحرف أو أكثر.");
+      busy("#cf", true); msg("لحظة…", true);
+      const r = await fn("staff-auth", { action: "staff_login", code: who, password: tmp, new_password: a, dev: DEV.get(), ua: navigator.userAgent.slice(0, 120) });
+      busy("#cf", false);
+      if (r.status === 400) return msg(r.msg || "اختار كلمة سر أقوى.");   // ضعيفة ← يبقى بنفس الخطوة
+      $("#n1").value = $("#n2").value = ""; tmp = "";
+      if (r.status !== 200 || !r.token_hash) { show("#lf"); $("#lt").textContent = "دخول الإدارة"; return msg(r.msg || "ما گدرنا ندخل. ادخل من جديد."); }
+      msg("✅ انحفظت كلمة السر الجديدة.", true); finishStaff(r);
+    };
+    $("#forgot").onclick = async () => {
+      const id = $("#li").value.trim();
+      if (!id) return msg("اكتب الإيميل أو الكود أول، بعدين اضغط «نسيت كلمة السر؟».");
+      if (!id.includes("@")) return msg("راسل محمد الموسوي يسوّيلك «إعادة تعيين»، وتوصلك كلمة سر مؤقتة جديدة.", true);
+      await sb.auth.resetPasswordForEmail(id, { redirectTo: location.origin + location.pathname });
+      msg("إذا الإيميل صحيح، يوصلك رابط لتغيير كلمة السر. افتحه من نفس الجهاز.", true);
+    };
+    // دخول المالك برمز الإيميل: بس قبل ما تتفعّل الحماية (طريق الانتقال، حتى ما ينقفل محمد برا)
+    fn("staff-auth", { action: "status" }).then((st) => {
+      if (!st.email_code) return;
+      const ec = $("#ecode");
+      ec.innerHTML = '<button type="button" class="sd-link" id="emc">دخول برمز يوصل للإيميل (مؤقت لحد ما تكمّل الحماية)</button>';
+      ec.querySelector("#emc").onclick = () => emailCode();
+    });
+    $(code ? "#lp" : "#li").focus();
+  }
+  function emailCode() {
+    box.innerHTML = `<div class="sd-card"><h1>دخول الإدارة</h1><p class="sd-sub">رمز دخول يوصل لإيميل الإدارة (مؤقت لحد ما تكمّل الحماية).</p>
+      <form id="ef" novalidate><label class="sd-lab" for="em">الإيميل</label><input id="em" type="email" autocomplete="username" dir="ltr">
+      <button class="sd-btn" type="submit">أرسل رمز الدخول</button></form>
+      <form id="ef2" hidden novalidate><label class="sd-lab" for="code">الرمز اللي وصل للإيميل</label><input id="code" inputmode="numeric" autocomplete="one-time-code" dir="ltr">
+      <button class="sd-btn" type="submit">دخول</button></form><p class="sd-msg" id="emm" role="status" aria-live="polite"></p>
+      <p class="sd-links"><button type="button" class="sd-link" id="bk">‹ رجوع</button></p></div>`;
+    const m = box.querySelector("#emm"), say2 = (t, ok) => { m.textContent = t; m.className = "sd-msg " + (ok ? "ok" : "bad"); };
+    box.querySelector("#bk").onclick = () => loginView();
+    box.querySelector("#ef").onsubmit = async (e) => {
+      e.preventDefault();
+      const { error } = await sb.auth.signInWithOtp({ email: box.querySelector("#em").value.trim(), options: { shouldCreateUser: false } });
+      if (error) return say2(error.message);
+      box.querySelector("#ef2").hidden = false; say2("وصلك رمز بالإيميل.", true); box.querySelector("#code").focus();
+    };
+    box.querySelector("#ef2").onsubmit = async (e) => {
+      e.preventDefault();
+      const { error } = await sb.auth.verifyOtp({ email: box.querySelector("#em").value.trim(), token: box.querySelector("#code").value.trim(), type: "email" });
+      if (error) return say2(error.message); location.reload();
+    };
   }
 
   // رابط «نسيت كلمة السر» من الإيميل ← كلمة سر جديدة (وإذا عنده رمز: يكتبه هنا حتى يصير التغيير مسموح)
@@ -181,7 +189,7 @@
       box.querySelector("#r1").value = box.querySelector("#r2").value = "";
       await sb.auth.signOut({ scope: "local" });
       history.replaceState(null, "", location.pathname);
-      loginView("owner", "", "✅ انحفظت كلمة السر الجديدة. ادخل بيها هسه.");
+      loginView("", "", "✅ انحفظت كلمة السر الجديدة. ادخل بيها هسه.");
     };
   }
 
@@ -190,7 +198,7 @@
     box.innerHTML = '<p class="hint">لحظة…</p>';
     const { data: { session: s } } = await sb.auth.getSession();
     const me = await fn("supervisor", { action: "me" }, s && s.access_token);
-    if (me.status !== 200) { await sb.auth.signOut({ scope: "local" }); return loginView("staff", "", me.msg || "الجلسة انتهت أو الحساب موقوف. ادخل من جديد."); }
+    if (me.status !== 200) { await sb.auth.signOut({ scope: "local" }); return loginView("", "", me.msg || "الجلسة انتهت أو الحساب موقوف. ادخل من جديد."); }
     if (!window.StaffPanel) { box.innerHTML = '<p class="hint">اللوحة مو جاهزة.</p>'; return; }
     StaffPanel.mount(box, sb, me);
   }
@@ -199,8 +207,9 @@
   // «🙏 الشكر» القديم انشال من التبويبات (29/10): الشكر صار بجدول people ← «🙏 الفريق والشكر» (AdminPeople). الدالة thanks() تبقى بلا تبويب.
   const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
     ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "🔑 المساعدين" } : {}), ...(window.AdminDept ? { dept: "🏛️ رئيس القسم" } : {}),
-    ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), security: "🔐 الأمان" };
-  box.innerHTML = `${ost.mfa_required ? "" : '<div class="alert lg-warn"><b>🔐 كمّل حماية الدخول</b><p>هسه الدخول برمز الإيميل بس. من «🔐 الأمان»: حط كلمة سر، وضيف رمز التحقق بـ «كلمات السر» بالآيفون، وجرّب الدخول الجديد مرة وحدة — بعدها تتفعّل الحماية وحدها.</p><a class="btn" href="#security">🔐 الأمان</a></div>'}
+    ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), ...(window.AdminStudents ? { students: "🎓 الطلاب" } : {}), security: "🔐 الأمان" };
+  box.innerHTML = `<div class="tm-hello"><span><b>⚙️ لوحة الإدارة</b> · أهلاً محمد</span><span><button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button></span></div>
+    ${ost.mfa_required ? "" : '<div class="alert lg-warn"><b>🔐 كمّل حماية الدخول</b><p>هسه الدخول برمز الإيميل بس. من «🔐 الأمان»: حط كلمة سر، وضيف رمز التحقق بـ «كلمات السر» بالآيفون، وجرّب الدخول الجديد مرة وحدة — بعدها تتفعّل الحماية وحدها.</p><a class="btn" href="#security">🔐 الأمان</a></div>'}
     <nav class="dtabs">${Object.entries(tabs).map(([k, v]) => `<a href="#${k}" data-t="${k}">${v}</a>`).join("")}</nav><div id="pane"></div>
     <p class="hint"><button class="btn ghost" id="out">خروج</button></p>`;
   document.getElementById("out").onclick = async () => { await sb.auth.signOut({ scope: "local" }); location.reload(); };
@@ -256,12 +265,16 @@
       `<b>التوقع لآخر الشهر:</b> ≈ ${fc.toFixed(2)}$ ${fc >= cap ? "⚠️ يعبر الحد — المساعد يوگف وحده لما يوصل" : fc >= cap * (bud.alert_pct ?? 70) / 100 ? "⚠️ قريب من الحد" : "✅ ضمن الحد"}`;
   }
   async function control() {
-    const [ann, sec, bud] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget")]);
+    const [ann, sec, bud, gate, req] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget"), getSet("gate"), getSet("code_requests")]);
     pane.innerHTML = `<h2>📣 شريط الإعلان</h2><textarea id="an" rows="2">${esc(ann.text)}</textarea>
       <label><input type="checkbox" id="anon" ${ann.on ? "checked" : ""}> ظاهر</label><button class="btn" id="ans">حفظ</button>
       <h2>🧩 الأقسام</h2>
       <label><input type="checkbox" id="sx" ${sec.exams ? "checked" : ""}> 📅 الامتحانات (أيقونة بالرئيسية وقت الامتحانات بس)</label>
       <label><input type="checkbox" id="sa" ${sec.assistant ? "checked" : ""}> 🤖 مساعد الطالب (بعد ما ينحط المفتاح)</label>
+      <h2>🎓 الموقع للطلاب بالكود</h2>
+      <p class="hint">مطفي = كلشي مفتوح مثل هسه. مشغّل = المحاضرات والاختبارات ومصطلحات المحاضرات و«مساحتي» والمساعد الكامل لطلابنا بالكود؛ الأطلس والملوّنة والأجهزة والمصطلحات العامة مفتوحة للكل. (يوصل للطلاب خلال 10 دقائق.)</p>
+      <label><input type="checkbox" id="gon" ${gate.on ? "checked" : ""}> 🔒 بوابة الطلاب (settings.gate.on)</label>
+      <label><input type="checkbox" id="ron" ${req.on ? "checked" : ""}> 📨 طلب الكود من البوت (settings.code_requests.on)</label>
       <h2>💵 ميزانية المساعد</h2><div id="spend" class="hint">…</div><label>شهرياً ($) <input id="bm" type="number" value="${bud.monthly_usd ?? 50}"></label>
       <label>أسئلة يومياً لكل طالب/جهاز <input id="bd" type="number" value="${bud.daily_per_device ?? 15}"></label>
       <label>تنبيه بالبوت عند (%) <input id="bp" type="number" min="10" max="100" value="${bud.alert_pct ?? 70}"></label><button class="btn" id="bs">حفظ</button>`;
@@ -269,6 +282,17 @@
     document.getElementById("ans").onclick = async () => { await sb.from("settings").upsert({ key: "announcement", value: { text: document.getElementById("an").value, on: document.getElementById("anon").checked } }); alert("انحفظ"); };
     document.getElementById("sx").onchange = (e) => setSection("exams", e.target.checked);
     document.getElementById("sa").onchange = (e) => setSection("assistant", e.target.checked);
+    // 🎓 مفتاحين البوابة (29/10): دمج ويّا القيم الموجودة (open، الحدود) — تأكيد قبل أي تغيير لأنه يغيّر دخول الطلاب الحقيقيين
+    const flip = async (key, el, onMsg, offMsg) => {
+      if (!confirm(el.checked ? onMsg : offMsg)) { el.checked = !el.checked; return; }
+      const cur = await getSet(key);
+      const { error } = await sb.from("settings").upsert({ key, value: { ...cur, on: el.checked }, at: new Date().toISOString() });
+      if (error) { el.checked = !el.checked; alert(error.message); }
+    };
+    document.getElementById("gon").onchange = (e) => flip("gate", e.target,
+      "تشغّل بوابة الطلاب؟ المحاضرات والاختبارات تصير لطلابنا بالكود بس (الأطلس والملوّنة والأجهزة تبقى مفتوحة).", "تطفّي البوابة؟ كلشي يرجع مفتوح للكل.");
+    document.getElementById("ron").onchange = (e) => flip("code_requests", e.target,
+      "تشغّل طلب الكود من البوت؟ أي أحد يگدر يطلب، والطلب يوصلك هنا بتبويب «🎓 الطلاب» وبالبوت.", "تطفّي طلب الكود من البوت؟");
     // دمج ويّا القيم الموجودة (حدود IP والحد الكلّي تبقى) — الحفظ القديم كان يمسحها
     document.getElementById("bs").onclick = async () => {
       const cur = await getSet("assistant_budget"), n = (id) => +document.getElementById(id).value;
@@ -469,7 +493,8 @@
   }
 
   const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(), team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
-    dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats() }[t] || stats)(); };
+    dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats(),
+    students: () => window.AdminStudents ? AdminStudents.mount(pane, sb) : stats() }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();
 
   function style() {

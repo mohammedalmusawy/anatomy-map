@@ -259,7 +259,8 @@
     if (a.mistakes) return (f.mistakes || 0) >= a.mistakes;
     return false;
   }
-  const isDone = (plan, t, f) => !!(plan.done && plan.done[t.id]) || autoDone(t, f);
+  const ticked = (plan, id) => !!(plan && plan.done && plan.done[id] > 0);   // ✅ = وقت موجب؛ إلغاء ✅ = وقت سالب (حتى المزامنة تعرف الأحدث)
+  const isDone = (plan, t, f) => ticked(plan, t.id) || autoDone(t, f);
 
   // ── فاتك يوم؟ نرتّب الباقي من اليوم، بدون لوم ──
   // factsFor(date) ← حقائق ذاك اليوم. المحاضرة اللي خلصت كل قراءتها تبقى «متعلّمة» بتاريخها (حتى تكمل مراجعاتها).
@@ -288,11 +289,13 @@
     np.learnedDone = learned;
     np.rebalanced = { on: today, count: missed.size };
     np._lectures = plan._lectures;
+    if (plan.pid) np.pid = plan.pid;   // نفس الخطة بعد إعادة الترتيب
     return { plan: np, changed: true };
   }
   // ملاحظة: الخطة تحتفظ بنسخة مختصرة من المحاضرات (_lectures) حتى إعادة الترتيب ما تحتاج تنزيل شي
   function make(o) {
     const p = generate(o);
+    p.pid = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);   // هوية الخطة (للمزامنة بين الأجهزة)
     p._lectures = (o.lectures || []).map((l) => ({ id: l.id, subject: l.subject, subject_ar: l.subject_ar, type: l.type, num: l.num, title: l.title, minutes: l.minutes, sections: l.sections, questions: l.questions, learn: l.learn, quiz: l.quiz }));
     return p;
   }
@@ -329,8 +332,8 @@
     const p = load(); if (!p) return null;
     const t = p.days.flatMap((d) => d.tasks).find((x) => x.id === taskId);
     p.done = p.done || {};
-    if (t && f && !p.done[taskId] && autoDone(t, f)) return p;   // خالصة تلقائياً: ما نغيّر شي
-    if (p.done[taskId]) delete p.done[taskId]; else p.done[taskId] = Date.now();
+    if (t && f && !ticked(p, taskId) && autoDone(t, f)) return p;   // خالصة تلقائياً: ما نغيّر شي
+    p.done[taskId] = ticked(p, taskId) ? -Date.now() : Date.now();
     return save(p);
   };
   const exportData = () => ({ plan: load() });
@@ -349,24 +352,24 @@
       return;
     }
     const n = d.tasks.filter((t) => isDone(p, t, f)).length;
-    el.innerHTML = note + `<h2>خطة اليوم · ${d.min} دقيقة <small class="sub">(${n}/${d.tasks.length})</small></h2>` + d.tasks.map((t) => {
-      const ok = isDone(p, t, f), auto = !!t.auto, byAuto = ok && !(p.done && p.done[t.id]);
+    el.innerHTML = note + `<h2>خطة اليوم · ${+d.min || 0} دقيقة <small class="sub">(${n}/${d.tasks.length})</small></h2>` + d.tasks.map((t) => {
+      const ok = isDone(p, t, f), auto = !!t.auto, byAuto = ok && !ticked(p, t.id);
       // خلصت تلقائياً ← الزر ثابت (✓ تلقائي)؛ غيرها: label ثابت و aria-pressed يتغيّر بس
       return `<div class="task${ok ? " done" : ""}" data-task="${esc(t.id)}"><button type="button" class="ck" aria-pressed="${ok}"${byAuto ? ' aria-disabled="true" title="انحسبت وحدها"' : ""} aria-label="خلصت: ${esc(t.title)}">${ok ? "✓" : ""}</button>` +
-        `<span><b>${t.icon} <bdi>${esc(t.title)}</bdi></b><small>${t.min ? t.min + " دقيقة" : ""}${t.sub ? " · " + esc(t.sub) : ""}${byAuto ? " · ✓ انحسبت وحدها" : auto ? " · تتأشّر وحدها" : ""}</small></span>` +
+        `<span><b>${esc(t.icon)} <bdi>${esc(t.title)}</bdi></b><small>${t.min ? (+t.min || 0) + " دقيقة" : ""}${t.sub ? " · " + esc(t.sub) : ""}${byAuto ? " · ✓ انحسبت وحدها" : auto ? " · تتأشّر وحدها" : ""}</small></span>` +
         (t.href ? `<a class="go" href="${href(root, t.href)}">افتح ‹</a>` : "<span></span>") + `</div>`;
     }).join("");
   }
   function renderDays(el, p, o = {}) {
     if (!p) { el.innerHTML = ""; return; }
-    const head = `<h2>${esc(TEMPLATES[p.opts.template].label)} · ${DAILY[p.opts.daily]} باليوم</h2>` +
-      `<p class="sub">🎯 هدف الأسبوع: ${p.goal.lectures} ${p.goal.lectures === 1 ? "محاضرة" : p.goal.lectures === 2 ? "محاضرتين" : "محاضرات"} · ${Math.round(p.goal.minutes / 6) / 10} ساعة${p.opts.slot ? " · " + esc(p.opts.slot) : ""}</p>` +
+    const head = `<h2>${esc((TEMPLATES[p.opts && p.opts.template] || TEMPLATES.week).label)} · ${DAILY[p.opts && p.opts.daily] || ""} باليوم</h2>` +
+      `<p class="sub">🎯 هدف الأسبوع: ${+p.goal.lectures || 0} ${p.goal.lectures === 1 ? "محاضرة" : p.goal.lectures === 2 ? "محاضرتين" : "محاضرات"} · ${Math.round((+p.goal.minutes || 0) / 6) / 10} ساعة${p.opts.slot ? " · " + esc(p.opts.slot) : ""}</p>` +
       (p.tight ? `<p class="slim">⏳ الوقت ضيّق شوية على كل المحاضرات: زيد الوقت اليومي، أو جرّب «ما عندي وقت».</p>` : "");
     const td = o.date || dayKey();
     el.innerHTML = head + p.days.map((d) => {
       const dt = parse(d.date), lab = d.date === td ? "اليوم" : diff(td, d.date) === 1 ? "باچر" : DAYS[dt.getDay()];
-      const items = d.tasks.map((t) => `<li>${t.icon} ${esc(t.title)}${t.min ? ` <small class="sub">${t.min}د</small>` : ""}</li>`).join("");
-      return `<div class="plan-day${d.kind === "rest" ? " rest" : d.kind === "exam" ? " exam" : ""}"><span class="d">${lab}<b>${dt.getDate()}</b></span><ul>${items}</ul></div>`;
+      const items = d.tasks.map((t) => `<li>${esc(t.icon)} ${esc(t.title)}${t.min ? ` <small class="sub">${+t.min || 0}د</small>` : ""}</li>`).join("");
+      return `<div class="plan-day${d.kind === "rest" ? " rest" : d.kind === "exam" ? " exam" : ""}"><span class="d">${esc(lab)}<b>${dt.getDate() || ""}</b></span><ul>${items}</ul></div>`;
     }).join("") + `<p class="sub">فاتك يوم؟ نرتّبها من جديد وحدها، بدون لوم.</p>`;
   }
   // الباني: أزرار بس. o = { catalog, exam, root, onMake(plan) }
@@ -379,6 +382,7 @@
       <p class="sub" id="pb-d">${ex ? `📅 الامتحان: ${esc(arDate(ex.date))} (من «الامتحان القادم») · ` : ""}الوقت اليومي</p><div class="chips-row" role="group" aria-labelledby="pb-d">${Object.entries(DAILY).map(([k, v]) => chip("daily", k, v, +k === sel.daily)).join("")}</div>
       <p class="sub" id="pb-w">متى ووين راح تدرس؟</p><div class="chips-row" role="group" aria-labelledby="pb-w">${SLOTS.map((s) => chip("slot", s, s, false)).join("")}</div>
       <p class="sub" id="pb-t">القالب</p><div class="chips-row" role="group" aria-labelledby="pb-t">${Object.entries(TEMPLATES).map(([k, t]) => chip("tpl", k, t.label, k === sel.template)).join("")}</div>
+      <p class="sub"><label for="pb-x">📅 تاريخ امتحانك (اختياري، إذا تعرفه)</label></p><input type="date" id="pb-x" class="tin" data-exdate min="${dayKey()}" value="${ex && /^\d{4}-\d{2}-\d{2}$/.test(ex.date) ? esc(ex.date) : ""}">
       <button type="button" class="cbtn" data-make>✅ سوّي الخطة</button></div>`;
     el.addEventListener("click", (ev) => {
       const c = ev.target.closest(".chip2[data-k]");
@@ -394,7 +398,10 @@
         }
         return;
       }
-      if (ev.target.closest("[data-make]") && o.onMake) o.onMake(Object.assign({}, sel));
+      if (ev.target.closest("[data-make]") && o.onMake) {
+        const xd = (el.querySelector("[data-exdate]") || {}).value || "";
+        o.onMake(Object.assign({}, sel, { examDate: /^\d{4}-\d{2}-\d{2}$/.test(xd) && diff(dayKey(), xd) >= 0 ? xd : null }));
+      }
     });
     return sel;
   }

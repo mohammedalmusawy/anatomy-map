@@ -116,10 +116,11 @@
   function summarize(st, o = {}) {
     const today = o.today || dayKey(), progress = o.progress || {}, cat = o.catalog || [];
     const lectures = cat.map((l) => {
-      const r = ratios(st.lec[l.id]), q = progress[l.quiz] ? 1 : 0;
+      const r = ratios(st.lec[l.id]), tq = st.quiz.filter((x) => x.u === l.quiz), q = progress[l.quiz] || tq.length ? 1 : 0;
+      const best = Math.max(progress[l.quiz] ? +progress[l.quiz].best || 0 : 0, ...tq.map((x) => +x.p || 0));
       const audio = r.hasAudio || +l.minutes > 0;
       const pct = Math.round((audio ? 0.4 * r.open + 0.3 * r.heard + 0.3 * q : 0.5 * r.open + 0.5 * q) * 100);
-      return { id: l.id, subject: l.subject, title: l.title, open: r.open, heard: r.heard, quiz: !!q, best: q ? progress[l.quiz].best : null, pct, done: pct >= 80 };
+      return { id: l.id, subject: l.subject, title: l.title, open: r.open, heard: r.heard, quiz: !!q, best: q ? best : null, pct, done: pct >= 80, type: l.type, num: l.num, learn: l.learn, quizUrl: l.quiz };
     });
     const subjects = [];
     new Map(cat.map((l) => [l.subject, l.subject_ar])).forEach((name, s) => {
@@ -157,7 +158,7 @@
   const hm = (m) => (m >= 60 ? `${Math.floor(m / 60)} س${m % 60 ? ` ${m % 60} د` : ""}` : `${m} د`);
 
   // ── العرض (نفس كلاسات المعاينة: .bars .br .pbar .stat3 .wk .wkl) ──
-  function renderProgress(el, S) {
+  function renderProgress(el, S, o = {}) {
     const bar = (lab, right, pct) => `<div class="br"><span>${esc(lab)}</span><span class="pct">${esc(right)}</span><span class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="${esc(lab)}"><i style="width:${pct}%"></i></span></div>`;
     const mx = Math.max(30, ...S.week.map((x) => x.min));
     const devName = { xray: "🩻 الأشعة السينية", ct: "🌀 المفراس", mri: "🧲 الرنين", ultrasound: "🔊 السونار" };
@@ -167,6 +168,11 @@
       `<div><b>${S.quiz.avg == null ? "—" : S.quiz.avg + "%"}</b><small>معدل الاختبارات${S.quiz.up ? ` · ${S.quiz.up > 0 ? "↑" : "↓"} ${Math.abs(S.quiz.up)}%` : ""}</small></div>` +
       `<div><b>${S.fixed}</b><small>غلط تصلّح</small></div></div>` +
       `<h2>المحاضرات</h2><div class="bars">${S.subjects.map((s) => bar(s.name, `${s.done}/${s.total} · ${s.left ? `باقي ${s.left}` : "✓"}`, s.pct)).join("")}</div>` +
+      // كل محاضرة: 📖 فتحت · 🎧 سمعت · 📝 اختبرت (تنفتح بضغطة، حتى الصفحة تبقى قصيرة)
+      `<details class="sheet lecs"><summary>📚 كل محاضرة بالتفصيل (📖 فتحت · 🎧 سمعت · 📝 اختبرت)</summary>` +
+      S.subjects.map((s) => { const ls = S.lectures.filter((x) => x.subject === s.subject); if (!ls.length) return "";
+        return `<h3 class="lsub">${esc(s.name)}</h3><ul class="lrows">${ls.map((x) => `<li><a href="${esc((o.root || "") + (x.learn || ""))}"><b>${x.type === "practical" ? "عملي" : "نظري"} م${x.num} · ${esc(x.title)}</b></a>` +
+          `<span class="lm"><span title="فتحت">📖 ${Math.round(x.open * 100)}%</span><span title="سمعت">🎧 ${Math.round(x.heard * 100)}%</span><span title="اختبرت">📝 ${x.quiz ? x.best + "%" : "—"}</span></span></li>`).join("")}</ul>`; }).join("") + `</details>` +
       `<p class="sub">${esc(S.subjects.filter((s) => s.left).map((s) => s.text).slice(0, 2).join(" · ") || "خلصت كل المحاضرات 👏")}. النسبة من الأقسام اللي فتحتها وسمعتها واختبرتها.</p>` +
       // الأطلس: الأشعة أول، وبكل جهاز المناطق اللي شاف بيها حالات بس (الباقي سطر واحد) حتى الصفحة ما تطول
       Object.keys(groups).sort((x, y) => DEV_ORDER.indexOf(x) - DEV_ORDER.indexOf(y)).map((dv) => {
@@ -219,7 +225,35 @@
   const load = () => shape(LS.get(KEY, null));
   // كل تسجيل يقرا التخزين من جديد ويكتب فوراً، حتى تبويبين مفتوحين (محاضرة + مساحتي) ما يمسح واحد شغل الثاني
   const mutate = (f) => { const s = load(); f(s); LS.set(KEY, prune(s)); return s; };
-  const st = () => load();
+  // ☁️ الأجهزة الثانية (sync.js يكتبها بـ t:track-remote): العرض يجمعها ويّا هالجهاز. التسجيل (mutate) على هالجهاز بس.
+  function combine(own, others = []) {
+    const out = JSON.parse(JSON.stringify(shape(own)));
+    const minD = (a, b) => (!a ? b : !b ? a : a < b ? a : b);
+    others.map(shape).forEach((o) => {
+      for (const id in o.lec) {
+        const A = (out.lec[id] = out.lec[id] || { open: {}, heard: {}, tot: {}, nsec: 0 }), B = o.lec[id] || {};
+        A.open = A.open || {}; A.heard = A.heard || {}; A.tot = A.tot || {};
+        A.nsec = Math.max(+A.nsec || 0, +B.nsec || 0);
+        for (const k in B.open || {}) A.open[k] = minD(A.open[k], B.open[k]);
+        for (const k in B.tot || {}) A.tot[k] = Math.max(+A.tot[k] || 0, +B.tot[k] || 0);
+        for (const k in B.heard || {}) A.heard[k] = [...new Set((A.heard[k] || []).concat(B.heard[k] || []))];
+      }
+      for (const r in o.atlas) { const A = (out.atlas[r] = out.atlas[r] || {}); for (const c in o.atlas[r]) A[c] = minD(A[c], o.atlas[r][c]); }
+      for (const d in o.days) {
+        const A = day(out, d), B = o.days[d] || {};
+        A.lec = A.lec || {}; A.s = (+A.s || 0) + (+B.s || 0); A.terms = +A.terms || 0; A.mistakes = +A.mistakes || 0; A.terms += +B.terms || 0; A.mistakes += +B.mistakes || 0;
+        for (const k in B.lec || {}) A.lec[k] = (A.lec[k] || 0) + (+B.lec[k] || 0);
+        A.cases = [...new Set((A.cases || []).concat(B.cases || []))]; A.quizzes = [...new Set((A.quizzes || []).concat(B.quizzes || []))];
+      }
+      const qk = new Set(out.quiz.map((x) => x.u + "@" + x.t)); o.quiz.forEach((x) => { if (!qk.has(x.u + "@" + x.t)) out.quiz.push(x); });
+      const ok = new Set(out.outside.map((x) => x.id + "@" + x.t)); o.outside.forEach((x) => { if (!ok.has(x.id + "@" + x.t)) out.outside.push(x); });
+      out.fixed += o.fixed;
+    });
+    out.quiz.sort((a, b) => a.t - b.t); out.outside.sort((a, b) => a.t - b.t);
+    return out;
+  }
+  const remote = () => { const r = LS.get("t:track-remote", null); return r && typeof r === "object" ? Object.values(r) : []; };
+  const st = () => { const o = remote(); return o.length ? combine(load(), o) : load(); };
   const flush = () => {};   // ما يحتاج (كل تسجيل ينكتب فوراً) — يبقى للتوافق
   const add = (x) => { let e; mutate((s) => { e = rec.outside(s, x); }); emit(); return e; };
   const emit = () => { if (typeof document !== "undefined") document.dispatchEvent(new CustomEvent("track:change")); };
@@ -233,7 +267,7 @@
     const lm = rel.match(/^learn\/([^/]+)\/(theory|practical)\/(\d+)\/$/);
     let lecId = lm ? `${lm[1]}/${lm[2]}/${lm[3]}` : null;
     if (!lecId && document.body.dataset.lecture) try { const m = JSON.parse(document.body.dataset.lecture).url.match(/learn\/([^/]+)\/(theory|practical)\/(\d+)\//); if (m) lecId = `${m[1]}/${m[2]}/${m[3]}`; } catch (e) {}
-    const am = rel.match(/^devices\/([^/]+)\/cases\/([^/]+)\/$/);
+    const am = rel.match(/^devices\/([^/]+)\/cases\/([^/]+)\/$/) || rel.match(/^atlas\/([^/]+)\/([^/]+)\/$/);   // الرابط القديم والإنكليزي الجديد
     const region = am ? `${am[1]}/${am[2]}` : null;
 
     // ⏱️ الوقت الحقيقي: كل 5 ثواني، بس إذا الصفحة ظاهرة وآخر تفاعل خلال 60 ثانية (أو صوت المحاضرة شغّال)
@@ -309,7 +343,7 @@
   }
 
   return { KEY, OUT_TYPES, dayKey, addDays, arCount, empty, rec, prune, facts, ratios, streak, summarize, hm,
-    renderProgress, renderOutside, start, load, add,
+    renderProgress, renderOutside, start, load, add, combine,
     state: st, mutate, save: flush,
     facts_today: (progress) => facts(st(), dayKey(), progress),
     export: () => ({ track: st() }),

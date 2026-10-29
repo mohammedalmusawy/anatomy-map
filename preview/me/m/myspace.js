@@ -28,12 +28,25 @@
     const t = custom ? Date.parse(custom) : NaN;   // من <input type="datetime-local">
     return Number.isFinite(t) && t > now ? t : now + 3600e3;
   }
-  const reminders = () => LS.get(RKEY, []);
-  function remind(text, k, now = Date.now(), custom = null) {
-    const r = { id: now.toString(36), t: now, at: whenAt(k, now, custom), text: String(text || "").trim().slice(0, 200) || "وقت الدراسة 📚", done: false };
-    const list = reminders().filter((x) => !x.done || now - x.at < 7 * 864e5); list.push(r); LS.set(RKEY, list.slice(-100));
+  const reminders = () => { const l = LS.get(RKEY, []); return Array.isArray(l) ? l.filter((r) => r && r.id) : []; };
+  const saveR = (list) => { LS.set(RKEY, list.slice(-100)); if (typeof document !== "undefined") document.dispatchEvent(new CustomEvent("reminders:change")); };
+  const rid = (now) => now.toString(36) + Math.random().toString(36).slice(2, 6);
+  const rtext = (t) => String(t || "").trim().slice(0, 200) || "وقت الدراسة 📚";
+  // extra = { at (وقت محدد), note (ملاحظة «⏰ تذكير» مربوطة) }
+  function remind(text, k, now = Date.now(), custom = null, extra = {}) {
+    const r = { id: rid(now), t: now, at: +extra.at || whenAt(k, now, custom), text: rtext(text), done: false };
+    if (extra.note) r.note = String(extra.note).slice(0, 40);
+    const list = reminders().filter((x) => !x.done || now - x.at < 7 * 864e5); list.push(r); saveR(list);
     return r;
   }
+  // ✏️ تعديل: النص و/أو الوقت (يرجع «مو خالص» حتى يطلع مرة ثانية)
+  function editReminder(id, x = {}, now = Date.now()) {
+    const list = reminders(), r = list.find((y) => y.id === id); if (!r) return null;
+    if (x.text != null) r.text = rtext(x.text);
+    if (x.at != null && Number.isFinite(+x.at)) { r.at = +x.at; r.done = r.at <= now ? r.done : false; }
+    saveR(list); return r;
+  }
+  const removeReminder = (id) => { const list = reminders(), n = list.length, out = list.filter((y) => y.id !== id); if (out.length !== n) saveR(out); return out.length !== n; };
   const dueReminders = (list, now = Date.now()) => list.filter((r) => !r.done && r.at <= now);
   const fmt = (t) => { const d = new Date(t), n = new Date(); const same = d.toDateString() === n.toDateString();
     const tm = new Date(n); tm.setDate(n.getDate() + 1);
@@ -43,11 +56,12 @@
   const allDue = () => {
     const N = G("Notes");
     const a = reminders().filter((r) => !r.done).map((r) => ({ src: "r", id: r.id, at: r.at, text: r.text }));
-    const b = N ? N.reminders(Date.now()).map((r) => ({ src: "n", id: r.id, at: r.at, text: r.text })) : [];
+    const rs = reminders(), linked = new Set(rs.map((r) => r.note).filter(Boolean)), ats = new Set(rs.map((r) => r.at + "|" + r.text));   // ملاحظة إلها تذكير بالطابور ← ما تتكرر (حتى بجهاز ثاني)
+    const b = N ? N.reminders(Date.now()).filter((r) => !linked.has(r.id) && !ats.has(r.at + "|" + String(r.text).slice(0, 200))).map((r) => ({ src: "n", id: r.id, at: r.at, text: r.text })) : [];
     return a.concat(b).sort((x, y) => x.at - y.at);
   };
   const markDone = (x) => {
-    if (x.src === "r") { const list = reminders(), r = list.find((y) => y.id === x.id); if (r) { r.done = true; LS.set(RKEY, list); } }
+    if (x.src === "r") { const list = reminders(), r = list.find((y) => y.id === x.id); if (r) { r.done = true; saveR(list); } }
     else { const N = G("Notes"); if (N) N.update(x.id, (n) => { if (n.remind) n.remind.done = true; }); }
   };
   const MAXT = 2 ** 31 - 1;
@@ -116,8 +130,9 @@
   }
   const studentName = () => {
     const A = G("Account"); if (!A) return null;
-    try { const u = typeof A.get === "function" ? A.get() : A.user || A; return (u && (u.name || u.full_name)) || null; } catch (e) { return null; }
+    try { const u = A.state && A.state.student; return (u && u.full_name && String(u.full_name).split(" ")[0]) || null; } catch (e) { return null; }
   };
+  const signedIn = () => { const Y = G("Sync"); return !!(Y && Y.state && Y.state.mode === "cloud"); };
 
   // ── العرض ──
   // o = { root, lectures (من study/data.json ويّا الأسئلة), catalog, ix (Notes.index), examDate, onChange }
@@ -144,17 +159,20 @@
       el.querySelectorAll("[data-open]").forEach((b) => b.setAttribute("aria-expanded", b.dataset.open === k));
       const f = sheet.querySelector("textarea, input, .chip2, .cbtn, a"); if (f) f.focus();
     };
+    const local = (t) => { const d = new Date(t); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+    const rlist = () => { const list = reminders().filter((r) => !r.done).sort((a, b) => a.at - b.at);
+      return list.length ? `<ul class="rrows">${list.map((r) => `<li data-rid="${esc(r.id)}"><span>⏰ <b>${esc(fmt(r.at))}</b> · ${esc(r.text)}</span><span class="ra"><button type="button" class="ib" data-redit aria-label="عدّل التذكير: ${esc(r.text)}">✏️</button><button type="button" class="ib" data-rdel aria-label="امسح التذكير: ${esc(r.text)}">🗑️</button></span></li>`).join("")}</ul>` : `<p class="sub">ماكو تذكيرات جاية.</p>`; };
+    let editing = null;
     const views = {
       remind() {
-        const list = reminders().filter((r) => !r.done).sort((a, b) => a.at - b.at);
         const perm = typeof Notification !== "undefined" && Notification.permission === "default";
         return { title: "ذكّرني", body: `<p class="sub" id="rm-w">إمتى؟</p><div class="chips-row" role="group" aria-labelledby="rm-w">${Object.entries(WHEN).map(([k, v], i) => `<button type="button" class="chip2" data-when="${k}" aria-pressed="${i === 0}">${v}</button>`).join("")}</div>
-          <input type="datetime-local" data-custom hidden aria-label="الوقت">
+          <input type="datetime-local" class="tin" data-custom hidden aria-label="الوقت">
           <div class="row-in"><input type="text" data-voice data-rtext maxlength="200" placeholder="شنو؟ مثلاً: راجع محاضرة الوقاية" aria-label="شنو أذكّرك؟"></div>
-          <button type="button" class="cbtn" data-rsave>حفظ التذكير</button>
-          <p class="sub">التذكير يطلعلك بهالجهاز وقت الموقع مفتوح. وإذا سمحت بالتنبيهات، يوصلك تنبيه حتى لو كنت بصفحة ثانية بالموقع.</p>
+          <div class="chips-row"><button type="button" class="cbtn" data-rsave>حفظ التذكير</button><button type="button" class="cbtn ghost" data-rcancel hidden>إلغاء التعديل</button></div>
+          <p class="sub" data-rwhere>${signedIn() ? "☁️ التذكير محفوظ بحسابك، ويطلعلك بأي جهاز تدخل منه وقت الموقع مفتوح." : "📱 التذكير محفوظ بهالجهاز بس (أنت مو مسجّل دخول)، ويطلعلك وقت الموقع مفتوح بهالجهاز."} وإذا سمحت بالتنبيهات، يوصلك تنبيه حتى لو كنت بصفحة ثانية بالموقع.</p>
           ${perm ? `<button type="button" class="cbtn ghost" data-perm>🔔 خلّي هالجهاز ينبّهني</button>` : ""}
-          <div data-rlist>${list.map((r) => `<p class="slim">⏰ ${esc(fmt(r.at))} · ${esc(r.text)}</p>`).join("")}</div>` };
+          <p class="sub" data-rmsg role="status" aria-live="polite"></p><div data-rlist>${rlist()}</div>` };
       },
       resume() {
         const last = LS.get("t:last", null);
@@ -208,14 +226,33 @@
     };
     el.addEventListener("click", (ev) => {
       const b = ev.target.closest("button"); if (!b) return;
-      if (b.dataset.open) { if (open === b.dataset.open) { close(); return; } when = "h1"; show(b.dataset.open, views[b.dataset.open]()); if (b.dataset.open === "test") runQuiz(sheet.querySelector("[data-quiz]")); return; }
+      if (b.dataset.open) { if (open === b.dataset.open) { close(); return; } when = "h1"; editing = null; show(b.dataset.open, views[b.dataset.open]()); if (b.dataset.open === "test") runQuiz(sheet.querySelector("[data-quiz]")); return; }
       if (b.hasAttribute("data-close-sheet")) { const k = open; close(); const t = el.querySelector(`[data-open="${k}"]`); if (t) t.focus(); return; }
       if (b.dataset.when) { when = b.dataset.when; sheet.querySelectorAll("[data-when]").forEach((x) => x.setAttribute("aria-pressed", x === b)); sheet.querySelector("[data-custom]").hidden = when !== "custom"; return; }
+      const setWhen = (k) => { when = k; sheet.querySelectorAll("[data-when]").forEach((x) => x.setAttribute("aria-pressed", x.dataset.when === k)); sheet.querySelector("[data-custom]").hidden = k !== "custom"; };
+      const endEdit = () => { editing = null; sheet.querySelector("[data-rsave]").textContent = "حفظ التذكير"; sheet.querySelector("[data-rcancel]").hidden = true; sheet.querySelector("[data-rtext]").value = ""; setWhen("h1"); };
       if (b.hasAttribute("data-rsave")) {
-        const cv = sheet.querySelector("[data-custom]").value, bad = when === "custom" && !(Date.parse(cv) > Date.now());
-        const r = remind(sheet.querySelector("[data-rtext]").value, when, Date.now(), cv);
-        sheet.querySelector("[data-rlist]").insertAdjacentHTML("afterbegin", `<p class="slim" role="status">✓ ⏰ ${esc(fmt(r.at))} · ${esc(r.text)}${bad ? " (الوقت ما كان واضح، خلّيناه بعد ساعة)" : ""}</p>`);
-        sheet.querySelector("[data-rtext]").value = ""; armNotifications(); return;
+        const cv = sheet.querySelector("[data-custom]").value, bad = when === "custom" && !(Date.parse(cv) > Date.now()), msg = sheet.querySelector("[data-rmsg]");
+        let r;
+        if (editing) { r = editReminder(editing, { text: sheet.querySelector("[data-rtext]").value, at: whenAt(when, Date.now(), cv) }); endEdit(); }
+        else { r = remind(sheet.querySelector("[data-rtext]").value, when, Date.now(), cv); sheet.querySelector("[data-rtext]").value = ""; }
+        if (r) msg.textContent = `✓ ⏰ ${fmt(r.at)} · ${r.text}${bad ? " (الوقت ما كان واضح، خلّيناه بعد ساعة)" : ""}`;
+        sheet.querySelector("[data-rlist]").innerHTML = rlist(); armNotifications(); return;
+      }
+      if (b.hasAttribute("data-rcancel")) { endEdit(); return; }
+      if (b.hasAttribute("data-redit")) {
+        const id = b.closest("[data-rid]").dataset.rid, r = reminders().find((x) => x.id === id); if (!r) return;
+        editing = id; setWhen("custom"); sheet.querySelector("[data-custom]").value = local(r.at);
+        const t = sheet.querySelector("[data-rtext]"); t.value = r.text; t.focus();
+        sheet.querySelector("[data-rsave]").textContent = "حفظ التعديل"; sheet.querySelector("[data-rcancel]").hidden = false; return;
+      }
+      if (b.hasAttribute("data-rdel")) {
+        const li = b.closest("[data-rid]"), id = li.dataset.rid, next = li.nextElementSibling;
+        if (typeof confirm === "function" && !confirm("تمسح هذا التذكير؟")) return;
+        removeReminder(id); if (editing === id) endEdit();
+        sheet.querySelector("[data-rlist]").innerHTML = rlist(); sheet.querySelector("[data-rmsg]").textContent = "✓ انمسح التذكير.";
+        const f = (next && sheet.querySelector(`[data-rid="${CSS.escape(next.dataset.rid)}"] [data-rdel]`)) || sheet.querySelector("[data-rtext]"); if (f) f.focus();
+        armNotifications(); return;
       }
       if (b.hasAttribute("data-perm")) { Notification.requestPermission().then(() => b.remove()).catch(() => {}); return; }   // بضغطة الطالب بس
       if (b.hasAttribute("data-qnsave")) {
@@ -225,6 +262,8 @@
         if (n) ta.value = "";
       }
     });
+    // ☁️ وصل شي من جهاز ثاني ← نحدّث قائمة التذكيرات المفتوحة
+    document.addEventListener("sync:applied", () => { if (open === "remind" && !editing) { const l = sheet.querySelector("[data-rlist]"); if (l) l.innerHTML = rlist(); } armNotifications(); });
     el.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && open) { const k = open; close(); const t = el.querySelector(`[data-open="${k}"]`); if (t) t.focus(); } });
     armNotifications();
   }
@@ -256,5 +295,5 @@
     paint(); if (force) d.querySelector("[data-next]").focus();
   }
 
-  return { WHEN, whenAt, remind, reminders, dueReminders, armNotifications, pickQuiz, scoreQuiz, exportAll, importAll, studentName, mountToday, tour, STEPS };
+  return { WHEN, whenAt, remind, editReminder, removeReminder, reminders, signedIn, dueReminders, armNotifications, pickQuiz, scoreQuiz, exportAll, importAll, studentName, mountToday, tour, STEPS };
 });

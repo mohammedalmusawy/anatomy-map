@@ -129,11 +129,14 @@
   // n = { text, kind, ctx:{kind,url,title}, remind:"tomorrow"|"d3"|"exam", examDate, color, ix (الفهرس) }
   function add(n, now = Date.now()) {
     const text = String(n.text || "").trim().slice(0, 2000); if (!text) return null;
-    const links = detect(text, n.ix), tg = tags(text);
+    const links = (Array.isArray(n.links) ? n.links.filter((l) => l && l.type && l.key) : []).concat(detect(text, n.ix)).filter((l, i, a) => a.findIndex((y) => y.type === l.type && y.key === l.key) === i).slice(0, 6), tg = tags(text);
     const note = { id: now.toString(36) + Math.random().toString(36).slice(2, 6), t: now, d: dayKey(new Date(now)), text, kind: KINDS[n.kind] ? n.kind : "free",
       q: n.q || null, pin: false, color: n.color == null ? (tg.length ? (Object.keys(TAGS).indexOf(tg[0]) % 3) + 1 : 0) : +n.color,
       tags: tg, subject: classify(text, links, tg), links, ctx: n.ctx || null, remind: null };
     if (note.kind === "rem") note.remind = { at: remindAt(n.remind || "tomorrow", now, n.examDate), label: REMIND[n.remind || "tomorrow"], done: false };
+    // ⏰ نفس الطابور مال «ذكّرني» (وبالحساب ← جدول reminders)، مربوط بالملاحظة
+    const MS = typeof self !== "undefined" && self.MySpace;
+    if (note.remind && !n.list && MS && MS.remind) MS.remind(text.slice(0, 200), "custom", now, null, { at: note.remind.at, note: note.id });
     if (n.list) { n.list.push(note); return note; }
     const list = all(); list.push(note); put(list); return note;
   }
@@ -145,7 +148,11 @@
   const update = (id, f) => { const list = all(), n = list.find((x) => x.id === id); if (!n) return null; f(n); put(list); return n; };
   const pin = (id) => update(id, (n) => { n.pin = !n.pin; });
   const color = (id) => update(id, (n) => { n.color = ((n.color || 0) + 1) % 4; });
-  const remove = (id) => { put(all().filter((x) => x.id !== id)); };   // ملاحظة الطالب نفسه، بجهازه، وبطلب منه
+  const remove = (id) => {
+    put(all().filter((x) => x.id !== id));
+    const MS = typeof self !== "undefined" && self.MySpace;   // التذكير المربوط بيها ينمسح وياها
+    if (MS && MS.reminders) MS.reminders().filter((r) => r.note === id).forEach((r) => MS.removeReminder(r.id));
+  };   // ملاحظة الطالب نفسه، بجهازه، وبطلب منه
   // البحث: المثبّتة أول، ثم الأحدث
   function search(q, list = all()) {
     const nq = norm(q);
@@ -167,9 +174,16 @@
   const examGuess = () => LS.get(EKEY, null);
 
   // ── من وين انكتبت (السياق) ──
-  function context() {
+  // el (اختياري) = العنصر اللي انكتبت منه الملاحظة ← نعرف القسم (section[id^=r-s] / .lsec[id])
+  function context(el) {
     if (typeof document === "undefined") return null;
-    try { if (document.body.dataset.lecture) { const L = JSON.parse(document.body.dataset.lecture); return { kind: "lecture", url: L.url, title: L.title }; } } catch (e) {}
+    try { if (document.body.dataset.lecture) {
+      const L = JSON.parse(document.body.dataset.lecture), c = { kind: "lecture", url: "/" + String(L.url || "").replace(/^\//, ""), title: L.title };
+      const m = String(L.url || "").match(/learn\/([^/]+)\/(theory|practical)\/(\d+)\//); if (m) c.lec = `${m[1]}/${m[2]}/${m[3]}`;
+      const sec = el && el.closest && el.closest("section[id^='r-s'], .lsec[id]");
+      if (sec) { c.sec = sec.id.replace(/^r-/, ""); const h = sec.querySelector("h2 .ar, h3 .ar, h2, h3, summary"); c.secTitle = h ? h.textContent.trim().slice(0, 80) : ""; }
+      return c;
+    } } catch (e) {}
     const pop = document.querySelector(".tpop:not([hidden]) b");
     if (pop) return { kind: "term", url: location.pathname, title: pop.textContent };
     const c = location.hash.startsWith("#c-") && document.getElementById(location.hash.slice(1));
@@ -195,8 +209,13 @@
   const clean = (n) => Object.assign({}, n, { text: String(n.text).slice(0, 2000), kind: KINDS[n.kind] ? n.kind : "free", color: Math.max(0, Math.min(3, (n.color | 0))),
     pin: !!n.pin, t: +n.t || Date.now(), d: /^\d{4}-\d{2}-\d{2}$/.test(n.d) ? n.d : dayKey(new Date(+n.t || Date.now())),
     tags: (Array.isArray(n.tags) ? n.tags : []).map(String).slice(0, 12), links: (Array.isArray(n.links) ? n.links : []).filter((l) => l && l.type && l.key).map((l) => ({ type: String(l.type), key: String(l.key), title: String(l.title || ""), href: l.href ? safeHref(l.href) : null, subject: l.subject || null })),
-    ctx: n.ctx && typeof n.ctx === "object" ? { kind: String(n.ctx.kind || ""), url: String(n.ctx.url || ""), title: String(n.ctx.title || "") } : null,
+    ctx: n.ctx && typeof n.ctx === "object" ? Object.assign({ kind: String(n.ctx.kind || ""), url: String(n.ctx.url || ""), title: String(n.ctx.title || "") },
+      n.ctx.lec ? { lec: String(n.ctx.lec).slice(0, 60) } : {}, /^s\d{1,3}$/.test(n.ctx.sec || "") ? { sec: n.ctx.sec, secTitle: String(n.ctx.secTitle || "").slice(0, 80) } : {}, n.ctx.key ? { key: String(n.ctx.key).slice(0, 80) } : {}) : null,
     remind: n.remind && typeof n.remind === "object" ? { at: +n.remind.at || 0, label: String(n.remind.label || ""), done: !!n.remind.done } : null });
+  // من وين انكتبت ← رابط يرجعه لنفس المكان (القسم نفسه إذا معروف). روابط داخل الموقع بس.
+  const ctxLink = (n) => { const c = n.ctx; if (!c || !c.url || !/^\/[^/]/.test(c.url) || c.kind === "page") return "";
+    const lab = c.kind === "lecture" ? (c.sec ? `القسم: ${c.secTitle || c.sec}` : c.title) : c.title;
+    return `<a href="${esc(c.url.split("#")[0] + (c.sec ? "#r-" + c.sec : c.kind === "case" && c.url.includes("#") ? "#" + c.url.split("#")[1] : ""))}">↩️ ${esc(CTX[c.kind] || "")}: ${esc(lab || "")}</a>`; };
   function renderNote(n, root = "") {
     n = clean(n);
     const k = KINDS[n.kind] || KINDS.free, when = new Date(n.t);
@@ -205,7 +224,7 @@
       ? `<span class="tm" tabindex="0" role="button" data-k="${esc(l.key)}" dir="ltr">${esc(l.title)} 🔊</span>`
       : l.href ? `<a href="${esc(/^https:/.test(l.href) || l.href === "#" ? l.href : root + l.href)}">افتح: ${esc(l.title)} ‹</a>` : "").join("");
     return `<div class="note c${n.color || 0}" data-note="${esc(n.id)}"><div class="nh"><span>${n.pin ? "📌 مثبّتة · " : ""}${k.icon} ${k.label}${n.ctx ? " · " + esc(CTX[n.ctx.kind] || "") : ""}${n.remind ? ` · ⏰ ${esc(n.remind.label)}` : ""}</span><span>${esc(ago)}</span></div>` +
-      `<p dir="auto">${esc(n.text).replace(/\n/g, "<br>")}</p><div class="tags">${(n.tags || []).map((t) => `<span>${esc(t)}</span>`).join("")}${links}</div>` +
+      `<p dir="auto">${esc(n.text).replace(/\n/g, "<br>")}</p><div class="tags">${(n.tags || []).map((t) => `<span>${esc(t)}</span>`).join("")}${links}${ctxLink(n)}</div>` +
       `<div class="chips-row"><button type="button" class="ib" data-act="pin" aria-pressed="${!!n.pin}" aria-label="ثبّت الملاحظة">📌</button>` +
       `<button type="button" class="ib" data-act="color" aria-label="غيّر اللون">🎨</button><button type="button" class="ib" data-act="del" aria-label="امسح الملاحظة">🗑️</button></div></div>`;
   }
@@ -229,6 +248,7 @@
         ls.map((l) => l.type === "term" ? `<span class="tm" tabindex="0" role="button" data-k="${esc(l.key)}" dir="ltr">${esc(l.title)} 🔊</span>` : `<a href="${esc((o.root || "") + l.href)}">افتح: ${esc(l.title)} ‹</a>`).join("");
     }, 250); });
     $("[data-n-q]").addEventListener("input", list);
+    document.addEventListener("sync:applied", () => { if (!el.contains(document.activeElement) || document.activeElement === document.body) list(); else setTimeout(list, 0); });
     el.addEventListener("click", async (ev) => {
       const t = ev.target.closest("button"); if (!t || !el.contains(t)) return;
       if (t.dataset.ans != null) {
@@ -263,7 +283,31 @@
     list();
   }
 
-  return { KEY, KINDS, REMIND, TAGS, norm, tags, classify, index, detect, question, add, update, pin, color, remove, search, reminders, remindAt,
+  // ── 📝 ملاحظة من مكانها (صفحة محاضرة / مصطلح بالمعاينة): صندوق صغير تحت الزر ──
+  // o = { ctx, links:[{type,key,title}], prefill, ix, onSave }
+  function quick(anchor, o = {}) {
+    if (typeof document === "undefined") return null;
+    const old = document.querySelector(".nquick"); if (old) { const same = old.dataset.for === (o.forId || ""); old.remove(); if (same && o.forId) return null; }
+    const box = document.createElement("div"); box.className = "nquick"; box.dataset.for = o.forId || ""; box.setAttribute("role", "group"); box.setAttribute("aria-label", "ملاحظة جديدة");
+    box.innerHTML = `<div class="row-in"><textarea rows="2" data-voice maxlength="2000" placeholder="اكتب أو احچي…" aria-label="الملاحظة"></textarea></div>
+      <div class="chips-row"><button type="button" class="cbtn" data-qs>حفظ بملاحظاتي</button><button type="button" class="cbtn ghost" data-qx>إلغاء</button></div><p class="sub" role="status" aria-live="polite"></p>`;
+    if (o.into) o.into.appendChild(box); else anchor.after(box);
+    const back = () => { const r = o.returnTo || anchor; if (r && r.focus) r.focus(); };
+    const ta = box.querySelector("textarea"), msg = box.querySelector("[role=status]");
+    if (o.prefill) ta.value = o.prefill;
+    box.addEventListener("click", (ev) => {
+      if (ev.target.closest("[data-qx]")) { box.remove(); back(); return; }
+      if (!ev.target.closest("[data-qs]")) return;
+      const n = add({ text: ta.value, kind: "free", ctx: o.ctx || context(anchor), links: o.links, ix: o.ix });
+      if (!n) { msg.textContent = "اكتب شي أول."; ta.focus(); return; }
+      msg.textContent = "✓ انحفظت بملاحظاتي."; ta.value = ""; if (o.onSave) o.onSave(n);
+      setTimeout(() => { if (box.isConnected) { box.remove(); back(); } }, 1400);
+    });
+    box.addEventListener("keydown", (ev) => { if (ev.key === "Escape") { box.remove(); back(); } });
+    ta.focus(); return box;
+  }
+
+  return { quick, KEY, KINDS, REMIND, TAGS, norm, tags, classify, index, detect, question, add, update, pin, color, remove, search, reminders, remindAt,
     answer, intentToday, examGuess, context, tidy, renderNote, mount, all,
     get assistant() { return assistant; }, set assistant(f) { assistant = typeof f === "function" ? f : null; },
     export: () => ({ notes: all() }),

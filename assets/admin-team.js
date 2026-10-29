@@ -11,9 +11,25 @@
     upload_done: "📤 رفع ملف", approve_request: "✅ وافق على كود", forward_request: "↪️ حوّل طلب", admin_feature: "🎛️ المفتاح العام", admin_create: "➕ حساب",
     admin_toggle: "⏸️/▶️ الصلاحية", admin_perms: "الصلاحيات", admin_rotate: "🔄 كود جديد", admin_delete: "🗑️ حذف حساب", admin_decide: "قرار بالطابور",
     admin_roster_add: "➕ القائمة الرسمية", admin_roster_remove: "➖ القائمة الرسمية", admin_expected_set: "العدد المتوقع",
-    set_password: "🔑 اختار كلمة سر", admin_expiry: "⌛ تاريخ الانتهاء", admin_reset_password: "🔑 صفّر كلمة السر", db_insert: "✏️ أضاف", db_update: "✏️ عدّل" };
+    set_password: "🔑 غيّر المؤقتة لكلمة سر خاصة", temp_expired: "⌛ جرّب بمؤقتة منتهية", admin_expiry: "⌛ تاريخ الانتهاء", admin_reset_password: "🔑 إعادة تعيين (مؤقتة جديدة)", db_insert: "✏️ أضاف", db_update: "✏️ عدّل" };
   const t16 = (t) => String(t || "").replace("T", " ").slice(0, 16);
   const copy = async (s, b) => { try { await navigator.clipboard.writeText(s); const o = b.textContent; b.textContent = "✔️"; setTimeout(() => (b.textContent = o), 1200); } catch (e) { prompt("انسخ:", s); } };
+  // 🔑 29/10 (الدخول الموحّد): الكود + كلمة السر المؤقتة يطلعون هنا مرة وحدة بس (ما ينحفظون بأي مكان) + رسالة جاهزة يدزها محمد بالخاص.
+  //   مشتركة ويّا admin-dept.js (window.StaffOnce). «✕ خلصت» يشيلها من الشاشة.
+  const once = (r, what) => {
+    const nm = String(r.name || "").split("—")[0].trim();
+    const exp = r.temp_expires_at ? new Date(r.temp_expires_at).toLocaleString("ar-IQ", { dateStyle: "medium", timeStyle: "short" }) : "";
+    const text = `السلام عليكم ${nm}،\nحسابك بموقع دروس تقنيات الأشعة جاهز:\n١) افتح: ${r.login_url || ""}\n   (أو افتح الموقع واضغط على العنوان «دروس تقنيات الأشعة» 5 مرات بسرعة)\n` +
+      `٢) الكود: ${r.code}\n٣) كلمة السر المؤقتة: ${r.temp_password}\n   (تشتغل 72 ساعة)\n٤) أول دخول يطلب منك كلمة سر جديدة خاصة بيك (10 أحرف أو أكثر).\nلا تشارك الكود ولا كلمة السر ويّا أي أحد.`;
+    return `<div class="tm-once" role="status"><b>✅ ${esc(what)} — ${esc(r.name || "")}</b>
+      <p>الكود (يبقى نفسه): <span class="code" dir="ltr">${esc(r.code)}</span> <button class="ib" type="button" data-cp="${esc(r.code)}" title="نسخ الكود" aria-label="نسخ الكود">📋</button></p>
+      <p>كلمة السر المؤقتة: <span class="code" dir="ltr">${esc(r.temp_password)}</span> <button class="ib" type="button" data-cp="${esc(r.temp_password)}" title="نسخ كلمة السر المؤقتة" aria-label="نسخ كلمة السر المؤقتة">📋</button></p>
+      <p class="hint">تشتغل لحد ${esc(exp)} (72 ساعة)، وأول دخول يجبره يختار كلمة سر جديدة.</p>
+      <p><button class="btn" type="button" data-cp="${esc(text)}">📋 انسخ رسالة جاهزة (دزّها بالخاص)</button> <button class="btn ghost" type="button" data-once-hide>✕ خلصت — اخفيها</button></p>
+      <p class="hint">⚠️ تطلع <b>هسه بس</b> وما تنحفظ بأي مكان (ولا بالسجل). إذا ضاعت: «🔑 إعادة تعيين» تطلّع وحدة جديدة.</p></div>`;
+  };
+  window.StaffOnce = once;
+  if (!window.__onceHide) { window.__onceHide = 1; document.addEventListener("click", (ev) => { const b = ev.target.closest && ev.target.closest("[data-once-hide]"); if (b) b.closest(".tm-once").remove(); }); }
 
   async function mount(pane, sb) {
     const api = async (body) => {
@@ -24,12 +40,12 @@
     };
     const PERM = [["can_lectures", "📚 المحاضرات"], ["can_codes", "🎓 الأكواد"], ["can_team", "👥 الفريق"], ["can_ads", "📣 الإعلانات"]];
     pane.innerHTML = `<h2>🔑 المساعدين والصلاحيات</h2>
-      <p class="hint">كل مساعد يدخل بكود + كلمة سر يختارها بأول دخول، ويشوف بس الصلاحيات اللي تأشّرها هنا. <b>ممنوع على كل مساعد:</b> الحذف، الإعدادات، ملاحظات الطلاب، لوحة رئيس القسم، وإضافة مساعدين. كل فعل ينكتب بالسجل تحت.</p>
+      <p class="hint">كل مساعد يدخل من الباب المخفي (5 ضغطات على عنوان الموقع) بكوده + كلمة سر مؤقتة تطلعلك هنا مرة وحدة، وأول دخول يجبره يختار كلمة سر جديدة. يشوف بس الصلاحيات اللي تأشّرها هنا. <b>ممنوع على كل مساعد:</b> الحذف، الإعدادات، ملاحظات الطلاب، لوحة رئيس القسم، وإضافة مساعدين. كل فعل ينكتب بالسجل تحت.</p>
       <p id="tm-on"></p>
       <div class="tm-new"><h3>➕ مساعد جديد</h3>
         <label class="tm-f"><span>الاسم</span><input id="tm-name" placeholder="مثل: تحسين سليم السعيدي" maxlength="120"></label>
         <label class="tm-f"><span>الصفة</span><input id="tm-title" value="منسّق المحاضرات" maxlength="80"></label>
-        <fieldset class="tm-perms"><legend>الصلاحيات</legend>${PERM.map(([k, l]) => `<label class="sw"><input type="checkbox" data-np="${k.slice(4)}" ${k === "can_lectures" || k === "can_codes" ? "checked" : ""}> ${l}</label>`).join("")}</fieldset>
+        <fieldset class="tm-perms"><legend>الصلاحيات</legend>${PERM.map(([k, l]) => `<label class="sw"><input type="checkbox" data-np="${k.slice(4)}" ${k === "can_lectures" ? "checked" : ""}> ${l}</label>`).join("")}</fieldset>
         <label class="tm-f"><span>ينتهي (اختياري)</span><input id="tm-exp-new" type="date"></label>
         <p><button class="btn" id="tm-make">➕ سوّي الحساب</button></p><div id="tm-out" aria-live="polite"></div></div>
       <h3>المساعدين</h3><div class="scroll-x" id="tm-list">…</div>
@@ -41,11 +57,9 @@
       <h3>🧾 سجل أفعال المساعدين</h3><div class="scroll-x" id="tm-log">…</div><button class="btn ghost" id="tm-more" hidden>أقدم…</button>`;
     const $ = (s) => pane.querySelector(s);
     let lastId = null;
-    const once = (r, what) => `<div class="tm-once"><b>✅ ${esc(what)} — ${esc(r.name || "")}</b>
-      <p>الكود: <span class="code" dir="ltr">${esc(r.code)}</span> <button class="ib" data-cp="${esc(r.code)}" title="نسخ الكود">📋</button>
-      <button class="ib" data-cp="${esc(r.link)}" title="نسخ رابط الدخول">🔗</button></p>
-      <p class="hint">⚠️ الكود يطلع <b>هسه بس</b> (ما ينحفظ بالصفحة). دزّه له بالخاص. بأول دخول يكتب الكود ويختار كلمة سر خاصة بيه.</p></div>`;
-    const st = (v) => !v.enabled ? "⏸️ موقوف" : v.expires_at && new Date(v.expires_at) <= new Date() ? "⌛ منتهي" : v.pw_set_at ? "✅ فعّال" : "⏳ بانتظار أول دخول";
+    const st = (v) => !v.enabled ? "⏸️ موقوف" : v.expires_at && new Date(v.expires_at) <= new Date() ? "⌛ منتهي"
+      : v.must_change ? (v.temp_expires_at && new Date(v.temp_expires_at) <= new Date() ? "⌛ المؤقتة انتهت — اضغط «إعادة تعيين»" : "⏳ بانتظار أول دخول (كلمة سر مؤقتة)")
+      : v.pw_set_at ? "✅ فعّال" : "⏳ ماكو كلمة سر — اضغط «إعادة تعيين»";
 
     async function status() {
       const r = await api({ action: "admin_status" });
@@ -62,7 +76,7 @@
           <div class="tm-card-r"><label class="tm-f tm-exp-f"><span>ينتهي</span><input type="date" data-a="exp" value="${esc(v.expires_at ? String(v.expires_at).slice(0, 10) : "")}"></label>
             <small>آخر دخول: ${t16(v.last_login) || "—"}</small></div>
           <div class="tm-card-a"><button class="btn ${v.enabled ? "ghost" : ""}" data-a="toggle">${v.enabled ? "⏸️ أوقفه" : "▶️ رجّعه"}</button>
-          <button class="btn ghost" data-a="resetpw" title="يختار كلمة سر جديدة بأول دخول">🔑 صفّر كلمة السر</button>
+          <button class="btn ghost" data-a="resetpw" title="كلمة سر مؤقتة جديدة بنفس الكود">🔑 إعادة تعيين</button>
           <button class="ib" data-a="rotate" title="كود جديد" aria-label="كود جديد">🔄</button> <button class="ib" data-a="delete" title="حذف الحساب" aria-label="حذف الحساب">🗑️</button></div></div>`).join("") + "</div>"
         : '<p class="hint">ماكو مساعد بعد.</p>';
     }
@@ -126,8 +140,8 @@
       if (b.dataset.a && tr && tr.dataset.id) {
         const id = tr.dataset.id, a = b.dataset.a;
         if (a === "toggle") { await api({ action: "admin_toggle", id, enabled: b.textContent.includes("رجّع") }); status(); log(true); return; }
-        if (a === "resetpw") { if (!confirm(`تصفّر كلمة سر «${tr.dataset.name}»؟ يطلع من كل أجهزته، وياخذ كود جديد يختار بيه كلمة سر جديدة.`)) return; const r = await api({ action: "admin_reset_password", id }); if (r.code) $("#tm-out").innerHTML = once({ ...r, name: tr.dataset.name }, "تصفّرت كلمة السر — كود جديد"); status(); log(true); return; }
-        if (a === "rotate") { if (!confirm("كود جديد؟ القديم يبطل، كلمة السر تتصفّر، ويطلع من كل أجهزته.")) return; const r = await api({ action: "admin_rotate", id }); if (r.code) $("#tm-out").innerHTML = once({ ...r, name: tr.dataset.name }, "كود جديد"); status(); log(true); return; }
+        if (a === "resetpw") { if (!confirm(`إعادة تعيين «${tr.dataset.name}»؟ تطلعلك كلمة سر مؤقتة جديدة (72 ساعة) بنفس الكود، كلمته القديمة تبطل، ويطلع من كل أجهزته.`)) return; const r = await api({ action: "admin_reset_password", id }); if (r.temp_password) $("#tm-out").innerHTML = once({ ...r, name: tr.dataset.name }, "كلمة سر مؤقتة جديدة"); else alert(r.msg || "ما صار."); status(); log(true); return; }
+        if (a === "rotate") { if (!confirm("كود جديد؟ القديم يبطل، وتطلع كلمة سر مؤقتة جديدة، ويطلع من كل أجهزته.")) return; const r = await api({ action: "admin_rotate", id }); if (r.code) $("#tm-out").innerHTML = once({ ...r, name: tr.dataset.name }, "كود جديد + كلمة سر مؤقتة"); status(); log(true); return; }
         if (a === "delete") { const n = prompt(`حذف الحساب نهائياً (السجل يبقى). اكتب الاسم بالضبط للتأكيد:\n${tr.dataset.name}`); if (!n) return; const r = await api({ action: "admin_delete", id, confirm: true, confirm_name: n }); if (r.status !== 200) alert("ما انحذف (الاسم ما طابق؟)"); status(); log(true); return; }
       }
       if (b.dataset.d && tr && tr.dataset.q) {
