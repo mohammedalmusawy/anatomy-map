@@ -307,7 +307,7 @@
   // 📅 الامتحانات (27/10، نص + نوع + المشمول 29/10): صورة أو نص ← قراءة (exam-reader) ← مراجعة ← «تأكيد وحفظ». المشمول من قائمة المحاضرات الحقيقية.
   async function exams() {
     const [{ data }, LEC] = await Promise.all([
-      sb.from("exams").select("*").eq("archived", false).eq("confirmed", true).order("exam_date"),
+      sb.rpc("exams_admin", { only_open: true }),   // 🔒 كل الأعمدة (ويّا note) للمالك بس
       fetch(new URL("../study/data.json", location.href)).then((r) => r.json()).catch(() => ({})),
     ]);
     const TYP = [["", "غير محدد"], ["theory", "نظري"], ["practical", "عملي"]];

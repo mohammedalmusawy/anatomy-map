@@ -193,7 +193,7 @@
   if ($("#exams")) (async () => {
     const s = await settings();
     if (!ON || !s.exams) return;
-    const [ex, d, st] = await Promise.all([rest("exams", "select=*&confirmed=eq.true&archived=eq.false", 15 * 60e3), data(), stats()]);
+    const [ex, d, st] = await Promise.all([rest("exams", "select=id,term,subject,type,exam_date,postponed_to,lectures&confirmed=eq.true&archived=eq.false", 15 * 60e3), data(), stats()]);
     if (!ex.length) return;
     const day = (x) => new Date(x + "T00:00:00");
     ex.sort((a, b) => day(a.postponed_to || a.exam_date) - day(b.postponed_to || b.exam_date));
