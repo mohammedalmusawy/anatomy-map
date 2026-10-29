@@ -6,6 +6,15 @@
   const root = new URL(".", document.querySelector('link[rel="manifest"]').href).href;
   const C = window.STUDY_CLOUD || {}, ON = !!(C.url && C.anon);
   const H = { apikey: C.anon, Authorization: "Bearer " + C.anon, "Content-Type": "application/json" };
+  // توكن جلسة الطالب: من account.js إذا محمّل، وإلا من جلسة Supabase المحفوظة (t:acct-session) إذا بعدها صالحة
+  const studentToken = () => {
+    try { if (window.Account && Account.token) return Account.token(); } catch (e) {}
+    try {
+      const s = JSON.parse(localStorage.getItem("t:acct-session") || "null");
+      const t = s && (s.access_token || (s.currentSession && s.currentSession.access_token));
+      return t && (s.expires_at || 0) * 1000 > Date.now() + 30e3 ? t : null;
+    } catch (e) { return null; }
+  };
   const N = window.Net;   // 📡 net.js: كاش بمدة (إذا الصفحة ما حمّلته: طلب مباشر مثل قبل)
   const rest = (t, q, ttl) => !ON ? Promise.resolve([]) : N ? N.get(t, q, ttl) : fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => r.json()).catch(() => []);
   const norm = (s) => String(s).toLowerCase().replace(/[ً-ْـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه")
@@ -18,7 +27,7 @@
   const stats = () => STATS ? Promise.resolve(STATS) : rest("question_stats", "select=qkey,rate,estimated,hint_en,hint_ar,attempts", 6 * 3600e3).then((r) => (STATS = Object.fromEntries((r || []).map((x) => [x.qkey, x]))));
   const qk = (q) => (q.q_en || "").slice(0, 120);
   const settings = () => window.STUDY_SETTINGS ? Promise.resolve(window.STUDY_SETTINGS)
-    : (N && ON ? N.settings() : rest("settings", "select=key,value").then((r) => Object.fromEntries((r || []).map((x) => [x.key, x.value])))).then((S) => S.sections || {});
+    : (N && ON ? N.settings() : rest("settings", "select=key,value").then((r) => Object.fromEntries((r || []).map((x) => [x.key, x.value])))).then((S) => (S && S.sections) || S || {});   // cloud.js يحط STUDY_SETTINGS = الأقسام نفسها؛ الطلب المباشر يرجّع كل الإعدادات
 
   // ───────── 🔎 البحث الذكي ─────────
   function lev(a, b) {
@@ -150,11 +159,14 @@
       const s = await settings();
       if (!ON || !s.assistant) { say("bot", "🤖 المحادثة بالذكاء الاصطناعي تشتغل قريباً. هسه تگدر تستعمل <b>🎯 رشّحلي</b> و<b>📝 لخّصلي</b> فوق، و<a href='" + root + "search/'>🔎 البحث</a>."); return; }
       say("bot", "<i class='typing'>…</i>");
-      const r = await fetch(`${C.url}/functions/v1/study-assistant`, { method: "POST", headers: H, body: JSON.stringify({ device: window.Cloud && Cloud.dev, q, ctx: params.get("subject") ? { subject: params.get("subject") } : null }) })
-        .then((x) => x.json()).catch(() => ({ error: 1 }));
+      const body = JSON.stringify({ device: window.Cloud && Cloud.dev, q, ctx: params.get("subject") ? { subject: params.get("subject") } : null });
+      const post = (tok) => fetch(`${C.url}/functions/v1/study-assistant`, { method: "POST", headers: { ...H, Authorization: "Bearer " + (tok || C.anon) }, body });
+      // 🎓 29/10: الطالب المسجّل يرسل توكن جلسته حتى ينحسب طالب (مو زائر). توكن منتهي/مرفوض ← نعيد كزائر مرة وحدة.
+      const tok = studentToken();
+      const r = await post(tok).then((x) => (tok && x.status === 401 ? post(null) : x)).then((x) => x.json()).catch(() => ({ error: 1 }));
       chat.lastElementChild.remove();
       if (r.disabled) return say("bot", "🤖 المساعد مطفي حالياً.");
-      if (r.limit) return say("bot", "وصلت حد اليوم (20 سؤال). ارجع باچر 🌙 — وهسه تگدر تستعمل 🎯 رشّحلي.");
+      if (r.limit) return say("bot", "وصلت حد اليوم (" + (r.max || 15) + " سؤال). ارجع باچر 🌙 — وهسه تگدر تستعمل 🎯 رشّحلي.");
       if (r.budget || r.error) return say("bot", "المساعد مو متوفر هسه. البحث و«رشّحلي» يشتغلون عادي.");
       if (r.intent === "exams") { say("bot", `📅 <a href="${root}exams/">افتح قسم الامتحانات</a>`); return; }
       if (r.intent === "recommend") { recommender("recommend", params.get("subject")); return; }

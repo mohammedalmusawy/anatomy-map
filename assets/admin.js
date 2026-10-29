@@ -66,6 +66,18 @@
   }
   async function getSet(k) { const { data } = await sb.from("settings").select("value").eq("key", k).single(); return data?.value || {}; }
   async function setSection(k, v) { const s = await getSet("sections"); s[k] = v; await sb.from("settings").upsert({ key: "sections", value: s, at: new Date().toISOString() }); }
+  // 💵 الصرف هذا الشهر + التوقع لآخر الشهر (السعر: Haiku 5.5 = 0.10$/0.50$ لكل مليون توكن، يتغيّر من assistant_budget.price_in/price_out)
+  async function spend(bud) {
+    const box = document.getElementById("spend"); if (!box) return;
+    const d = new Date(), m = d.toISOString().slice(0, 8) + "01", days = new Date(d.getUTCFullYear(), d.getUTCMonth() + 1, 0).getDate();
+    const { data, error } = await sb.rpc("assistant_spend_admin", { m });
+    if (error) { box.textContent = "ما گدرنا نقرا الصرف."; return; }
+    const r = (Array.isArray(data) ? data[0] : data) || {};
+    const usd = (r.tin || 0) * (bud.price_in ?? 0.1) / 1e6 + (r.tout || 0) * (bud.price_out ?? 0.5) / 1e6;
+    const fc = usd / Math.max(1, d.getUTCDate()) * days, cap = bud.monthly_usd ?? 50, pct = Math.round(usd / cap * 100);
+    box.innerHTML = `<b>الصرف هذا الشهر:</b> ${usd.toFixed(2)}$ من ${cap}$ (${pct}%) · ${r.asks || 0} سؤال<br>` +
+      `<b>التوقع لآخر الشهر:</b> ≈ ${fc.toFixed(2)}$ ${fc >= cap ? "⚠️ يعبر الحد — المساعد يوگف وحده لما يوصل" : fc >= cap * (bud.alert_pct ?? 70) / 100 ? "⚠️ قريب من الحد" : "✅ ضمن الحد"}`;
+  }
   async function control() {
     const [ann, sec, bud] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget")]);
     pane.innerHTML = `<h2>📣 شريط الإعلان</h2><textarea id="an" rows="2">${esc(ann.text)}</textarea>
@@ -73,12 +85,22 @@
       <h2>🧩 الأقسام</h2>
       <label><input type="checkbox" id="sx" ${sec.exams ? "checked" : ""}> 📅 الامتحانات (أيقونة بالرئيسية وقت الامتحانات بس)</label>
       <label><input type="checkbox" id="sa" ${sec.assistant ? "checked" : ""}> 🤖 مساعد الطالب (بعد ما ينحط المفتاح)</label>
-      <h2>💵 ميزانية المساعد</h2><label>شهرياً ($) <input id="bm" type="number" value="${bud.monthly_usd ?? 50}"></label>
-      <label>أسئلة يومياً لكل جهاز <input id="bd" type="number" value="${bud.daily_per_device ?? 20}"></label><button class="btn" id="bs">حفظ</button>`;
+      <h2>💵 ميزانية المساعد</h2><div id="spend" class="hint">…</div><label>شهرياً ($) <input id="bm" type="number" value="${bud.monthly_usd ?? 50}"></label>
+      <label>أسئلة يومياً لكل طالب/جهاز <input id="bd" type="number" value="${bud.daily_per_device ?? 15}"></label>
+      <label>تنبيه بالبوت عند (%) <input id="bp" type="number" min="10" max="100" value="${bud.alert_pct ?? 70}"></label><button class="btn" id="bs">حفظ</button>`;
+    spend(bud);
     document.getElementById("ans").onclick = async () => { await sb.from("settings").upsert({ key: "announcement", value: { text: document.getElementById("an").value, on: document.getElementById("anon").checked } }); alert("انحفظ"); };
     document.getElementById("sx").onchange = (e) => setSection("exams", e.target.checked);
     document.getElementById("sa").onchange = (e) => setSection("assistant", e.target.checked);
-    document.getElementById("bs").onclick = async () => { await sb.from("settings").upsert({ key: "assistant_budget", value: { monthly_usd: +document.getElementById("bm").value, daily_per_device: +document.getElementById("bd").value } }); alert("انحفظ"); };
+    // دمج ويّا القيم الموجودة (حدود IP والحد الكلّي تبقى) — الحفظ القديم كان يمسحها
+    document.getElementById("bs").onclick = async () => {
+      const cur = await getSet("assistant_budget"), n = (id) => +document.getElementById(id).value;
+      const value = { ...cur, monthly_usd: n("bm"), daily_per_device: n("bd"), alert_pct: n("bp") };
+      const { data: g } = await sb.from("settings").select("value").eq("key", "gate").single();
+      await sb.from("settings").upsert({ key: "assistant_budget", value, at: new Date().toISOString() });
+      if (g) await sb.from("settings").upsert({ key: "gate", value: { ...g.value, student_daily: value.daily_per_device }, at: new Date().toISOString() });
+      alert("انحفظ"); spend(value);
+    };
   }
   const SUBJ = { anatomy: "تشريح", radiography: "التصوير الشعاعي", protection: "الوقاية", examinations: "الفحوصات الشعاعية", ct: "أجهزة التصوير المقطعي", equipment: "أجهزة الأشعة التقليدية" };
   // 📅 الامتحانات (27/10، نص + نوع + المشمول 29/10): صورة أو نص ← قراءة (exam-reader) ← مراجعة ← «تأكيد وحفظ». المشمول من قائمة المحاضرات الحقيقية.
