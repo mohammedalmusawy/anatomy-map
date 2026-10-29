@@ -21,6 +21,7 @@
   .ap-chk{display:flex!important;align-items:center;gap:8px;min-height:44px;color:var(--ink)!important}
   .ap-chk input{width:20px;height:20px}
   .ap-ph{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .ap-note{color:var(--muted)}
   .ap-av{flex:none;width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--brand-soft);display:inline-flex;align-items:center;justify-content:center;color:var(--brand);font:800 1.3rem/1 var(--title-font,system-ui)}
   .ap-row .ap-av{width:44px;height:44px;font-size:1.05rem}
   .ap-b{min-height:44px;min-width:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:14px;font-family:inherit;cursor:pointer}
@@ -92,6 +93,7 @@
         <b id="ap-ft">➕ إضافة شخص</b>
         <label>الاسم<input type="text" id="ap-name" maxlength="120" required autocomplete="off"></label>
         <label>الصفة / الاختصاص (اختياري)<input type="text" id="ap-title" maxlength="120" autocomplete="off" placeholder="مثل: جراحة العظام والمفاصل"></label>
+        <label>كلمة شكر (اختياري، سطر قصير) <small id="ap-note-n" aria-live="polite">0/80</small><input type="text" id="ap-note" maxlength="80" autocomplete="off" placeholder="مثل: شكراً لدعمك الطلاب بصورك"></label>
         <label>القسم<select id="ap-grp">${GRP.map(([k, t]) => `<option value="${k}">${t}</option>`).join("")}</select></label>
         <label id="ap-tagw">قسم الأطلس (اختياري — يطلع اسمه بسطر الشكر آخر صفحات الأطلس)<select id="ap-tag">${TAGS.map(([k, t]) => `<option value="${k}">${t}</option>`).join("")}</select></label>
         <div class="ap-ph"><span class="ap-av" id="ap-prev" aria-hidden="true">؟</span>
@@ -104,6 +106,8 @@
       <div id="ap-list"><p class="hint">لحظة…</p></div>`;
     const $ = (s) => pane.querySelector(s);
     let rows = [], edit = null, photo = null /* {blob,ext,path?} جديدة */, clear = false, blobUrl = null;
+    // 💬 عدّاد «كلمة شكر» (80 حرف كحد أقصى)
+    $("#ap-note").addEventListener("input", () => { $("#ap-note-n").textContent = $("#ap-note").value.length + "/80"; });
     const msg = (t, k) => { const m = $("#ap-msg"); m.textContent = t; m.className = "ap-msg" + (k ? " " + k : ""); };
     const syncTag = () => { $("#ap-tagw").hidden = $("#ap-grp").value !== "doctors"; };
     $("#ap-grp").onchange = syncTag;
@@ -126,13 +130,13 @@
     $("#ap-nophoto").onclick = () => { photo = null; clear = true; $("#ap-file").value = ""; preview(); };
 
     function resetForm() {
-      edit = null; photo = null; clear = false; $("#ap-form").reset(); $("#ap-vis").checked = true;
+      edit = null; photo = null; clear = false; $("#ap-form").reset(); $("#ap-vis").checked = true; $("#ap-note-n").textContent = "0/80";
       $("#ap-ft").textContent = "➕ إضافة شخص"; $("#ap-cancel").hidden = true; syncTag(); preview();
     }
     $("#ap-cancel").onclick = () => { resetForm(); msg(""); };
     function startEdit(p) {
       edit = p; photo = null; clear = false;
-      $("#ap-name").value = p.name; $("#ap-title").value = p.title || ""; $("#ap-grp").value = p.grp; $("#ap-tag").value = p.tag || "";
+      $("#ap-name").value = p.name; $("#ap-title").value = p.title || ""; $("#ap-note").value = p.note || ""; $("#ap-note").dispatchEvent(new Event("input")); $("#ap-grp").value = p.grp; $("#ap-tag").value = p.tag || "";
       $("#ap-vis").checked = !!p.visible; $("#ap-file").value = "";
       $("#ap-ft").textContent = "✏️ تعديل: " + p.name; $("#ap-cancel").hidden = false; syncTag(); preview(); msg("");
       $("#ap-form").scrollIntoView({ behavior: "smooth", block: "start" }); $("#ap-name").focus({ preventScroll: true });
@@ -143,7 +147,7 @@
       const name = $("#ap-name").value.trim().replace(/\s+/g, " ");
       if (name.length < 2) { msg("⚠️ اكتب الاسم.", "bad"); $("#ap-name").focus(); return; }
       const grp = $("#ap-grp").value;
-      const row = { name, title: $("#ap-title").value.trim().replace(/\s+/g, " "), grp, tag: grp === "doctors" ? $("#ap-tag").value : "", visible: $("#ap-vis").checked };
+      const row = { name, title: $("#ap-title").value.trim().replace(/\s+/g, " "), note: $("#ap-note").value.trim().replace(/\s+/g, " ").slice(0, 80), grp, tag: grp === "doctors" ? $("#ap-tag").value : "", visible: $("#ap-vis").checked };
       $("#ap-save").disabled = true; msg("⏳ أحفظ…");
       try {
         if (photo) row.photo = photo.path || (photo.path = await upload(sb, photo));   // إعادة المحاولة ما ترفع نسخة ثانية
@@ -164,7 +168,7 @@
     const nextSort = (grp) => rows.filter((r) => r.grp === grp).reduce((m, r) => Math.max(m, r.sort || 0), 0) + 10;
 
     async function load() {
-      const { data, error } = await sb.from("people").select("id,name,title,grp,photo,visible,sort,tag").order("grp").order("sort");
+      const { data, error } = await sb.from("people").select("id,name,title,note,grp,photo,visible,sort,tag").order("grp").order("sort");
       if (error) { $("#ap-list").innerHTML = `<p class="hint">ما گدرت أجيب القائمة (${esc(error.message)}).</p>`; return; }
       rows = data || []; draw();
     }
@@ -174,7 +178,7 @@
         return `<h3 class="ap-g">${t} <small class="hint">(${xs.length})</small></h3>` + (xs.length ? `<ul class="ap-list" data-grp="${k}">` + xs.map((p, i) => `
           <li class="ap-row${p.visible ? "" : " off"}" data-id="${p.id}">
             <span class="ap-h" role="img" aria-label="اسحب للترتيب" title="اسحب للترتيب">⠿</span>${av(p)}
-            <span class="ap-t"><b>${esc(p.name)}${p.visible ? "" : ' <span class="ap-tag">مخفي</span>'}${p.tag ? ` <span class="ap-tag">${esc((TAGS.find((x) => x[0] === p.tag) || ["", p.tag])[1])}</span>` : ""}</b>${p.title ? `<small>${esc(p.title)}</small>` : ""}</span>
+            <span class="ap-t"><b>${esc(p.name)}${p.visible ? "" : ' <span class="ap-tag">مخفي</span>'}${p.tag ? ` <span class="ap-tag">${esc((TAGS.find((x) => x[0] === p.tag) || ["", p.tag])[1])}</span>` : ""}</b>${p.title ? `<small>${esc(p.title)}</small>` : ""}${p.note ? `<small class="ap-note">💬 ${esc(p.note)}</small>` : ""}</span>
             <span class="ap-acts">
               <button type="button" class="ap-b" data-up aria-label="انقل ${esc(p.name)} لفوق"${i ? "" : " disabled"}>▲</button>
               <button type="button" class="ap-b" data-down aria-label="انقل ${esc(p.name)} لجوّه"${i < xs.length - 1 ? "" : " disabled"}>▼</button>

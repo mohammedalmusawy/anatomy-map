@@ -26,7 +26,7 @@
     const s = src(p.photo), n = big ? 72 : 48;
     const av = s ? `<img class="pp-av" src="${esc(s)}" alt="" width="${n}" height="${n}" loading="lazy" decoding="async">`
       : `<span class="pp-av pp-mono" aria-hidden="true">${esc(mono(p.name))}</span>`;
-    return `<li class="pp">${av}<span class="pp-t"><b>${esc(p.name)}</b>${p.title ? `<small>${esc(p.title)}</small>` : ""}</span></li>`;
+    return `<li class="pp">${av}<span class="pp-t"><b>${esc(p.name)}</b>${p.title ? `<small>${esc(p.title)}</small>` : ""}${p.note ? `<span class="pp-note">${esc(p.note)}</span>` : ""}</span></li>`;
   };
   const render = (rows) => GROUPS.map(([k, ic, title, sub, anc]) => {
     const xs = rows.filter((r) => r.grp === k).sort((a, b) => (a.sort || 0) - (b.sort || 0));
@@ -45,8 +45,8 @@
   };
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
-  if (cached && Date.now() - cached.t < TTL) return apply(cached.d);
-  fetch(`${C.url}/rest/v1/people?select=id,name,title,grp,photo,sort&visible=eq.true&order=grp.asc,sort.asc`,
+  if (cached) apply(cached.d);   // يرسم المحفوظ فوراً، وبعدين الجديد من الشبكة (التعديل يطلع فوراً)
+  fetch(`${C.url}/rest/v1/people?select=id,name,title,note,grp,photo,sort&visible=eq.true&order=grp.asc,sort.asc`,
     { headers: { apikey: C.anon, Authorization: "Bearer " + C.anon } })
     .then((r) => (r.ok ? r.json() : null))
     .then((d) => { if (!d) return; try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d })); } catch (e) {} apply(d); })
