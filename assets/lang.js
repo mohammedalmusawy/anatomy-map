@@ -6,9 +6,9 @@
   var root = document.documentElement;
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   var AR = /[؀-ۿ]/;
-  var SKIP = ".pa, .ar, script, style, noscript, textarea, input, select, .lang, [data-noen], .tpop, .ta, .tod .m";
+  var SKIP = ".pa, .ar, script, style, noscript, textarea, input, select, .lang, [data-noen], .tpop, .ta, .tod .m, .pp-av, .pp-mono, .tm-mono, .ap-av";   // دائرة أول حرف من الاسم: عربية عمداً
   var BLOCK = "p, li, h1, h2, h3, h4, summary, figcaption, td, th, label, dt, dd, .ccard, .hcard, .pcard, .meta, .sub, .bl, button, a";
-  var DICT = null, orig = new Map(), marked = [];
+  var DICT = null, orig = new Map(), elOrig = new Map(), marked = [];
   var titleAr = document.title, root_ = (function () { var l = document.querySelector('link[rel="manifest"]'); return l ? new URL(".", l.href).href : "/"; })();
 
   function store(v) { try { localStorage.setItem("t:lang", v); } catch (e) {} }
@@ -60,6 +60,13 @@
       var t = h.previousElementSibling; if (!t || !t.firstChild || t.firstChild.nodeType !== 3) return;
       orig.set(t.firstChild, t.firstChild.nodeValue); t.firstChild.nodeValue = h.textContent;
     });
+    // عنصر نصّه الكامل بالقاموس بس مقسوم بمصطلح منقّط (.tm) — مثل «الأشعة الملونة للرحم (HSG)» ← نترجمه كله
+    [].forEach.call(document.querySelectorAll("small, b, p, h1, h2, h3, li, span, a, figcaption"), function (el) {
+      if (el.closest(SKIP) || !el.firstElementChild || elOrig.has(el)) return;
+      if ([].some.call(el.children, function (c) { return !c.classList.contains("tm"); })) return;
+      var k = el.textContent.replace(/\s+/g, " ").trim(); if (!AR.test(k) || !DICT[k]) return;
+      elOrig.set(el, el.innerHTML); el.textContent = DICT[k];
+    });
     texts(function (n) {
       var v = tr(n.nodeValue);
       if (v != null) { orig.set(n, n.nodeValue); n.nodeValue = v; return; }
@@ -81,6 +88,7 @@
     var t = DICT[titleAr.replace(/ · معاينة$/, "")]; document.title = t ? t + " · Preview" : titleAr;
   }
   function toAr() {
+    elOrig.forEach(function (h, el) { el.innerHTML = h; }); elOrig.clear();
     orig.forEach(function (v, n) { n.nodeValue = v; }); orig.clear();
     marked.forEach(function (b) { b.removeAttribute("data-ensoon"); b.removeAttribute("dir"); b.removeAttribute("lang"); }); marked = [];
     [].forEach.call(document.querySelectorAll("[data-ar-label]"), function (el) { el.setAttribute("aria-label", el.getAttribute("data-ar-label")); el.removeAttribute("data-ar-label"); });
