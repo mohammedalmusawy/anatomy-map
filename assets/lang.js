@@ -68,11 +68,11 @@
       elOrig.set(el, el.innerHTML); el.textContent = DICT[k];
     });
     texts(function (n) {
-      var v = tr(n.nodeValue);
-      if (v != null) { orig.set(n, n.nodeValue); n.nodeValue = v; return; }
-      // عنصر بيه العربي ويّا نسخته الإنكليزية ([lang=en]) ← نخفي العربي بس
+      // عنصر بيه العربي ويّا نسخته الإنكليزية (.en / .h1en) ← نخفي العربي بس (قبل الترجمة، حتى ما يتكرر «IntroductionIntroduction»)
       var par = n.parentElement;
       if (par.querySelector(':scope > .en, :scope > .h1en')) { orig.set(n, n.nodeValue); n.nodeValue = ""; return; }
+      var v = tr(n.nodeValue);
+      if (v != null) { orig.set(n, n.nodeValue); n.nodeValue = v; return; }
       var b = par.closest(BLOCK) || par;          // ما إله ترجمة ← عربي + «EN soon»
       if (b.closest("[data-ensoon]") && b.closest("[data-ensoon]") !== b) return;
       if (!b.hasAttribute("data-ensoon")) { b.setAttribute("data-ensoon", ""); b.setAttribute("dir", "rtl"); b.setAttribute("lang", "ar"); marked.push(b); }
@@ -84,6 +84,11 @@
     // سطر تحت العنوان بنفس النص الإنكليزي (العنوان صار إنكليزي) ← نخفيه حتى ما يتكرر
     [].forEach.call(document.querySelectorAll("h1 + .sub, h1 + p, h1 + .en"), function (x) {
       var h = x.previousElementSibling; if (h && h.textContent.trim() === x.textContent.trim()) { x.hidden = true; x.setAttribute("data-dup", ""); }
+    });
+    // 30/10: «🎯 Purpose الغرض» ← العنوان العربي الصغير (.gh-ar) صار نفس الإنكليزي اللي جنبه ← نخفيه حتى ما يطلع «Purpose Purpose»
+    [].forEach.call(document.querySelectorAll(".gh-ar"), function (x) {
+      var p = x.previousElementSibling, n = function (v) { return String(v || "").replace(/\s+/g, " ").trim().toLowerCase(); };
+      if (p && n(p.textContent) === n(x.textContent)) { x.hidden = true; x.setAttribute("data-dup", ""); }
     });
     var t = DICT[titleAr.replace(/ · معاينة$/, "")]; document.title = t ? t + " · Preview" : titleAr;
   }
@@ -112,9 +117,15 @@
     });
     var d = document.querySelector(".disp"); if (d) d.setAttribute("aria-label", lang === "en" ? "Display" : "العرض");
   }
+  function lexMarked() {
+    if (!window.Listen || !window.Listen.ready) return null;
+    var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 30); };
+    return Promise.resolve(window.Listen.ready()).then(function () { return new Promise(function (r) { idle(function () { idle(r); }); }); });
+  }
   function paint(lang) {
     root.lang = lang; root.dir = lang === "en" ? "ltr" : "rtl"; seg(lang);
-    if (lang === "en") return dict().then(function () { watch(false); toAr(); busy = true; toEn(); busy = false; watch(true); });
+    // ⚡ (30/10) الترجمة بعد ما يكمّل listen.js تعليم المصطلحات (المعجم صار ينزل بعد load) ← نفس الشكل القديم: مصطلحات النص تتنقّط، الواجهة المترجمة لا
+    if (lang === "en") return Promise.all([dict(), lexMarked()]).then(function () { watch(false); toAr(); busy = true; toEn(); busy = false; watch(true); });
     watch(false); toAr(); return Promise.resolve();
   }
   function toast(lang) {
@@ -153,6 +164,8 @@
   });
   var st = document.querySelector(".cbar.sticky");
   if (st) window.addEventListener("scroll", function () { st.classList.toggle("stuck", window.scrollY > 4); }, { passive: true });
+  // 30/10: ارتفاع الشريط الثابت الحقيقي ← scroll-padding-top (lang.css) حتى الروابط #… ما تنزل تحته
+  if (st) { var cbh = function () { root.style.setProperty("--cbar-h", st.offsetHeight + "px"); }; cbh(); window.addEventListener("resize", cbh, { passive: true }); }
 
   var q = /[?&]lang=(en|ar)/.exec(location.search);
   var start = q ? q[1] : (saved() === "en" ? "en" : "ar");

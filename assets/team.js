@@ -21,10 +21,16 @@
     while (again) { again = false; for (const p of PREFIX) if (n.startsWith(p)) { n = n.slice(p.length).trim(); again = true; } }
     return (n.match(/\p{L}/u) || ["•"])[0];
   };
-  const src = (ph) => !ph ? "" : ph.startsWith("assets/") ? (cfg.rp || "") + ph : (cfg.store || C.url + "/storage/v1/object/public/people/") + ph;
+  // 🔧 (30/10) جذر الموقع من رابط الـ manifest (مو cfg.rp الثابت من صفحة المعاينة «../../» اللي تكسر بالحي)
+  const ROOT = (() => { const l = document.querySelector('link[rel="manifest"]'); return l ? new URL(".", l.href).href : new URL("../", location.href).href; })();
+  // نسخ WebP الجاهزة بالصفحة الثابتة (<picture>) ← نرجع نستعملها لنفس الصورة بعد التحديث الحي
+  const PIC = {};
+  box.querySelectorAll("picture").forEach((pc) => { const im = pc.querySelector("img"); if (im && im.src) PIC[im.src] = [...pc.querySelectorAll("source")].map((x) => x.outerHTML).join(""); });
+  const src = (ph) => !ph ? "" : ph.startsWith("assets/") ? new URL(ph, ROOT).href : (cfg.store || C.url + "/storage/v1/object/public/people/") + ph;
   const person = (p, big) => {
     const s = src(p.photo), n = big ? 72 : 48;
-    const av = s ? `<img class="pp-av" src="${esc(s)}" alt="" width="${n}" height="${n}" loading="lazy" decoding="async">`
+    const img = `<img class="pp-av" src="${esc(s)}" alt="" width="${n}" height="${n}" loading="lazy" decoding="async">`;
+    const av = s ? (PIC[s] ? `<picture>${PIC[s]}${img}</picture>` : img)
       : `<span class="pp-av pp-mono" aria-hidden="true">${esc(mono(p.name))}</span>`;
     return `<li class="pp">${av}<span class="pp-t"><b>${esc(p.name)}</b>${p.title ? `<small>${esc(p.title)}</small>` : ""}${p.note ? `<span class="pp-note">${esc(p.note)}</span>` : ""}</span></li>`;
   };

@@ -57,7 +57,7 @@
     const fb = $("fb");
     if (k === q.answer) {
       fb.className = "fb ok";
-      fb.textContent = "🟢 إجابة صحيحة";
+      fb.innerHTML = `<b>🟢 إجابة صحيحة</b>${q.why ? `<div class="why">💡 ${esc(q.why)}</div>` : ""}`;   // 30/10: «ليش صح» بعد كل جواب (مختصر)
     } else {
       btn.classList.add("wrong");
       wrong.push(q);

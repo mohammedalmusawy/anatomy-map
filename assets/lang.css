@@ -49,6 +49,8 @@ button[data-ensoon]::after, a.tbtn[data-ensoon]::after { display: none; }
 /* الشريط اللاصق: خط رفيع يطلع بس لما تنزل */
 .cbar.sticky { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); border-bottom: 1px solid transparent; }
 .cbar.sticky.stuck { border-bottom-color: var(--line); }
+/* 30/10: الروابط #c-… (الأطلس حسب العَرَض والبحث) ← رأس البطاقة ما يختفي تحت الشريط الثابت */
+html:has(.cbar.sticky) { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + var(--cbar-h, 72px) + 8px); }
 
 /* قلب الاتجاه بنعومة */
 html.swapping body { opacity: .35; transition: opacity .15s ease; }

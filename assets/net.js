@@ -25,6 +25,15 @@
   const scrub = (row) => { if (row && typeof row === "object") for (const f of ["page", "quiz", "ref"]) if (typeof row[f] === "string") row[f] = clean(row[f]); return row; };
   // L6: 401/403 متكرر (مفتاح أو سياسة تغيّرت) ← نوقف الإرسال لهاي الجلسة (الصفوف تبقى بالطابور)، بدل كل 30 ث للأبد
   let authFails = 0;
+  // ⚡ (30/10 السرعة) أول طلب لـ Supabase (بلا كاش) يبدي بعد ما تكمل الصفحة (load + وقت فراغ، أقصاه ~1 ث)، مو بطريق أول رسم.
+  //    أي لمسة أو زر قبلها ← يبدي فوراً. الكاش (الزيارات اللي بعدها) يرجع فوراً مثل قبل.
+  let loadedP = null;
+  const afterLoad = () => loadedP || (loadedP = new Promise((res) => {
+    let done = false; const go = () => { if (!done) { done = true; res(); } };
+    const idleGo = () => (window.requestIdleCallback ? requestIdleCallback(go, { timeout: 1000 }) : setTimeout(go, 150));
+    if (document.readyState === "complete") idleGo(); else addEventListener("load", idleGo, { once: true });
+    ["pointerdown", "keydown", "touchstart"].forEach((t) => addEventListener(t, go, { once: true, passive: true, capture: true }));
+  }));
   const inflight = new Map();
 
   function get(table, query, ttl = 10 * 60e3) {
@@ -32,7 +41,7 @@
     const key = "t:c:" + table + "?" + query, c = ls.get(key);
     if (c && (Date.now() - c.at < ttl || !online())) return Promise.resolve(c.v);
     if (inflight.has(key)) return inflight.get(key);
-    const p = fetch(`${C.url}/rest/v1/${table}?${query}`, { headers: H })
+    const p = afterLoad().then(() => fetch(`${C.url}/rest/v1/${table}?${query}`, { headers: H }))
       .then((r) => { if (!r.ok) throw r.status; return r.json(); })
       .then((v) => { ls.set(key, { at: Date.now(), v }); return v; })
       .catch(() => (c ? c.v : []))
@@ -97,5 +106,5 @@
     addEventListener("pagehide", () => flush());
     document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") flush(); });
   }
-  window.Net = { on: ON, get, settings, post, log, flush };
+  window.Net = { on: ON, get, settings, post, log, flush, afterLoad };
 })();

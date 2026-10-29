@@ -10,7 +10,14 @@
   const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
   // ── 🌙 الوضع الليلي: اختياري بزر، ويتذكّر (الافتراضي فاتح) ──
-  const setTheme = (t) => { if (t === "dark") document.documentElement.dataset.theme = "dark"; else delete document.documentElement.dataset.theme; };
+  // 30/10: لون شريط المتصفح (theme-color) يتبع الوضع الفعلي للصفحة (فاتح افتراضياً، داكن بـ 🌙) — مو وضع الجهاز
+  const themeColor = (t) => {
+    const ms = [...document.querySelectorAll('meta[name="theme-color"]')];
+    const m = ms[0] || document.head.appendChild(Object.assign(document.createElement("meta"), { name: "theme-color" }));
+    ms.slice(1).forEach((x) => x.remove()); m.removeAttribute("media");
+    m.setAttribute("content", t === "dark" ? "#12151C" : "#4B5A8A");
+  };
+  const setTheme = (t) => { if (t === "dark") document.documentElement.dataset.theme = "dark"; else delete document.documentElement.dataset.theme; themeColor(t); };
   setTheme(LS.get("theme", "light"));
   document.addEventListener("click", (ev) => {
     if (!ev.target.closest("[data-theme-toggle]")) return;
@@ -187,6 +194,13 @@
     };
     av.addEventListener("click", (ev) => { const b = ev.target.closest("[data-av]"); if (b) pick(b.dataset.av, true); });
     pick(location.hash === "#sx" ? "sx" : "body");
+    // 30/10: «حسب العَرَض» يتذكّر الجهاز والعَرَض المفتوحين (sessionStorage) ← الرجوع من الحالة يلگاهن مثل ما چانن
+    const sxp = $("#av-sx");
+    if (sxp) {
+      const ds = $$("details", sxp), K = "t:atlas-sx";
+      try { JSON.parse(sessionStorage.getItem(K) || "[]").forEach((i) => { if (ds[i]) ds[i].open = true; }); } catch (e) {}
+      sxp.addEventListener("toggle", () => { try { sessionStorage.setItem(K, JSON.stringify(ds.map((d, i) => (d.open ? i : -1)).filter((i) => i >= 0))); } catch (e) {} }, true);
+    }
   }
   // المحاضرة: التبويب من الرابط (#read #listen #quiz #terms #file)، والروابط القديمة (#listen و#s3 من الـ PDF) تفتح «اسمع» على نفس القسم
   const lt = $("#ltabs");

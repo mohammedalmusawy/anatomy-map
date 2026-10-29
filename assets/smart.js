@@ -181,13 +181,21 @@
       say("bot", h);
     }
     chat.addEventListener("click", (ev) => { const b = ev.target.closest(".nx"); if (b) ask(b.dataset.q); });
-    $("#ask").addEventListener("submit", (ev) => { ev.preventDefault(); const v = $("#aq").value.trim(); if (v) { $("#aq").value = ""; ask(v); } });
+    $("#ask").addEventListener("submit", (ev) => { ev.preventDefault(); const v = $("#aq").value.trim(); if (v) { $("#aq").value = ""; unpulse(); ask(v); } });
+    function unpulse() { const b = $("#ask .pulse"); if (b) b.classList.remove("pulse"); }
     $("#quick").addEventListener("click", (ev) => {
       const b = ev.target.closest("button"); if (!b) return;
       if (b.dataset.mode) recommender(b.dataset.mode, params.get("subject")); else ask(b.dataset.q);
     });
     if (params.get("mode")) recommender(params.get("mode"), params.get("subject"));
-    else if (params.get("q")) ask(params.get("q"));
+    else if (params.get("q")) {
+      // 🛡️ (30/10) ?q= ما يرسل وحده (الزواحف والتحميل المسبق ما يصرفون): نعبّي السؤال ونأشّر «إرسال»، والإرسال بس بضغطة/Enter من الطالب
+      const inp = $("#aq"), sb = $("#ask button[type=submit], #ask button");
+      inp.value = params.get("q");
+      if (sb) sb.classList.add("pulse");
+      try { inp.focus({ preventScroll: true }); } catch (e) { inp.focus(); }
+      inp.addEventListener("input", () => sb && sb.classList.remove("pulse"), { once: true });
+    }
   }
 
   // ───────── 📅 الامتحانات ─────────

@@ -290,8 +290,13 @@
   // v3b: بطاقة جولة داخل الصفحة (مو نافذة تغطي المحتوى) + تأشير خفيف على العنصر اللي تشرحه؛ تتخطّى وما ترجع إلا بزر «؟»
   const COACH = [null, ".big4", "#d-plan > summary, #t-plan"];
   function tour(force = false) {
-    if (typeof document === "undefined" || (!force && LS.get(TKEY, false)) || document.querySelector(".tour")) return;
-    const d = document.createElement("section");
+    if (typeof document === "undefined") return;
+    // ⚡ (30/10) صفحتي ترسم البطاقة الأولى بالـ HTML (data-pre) حتى ما تنزل الصفحة لتحت وقت التحميل ← نكمّلها هي بدل وحدة جديدة
+    const pre = document.querySelector(".tour[data-pre]");
+    if ((!force && LS.get(TKEY, false))) { if (pre) pre.remove(); return; }
+    if (document.querySelector(".tour:not([data-pre])")) return;
+    const d = pre || document.createElement("section");
+    if (pre) delete pre.dataset.pre;
     d.className = "tourcard tour"; d.setAttribute("aria-labelledby", "tour-t");
     let i = 0;
     const unmark = () => document.querySelectorAll(".coach").forEach((x) => x.classList.remove("coach"));
@@ -304,7 +309,7 @@
     d.addEventListener("click", (ev) => { if (ev.target.closest("[data-skip]")) fin(); else if (ev.target.closest("[data-next]")) { if (++i >= STEPS.length) fin(); else { paint(); d.querySelector("[data-next]").focus(); } } });
     d.addEventListener("keydown", (ev) => { if (ev.key === "Escape") fin(); });
     const at = document.querySelector("#ltabs") || document.querySelector("#mego-sec");
-    if (at && at.parentNode) at.parentNode.insertBefore(d, at); else document.body.appendChild(d);
+    if (!pre) { if (at && at.parentNode) at.parentNode.insertBefore(d, at); else document.body.appendChild(d); }
     paint(); if (force) d.querySelector("[data-next]").focus();
   }
 

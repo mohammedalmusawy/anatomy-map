@@ -28,7 +28,8 @@
   async function load() {
     try { const c = JSON.parse(localStorage.getItem(KEY) || "null"); if (c && Date.now() - c.at < TTL) return c; } catch (e) {}
     if (navigator.onLine === false) throw 0;                 // بلا نت وماكو نسخة حديثة ← ما نعرض تاريخ ممكن تأجّل
-    const q = (t, p) => fetch(`${C.url}/rest/v1/${t}?${p}`, { headers: H }).then((r) => { if (!r.ok) throw 0; return r.json(); });
+    const AL = window.Net && window.Net.afterLoad ? window.Net.afterLoad() : Promise.resolve();   // ⚡ (30/10) بعد ما تكمل الصفحة
+    const q = (t, p) => AL.then(() => fetch(`${C.url}/rest/v1/${t}?${p}`, { headers: H })).then((r) => { if (!r.ok) throw 0; return r.json(); });
     const N = window.Net;   // 📡 net.js: settings مشترك ويّا cloud.js (طلب واحد كل 10 دقايق بدل طلبين بكل صفحة)
     const [rows, examsOn] = await Promise.all([
       q("exams", "select=term,subject,type,exam_date,postponed_to,lectures&confirmed=eq.true&archived=eq.false"),

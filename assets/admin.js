@@ -30,6 +30,8 @@
   const say = (el, t, ok) => { el.textContent = t || ""; el.className = "sd-msg" + (ok ? " ok" : t ? " bad" : ""); };
   const digits = (s) => String(s || "").replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/\D/g, "");
   const pinOk = (p) => p.length >= 8 && p.length <= 12;
+  // 30/10: حقول الرقم السري تقبل أرقام بس (الأرقام العربية تتحول لإنكليزية)
+  box.addEventListener("input", (ev) => { const t = ev.target; if (t.matches && t.matches('input[type="password"][inputmode="numeric"]')) { const v = digits(t.value); if (v !== t.value) t.value = v; } });
   const tokNow = async () => { const { data: { session: s } } = await sb.auth.getSession(); return s && s.access_token; };
   if (new URLSearchParams(location.search).get("k")) history.replaceState(null, "", location.pathname + location.hash);   // الروابط القديمة بالكود
 
@@ -38,9 +40,9 @@
     tools(el) {
       if (window.StaffDoor) StaffDoor.css();
       el.innerHTML = `<details class="sd-card ad-self"><summary>🔢 رقمي السري والأجهزة</summary>
-        <form class="ad-f" novalidate><label class="sd-lab" for="as-o">رقمك الحالي</label><input id="as-o" type="password" inputmode="numeric" autocomplete="current-password" dir="ltr" maxlength="12">
-          <label class="sd-lab" for="as-n">الرقم الجديد (8 أرقام أو أكثر)</label><input id="as-n" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12">
-          <label class="sd-lab" for="as-n2">أعده مرة ثانية</label><input id="as-n2" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12">
+        <form class="ad-f" novalidate><label class="sd-lab" for="as-o">رقمك الحالي</label><input id="as-o" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="current-password" dir="ltr" maxlength="12">
+          <label class="sd-lab" for="as-n">الرقم الجديد (8 أرقام أو أكثر)</label><input id="as-n" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
+          <label class="sd-lab" for="as-n2">أعده مرة ثانية</label><input id="as-n2" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
           <button class="sd-btn" type="submit">غيّر رقمي</button></form>
         <p class="sd-free">تغيير الرقم اختياري. إذا نسيته، محمد يسوّيلك «إعادة تعيين».</p>
         <button class="sd-btn ghost" type="button" id="as-all">🚪 اطلع من كل الأجهزة</button>
@@ -91,12 +93,13 @@
         <div id="ew" class="ad-f" ${own ? "" : "hidden"}><label class="sd-lab" for="le">الإيميل</label>
           <input id="le" type="email" name="username" autocomplete="username" dir="ltr" autocapitalize="none" spellcheck="false" maxlength="200"></div>
         <label class="sd-lab" for="lp">الرقم السري</label>
-        <input id="lp" type="password" name="password" inputmode="numeric" autocomplete="current-password" dir="ltr" maxlength="12" placeholder="••••••••">
+        <input id="lp" type="password" name="password" inputmode="numeric" pattern="[0-9]*" autocomplete="current-password" dir="ltr" maxlength="12" placeholder="••••••••">
         <label class="sd-chk"><input type="checkbox" id="lr" ${DEV.get() || LSx.get("adm:remember") === "1" ? "checked" : ""}> <span>تذكّر هذا الجهاز 30 يوم</span></label>
         <button class="sd-btn" type="submit">دخول</button></form>
       <p class="sd-msg" id="lm" role="status" aria-live="polite"></p>
       <p class="sd-links"><button type="button" class="sd-link" id="forgot">نسيت الرقم؟</button>
-        <button type="button" class="sd-link" id="who">${own ? "دخول بالرقم بس" : "أنا محمد — دخول بالإيميل"}</button><span id="ecode"></span></p></div>`;
+        <button type="button" class="sd-link" id="who">${own ? "دخول بالرقم بس" : "أنا محمد — دخول بالإيميل"}</button><span id="ecode"></span></p>
+      <p class="sd-links"><a class="sd-link" href="../">‹ الرئيسية</a></p></div>`;
     const $ = (q) => box.querySelector(q), m = $("#lm");
     const msg = (t, ok) => say(m, t, ok);
     if (note) msg(note);
@@ -142,12 +145,14 @@
       <button class="sd-btn" type="submit">أرسل رمز الدخول</button></form>
       <form id="ef2" hidden novalidate><label class="sd-lab" for="code">الرمز اللي وصل للإيميل</label><input id="code" inputmode="numeric" autocomplete="one-time-code" dir="ltr">
       <button class="sd-btn" type="submit">دخول</button></form><p class="sd-msg" id="emm" role="status" aria-live="polite"></p>
-      <p class="sd-links"><button type="button" class="sd-link" id="bk">‹ رجوع</button></p></div>`;
+      <p class="sd-links"><button type="button" class="sd-link" id="bk">‹ رجوع</button> <a class="sd-link" href="../">‹ الرئيسية</a></p></div>`;
     const m = box.querySelector("#emm");
     box.querySelector("#bk").onclick = () => loginView("", true);
     box.querySelector("#ef").onsubmit = async (e) => {
       e.preventDefault();
-      const { error } = await sb.auth.signInWithOtp({ email: box.querySelector("#em").value.trim(), options: { shouldCreateUser: false } });
+      const em = box.querySelector("#em").value.trim();
+      if (!em) { say(m, "اكتب الإيميل."); box.querySelector("#em").focus(); return; }
+      const { error } = await sb.auth.signInWithOtp({ email: em, options: { shouldCreateUser: false } });
       if (error) return say(m, error.message);
       box.querySelector("#ef2").hidden = false; say(m, "وصلك رمز بالإيميل.", true); box.querySelector("#code").focus();
     };
@@ -161,9 +166,9 @@
   // رابط «نسيت الرقم؟» من الإيميل ← رقم سري جديد (السيرفر يحطه، وكل الأجهزة تطلع)
   function pinForm(id, withOld) {
     return `<form class="ad-f" id="${id}" novalidate>
-      ${withOld ? `<label class="sd-lab" for="${id}-o">رقمك الحالي</label><input id="${id}-o" type="password" inputmode="numeric" autocomplete="current-password" dir="ltr" maxlength="12">` : ""}
-      <label class="sd-lab" for="${id}-1">الرقم السري الجديد (8 أرقام أو أكثر)</label><input id="${id}-1" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12">
-      <label class="sd-lab" for="${id}-2">أعده مرة ثانية</label><input id="${id}-2" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12">
+      ${withOld ? `<label class="sd-lab" for="${id}-o">رقمك الحالي</label><input id="${id}-o" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="current-password" dir="ltr" maxlength="12">` : ""}
+      <label class="sd-lab" for="${id}-1">الرقم السري الجديد (8 أرقام أو أكثر)</label><input id="${id}-1" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
+      <label class="sd-lab" for="${id}-2">أعده مرة ثانية</label><input id="${id}-2" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
       <button class="sd-btn" type="submit">احفظ الرقم</button></form>`;
   }
   async function savePin(root, id, m) {

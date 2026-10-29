@@ -259,7 +259,17 @@
 
   // ── التشغيل ──
   function mount(el) { box = el || document.querySelector(".listen"); marks(); openHash(); if (el && CI.size) queue(el); }
-  ready = fetch(root + "assets/audio/terms/lex.json").then((r) => (r.ok ? r.json() : {})).then((d) => {
+  // ⚡ (30/10 السرعة) المعجم (~60 KB) ينزل بعد ما تكمل الصفحة (load + وقت فراغ) حتى ما يزاحم أول رسم؛
+  //    أي لمسة أو زر قبلها ← ينزل فوراً. التعليم والبطاقة والصوت نفسهم بالضبط.
+  //    بوضع ENG (lang=en من أول الصفحة) ينزل فوراً مثل قبل: التعليم لازم يصير قبل ترجمة الواجهة (وإلا «X-ray» بالمسار يتنقّط).
+  const afterLoad = () => new Promise((res) => {
+    let done = false; const go = () => { if (!done) { done = true; res(); } };
+    if (document.documentElement.lang === "en") return go();
+    const idleGo = () => (window.requestIdleCallback ? requestIdleCallback(go, { timeout: 1500 }) : setTimeout(go, 200));
+    if (document.readyState === "complete") idleGo(); else addEventListener("load", idleGo, { once: true });
+    ["pointerdown", "keydown", "touchstart"].forEach((t) => addEventListener(t, go, { once: true, passive: true, capture: true }));
+  });
+  ready = afterLoad().then(() => fetch(root + "assets/audio/terms/lex.json")).then((r) => (r.ok ? r.json() : {})).then((d) => {
     index(d);
     queue(document.body);
     new MutationObserver((ms) => {

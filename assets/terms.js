@@ -9,6 +9,14 @@
   let set = ["#general", "#symptoms"].includes(location.hash) ? location.hash.slice(1) : "ours", subj = "", q = "";
   const idx = {};
   for (const k in D) idx[k] = D[k].map((t) => ({ t, s: norm([t.en, t.ar, ...(t.k || [])].join(" ")) }));
+  // 🔎 (30/10) ?t=<المصطلح> من نتائج البحث ← نفتح قسمه، نكتبه بالبحث، ونعلّمه أول النتائج
+  let hit = "";
+  try { hit = new URLSearchParams(location.search).get("t") || ""; } catch (e) {}
+  if (hit) {
+    const want = hit.toLowerCase().trim();
+    const at = [set, ...Object.keys(D).filter((k) => k !== set)].find((k) => D[k].some((t) => String(t.en).toLowerCase() === want));
+    if (at) { set = at; q = hit; const tq = $("#tq"); if (tq) tq.value = hit; } else hit = "";
+  }
 
   function chips() {
     const subs = [...new Set(D[set].map((t) => t.s).filter(Boolean))];
@@ -19,8 +27,10 @@
   function render() {
     const words = norm(q).split(" ").filter(Boolean);
     const list = idx[set].filter(({ t, s }) => (!subj || t.s === subj) && words.every((w) => s.includes(w)));
+    const H = hit && q === hit ? hit.toLowerCase() : "";
+    if (H) list.sort((a, b) => (String(b.t.en).toLowerCase() === H) - (String(a.t.en).toLowerCase() === H));
     $("#tn").textContent = `${list.length} مصطلح`;
-    $("#tl").innerHTML = list.slice(0, 400).map(({ t }) => `<article class="term">
+    $("#tl").innerHTML = list.slice(0, 400).map(({ t }) => `<article class="term${H && String(t.en).toLowerCase() === H ? " hit" : ""}">
       <div class="th"><bdi class="te">${esc(t.en)}</bdi></div>
       ${pron(t.en)}
       <b class="ta">${esc(t.ar)}</b>${t.d ? `<p>${esc(t.d)}</p>` : ""}
@@ -45,4 +55,5 @@
   if (set !== "ours") document.querySelectorAll("#tt a").forEach((x) => x.classList.toggle("on", x.dataset.set === set));
   document.addEventListener("listen:ready", render);
   chips(); render();
+  if (hit) { const a = $("#tl .term.hit"); if (a) { a.setAttribute("tabindex", "-1"); requestAnimationFrame(() => { a.scrollIntoView({ block: "center" }); a.focus({ preventScroll: true }); }); } }
 })();
