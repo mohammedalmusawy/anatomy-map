@@ -1,5 +1,5 @@
 // 👥 لوحة المساعد (29/10/2026، الدخول والصلاحيات) — window.StaffPanel.mount(root, sb, me)
-// المساعد يدخل من /admin/ (كود SUP-… + كلمة سر) ← admin.js يفتح هاللوحة بالتبويبات اللي محمد اختارها بس:
+// المساعد يدخل من /admin/ (🔢 الرقم السري بس، 29/10) ← admin.js يفتح هاللوحة بالتبويبات اللي محمد اختارها بس:
 //   📚 المحاضرات (lectures) · 🎓 الأكواد (codes) · 👥 الفريق (team ← AdminPeople) · 📣 الإعلانات (ads ← شريط الإعلان).
 // كل صلاحية تنفحص بالسيرفر (دالة supervisor + RLS staff_can)؛ هذا الملف واجهة بس. ماكو حذف ولا إعدادات ولا نشر من هنا.
 (function () {
@@ -29,7 +29,8 @@
     root.innerHTML = `<div class="tm-hello"><span>أهلاً <b>${esc(me.name)}</b> · ${esc(me.title)}</span><span><button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button> <button class="btn ghost" id="sup-out" type="button">خروج</button></span></div>
       <p class="hint">كل شي ترفعه أو تبلّغ عنه يروح لمحمد للمراجعة، وما ينشر إلا بعد موافقته. وكل فعل ينكتب بالسجل.</p>
       ${tabs.length ? `<nav class="dtabs" role="tablist">${tabs.map(([k, l], i) => `<a href="#${k}" role="tab" data-t="${k}" class="${i === 0 ? "on" : ""}">${l}</a>`).join("")}</nav>` : '<p class="hint">ماكو صلاحيات مفعّلة لحسابك هسه. راسل محمد.</p>'}
-      <div id="sup-pane" role="tabpanel"></div>`;
+      <div id="sup-pane" role="tabpanel"></div><div id="sup-self"></div>`;
+    if (window.AdminSelf) AdminSelf.tools(root.querySelector("#sup-self"));   // 🔢 29/10: غيّر رقمي (اختياري) + اطلع من كل الأجهزة
     root.querySelector("#sup-out").onclick = async () => { await sb.auth.signOut({ scope: "local" }).catch(() => {}); location.reload(); };
     const pane = () => root.querySelector("#sup-pane");
     const show = (t) => {

@@ -1,196 +1,195 @@
-// ⚙️ لوحة الإدارة /admin/ (27/10؛ الدخول والصلاحيات 29/10). صفحة دخول وحدة لكل الفريق، ماكو رابط إلها بالموقع:
-//   محمد (المالك): إيميل + كلمة سر + رمز «كلمات السر» (TOTP) عبر دالة staff-auth (عدّاد محاولات + قفل + تنبيه بالبوت).
-//     لحد ما يكمّل أول دخول كامل، دخول الرمز بالإيميل القديم يبقى (حتى ما ينقفل برا). الإعداد من «🔐 الأمان».
-//   المساعد (role supervisor) ← StaffPanel (supervisor.js) بالتبويبات اللي اختارها محمد بس.
-//   رئيس القسم (role dept) ← AdminDept.viewer (أرقام مجمّعة بس).
+// ⚙️ لوحة الإدارة /admin/ (27/10؛ الدخول بالرقم السري 29/10 — التصميم النهائي لمحمد). ماكو رابط إلها بالموقع (5 ضغطات على العنوان):
+//   محمد (المالك): الإيميل + رقمه السري (8 أرقام أو أكثر) عبر staff-auth. «نسيت الرقم؟» ← رابط للإيميل ← رقم جديد.
+//   د. حيدر (رئيس القسم) وتحسين (مساعد): الرقم بس — الموقع يعرف منو من الرقم ويفتح صلاحياته.
+//   «تذكّر هذا الجهاز 30 يوم» (بدونه: الجلسة تنتهي بسدّ المتصفح، وبالسيرفر بعد 12 ساعة). ماكو رمز تحقق لأحد.
+//   المساعد (role supervisor) ← StaffPanel (supervisor.js) · رئيس القسم (role dept) ← AdminDept.viewer (أرقام مجمّعة بس).
 //   الطالب: دخوله بـ account.js (مفتاح جلسة ثاني) — ما تغيّر شي.
-// كل الصلاحيات بالسيرفر (is_admin / staff_can / الدوال)؛ هذا الملف واجهة بس. ولا كلمة سر ولا رمز ينحفظ هنا.
+// كل الصلاحيات بالسيرفر (is_admin / staff_can / الدوال)؛ هذا الملف واجهة بس. ولا رقم ينحفظ هنا.
 (async function () {
   const C = window.STUDY_CLOUD || {}, box = document.getElementById("admin");
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   if (!C.url || !C.anon || !window.supabase) { box.innerHTML = '<p class="hint">Supabase مو مربوط بعد. الخطوات بـ _النظام/supabase/README.md.</p>'; return; }
   style();
   const isRecovery = /type=recovery/.test(location.hash);
-  const sb = supabase.createClient(C.url, C.anon);
+  // «تذكّر هذا الجهاز»: الجلسة بـ localStorage (30 يوم) — وإلا بـ sessionStorage (تنتهي بسدّ المتصفح)
+  const LSx = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* */ } },
+    del(k) { try { localStorage.removeItem(k); } catch (e) { /* */ } } };
+  const store = {   // L8: الافتراضي = ما يتذكّر (sessionStorage) إلا إذا أشّر «تذكّر»
+    getItem(k) { try { return sessionStorage.getItem(k) ?? localStorage.getItem(k); } catch (e) { return null; } },
+    setItem(k, v) { try { if (LSx.get("adm:remember") !== "1") { sessionStorage.setItem(k, v); localStorage.removeItem(k); } else { localStorage.setItem(k, v); sessionStorage.removeItem(k); } } catch (e) { /* */ } },
+    removeItem(k) { try { sessionStorage.removeItem(k); localStorage.removeItem(k); } catch (e) { /* */ } },
+  };
+  const sb = supabase.createClient(C.url, C.anon, { auth: { storage: store } });
   const fn = async (name, body, tok) => {
     try {
       const r = await fetch(`${C.url}/functions/v1/${name}`, { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + (tok || C.anon), "Content-Type": "application/json" }, body: JSON.stringify(body) });
       return { status: r.status, ...(await r.json().catch(() => ({}))) };
     } catch (e) { return { status: 0, msg: "ماكو اتصال. تأكد من النت وجرّب مرة ثانية." }; }
   };
-  const DEV = { get: () => { try { return localStorage.getItem("adm:dev") || ""; } catch (e) { return ""; } }, set: (t) => { try { if (t) localStorage.setItem("adm:dev", t); } catch (e) { /* */ } } };
-  const say = (el, t, ok) => { el.textContent = t || ""; el.className = "lg-msg" + (ok ? " ok" : t ? " bad" : ""); };
-  const k0 = new URLSearchParams(location.search).get("k");
-  if (k0) history.replaceState(null, "", location.pathname + location.hash);   // الكود ما يبقى بالعنوان ولا بالسجل
+  const DEV = { get: () => LSx.get("adm:dev") || "", set: (t) => { if (t) LSx.set("adm:dev", t); }, del: () => LSx.del("adm:dev") };
+  const say = (el, t, ok) => { el.textContent = t || ""; el.className = "sd-msg" + (ok ? " ok" : t ? " bad" : ""); };
+  const digits = (s) => String(s || "").replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/\D/g, "");
+  const pinOk = (p) => p.length >= 8 && p.length <= 12;
+  const tokNow = async () => { const { data: { session: s } } = await sb.auth.getSession(); return s && s.access_token; };
+  if (new URLSearchParams(location.search).get("k")) history.replaceState(null, "", location.pathname + location.hash);   // الروابط القديمة بالكود
+
+  // 🔢 أدوات «حسابي» (للمساعد ورئيس القسم): غيّر رقمي (اختياري) + اطلع من كل الأجهزة — تستعملها supervisor.js و admin-dept.js
+  window.AdminSelf = {
+    tools(el) {
+      if (window.StaffDoor) StaffDoor.css();
+      el.innerHTML = `<details class="sd-card ad-self"><summary>🔢 رقمي السري والأجهزة</summary>
+        <form class="ad-f" novalidate><label class="sd-lab" for="as-o">رقمك الحالي</label><input id="as-o" type="password" inputmode="numeric" autocomplete="current-password" dir="ltr" maxlength="12">
+          <label class="sd-lab" for="as-n">الرقم الجديد (8 أرقام أو أكثر)</label><input id="as-n" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12">
+          <label class="sd-lab" for="as-n2">أعده مرة ثانية</label><input id="as-n2" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12">
+          <button class="sd-btn" type="submit">غيّر رقمي</button></form>
+        <p class="sd-free">تغيير الرقم اختياري. إذا نسيته، محمد يسوّيلك «إعادة تعيين».</p>
+        <button class="sd-btn ghost" type="button" id="as-all">🚪 اطلع من كل الأجهزة</button>
+        <p class="sd-msg" id="as-m" role="status" aria-live="polite"></p></details>`;
+      const $ = (q) => el.querySelector(q), m = $("#as-m");
+      $("form").onsubmit = async (e) => {
+        e.preventDefault();
+        const o = digits($("#as-o").value), a = digits($("#as-n").value), b = digits($("#as-n2").value);
+        if (a !== b) return say(m, "الرقمين مو متطابقين.");
+        if (!pinOk(a)) return say(m, "الرقم السري لازم 8 أرقام أو أكثر.");
+        say(m, "لحظة…", true);
+        const r = await fn("staff-auth", { action: "change_pin", old_pin: o, pin: a }, await tokNow());
+        if (r.status === 200) { el.querySelectorAll("input").forEach((i) => (i.value = "")); DEV.del(); }
+        say(m, r.msg || (r.status === 200 ? "✅ انحفظ." : "ما صار."), r.status === 200);
+      };
+      $("#as-all").onclick = async () => {
+        if (!confirm("تطلع من كل الأجهزة (حتى هذا)؟")) return;
+        await fn("staff-auth", { action: "signout_all" }, await tokNow());
+        DEV.del(); await sb.auth.signOut({ scope: "local" }).catch(() => {}); location.reload();
+      };
+    },
+  };
 
   const { data: { session } } = await sb.auth.getSession();
   if (isRecovery && session) return recoveryView();
-  if (!session) return loginView("", k0 || "");
+  if (!session) return loginView();
   const role = (session.user.app_metadata || {}).role || "";
   if (role === "supervisor") return assistantView();
   if (role === "dept") { box.innerHTML = '<p class="hint">لحظة…</p>'; return window.AdminDept ? AdminDept.viewer(box, sb) : (box.innerHTML = '<p class="hint">اللوحة مو جاهزة.</p>'); }
-  if (role === "student") { await sb.auth.signOut({ scope: "local" }); return loginView("", "", "هذا حساب طالب؛ الطلاب يدخلون بالكود من الموقع نفسه."); }
+  if (role === "student") { await sb.auth.signOut({ scope: "local" }); return loginView("هذا حساب طالب؛ الطلاب يدخلون بالكود من الموقع نفسه."); }
   const { data: isAdmin } = await sb.rpc("is_admin");
-  const ost = await fn("staff-auth", { action: "owner_state" }, session.access_token);
+  const ost = await fn("staff-auth", { action: "status" });
   if (!isAdmin) {
     await sb.auth.signOut({ scope: "local" });
-    return loginView("", "", ost.owner ? "الحماية مفعّلة: ادخل بكلمة السر + رمز «كلمات السر»." : "هذا الحساب مو حساب الإدارة.");
+    return loginView(session.user.email ? "الجلسة انتهت. ادخل بالإيميل + الرقم السري." : "هذا الحساب مو حساب الإدارة.", true);
   }
+  const pinOn = ost.email_code === false;
 
-  // ───────── الدخول الموحّد (29/10، طلب محمد): بطاقة وحدة لكل الفريق، بنفس شكل دخول الطلاب ─────────
-  // «الإيميل أو الكود» + «كلمة السر» ← الموقع يعرف منو: إيميل = محمد (بعدها رمز «كلمات السر» إذا مضاف) · SUP-/DEP- = مساعد / رئيس القسم.
-  // كلمة سر مؤقتة (من لوحة محمد) ← أول دخول يجبره يختار جديدة. ولا كلمة سر تنحفظ بالصفحة (المؤقتة بالذاكرة بس لحد ما تتغيّر).
-  function loginView(mode, code, note) {
+  // ───────── دخول الإدارة (بطاقة وحدة بشكل دخول الطلاب) ─────────
+  // الرقم بس ← الموقع يعرف منو (د. حيدر / تحسين). «أنا محمد» ← يطلع حقل الإيميل (ويتذكّره هالجهاز).
+  function loginView(note, owner) {
     if (window.StaffDoor) StaffDoor.css();
+    const own = owner || LSx.get("adm:owner") === "1";
     box.innerHTML = `<div class="sd-card" id="lg">
       <h1 id="lt">دخول الإدارة</h1>
-      <p class="sd-sub" id="ls">اكتب الإيميل أو الكود، وكلمة السر. الموقع يعرفك ويفتحلك صلاحياتك.</p>
+      <p class="sd-sub" id="ls">${own ? "اكتب إيميلك ورقمك السري." : "اكتب رقمك السري، والموقع يعرفك ويفتحلك صلاحياتك."}</p>
       <form id="lf" autocomplete="on" novalidate>
-        <label class="sd-lab" for="li">الإيميل أو الكود</label>
-        <input id="li" name="username" autocomplete="username" dir="ltr" autocapitalize="none" spellcheck="false" maxlength="200" placeholder="name@example.com · SUP-XXXXXXXX">
-        <label class="sd-lab" for="lp">كلمة السر</label>
-        <input id="lp" type="password" name="password" autocomplete="current-password" dir="ltr" maxlength="200">
+        <div id="ew" class="ad-f" ${own ? "" : "hidden"}><label class="sd-lab" for="le">الإيميل</label>
+          <input id="le" type="email" name="username" autocomplete="username" dir="ltr" autocapitalize="none" spellcheck="false" maxlength="200"></div>
+        <label class="sd-lab" for="lp">الرقم السري</label>
+        <input id="lp" type="password" name="password" inputmode="numeric" autocomplete="current-password" dir="ltr" maxlength="12" placeholder="••••••••">
+        <label class="sd-chk"><input type="checkbox" id="lr" ${DEV.get() || LSx.get("adm:remember") === "1" ? "checked" : ""}> <span>تذكّر هذا الجهاز 30 يوم</span></label>
         <button class="sd-btn" type="submit">دخول</button></form>
-      <form id="mf" hidden autocomplete="off" novalidate>
-        <p class="sd-sub">افتح «كلمات السر» بالآيفون ← حساب الموقع ← انسخ <b>رمز التحقق</b> (6 أرقام) واكتبه هنا.</p>
-        <label class="sd-lab" for="oc">رمز التحقق</label>
-        <input id="oc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" dir="ltr">
-        <button class="sd-btn" type="submit">تأكيد</button></form>
-      <form id="cf" hidden autocomplete="on" novalidate>
-        <input type="text" name="username" autocomplete="username" id="cu" hidden>
-        <p class="sd-sub">أول دخول: اختار كلمة سر جديدة خاصة بيك (10 أحرف أو أكثر)، وخلّي مدير كلمات السر بجهازك يحفظها. المؤقتة تبطل بعدها.</p>
-        <label class="sd-lab" for="n1">كلمة السر الجديدة</label><input id="n1" type="password" name="new-password" autocomplete="new-password" dir="ltr" minlength="10" maxlength="128">
-        <label class="sd-lab" for="n2">أعدها مرة ثانية</label><input id="n2" type="password" autocomplete="new-password" dir="ltr" minlength="10" maxlength="128">
-        <button class="sd-btn" type="submit">احفظ وادخل</button></form>
       <p class="sd-msg" id="lm" role="status" aria-live="polite"></p>
-      <p class="sd-links"><button type="button" class="sd-link" id="forgot">نسيت كلمة السر؟</button><span id="ecode"></span></p></div>`;
+      <p class="sd-links"><button type="button" class="sd-link" id="forgot">نسيت الرقم؟</button>
+        <button type="button" class="sd-link" id="who">${own ? "دخول بالرقم بس" : "أنا محمد — دخول بالإيميل"}</button><span id="ecode"></span></p></div>`;
     const $ = (q) => box.querySelector(q), m = $("#lm");
-    const msg = (t, ok) => { m.textContent = t || ""; m.className = "sd-msg" + (ok ? " ok" : t ? " bad" : ""); };
+    const msg = (t, ok) => say(m, t, ok);
     if (note) msg(note);
-    if (code) $("#li").value = code;
-    let ticket = "", tmp = "", who = "";
-    const show = (id) => { ["#lf", "#mf", "#cf"].forEach((f) => ($(f).hidden = f !== id)); $(".sd-links").hidden = id !== "#lf"; $("#ls").hidden = id !== "#lf"; };
-    const busy = (f, on) => { const b = $(f + " button[type=submit]"); if (b) b.disabled = on; };
-    const finishOwner = async (r) => {
-      DEV.set(r.device);
+    const isOwn = () => !$("#ew").hidden;
+    $("#who").onclick = () => { LSx.set("adm:owner", isOwn() ? "0" : "1"); loginView("", !isOwn()); };
+    $("#lf").onsubmit = async (e) => {
+      e.preventDefault();
+      const pin = digits($("#lp").value), email = $("#le").value.trim(), remember = $("#lr").checked;
+      if (isOwn() && !email) return msg("اكتب الإيميل.");
+      if (!pinOk(pin)) return msg("الرقم السري 8 أرقام أو أكثر.");
+      const b = $("#lf button[type=submit]"); b.disabled = true; msg("لحظة…", true);
+      if (!remember) DEV.del();
+      const body = { action: isOwn() ? "owner_login" : "pin_login", pin, remember, dev: DEV.get(), ...(isOwn() ? { email } : {}) };
+      const r = await fn("staff-auth", body);
+      $("#lp").value = ""; b.disabled = false;
+      if (r.status !== 200 || !r.session) return msg(r.msg || "ما گدرنا ندخل.");
+      LSx.set("adm:remember", remember ? "1" : "0");
+      if (remember) DEV.set(r.device);
+      if (isOwn()) LSx.set("adm:owner", "1");
       const { error } = await sb.auth.setSession({ access_token: r.session.access_token, refresh_token: r.session.refresh_token });
       if (error) return msg("ما گدرنا نكمل الدخول. جرّب مرة ثانية.");
       location.reload();
     };
-    const finishStaff = async (r) => {
-      DEV.set(r.device);
-      const { error } = await sb.auth.verifyOtp({ token_hash: r.token_hash, type: "magiclink" });
-      if (error) return msg("ما گدرنا نكمل الدخول. جرّب مرة ثانية.");
-      location.reload();
-    };
-    $("#lf").onsubmit = async (e) => {
-      e.preventDefault();
-      const id = $("#li").value.trim(), pw = $("#lp").value;
-      if (!id || !pw) return msg("اكتب الإيميل أو الكود، وكلمة السر.");
-      busy("#lf", true); msg("لحظة…", true);
-      if (id.includes("@")) {
-        const r = await fn("staff-auth", { action: "owner_login", email: id, password: pw, dev: DEV.get() });
-        $("#lp").value = ""; busy("#lf", false);
-        if (r.status !== 200) return msg(r.msg || "ما گدرنا ندخل.");
-        if (r.stage === "done") return finishOwner(r);
-        ticket = r.ticket; msg(""); show("#mf"); $("#oc").focus(); return;
-      }
-      const r = await fn("staff-auth", { action: "staff_login", code: id, password: pw, dev: DEV.get(), ua: navigator.userAgent.slice(0, 120) });
-      $("#lp").value = ""; busy("#lf", false);
-      if (r.stage === "change_password") {
-        tmp = pw; who = id; $("#cu").value = id;
-        $("#lt").textContent = `أهلاً ${r.name || ""}`; msg(r.msg || "", true); show("#cf"); $("#n1").focus(); return;
-      }
-      if (r.status !== 200 || !r.token_hash) return msg(r.msg || "ما گدرنا ندخل.");
-      finishStaff(r);
-    };
-    $("#mf").onsubmit = async (e) => {
-      e.preventDefault(); busy("#mf", true); msg("لحظة…", true);
-      const r = await fn("staff-auth", { action: "owner_mfa", ticket, code: $("#oc").value, dev: DEV.get() });
-      $("#oc").value = ""; busy("#mf", false);
-      if (r.status === 200) return finishOwner(r);
-      msg(r.msg || "الرمز غلط.");
-      if (r.error === "expired" || r.error === "locked" || /من جديد/.test(r.msg || "")) show("#lf");
-    };
-    $("#cf").onsubmit = async (e) => {
-      e.preventDefault();
-      const a = $("#n1").value, b = $("#n2").value;
-      if (a !== b) return msg("الكلمتين مو متطابقات.");
-      if (a.length < 10) return msg("كلمة السر لازم 10 أحرف أو أكثر.");
-      busy("#cf", true); msg("لحظة…", true);
-      const r = await fn("staff-auth", { action: "staff_login", code: who, password: tmp, new_password: a, dev: DEV.get(), ua: navigator.userAgent.slice(0, 120) });
-      busy("#cf", false);
-      if (r.status === 400) return msg(r.msg || "اختار كلمة سر أقوى.");   // ضعيفة ← يبقى بنفس الخطوة
-      $("#n1").value = $("#n2").value = ""; tmp = "";
-      if (r.status !== 200 || !r.token_hash) { show("#lf"); $("#lt").textContent = "دخول الإدارة"; return msg(r.msg || "ما گدرنا ندخل. ادخل من جديد."); }
-      msg("✅ انحفظت كلمة السر الجديدة.", true); finishStaff(r);
-    };
     $("#forgot").onclick = async () => {
-      const id = $("#li").value.trim();
-      if (!id) return msg("اكتب الإيميل أو الكود أول، بعدين اضغط «نسيت كلمة السر؟».");
-      if (!id.includes("@")) return msg("راسل محمد الموسوي يسوّيلك «إعادة تعيين»، وتوصلك كلمة سر مؤقتة جديدة.", true);
-      await sb.auth.resetPasswordForEmail(id, { redirectTo: location.origin + location.pathname });
-      msg("إذا الإيميل صحيح، يوصلك رابط لتغيير كلمة السر. افتحه من نفس الجهاز.", true);
+      if (!isOwn()) return msg("راسل محمد الموسوي يسوّيلك «إعادة تعيين» للرقم. (محمد؟ اضغط «أنا محمد — دخول بالإيميل».)", true);
+      const email = $("#le").value.trim();
+      if (!email) return msg("اكتب إيميلك أول، بعدين اضغط «نسيت الرقم؟».");
+      await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+      msg("إذا الإيميل صحيح، يوصلك رابط لرقم جديد. افتحه من نفس الجهاز.", true);
     };
-    // دخول المالك برمز الإيميل: بس قبل ما تتفعّل الحماية (طريق الانتقال، حتى ما ينقفل محمد برا)
-    fn("staff-auth", { action: "status" }).then((st) => {
+    // رمز الإيميل: بس قبل أول دخول بالرقم (طريق الانتقال، حتى ما ينقفل محمد برا)
+    if (isOwn()) fn("staff-auth", { action: "status" }).then((st) => {
       if (!st.email_code) return;
       const ec = $("#ecode");
-      ec.innerHTML = '<button type="button" class="sd-link" id="emc">دخول برمز يوصل للإيميل (مؤقت لحد ما تكمّل الحماية)</button>';
+      ec.innerHTML = '<button type="button" class="sd-link" id="emc">دخول برمز يوصل للإيميل (مؤقت لحد أول دخول بالرقم)</button>';
       ec.querySelector("#emc").onclick = () => emailCode();
     });
-    $(code ? "#lp" : "#li").focus();
+    $(isOwn() && !$("#le").value ? "#le" : "#lp").focus();
   }
   function emailCode() {
-    box.innerHTML = `<div class="sd-card"><h1>دخول الإدارة</h1><p class="sd-sub">رمز دخول يوصل لإيميل الإدارة (مؤقت لحد ما تكمّل الحماية).</p>
+    box.innerHTML = `<div class="sd-card"><h1>دخول الإدارة</h1><p class="sd-sub">رمز دخول يوصل لإيميل الإدارة (مؤقت لحد أول دخول بالرقم).</p>
       <form id="ef" novalidate><label class="sd-lab" for="em">الإيميل</label><input id="em" type="email" autocomplete="username" dir="ltr">
       <button class="sd-btn" type="submit">أرسل رمز الدخول</button></form>
       <form id="ef2" hidden novalidate><label class="sd-lab" for="code">الرمز اللي وصل للإيميل</label><input id="code" inputmode="numeric" autocomplete="one-time-code" dir="ltr">
       <button class="sd-btn" type="submit">دخول</button></form><p class="sd-msg" id="emm" role="status" aria-live="polite"></p>
       <p class="sd-links"><button type="button" class="sd-link" id="bk">‹ رجوع</button></p></div>`;
-    const m = box.querySelector("#emm"), say2 = (t, ok) => { m.textContent = t; m.className = "sd-msg " + (ok ? "ok" : "bad"); };
-    box.querySelector("#bk").onclick = () => loginView();
+    const m = box.querySelector("#emm");
+    box.querySelector("#bk").onclick = () => loginView("", true);
     box.querySelector("#ef").onsubmit = async (e) => {
       e.preventDefault();
       const { error } = await sb.auth.signInWithOtp({ email: box.querySelector("#em").value.trim(), options: { shouldCreateUser: false } });
-      if (error) return say2(error.message);
-      box.querySelector("#ef2").hidden = false; say2("وصلك رمز بالإيميل.", true); box.querySelector("#code").focus();
+      if (error) return say(m, error.message);
+      box.querySelector("#ef2").hidden = false; say(m, "وصلك رمز بالإيميل.", true); box.querySelector("#code").focus();
     };
     box.querySelector("#ef2").onsubmit = async (e) => {
       e.preventDefault();
       const { error } = await sb.auth.verifyOtp({ email: box.querySelector("#em").value.trim(), token: box.querySelector("#code").value.trim(), type: "email" });
-      if (error) return say2(error.message); location.reload();
+      if (error) return say(m, error.message); location.reload();
     };
   }
 
-  // رابط «نسيت كلمة السر» من الإيميل ← كلمة سر جديدة (وإذا عنده رمز: يكتبه هنا حتى يصير التغيير مسموح)
+  // رابط «نسيت الرقم؟» من الإيميل ← رقم سري جديد (السيرفر يحطه، وكل الأجهزة تطلع)
+  function pinForm(id, withOld) {
+    return `<form class="ad-f" id="${id}" novalidate>
+      ${withOld ? `<label class="sd-lab" for="${id}-o">رقمك الحالي</label><input id="${id}-o" type="password" inputmode="numeric" autocomplete="current-password" dir="ltr" maxlength="12">` : ""}
+      <label class="sd-lab" for="${id}-1">الرقم السري الجديد (8 أرقام أو أكثر)</label><input id="${id}-1" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12">
+      <label class="sd-lab" for="${id}-2">أعده مرة ثانية</label><input id="${id}-2" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12">
+      <button class="sd-btn" type="submit">احفظ الرقم</button></form>`;
+  }
+  async function savePin(root, id, m) {
+    const v = (s) => digits((root.querySelector("#" + id + s) || {}).value);
+    const a = v("-1"), b = v("-2");
+    if (a !== b) return say(m, "الرقمين مو متطابقين.");
+    if (!pinOk(a)) return say(m, "الرقم السري لازم 8 أرقام أو أكثر.");
+    say(m, "لحظة…", true);
+    const remember = LSx.get("adm:remember") === "1";
+    const r = await fn("staff-auth", { action: "owner_set_pin", pin: a, old_pin: v("-o"), remember }, await tokNow());
+    if (r.status !== 200) return say(m, r.msg || "ما صار.");
+    root.querySelectorAll("input").forEach((i) => (i.value = ""));
+    DEV.del(); await sb.auth.signOut({ scope: "local" }).catch(() => {});
+    history.replaceState(null, "", location.pathname);
+    LSx.set("adm:owner", "1");
+    // السيرفر يدخّلك مباشرة بالرقم الجديد (جلسة مسجّلة) — حتى لو أحد قافل الدخول بمحاولات غلط
+    if (r.session) { if (remember) DEV.set(r.device); const { error } = await sb.auth.setSession({ access_token: r.session.access_token, refresh_token: r.session.refresh_token }); if (!error) { location.reload(); return; } }
+    loginView("✅ انحفظ الرقم الجديد، وطلعت كل الأجهزة. ادخل بيه هسه.", true);
+  }
   function recoveryView() {
-    box.innerHTML = `<div class="lg"><h2>🔑 كلمة سر جديدة</h2><form class="lg-form" id="rf">
-      <label class="lg-f"><span>كلمة السر الجديدة</span><input id="r1" type="password" autocomplete="new-password" dir="ltr" minlength="10" required></label>
-      <label class="lg-f"><span>أعدها مرة ثانية</span><input id="r2" type="password" autocomplete="new-password" dir="ltr" minlength="10" required></label>
-      <label class="lg-f hidden" id="rcw"><span>رمز «كلمات السر» (6 أرقام)</span><input id="rc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" dir="ltr"></label>
-      <button class="btn lg-go" type="submit">احفظ</button></form><p class="lg-msg" id="rm" role="status"></p></div>`;
+    if (window.StaffDoor) StaffDoor.css();
+    box.innerHTML = `<div class="sd-card"><h1>🔢 رقم سري جديد</h1><p class="sd-sub">اختار رقم تتذكّره (8 أرقام أو أكثر)، مو تسلسل ولا رقم مكرر.</p>
+      ${pinForm("rf", false)}<p class="sd-msg" id="rm" role="status" aria-live="polite"></p></div>`;
     const m = box.querySelector("#rm");
-    box.querySelector("#rf").onsubmit = async (e) => {
-      e.preventDefault();
-      const a = box.querySelector("#r1").value, b = box.querySelector("#r2").value;
-      if (a !== b) return say(m, "الكلمتين مو متطابقات.");
-      const code = box.querySelector("#rc").value.trim();
-      if (code) {
-        const { data } = await sb.auth.mfa.listFactors();
-        const f = (data && data.totp || []).find((x) => x.status === "verified");
-        if (f) { const { error } = await sb.auth.mfa.challengeAndVerify({ factorId: f.id, code }); if (error) return say(m, "الرمز غلط."); }
-      }
-      const { error } = await sb.auth.updateUser({ password: a });
-      if (error) {
-        if (/aal|AAL|assurance/i.test(error.message || error.code || "")) { box.querySelector("#rcw").classList.remove("hidden"); return say(m, "حسابك عليه رمز تحقق: اكتب الرمز من «كلمات السر» واضغط احفظ."); }
-        return say(m, error.message);
-      }
-      box.querySelector("#r1").value = box.querySelector("#r2").value = "";
-      await sb.auth.signOut({ scope: "local" });
-      history.replaceState(null, "", location.pathname);
-      loginView("", "", "✅ انحفظت كلمة السر الجديدة. ادخل بيها هسه.");
-    };
+    box.querySelector("#rf").onsubmit = (e) => { e.preventDefault(); savePin(box, "rf", m); };
+    box.querySelector("#rf-1").focus();
   }
 
   // ───────── المساعد ─────────
@@ -198,7 +197,7 @@
     box.innerHTML = '<p class="hint">لحظة…</p>';
     const { data: { session: s } } = await sb.auth.getSession();
     const me = await fn("supervisor", { action: "me" }, s && s.access_token);
-    if (me.status !== 200) { await sb.auth.signOut({ scope: "local" }); return loginView("", "", me.msg || "الجلسة انتهت أو الحساب موقوف. ادخل من جديد."); }
+    if (me.status !== 200) { await sb.auth.signOut({ scope: "local" }); return loginView(me.msg || "الجلسة انتهت أو الحساب موقوف. ادخل من جديد."); }
     if (!window.StaffPanel) { box.innerHTML = '<p class="hint">اللوحة مو جاهزة.</p>'; return; }
     StaffPanel.mount(box, sb, me);
   }
@@ -209,7 +208,7 @@
     ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "🔑 المساعدين" } : {}), ...(window.AdminDept ? { dept: "🏛️ رئيس القسم" } : {}),
     ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), ...(window.AdminStudents ? { students: "🎓 الطلاب" } : {}), ...(window.AdminNotify ? { notify: "🔔 التنبيهات" } : {}), security: "🔐 الأمان" };
   box.innerHTML = `<div class="tm-hello"><span><b>⚙️ لوحة الإدارة</b> · أهلاً محمد</span><span><button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button></span></div>
-    ${ost.mfa_required ? "" : '<div class="alert lg-warn"><b>🔐 كمّل حماية الدخول</b><p>هسه الدخول برمز الإيميل بس. من «🔐 الأمان»: حط كلمة سر، وضيف رمز التحقق بـ «كلمات السر» بالآيفون، وجرّب الدخول الجديد مرة وحدة — بعدها تتفعّل الحماية وحدها.</p><a class="btn" href="#security">🔐 الأمان</a></div>'}
+    ${pinOn ? "" : '<div class="alert lg-warn"><b>🔢 حدد رقمك السري</b><p>من «🔐 الأمان» حط رقمك السري (8 أرقام أو أكثر)، واطلع وادخل بالإيميل + الرقم مرة وحدة — بعدها دخول رمز الإيميل يوگف وحده.</p><a class="btn" href="#security">🔐 الأمان</a></div>'}
     <nav class="dtabs">${Object.entries(tabs).map(([k, v]) => `<a href="#${k}" data-t="${k}">${v}</a>`).join("")}</nav><div id="pane"></div>
     <p class="hint"><button class="btn ghost" id="out">خروج</button></p>`;
   document.getElementById("out").onclick = async () => { await sb.auth.signOut({ scope: "local" }); location.reload(); };
@@ -443,77 +442,28 @@
       if (error) return alert(error.message); thanks();
     };
   }
-  // 🔐 الأمان: كلمة السر ← رمز التحقق (كلمات السر بالآيفون) ← تجربة الدخول الجديد (بعدها الحماية تتفعّل وحدها)
+  // 🔐 الأمان (29/10، الرقم السري): رقمي · اطلع من كل الأجهزة · آخر الدخولات · الطوارئ
   async function security() {
     pane.innerHTML = '<p class="hint">لحظة…</p>';
-    const { data: { session: s } } = await sb.auth.getSession();
-    const st = await fn("staff-auth", { action: "owner_state" }, s && s.access_token);
-    const li = (ok, t) => `<li>${ok ? "✅" : "⏳"} ${t}</li>`;
+    const { data: logs } = await sb.from("staff_login_log").select("at, who, role, device, remember, tg").order("at", { ascending: false }).limit(15);
+    const ROLE = { owner: "المالك", supervisor: "مساعد", dept: "رئيس القسم" };
+    const tg403 = (logs || []).some((l) => l.tg === "http_403" || l.tg === "http_400");
     pane.innerHTML = `<h2>🔐 أمان الدخول</h2>
-      <ul class="sec-list">${li(st.has_password, "كلمة السر")}${li(st.has_totp, "رمز التحقق («كلمات السر» بالآيفون)")}${li(st.mfa_required, "الحماية مفعّلة: كلمة سر + رمز، ودخول الإيميل موقوف")}</ul>
-      <h3>1) كلمة السر</h3><p class="hint">اكتبها إنت بنفسك (12 حرف أو أكثر). خلّي الآيفون يقترح وحدة قوية ويحفظها.</p>
-      <form class="lg-form" id="pwf" autocomplete="on"><input type="email" name="username" autocomplete="username" value="${esc(s && s.user.email)}" hidden>
-        <label class="lg-f"><span>كلمة السر الجديدة</span><input id="p1" type="password" autocomplete="new-password" minlength="12" dir="ltr" required></label>
-        <label class="lg-f"><span>أعدها مرة ثانية</span><input id="p2" type="password" autocomplete="new-password" minlength="12" dir="ltr" required></label>
-        <label class="lg-f hidden" id="pnw"><span>الرمز اللي وصل للإيميل (تأكيد)</span><input id="pn" inputmode="numeric" autocomplete="one-time-code" dir="ltr"></label>
-        <button class="btn" type="submit">${st.has_password ? "غيّر كلمة السر" : "احفظ كلمة السر"}</button></form><p class="lg-msg" id="pwm" role="status"></p>
-      <h3>2) رمز التحقق بـ «كلمات السر»</h3>
-      ${st.has_totp && !security.replace ? `<p>✅ مضاف. كل دخول يطلب الرمز (6 أرقام يتبدل كل 30 ثانية).</p>${st.mfa_required ? '<p class="hint">تغيير الرمز مقفول بالسيرفر (حماية). إذا تحتاج تبدّله (آيفون جديد): <button class="btn ghost" id="unl" type="button">🔓 افتح التغيير 10 دقائق</button></p>' : ""}` : `<p class="hint">اضغط الزر يطلعلك QR. بالآيفون: الإعدادات ← كلمات السر (أو تطبيق «كلمات السر») ← افتح حساب الموقع (أو ضيفه) ← «إعداد رمز التحقق…» ← «مسح رمز QR ضوئياً» ← وجّه الكاميرا على الـ QR. بعدين اكتب الرمز الظاهر تحت.</p>
-        <button class="btn" id="en" type="button">➕ أضف رمز التحقق</button><div id="qr"></div>`}
-      <h3>3) جرّب الدخول الجديد</h3>
-      ${st.mfa_required ? "<p>✅ الحماية مفعّلة. الدخول بكلمة السر + الرمز بس، و5 محاولات غلط تقفل الدخول 15 دقيقة وتوصلك رسالة بالبوت.</p>"
-        : `<p class="hint">بعد الخطوتين: اطلع وادخل بالإيميل + كلمة السر + الرمز. أول ما ينجح، الحماية تتفعّل وحدها ودخول الإيميل يوگف.</p>
-           <button class="btn" id="try" type="button" ${st.has_password && st.has_totp ? "" : "disabled"}>🚪 اطلع وجرّب الدخول الجديد</button>`}
-      <h3>الأجهزة</h3><button class="btn ghost" id="allout" type="button">اطلع من كل الأجهزة</button>
-      <details><summary>إذا ضاع الآيفون (طريق الطوارئ)</summary><p class="hint">«كلمات السر» تنحفظ بـ iCloud، فتلگاها بأي جهاز Apple مسجّل بنفس الحساب (الماك: الإعدادات ← كلمات السر).
-        إذا ضاعت كلها: من الماك بالـ Terminal بمجلد _النظام شغّل: <code dir="ltr">supabase db query --linked --workdir . -f "supabase/طوارئ-دخول-المالك.sql"</code> (يرجّع دخول الإيميل)، وبعدها من لوحة Supabase ← Authentication ← Users ← حسابك ← احذف عامل الـ MFA، وضيف رمز جديد من هنا.</p></details>`;
-    const pm = pane.querySelector("#pwm");
-    pane.querySelector("#pwf").onsubmit = async (e) => {
-      e.preventDefault();
-      const a = pane.querySelector("#p1").value, b = pane.querySelector("#p2").value, nonce = pane.querySelector("#pn").value.trim();
-      if (a !== b) return say(pm, "الكلمتين مو متطابقات.");
-      say(pm, "لحظة…", true);
-      const { error } = await sb.auth.updateUser(nonce ? { password: a, nonce } : { password: a });
-      if (error) {
-        if (/reauth/i.test((error.code || "") + (error.message || ""))) {
-          await sb.auth.reauthenticate(); pane.querySelector("#pnw").classList.remove("hidden");
-          return say(pm, "للتأكيد وصلك رمز بالإيميل: اكتبه واضغط الزر مرة ثانية.", true);
-        }
-        return say(pm, /aal|assurance/i.test(error.message || "") ? "لازم تكون داخل بالرمز حتى تغيّرها." : error.message);
-      }
-      pane.querySelector("#p1").value = pane.querySelector("#p2").value = pane.querySelector("#pn").value = "";
-      say(pm, "✅ انحفظت. خلّي «كلمات السر» يحفظها لما يسألك.", true); setTimeout(security, 1500);
+      <ul class="sec-list"><li>${pinOn ? "✅ الدخول بالإيميل + الرقم السري، ودخول رمز الإيميل موقوف" : "⏳ حدد رقمك السري تحت، وادخل بيه مرة وحدة"}</li>
+        <li>✅ 5 محاولات غلط ← الدخول يقفل 15 دقيقة، وتوصلك رسالة بالبوت</li><li>✅ كل دخول للوحة ← رسالة بالبوت (منو، أي جهاز، الوقت)</li></ul>
+      ${tg403 ? '<p class="alert">📨 رسائل البوت ما توصلك بعد: افتح <a href="https://t.me/mohammed_almusawy_bot" target="_blank" rel="noopener">@mohammed_almusawy_bot</a> واضغط <b>Start</b> مرة وحدة.</p>' : ""}
+      <h3>🔢 رقمي السري</h3><p class="hint">${pinOn ? "اكتب رقمك الحالي والجديد. بعد الحفظ كل الأجهزة تطلع وتدخل بالجديد." : "اختار رقم تتذكّره (8 أرقام أو أكثر)، مو تسلسل ولا رقم مكرر. بعد الحفظ تطلع وتدخل بيه."} إذا نسيته: «نسيت الرقم؟» بصفحة الدخول.</p>
+      <div class="sd-card ad-in">${pinForm("pf", pinOn)}<p class="sd-msg" id="pfm" role="status" aria-live="polite"></p></div>
+      <h3>الأجهزة</h3><button class="btn ghost" id="allout" type="button">🚪 اطلع من كل الأجهزة</button>
+      <h3>آخر الدخولات</h3>${(logs || []).length ? `<div class="scroll-x"><table class="adm"><tr><th>الوقت (بغداد)</th><th>منو</th><th>الجهاز</th><th>البوت</th></tr>${logs.map((l) => `<tr><td>${esc(new Date(new Date(l.at).getTime() + 3 * 3600e3).toISOString().slice(0, 16).replace("T", " "))}</td><td>${esc(l.who)} <small>${esc(ROLE[l.role] || "")}</small></td><td dir="ltr">${esc(l.device || "")}${l.remember ? " · 30d" : ""}</td><td>${l.tg === "ok" ? "✅" : "—"}</td></tr>`).join("")}</table></div>` : '<p class="hint">ماكو دخول بعد.</p>'}
+      <details><summary>إذا ضاع الإيميل والرقم (طريق الطوارئ)</summary><p class="hint">من الماك بالـ Terminal بمجلد _النظام شغّل: <code dir="ltr">supabase db query --linked --workdir . -f "supabase/طوارئ-دخول-المالك.sql"</code> — يرجّع دخول «رمز يوصل للإيميل» بصفحة الدخول، وبعدها حط رقم جديد من هنا.</p></details>`;
+    const pf = pane.querySelector("#pf");
+    pf.onsubmit = (e) => { e.preventDefault(); savePin(pane, "pf", pane.querySelector("#pfm")); };
+    pane.querySelector("#allout").onclick = async () => {
+      if (!confirm("تطلع من كل الأجهزة (حتى هذا)؟")) return;
+      await fn("staff-auth", { action: "signout_all" }, await tokNow());
+      DEV.del(); await sb.auth.signOut({ scope: "local" }).catch(() => {}); location.reload();
     };
-    const en = pane.querySelector("#en");
-    if (en) en.onclick = async () => {
-      en.disabled = true;
-      const { data: lf } = await sb.auth.mfa.listFactors();
-      for (const f of (lf && lf.all) || []) if (f.status !== "verified") await sb.auth.mfa.unenroll({ factorId: f.id });
-      const { data, error } = await sb.auth.mfa.enroll({ factorType: "totp", friendlyName: "iPhone " + new Date().toISOString().slice(0, 10) + "-" + Math.random().toString(36).slice(2, 6), issuer: "Radiology Study" });
-      if (error || !data) { en.disabled = false; return say(pm, "ما گدرنا نضيف الرمز: " + ((error && error.message) || "")); }
-      const q = pane.querySelector("#qr");
-      q.innerHTML = `<div class="qr-box"><img alt="QR رمز التحقق — امسحه من «كلمات السر» بالآيفون" width="200" height="200"></div>
-        <p><a class="btn ghost" id="otp-link">📱 إذا إنت هسه على الآيفون: اضغط هنا يفتح «كلمات السر»</a></p>
-        <form class="lg-form" id="vf"><label class="lg-f"><span>الرمز الظاهر بـ «كلمات السر»</span><input id="vc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" dir="ltr" required></label>
-        <button class="btn" type="submit">✅ تأكيد</button></form><p class="lg-msg" id="vm" role="status"></p>`;
-      q.querySelector("img").src = data.totp.qr_code;      // الـ QR يطلع على شاشتك بس؛ ما ينحفظ بأي مكان
-      q.querySelector("#otp-link").href = data.totp.uri;
-      q.querySelector("#vf").onsubmit = async (e) => {
-        e.preventDefault();
-        const { error: ve } = await sb.auth.mfa.challengeAndVerify({ factorId: data.id, code: q.querySelector("#vc").value.trim() });
-        if (ve) return say(q.querySelector("#vm"), "الرمز غلط أو انتهى. اكتب الرمز الجديد.");
-        say(q.querySelector("#vm"), "✅ انضاف رمز التحقق.", true); setTimeout(security, 1200);
-      };
-    };
-    const unl = pane.querySelector("#unl");
-    if (unl) unl.onclick = async () => {
-      const r = await fn("staff-auth", { action: "owner_factor_unlock" }, s && s.access_token);
-      if (r.status !== 200) return say(pm, "ما انفتح (لازم تكون داخل بكلمة السر + الرمز).");
-      security.replace = true; await security(); security.replace = false;   // يطلع زر «أضف رمز التحقق»؛ الرمز القديم يبقى لحد ما تحذفه من لوحة Supabase أو يتبدل
-    };
-    const tr = pane.querySelector("#try");
-    if (tr) tr.onclick = async () => { await sb.auth.signOut({ scope: "local" }); location.hash = ""; location.reload(); };
-    pane.querySelector("#allout").onclick = async () => { if (!confirm("تطلع من كل الأجهزة (حتى هذا)؟")) return; await sb.auth.signOut({ scope: "global" }); location.reload(); };
   }
 
   const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(), team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
@@ -536,7 +486,8 @@
 .lg-go{min-height:48px;width:100%;font-size:16px}.lg-msg{min-height:1.4em;margin:6px 0;font-size:15px}.lg-msg.ok{color:var(--muted)}.lg-msg.bad{color:#B3261E;font-weight:700}
 .lg-links{font-size:14px;margin:4px 0 0}.lg-link{background:none;border:0;padding:6px 0;min-height:44px;color:var(--brand);font:inherit;text-decoration:underline;cursor:pointer}
 .lg-warn{border-color:var(--brand)}.sec-list{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px}
-.qr-box{background:#fff;display:inline-block;padding:10px;border-radius:12px;border:1px solid var(--line)}.qr-box img{display:block;width:200px;height:200px}
+.ad-f{display:grid;gap:8px}.ad-in{margin:8px 0}.ad-self{margin:12px 0}.ad-self summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+.sd-chk{display:flex;align-items:center;gap:10px;min-height:44px;font-size:.95rem;cursor:pointer}.sd-card .sd-chk input{width:22px;height:22px;min-height:0;margin:0;accent-color:var(--brand,#3B4A8C)}
 #admin .tm-hello{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 8px}
 #admin .tm-new{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;display:grid;gap:10px}
 #admin .tm-new h3{margin:0}#admin .tm-f{display:grid;gap:4px}#admin .tm-f span{font-size:14px;color:var(--muted);font-weight:600}

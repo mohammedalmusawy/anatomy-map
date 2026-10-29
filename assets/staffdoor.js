@@ -1,6 +1,6 @@
 // 🚪 الباب المخفي + بوابة الطلاب (29/10/2026، طلب محمد) — ينحمّل بكل صفحات الموقع (site.py page()) والمعاينة (preview.py foot()).
 //  1) الباب: 5 ضغطات على شعار الموقع (العنوان «دروس تقنيات الأشعة» / «قسم تقنيات الأشعة» بالمعاينة) خلال 3 ثواني ← شاشة «دخول الإدارة» (/admin/).
-//     ماكو زر ولا رابط ظاهر. الباب واجهة بس؛ الحماية كلها بالسيرفر (staff-auth: كلمة سر + قفل 5 محاولات + تنبيه بالبوت).
+//     ماكو زر ولا رابط ظاهر. الباب واجهة بس؛ الحماية كلها بالسيرفر (staff-auth: الرقم السري + قفل 5 محاولات + تنبيه بالبوت بكل دخول).
 //  2) «👁️ شوف كطالب»: من لوحة الفريق ← الموقع ينفتح مثل الطالب، ويّا زر صغير «⚙️ رجوع للإدارة».
 //  3) البوابة: مطفية لحد settings.gate.on = true. لما تنفتح: المحاضرات والاختبارات ومصطلحات المحاضرات و«مساحتي» والامتحانات لطلابنا بالكود؛
 //     الأطلس والملوّنة والأجهزة والمصطلحات العامة مفتوحة. ⚠️ هذي بوابة بالمتصفح: تمنع التصفح العادي بس — ملفات GitHub Pages
@@ -65,7 +65,9 @@ body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
   // ── الجلسات (للعرض بس؛ الصلاحية الحقيقية بالسيرفر) ──
   const alive = (s) => !!(s && (s.refresh_token || (s.expires_at && s.expires_at * 1000 > Date.now())) && s.user);
   function staffSession() {
-    const s = LS.json(`sb-${REF}-auth-token`);
+    // 🔢 29/10: بلا «تذكّر هذا الجهاز» الجلسة بـ sessionStorage (admin.js)
+    let s = LS.json(`sb-${REF}-auth-token`);
+    if (!alive(s)) { try { s = JSON.parse(sessionStorage.getItem(`sb-${REF}-auth-token`) || "null"); } catch (e) { s = null; } }
     if (!alive(s)) return null;
     const role = ((s.user || {}).app_metadata || {}).role || "";
     return role === "student" ? null : s;          // المالك أو مساعد أو رئيس القسم
