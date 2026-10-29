@@ -7,7 +7,7 @@
   const man = document.querySelector('link[rel="manifest"]'); if (!man) return;
   const root = new URL(".", man.href).href;
   const rel = location.href.split(/[?#]/)[0].slice(root.length).replace(/index\.html$/, "");
-  if (rel !== "lessons/" && rel !== "learn/") return;
+  if (rel !== "lessons/" && rel !== "learn/" && rel !== "me/") return;   // me/: بطاقة «أقرب امتحان» بس (v2، 29/10)
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const H = { apikey: C.anon, Authorization: "Bearer " + C.anon };
   const KEY = "t:nextexam", TTL = 15 * 60e3, WINDOW = 14;
@@ -84,5 +84,13 @@
     if (at) at.insertAdjacentElement("afterend", el); else (document.querySelector(".wrap") || document.body).prepend(el);
   }
 
-  load().then(icon).then(render).catch(() => {});
+  // 👤 «صفحتي» v2: عدّاد «أقرب امتحان» بس إذا قسم الامتحانات شغّال (sections.exams) + امتحان مؤكَّد خلال 14 يوم
+  function meCard(c) {
+    const box = document.getElementById("mexam"); if (!box || !c || !c.examsOn) return;
+    const up = pick(c.rows || []); if (!up.length) return;
+    const x = up[0], name = (SUBJ[x.subject] || x.subject) + (x.type ? ` (${TYP[x.type]})` : "");
+    box.innerHTML = `<div class="ex2" role="note"><span class="dd"><b>${x.left}</b><small>${x.left === 0 ? "اليوم" : x.left === 1 ? "يوم" : "أيام"}</small></span>
+      <span><strong><span>أقرب امتحان:</span> ${esc(name)}</strong><p>${esc(arDate(x.when))} · ${inDays(x.left)}</p><p><a href="${root}exams/">📅 قسم الامتحانات ‹</a></p></span></div>`;
+  }
+  load().then(icon).then((c) => (rel === "me/" ? meCard(c) : render(c))).catch(() => {});
 })();

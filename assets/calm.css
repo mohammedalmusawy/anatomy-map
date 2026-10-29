@@ -791,3 +791,23 @@ body[data-role="student"] .pvtool [data-role-set="student"], body[data-role="vis
 
 /* ⚡ v3 حي: «احتمال خطأ» بتباين ≥ 4.5 بالفاتح، والليلي يرجع للون الهادئ */
 :root[data-theme="dark"] .calm .perr-in { color: var(--accent); }
+
+/* 🧭 صف التنقل (29/10، «صفحتي» v2): [الرئيسية | المحاضرات | صفحتي] — موبايل صف فوق الشريط، لابتوب داخل الشريط بالنص */
+.nnav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 10px 0 0; }
+.nn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; min-width: 0; padding: 0 8px; border: 1px solid var(--line);
+  border-radius: 14px; background: var(--card); color: var(--ink); font: 700 var(--t-sm)/1.2 var(--title-font); white-space: nowrap; text-decoration: none; }
+.nn span { overflow: hidden; text-overflow: ellipsis; }
+.nn .ico { width: 1.15rem; height: 1.15rem; color: var(--brand); }
+.nn:hover { border-color: color-mix(in srgb, var(--brand) 40%, var(--line)); }
+.nn[aria-current="page"] { background: var(--brand-soft); border-color: color-mix(in srgb, var(--brand) 35%, var(--line)); color: var(--brand); }
+.nn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.calm .nn { text-decoration: none; }
+.ndesk { display: none; }
+@media (max-width: 359px) { .nn { font-size: var(--t-xs); gap: 4px; padding: 0 4px; } .nn .ico { width: 1rem; height: 1rem; } }
+@media (min-width: 720px) {
+  .nmob { display: none; }
+  .cbar .ndesk { display: flex; gap: 6px; margin: 0; flex: none; }
+  .ndesk .nn { padding: 0 14px; }
+  .cbar:has(.ndesk) .back { flex: 1 1 0; } .cbar:has(.ndesk) .tools { flex: 1 1 0; justify-content: flex-end; }
+  .cbar:has(.ndesk) .back .bl { max-width: 150px; }
+}

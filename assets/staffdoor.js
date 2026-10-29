@@ -146,7 +146,8 @@ body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
         const r = await window.Account.redeem(inp.value);
         btn.disabled = false;
         if (!r.ok) { m.className = "sd-msg bad"; m.textContent = r.msg; return; }
-        const go = () => { if (next) location.href = next; else location.reload(); };
+        // بعد الدخول (29/10، «صفحتي» v2): رابط مقفول ← نفس الرابط؛ صفحة مقفولة ← نفسها؛ غيرها ← صفحتي (me/)
+        const go = () => { if (next) location.href = next; else if (G && gated(rel, G)) location.reload(); else location.href = ROOT + "me/"; };
         if (!r.name_confirmed) return nameCheck(d.querySelector(".sd-card"), r.full_name || "", go);
         go();
       } catch (e) { btn.disabled = false; m.className = "sd-msg bad"; m.textContent = "ماكو اتصال. تأكد من النت وجرّب مرة ثانية."; }

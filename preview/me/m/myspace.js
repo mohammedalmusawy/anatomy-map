@@ -138,11 +138,16 @@
   // o = { root, lectures (من study/data.json ويّا الأسئلة), catalog, ix (Notes.index), examDate, onChange }
   function mountToday(el, o = {}) {
     const root = o.root || "";
-    el.innerHTML = `<div class="big4" role="group" aria-label="أزرار اليوم">
-      <button type="button" class="big" data-open="remind" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a1.8 1.8 0 0 0 1.8-1.6h-3.6A1.8 1.8 0 0 0 12 21z"/><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/></svg><b>ذكّرني</b><small>بوقت تختاره</small></button>
-      <button type="button" class="big" data-open="resume" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><b>وين وصلت</b><small>كمّل آخر محاضرة</small></button>
-      <button type="button" class="big" data-open="test" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5h16"/><path d="M6.5 16v-4M11 16V8M15.5 16v-6M20 16V5"/></svg><b>قِس قوتك</b><small>10 أسئلة سريعة</small></button>
-      <button type="button" class="big" data-open="note" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h10l4 4V19.5H5z"/><path d="M15 4.5v4h4M8.5 12.5h7M8.5 16h5"/></svg><b>ملاحظة سريعة</b><small>اكتب أو احچي</small></button></div>
+    // v2 (29/10): o.tiles يختار الأزرار وترتيبها؛ «timer» زر يفتح/يسد المؤقت (#ptimer بالصفحة) بدل نافذة
+    const TILE = {
+      remind: `<button type="button" class="big" data-open="remind" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a1.8 1.8 0 0 0 1.8-1.6h-3.6A1.8 1.8 0 0 0 12 21z"/><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/></svg><b>ذكّرني</b><small>بوقت تختاره</small></button>`,
+      resume: `<button type="button" class="big" data-open="resume" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><b>وين وصلت</b><small>كمّل آخر محاضرة</small></button>`,
+      test: `<button type="button" class="big" data-open="test" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5.5 13.5H12L11 21l7.5-10.5H12z"/></svg><b>قِس قوتك</b><small>10 أسئلة سريعة</small></button>`,
+      note: `<button type="button" class="big" data-open="note" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h10l4 4V19.5H5z"/><path d="M15 4.5v4h4M8.5 12.5h7M8.5 16h5"/></svg><b>ملاحظة سريعة</b><small>اكتب أو احچي</small></button>`,
+      notes: `<button type="button" class="big" data-panel="pnotes-sec" aria-expanded="false" aria-controls="pnotes-sec"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.5A2.5 2.5 0 0 1 19 7v13H7.5A2.5 2.5 0 0 1 5 17.5z"/><path d="M5 17.5A2.5 2.5 0 0 1 7.5 15H19M9 8h6M9 11h4"/></svg><b>ملاحظاتي</b><small>اكتب أو احچي</small></button>`,
+      timer: `<button type="button" class="big" data-panel="ptimer" aria-expanded="false" aria-controls="ptimer"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M10 3h4"/></svg><b>المؤقت</b><small>جلسة 25 دقيقة</small></button>`,
+    };
+    el.innerHTML = `<div class="big4" role="group" aria-label="أدواتي">${(o.tiles || ["remind", "resume", "test", "note"]).map((k) => TILE[k] || "").join("")}</div>
       <div class="bigsheet" data-sheet hidden></div><p class="slim" data-toast role="status" aria-live="polite" hidden></p>`;
     const toast = el.querySelector("[data-toast]");
     document.addEventListener("reminder:due", (ev) => {
@@ -226,6 +231,14 @@
     };
     el.addEventListener("click", (ev) => {
       const b = ev.target.closest("button"); if (!b) return;
+      // v2: زر يفتح/يسد قسم بالصفحة نفسها (المؤقت، ملاحظاتي) — مو نافذة
+      if (b.dataset.panel) {
+        const pn = document.getElementById(b.dataset.panel); if (!pn) return;
+        if (open) close();
+        pn.hidden = !pn.hidden; b.setAttribute("aria-expanded", String(!pn.hidden));
+        if (!pn.hidden) { const f = pn.querySelector("textarea, button, input"); if (f) f.focus({ preventScroll: true }); pn.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+        return;
+      }
       if (b.dataset.open) { if (open === b.dataset.open) { close(); return; } when = "h1"; editing = null; show(b.dataset.open, views[b.dataset.open]()); if (b.dataset.open === "test") runQuiz(sheet.querySelector("[data-quiz]")); return; }
       if (b.hasAttribute("data-close-sheet")) { const k = open; close(); const t = el.querySelector(`[data-open="${k}"]`); if (t) t.focus(); return; }
       if (b.dataset.when) { when = b.dataset.when; sheet.querySelectorAll("[data-when]").forEach((x) => x.setAttribute("aria-pressed", x === b)); sheet.querySelector("[data-custom]").hidden = when !== "custom"; return; }
@@ -270,12 +283,12 @@
 
   // ── 👋 جولة أول مرة: 3 خطوات تتخطّى، وما ترجع إلا بزر «؟» ──
   const STEPS = [
-    ["👋 هاي مساحتك", "كلشي هنا إلك بس: خطتك وتقدّمك وملاحظاتك."],
-    ["4 أزرار تكفيك كل يوم", "ذكّرني، وين وصلت، قِس قوتك (10 أسئلة سريعة)، ملاحظة سريعة."],
+    ["👋 هاي صفحتك", "كلشي هنا إلك بس: محاضراتك وخطتك وتقدّمك وملاحظاتك."],
+    ["أدواتي تكفيك كل يوم", "ذكّرني، قِس قوتك (10 أسئلة سريعة)، ملاحظاتي، والمؤقت."],
     ["خطتي", "اختار المادة والوقت، وإحنا نرتّبلك يوم بيوم. فاتك يوم؟ تترتّب وحدها."],
   ];
   // v3b: بطاقة جولة داخل الصفحة (مو نافذة تغطي المحتوى) + تأشير خفيف على العنصر اللي تشرحه؛ تتخطّى وما ترجع إلا بزر «؟»
-  const COACH = [null, ".big4", "#t-plan"];
+  const COACH = [null, ".big4", "#d-plan > summary, #t-plan"];
   function tour(force = false) {
     if (typeof document === "undefined" || (!force && LS.get(TKEY, false)) || document.querySelector(".tour")) return;
     const d = document.createElement("section");
@@ -290,7 +303,7 @@
     };
     d.addEventListener("click", (ev) => { if (ev.target.closest("[data-skip]")) fin(); else if (ev.target.closest("[data-next]")) { if (++i >= STEPS.length) fin(); else { paint(); d.querySelector("[data-next]").focus(); } } });
     d.addEventListener("keydown", (ev) => { if (ev.key === "Escape") fin(); });
-    const at = document.querySelector("#ltabs");
+    const at = document.querySelector("#ltabs") || document.querySelector("#mego-sec");
     if (at && at.parentNode) at.parentNode.insertBefore(d, at); else document.body.appendChild(d);
     paint(); if (force) d.querySelector("[data-next]").focus();
   }

@@ -394,3 +394,13 @@
     }, 0);
   });
 })();
+
+// 🧭 صف التنقل (29/10، «صفحتي» v2): يلوّن الزر الحالي إذا المولّد ما حدّده — الرئيسية بالضبط، المحاضرات لـ learn/ و quiz/، صفحتي لـ me/.
+(function () {
+  const ns = document.querySelectorAll(".nnav .nn"); if (!ns.length || document.querySelector('.nn[aria-current="page"]')) return;
+  const man = document.querySelector('link[rel="manifest"]'); if (!man) return;
+  const root = new URL(".", man.href).pathname, p = decodeURIComponent(location.pathname).replace(/index\.html$/, "");
+  const rel = p.startsWith(root) ? p.slice(root.length).replace(/^preview\//, "") : "";
+  const k = /^(lessons|home)\/$/.test(rel) || rel === "" ? 0 : /^(learn|quiz)\//.test(rel) ? 1 : /^me\//.test(rel) ? 2 : -1;
+  if (k >= 0) ns.forEach((a) => { if (+a.dataset.nn === k) a.setAttribute("aria-current", "page"); });
+})();
