@@ -307,7 +307,7 @@
   // 📅 الامتحانات (27/10، نص + نوع + المشمول 29/10): صورة أو نص ← قراءة (exam-reader) ← مراجعة ← «تأكيد وحفظ». المشمول من قائمة المحاضرات الحقيقية.
   async function exams() {
     const [{ data }, LEC] = await Promise.all([
-      sb.from("exams").select("*").eq("archived", false).order("exam_date"),
+      sb.from("exams").select("*").eq("archived", false).eq("confirmed", true).order("exam_date"),
       fetch(new URL("../study/data.json", location.href)).then((r) => r.json()).catch(() => ({})),
     ]);
     const TYP = [["", "غير محدد"], ["theory", "نظري"], ["practical", "عملي"]];
@@ -318,7 +318,7 @@
         : `<p class="hint">${subj ? "ماكو محاضرات منزّلة لهالمادة بعد." : "اختار المادة أول."}</p>`;
     };
     const count = (div) => { const n = div.querySelectorAll(".exls input:checked").length; div.querySelector(".exn").textContent = n ? `${n} محاضرة` : "ما متأكدين بعد"; };
-    const card = (x) => `<div class="exrow" data-note="${esc(x.note || "")}">
+    const card = (x) => `<div class="exrow" data-note="${esc(x.note || "")}" data-id="${esc(x.id || "")}">
       <label>المادة<select class="es"><option value="" ${x.subject ? "" : "selected"}>— اختار المادة —</option>${Object.entries(SUBJ).map(([k, v]) => `<option value="${k}" ${x.subject === k ? "selected" : ""}>${v}</option>`).join("")}</select></label>
       <label>النوع<select class="ety">${TYP.map(([k, v]) => `<option value="${k}" ${(x.type || "") === k ? "selected" : ""}>${v}</option>`).join("")}</select></label>
       <label>التاريخ<input class="ed" type="date" value="${esc(x.exam_date || x.date || "")}"></label>
@@ -332,7 +332,8 @@
       <h2>📅 الجدول</h2><label>الفصل<select id="term"><option value="midterm">مِدترم</option><option value="final">نهائي</option></select></label>
       <div id="et" class="exlist"></div>
       <div class="exacts"><button class="btn ghost exbtn" id="add">+ مادة</button><button class="btn exbtn" id="save">✅ تأكيد وحفظ</button><button class="btn ghost exbtn" id="arch">📦 للأرشيف (خلصت الامتحانات)</button></div>
-      <p class="hint">💡 تگدر تدز الجدول (صورة أو نص) للبوت @mohammed_almusawy_bot بالخاص، ويرجعلك الصفوف حتى تأكدها.</p>`;
+      <p class="hint">💡 تگدر تدز الجدول (صورة أو نص) للبوت @mohammed_almusawy_bot بالخاص، ويرجعلك الصفوف حتى تأكدها.</p>
+      <p class="hint">📦 كل امتحان يفوت يومه ينتقل للأرشيف وحده (00:05 بتوقيت بغداد)، والأيقونة تختفي لما ماكو امتحان جاي. <a href="../exams/" target="_blank" rel="noopener">👁️ شوف صفحة الطلاب</a></p>`;
     const et = document.getElementById("et"), rd = document.getElementById("rd");
     if (data && data[0]) document.getElementById("term").value = data[0].term || "midterm";
     const draw = (rows) => { et.innerHTML = rows.length ? rows.map(card).join("") : '<p class="hint">ماكو امتحانات بالجدول هسه.</p>'; et.querySelectorAll(".exrow").forEach(count); };
@@ -349,7 +350,9 @@
       const { data: out, error } = await sb.functions.invoke("exam-reader", { body });
       if (error || !out || out.disabled || out.error || !(out.rows || []).length) { rd.textContent = "ما گدرت أقراه (المفتاح أو الصورة/النص). اكتبه يدوياً بـ «+ مادة»."; return; }
       document.getElementById("term").value = out.term || "midterm";
-      draw(out.rows.map((r) => ({ subject: r.subject, type: r.type, exam_date: r.date, postponed_to: r.postponed_to, lectures: r.lectures || [],
+      // (المرحلة 2) نفس المادة+النوع موجودة بالجدول ← ناخذ رقمها حتى يتحدّث بمكانه (مو صف جديد + القديم يختفي)
+      const used = new Set(), idOf = (r) => { const m = (data || []).find((x) => !used.has(x.id) && x.subject === r.subject && (x.type || null) === (r.type || null)); if (m) { used.add(m.id); return m.id; } return null; };
+      draw(out.rows.map((r) => ({ id: idOf(r), subject: r.subject, type: r.type, exam_date: r.date, postponed_to: r.postponed_to, lectures: r.lectures || [],
         note: [r.subject ? "" : `«${r.name_in_source}»`, r.note].filter(Boolean).join(" · ") })));
       rd.textContent = "✅ انقرت — بعدها ما انحفظت. راجعها وصلّح أي شي (المادة، النوع، التاريخ، المشمول)، بعدين «تأكيد وحفظ».";
     };
@@ -361,15 +364,29 @@
     document.getElementById("rtx").onclick = () => { const t = document.getElementById("etx").value.trim(); if (t) read({ text: t }); };
     document.getElementById("save").onclick = async () => {
       const term = document.getElementById("term").value;
-      const all = [...et.querySelectorAll(".exrow")].map((div) => ({
+      const all = [...et.querySelectorAll(".exrow")].map((div) => ({ id: Number(div.dataset.id) || null,
         term, subject: div.querySelector(".es").value, type: div.querySelector(".ety").value || null,
         exam_date: div.querySelector(".ed").value || null, postponed_to: div.querySelector(".ep").value || null,
         lectures: [...div.querySelectorAll(".exls input:checked")].map((i) => i.value), note: div.dataset.note || null, confirmed: true, archived: false,
       }));
       const list = all.filter((x) => x.exam_date && x.subject);
       if (all.length > list.length && !confirm(`${all.length - list.length} صف بلا مادة أو تاريخ ما راح ينحفظ. نكمّل؟`)) return;
-      await sb.from("exams").update({ archived: true }).eq("archived", false);
-      if (list.length) { const { error } = await sb.from("exams").insert(list); if (error) return alert(error.message); }
+      // 🕰️ تاريخ فات (بتوقيت بغداد) ← ينحفظ بس يروح للأرشيف وحده — نسأل حتى ما يصير غلط بالسنة
+      const bgd = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);
+      const old = list.filter((x) => (x.postponed_to || x.exam_date) < bgd).length;
+      if (old && !confirm(`${old} امتحان تاريخه فات (يروح للأرشيف مباشرة). تأكد من السنة. نكمّل؟`)) return;
+      // (المرحلة 2، 29/10) الصف الموجود يتحدّث بمكانه (بلا نسخ مكررة بأرشيف الطلاب)، الجديد ينضاف،
+      // واللي شلته من الجدول يصير confirmed = false (ما يطلع لأحد، ولا ينمسح).
+      const keep = new Set(list.filter((x) => x.id).map((x) => x.id));
+      const goneRows = (data || []).filter((x) => !keep.has(x.id));
+      // امتحان صار يومه أو فات ← يروح للأرشيف ويبقى (مؤكَّد)؛ اللي بعده جاي وشلته ← confirmed = false (ما يطلع لأحد، وما ينمسح)
+      const done = goneRows.filter((x) => (x.postponed_to || x.exam_date) <= bgd).map((x) => x.id), gone = goneRows.filter((x) => !done.includes(x.id)).map((x) => x.id);
+      if (done.length) { const { error } = await sb.from("exams").update({ archived: true }).in("id", done); if (error) return alert(error.message); }
+      if (gone.length) { const { error } = await sb.from("exams").update({ confirmed: false, archived: true }).in("id", gone); if (error) return alert(error.message); }
+      for (const x of list.filter((r) => r.id)) { const { id, ...v } = x; const { error } = await sb.from("exams").update(v).eq("id", id); if (error) return alert(error.message); }
+      const add = list.filter((x) => !x.id).map(({ id, ...v }) => v);
+      if (add.length) { const { error } = await sb.from("exams").insert(add); if (error) return alert(error.message); }
+      try { localStorage.removeItem("t:nextexam"); } catch (e) { /* */ }
       await setSection("exams", true); alert("انحفظ، وقسم الامتحانات تفعّل."); exams();
     };
     document.getElementById("arch").onclick = async () => { if (!confirm("خلصت الامتحانات؟ ينتقل الجدول للأرشيف وتختفي الأيقونة.")) return;

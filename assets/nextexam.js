@@ -16,8 +16,13 @@
   const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
   const MONTHS = ["كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول"];
 
-  const day = (s) => { const [y, m, d] = String(s).split("-").map(Number); return new Date(y, m - 1, d); };   // منتصف ليل الجهاز
-  const arDate = (s) => { const d = day(s); return `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`; };
+  // 🕰️ (المرحلة 2، 29/10) التاريخ بتوقيت بغداد (UTC+3) مهما كان توقيت الجهاز؛ «YYYY-MM-DD» تنحسب أيام كاملة بـ UTC
+  const today = () => {
+    try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Baghdad", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); }
+    catch (e) { return new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10); }
+  };
+  const utc = (s) => Date.parse(String(s) + "T00:00:00Z");
+  const arDate = (s) => { const d = new Date(utc(s)); return `${DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`; };
   const inDays = (n) => n === 0 ? "اليوم" : n === 1 ? "باچر" : n === 2 ? "بعد يومين" : n <= 10 ? `بعد ${n} أيام` : `بعد ${n} يوم`;
 
   async function load() {
@@ -35,11 +40,19 @@
     return c;
   }
 
-  function pick(rows) {
-    const t = new Date(); t.setHours(0, 0, 0, 0);
-    return rows.map((x) => { const when = x.postponed_to || x.exam_date; return when ? { ...x, when, left: Math.round((day(when) - t) / 864e5) } : null; })
-      .filter((x) => x && x.left >= 0 && x.left <= WINDOW)
+  function pick(rows, win = WINDOW) {
+    const t = utc(today());
+    return rows.map((x) => { const when = x.postponed_to || x.exam_date; return when && !isNaN(utc(when)) ? { ...x, when, left: Math.round((utc(when) - t) / 864e5) } : null; })
+      .filter((x) => x && x.left >= 0 && x.left <= win)
       .sort((a, b) => a.left - b.left);
+  }
+
+  // 📅 أيقونة «الامتحانات» بالرئيسية (الأيقونة الوقتية الوحيدة): تطلع بس إذا القسم مفعّل (sections.exams) + اكو امتحان مؤكَّد جاي.
+  // غير هيچ (مطفي، ماكو امتحان، بلا نت وماكو نسخة) تبقى مخفية — نفس الحال قبل.
+  function icon(c) {
+    const on = !!(c && c.examsOn && pick(c.rows || [], 3650).length);
+    document.querySelectorAll("[data-exams-icon]").forEach((a) => a.classList.toggle("hidden", !on));
+    return c;
   }
 
   async function render(c) {
@@ -71,5 +84,5 @@
     if (at) at.insertAdjacentElement("afterend", el); else (document.querySelector(".wrap") || document.body).prepend(el);
   }
 
-  load().then(render).catch(() => {});
+  load().then(icon).then(render).catch(() => {});
 })();
