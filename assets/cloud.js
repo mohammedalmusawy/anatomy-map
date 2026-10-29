@@ -5,7 +5,7 @@
   const ON = !!(C.url && C.anon);
   const root = new URL(".", document.querySelector('link[rel="manifest"]').href).href;
   // 🔒 M6 (29/10): الكود/التوكن ما ينسجّل أبداً بـ events (?code= ?token= ?k= …) — والقاعدة تشيلها هم (دفاع ثاني)
-  const SECRET_QS = /^(code|token|k|token_hash|access_token|refresh_token)$/i;
+  const SECRET_QS = /^(code|token|k|token_hash|access_token|refresh_token|q|t)$/i;   // 30/10: q/t = نص سؤال المساعد أو البحث، ما ينسجّل بالزيارة
   const clean = (u) => { const s = String(u), h = s.indexOf("#"), body = h < 0 ? s : s.slice(0, h), hash = h < 0 ? "" : s.slice(h), i = body.indexOf("?");
     if (i < 0) return s;
     const kept = body.slice(i + 1).split("&").filter((x) => x && !SECRET_QS.test(x.split("=")[0]));

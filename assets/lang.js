@@ -81,6 +81,13 @@
       var a = el.getAttribute("aria-label"); if (!AR.test(a) || el.closest(".lang")) return;
       var v = DICT[a.trim()]; if (v) { el.setAttribute("data-ar-label", a); el.setAttribute("aria-label", v); }
     });
+    // عنوان (مثل مجموعات الأطلس h2.gh) بيه span إنكليزي فرعي (.gh-en وأمثاله): إذا العنوان المترجم صار نفسه أو يحتويه ← نخفي الفرعي
+    [].forEach.call(document.querySelectorAll("h2 [class$='-en'], h3 [class$='-en'], h2 > [lang='en'], h3 > [lang='en']"), function (x) {
+      if (x.hidden || x.classList.contains("en")) return;
+      var h = x.closest("h2, h3"); if (!h) return;
+      var own = h.textContent.replace(x.textContent, "").replace(/\s+/g, " ").trim().toLowerCase(), t = x.textContent.replace(/\s+/g, " ").trim().toLowerCase();
+      if (t && own && (own === t || own.indexOf(t) > -1 || t.indexOf(own.replace(/^[^a-z]+/, "")) > -1)) { x.hidden = true; x.setAttribute("data-dup", ""); }
+    });
     // سطر تحت العنوان بنفس النص الإنكليزي (العنوان صار إنكليزي) ← نخفيه حتى ما يتكرر
     [].forEach.call(document.querySelectorAll("h1 + .sub, h1 + p, h1 + .en"), function (x) {
       var h = x.previousElementSibling; if (h && h.textContent.trim() === x.textContent.trim()) { x.hidden = true; x.setAttribute("data-dup", ""); }
