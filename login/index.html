@@ -1,0 +1,149 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>دخول</title>
+<meta name="description" content="دخول — دروس تقنيات الأشعة للمرحلة الثانية: محاضرات مسموعة، أسئلة، أطلس حالات."><link rel="manifest" href="../manifest.webmanifest"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/plex-arabic-400.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="preload" href="../assets/fonts/cairo-600-800.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="../assets/fonts.min.css?v=13f308a09f">
+<link rel="stylesheet" href="../assets/app.min.css?v=b82fe5524f"><link rel="stylesheet" href="../assets/calm.min.css?v=54937d74c9"><link rel="stylesheet" href="../assets/lang.min.css?v=d8f158d77b"><style>
+.me-top { display: flex; align-items: center; gap: 12px; margin: 4px 0 14px; }
+.me-top .av { width: 48px; height: 48px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; font: 800 var(--t-lg) var(--title-font); flex: none; }
+.me-top b { font-family: var(--title-font); font-size: var(--t-lg); display: block; line-height: 1.4; }
+.me-top small { color: var(--muted); font-size: var(--t-xs); }
+.chips-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.chip2 { min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); font: 600 var(--t-sm) var(--title-font); cursor: pointer; }
+.chip2[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); }
+.stat3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 14px; }
+.stat3 div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: center; }
+.stat3 b { display: block; font: 800 var(--t-lg) var(--title-font); }
+.stat3 small { color: var(--muted); font-size: var(--t-xs); }
+.slim { background: var(--accent-soft); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; font-size: var(--t-sm); margin: 0 0 14px; }
+.task { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 0 0 8px; color: var(--ink); }
+.task .ck { width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); font-size: var(--t-lg); cursor: pointer; }
+.task.done .ck { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.task.done b { text-decoration: line-through; text-decoration-color: var(--muted); color: var(--muted); }
+.task b { font-family: var(--title-font); font-size: var(--t-sm); line-height: 1.45; display: block; }
+.task small { color: var(--muted); font-size: var(--t-xs); }
+.task .go { color: var(--brand); font-weight: 700; font-size: var(--t-sm); min-height: 44px; display: flex; align-items: center; }
+.timer { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; margin: 14px 0; }
+.timer b { font: 800 var(--t-xl) var(--title-font); direction: ltr; }
+.qday { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 0 0 14px; }
+.qday b { font-family: var(--title-font); display: block; margin-bottom: 4px; }
+.row-in { display: flex; gap: 6px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 4px 6px 4px 4px; margin: 8px 0; }
+.row-in input, .row-in textarea { flex: 1; min-width: 0; border: 0; background: none; font: inherit; color: var(--ink); padding: 8px; resize: vertical; }
+.row-in input:focus, .row-in textarea:focus { outline: none; }
+.mic, .lang { min-width: 44px; min-height: 44px; border: 0; background: var(--brand-soft); color: var(--brand); border-radius: 12px; font: 700 var(--t-sm) var(--title-font); cursor: pointer; }
+.lang { background: none; border: 1px solid var(--line); }
+.note { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin: 0 0 8px; border-inline-start: 4px solid var(--line); }
+.note.c1 { border-inline-start-color: #C9B48A; } .note.c2 { border-inline-start-color: #A9B6E3; } .note.c3 { border-inline-start-color: #ABC9AE; }
+.note .nh { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: var(--t-xs); }
+.note p { margin: 4px 0 6px; }
+.note .tags { display: flex; flex-wrap: wrap; gap: 6px; font-size: var(--t-xs); }
+.note .tags span { background: var(--brand-soft); color: var(--brand); border-radius: 999px; padding: 1px 10px; }
+.note .tags a { color: var(--brand); font-weight: 700; }
+.bars { display: grid; gap: 10px; margin: 0 0 14px; }
+.bars .br { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; font-size: var(--t-sm); }
+.bars .br .pbar { grid-column: 1 / -1; }
+.wk { display: grid; grid-template-columns: repeat(7, 1fr); align-items: end; gap: 6px; height: 120px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px; margin: 0 0 6px; }
+.wk i { display: block; background: var(--brand); opacity: .55; border-radius: 6px 6px 3px 3px; }
+.wk i.today { opacity: 1; }
+.wkl { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; font-size: var(--t-xs); color: var(--muted); margin: 0 0 14px; padding: 0 12px; }
+.sheet { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 0 14px; margin: 0 0 14px; }
+.sheet > summary { min-height: 52px; display: flex; align-items: center; font: 700 var(--t-sm) var(--title-font); cursor: pointer; list-style: none; color: var(--brand); }
+.sheet > summary::-webkit-details-marker { display: none; }
+.sheet[open] { padding-bottom: 14px; }
+.plan-day { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; margin: 0 0 8px; display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: start; }
+.plan-day .d { font: 700 var(--t-xs) var(--title-font); color: var(--muted); }
+.plan-day .d b { display: block; color: var(--ink); font-size: var(--t-md); }
+.plan-day ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; font-size: var(--t-sm); }
+.plan-day.rest { background: var(--bg); }
+.plan-day.exam { border-color: var(--brand); background: var(--brand-soft); }
+.tbl { width: 100%; border-collapse: collapse; font-size: var(--t-sm); }
+.tbl th, .tbl td { text-align: start; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.tbl th { color: var(--muted); font-weight: 600; font-size: var(--t-xs); }
+.code { font: 700 var(--t-sm) ui-monospace, "SF Mono", Menlo, monospace; direction: ltr; letter-spacing: .04em; background: var(--brand-soft); color: var(--brand); border-radius: 8px; padding: 2px 8px; white-space: nowrap; }
+.ib { min-width: 44px; min-height: 44px; border: 1px solid var(--line); background: var(--card); border-radius: 10px; cursor: pointer; font-size: var(--t-sm); }
+.scroll-x { overflow-x: auto; }
+.gate { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; gap: 14px; max-width: 420px; margin: 0 auto; }
+.gate .flab { display: block; font: 700 var(--t-sm) var(--title-font); margin: 4px 0 6px; }
+.gate .err { color: var(--bad); font: 600 var(--t-sm) var(--title-font); margin: 0 0 8px; }
+.gate .steps { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0; font: 700 var(--t-xs) var(--title-font); color: var(--muted); }
+.gate .steps li { padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; }
+.gate .steps li.on { background: var(--brand-soft); color: var(--brand); border-color: var(--brand); }
+.gate form { display: grid; gap: 8px; } .gate section { display: grid; gap: 12px; }
+.gate .tin { width: 100%; min-height: 48px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--ink); font: inherit; padding: 0 12px; }
+.gate input { width: 100%; min-height: 56px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); font: 700 var(--t-xl) ui-monospace, Menlo, monospace; text-align: center; letter-spacing: .12em; direction: ltr; }
+.welcome { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 12px; }
+.welcome b { font: 800 var(--t-lg) var(--title-font); }
+.ltabs.four { grid-template-columns: repeat(4, 1fr); }
+</style>
+<script>try{if(localStorage.getItem("t:theme")==='"dark"')document.documentElement.dataset.theme="dark"}catch(e){}
+try{if(/[?&]lang=en/.test(location.search)||(!/[?&]lang=ar/.test(location.search)&&localStorage.getItem("t:lang")==="en")){document.documentElement.lang="en";document.documentElement.dir="ltr"}}catch(e){}try{if(!/\/preview\//.test(location.pathname)){var _d=document.documentElement;_d.dataset.live="1";if(localStorage.getItem("t:gate-on")==="1")_d.dataset.gate="on"}}catch(e){}</script>
+<meta name="theme-color" content="#4B5A8A" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#12151C" media="(prefers-color-scheme: dark)"><link rel="apple-touch-icon" href="../assets/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="build" content="20261029180038"></head><body class="calm"><div class="wrap" role="main">
+<div class="cbar sticky"><a class="back" href="../lessons/"><span aria-hidden="true">‹</span><span class="bl">الرئيسية</span></a><span class="tools"><a class="tbtn" href="../search/" aria-label="البحث (ويّا 🎤)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></a><a class="tbtn" href="../me/" aria-label="👤 مساحتي" data-locked><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></svg></a><span class="disp" role="group" aria-label="العرض"><span class="lang" role="radiogroup" aria-label="اللغة" data-cur="1"><span class="thumb" aria-hidden="true"></span><button type="button" role="radio" lang="ar" aria-label="العربية" aria-checked="true" tabindex="0">ع</button><button type="button" role="radio" lang="en" aria-label="English" aria-checked="false" tabindex="-1">ENG</button></span><i class="sep" aria-hidden="true"></i><button type="button" class="tbtn" data-theme-toggle aria-label="الوضع الليلي"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg></button></span></span></div><nav class="crumbs" aria-label="أنت هنا"><a href="../lessons/">الرئيسية</a><i aria-hidden="true">›</i><span aria-current="page">دخول الطلاب</span></nav>
+<div class="gate">
+<ol class="steps" aria-label="الخطوات"><li class="on" data-st="1">١ · الكود</li><li data-st="2">٢ · تأكيد الاسم</li></ol>
+<section id="st1" aria-labelledby="lt1"><h1 id="lt1" class="noterm">دخول طلاب المرحلة الثانية</h1>
+<p class="sub">أدخل الكود اللي وصلك. مرة وحدة بس، وبعدها الموقع يتذكّرك ويرجّعك لنفس المكان.</p>
+<form id="codef" novalidate><label for="code" class="flab">الكود</label>
+<input id="code" name="code" inputmode="text" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false" placeholder="RAD-XXXX-XXXX" maxlength="16" aria-describedby="codeh codeerr">
+<p class="sub" id="codeh">مثل RAD-7K4P · أو افتح الرابط اللي وصلك (بيه الكود جاهز). الكود يشتغل على 3 أجهزة بالكثير.</p>
+<p class="err" id="codeerr" role="alert" hidden>اكتب الكود أول (مثل RAD-7K4P).</p>
+<button type="submit" class="cbtn">تحقّق من الكود</button></form>
+<button type="button" class="cbtn ghost" data-reqcode aria-expanded="false">ما عندي كود — اطلب كودك</button><div class="reqnote" data-reqnote hidden><p>طلب الكود من الموقع يتفعّل قريباً. لحد ذاك، اطلبه من محمد الموسوي مباشرة (بالكلية أو من <a href="https://t.me/almusawy_radiology" rel="noopener">قناة التليغرام</a>).</p><button type="button" class="cbtn ghost" disabled aria-disabled="true">📨 اطلب من البوت · قريباً</button></div>
+</section>
+<section id="st2" hidden aria-labelledby="lt2"><h2 id="lt2" class="noterm">هذا اسمك؟</h2>
+<div class="welcome"><b id="wname"></b>
+<button type="button" class="cbtn" id="pvlogin">إي، هذا اسمي — ادخل</button>
+<button type="button" class="cbtn ghost" id="fixname" aria-expanded="false">لا، صحّح الاسم</button>
+<div id="fixbox" hidden><label for="fixin" class="flab">اسمك الثلاثي الصحيح</label><input id="fixin" class="tin" autocomplete="name">
+<small class="sub">يوصل تنبيه لمحمد يتأكد، وتگدر تدخل هسه.</small><button type="button" class="cbtn" id="fixsend">أرسل التصحيح</button><p class="err" id="fixmsg" role="status" hidden></p></div>
+<button type="button" class="cbtn plain" id="back1">‹ رجوع للكود</button></div></section>
+</div>
+</div><script>
+document.addEventListener("click", (ev) => {
+  const c = ev.target.closest(".chip2"); if (c) { const g = c.closest("[data-single]"); if (g) g.querySelectorAll(".chip2").forEach((x) => x.setAttribute("aria-pressed", x === c)); else c.setAttribute("aria-pressed", c.getAttribute("aria-pressed") !== "true"); }
+  const k = ev.target.closest(".ck"); if (k) { const t = k.closest(".task"); t.classList.toggle("done"); k.textContent = t.classList.contains("done") ? "✓" : ""; }
+  const tm = ev.target.closest("#tgo"); if (tm) { let s = 25 * 60, br = false; const o = document.getElementById("tclock"); tm.disabled = true; tm.textContent = "⏳ جلسة شغالة";
+    const iv = setInterval(() => { s--; if (s < 0) { br = !br; s = (br ? 5 : 25) * 60; document.getElementById("tlab").textContent = br ? "☕ استراحة 5 دقايق" : "📚 جلسة 25 دقيقة"; }
+      o.textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }, 1000); }
+  const tp = ev.target.closest("[data-tpl]"); if (tp) document.querySelectorAll("[data-plan]").forEach((p) => p.hidden = p.dataset.plan !== tp.dataset.tpl);
+});
+const nq = document.getElementById("nq");
+if (nq) nq.addEventListener("input", () => { const q = nq.value.trim(); document.querySelectorAll(".note").forEach((n) => n.hidden = q && !n.textContent.includes(q)); });
+if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) document.querySelectorAll(".mic, .lang").forEach((b) => b.hidden = true);
+</script><script src="../assets/cloud-config.min.js?v=275841b2a6"></script><script src="../assets/net.min.js?v=b38f4438db"></script><script>
+// 🔑 دخول حقيقي (v3 حي، 29/10): account.js ← redeem-code ← جلسة الطالب (t:acct-session). البوابة مطفية أو مفتوحة: نفس الخطوات.
+(() => {
+  const $ = (s) => document.getElementById(s), err = $("codeerr"), btn = document.querySelector("#codef button[type=submit]");
+  const nextUrl = () => { const n = new URLSearchParams(location.search).get("next"); return n && n.startsWith("/") && !n.startsWith("//") ? n : "../me/"; };
+  const go = () => { location.href = nextUrl(); };
+  const st = (n) => { $("st1").hidden = n !== 1; $("st2").hidden = n !== 2;
+    document.querySelectorAll(".steps li").forEach((l) => l.classList.toggle("on", +l.dataset.st === n)); (n === 1 ? $("code") : $("pvlogin")).focus(); };
+  const bad = (m) => { err.textContent = m; err.hidden = false; };
+  let acc = null;
+  const account = () => window.Account ? Promise.resolve() : (acc = acc || new Promise((ok, no) => { const x = document.createElement("script"); x.src = "../assets/account.min.js?v=adcde2ff23"; x.onload = ok; x.onerror = no; document.head.appendChild(x); }));
+  async function submit(v) {
+    if (!v) { bad("اكتب الكود أول (مثل RAD-7K4P)."); $("code").focus(); return; }
+    err.hidden = true; btn.disabled = true; const t0 = btn.textContent; btn.textContent = "لحظة…";
+    try {
+      await account();
+      const r = await window.Account.redeem(v);
+      if (!r.ok) { bad(r.msg || "ما گدرنا ندخلك، جرّب مرة ثانية."); return; }
+      if (r.name_confirmed) { go(); return; }
+      $("wname").textContent = r.full_name || ""; st(2);
+    } catch (e) { bad("ماكو اتصال. تأكد من النت وجرّب مرة ثانية."); }
+    finally { btn.disabled = false; btn.textContent = t0; }
+  }
+  $("codef").addEventListener("submit", (ev) => { ev.preventDefault(); submit($("code").value.trim()); });
+  $("back1").onclick = () => st(1);
+  $("fixname").onclick = (ev) => { const b = $("fixbox"); b.hidden = !b.hidden; ev.currentTarget.setAttribute("aria-expanded", !b.hidden); if (!b.hidden) { $("fixin").value = $("wname").textContent; $("fixin").focus(); } };
+  $("pvlogin").onclick = async () => { try { await window.Account.confirmName(); } catch (e) {} go(); };
+  $("fixsend").onclick = async () => {
+    const m = $("fixmsg"), v = $("fixin").value.trim(); m.hidden = false;
+    if (v.split(/\s+/).length < 3) { m.textContent = "اكتب اسمك الثلاثي."; return; }
+    try { const r = await window.Account.fixName(v); m.textContent = r.msg || (r.ok ? "وصل طلبك. تگدر تدخل هسه." : "صار خطأ، جرّب بعدين."); if (r.ok) setTimeout(go, 1200); }
+    catch (e) { m.textContent = "ماكو اتصال. جرّب بعدين."; }
+  };
+  const c = new URLSearchParams(location.search).get("code");
+  if (c) { $("code").value = c; history.replaceState(null, "", location.pathname + location.search.replace(/([?&])code=[^&]*&?/, "$1").replace(/[?&]$/, "") + location.hash); submit(c.trim()); }
+})();
+</script><a class="fab" href="../assistant/" aria-label="اسأل المساعد"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="11" rx="4"/><path d="M12 4v3.5M9 12.5h.01M15 12.5h.01M9.5 15.5h5"/></svg><span class="fl">اسأل المساعد</span><span class="fs" aria-hidden="true">اسأل</span></a><script src="../assets/listen.min.js?v=67ba7f1847" defer></script><script src="../assets/calm.min.js?v=4a17ffd229" defer></script><script src="../assets/staffdoor.min.js?v=f7935021de" defer></script><script src="../assets/lang.min.js?v=02323461bb" defer></script><script src="../assets/cloud.min.js?v=82ba066fd8"></script><script src="../assets/tools.min.js?v=f7ee3d51fe"></script><script src="../assets/voice.min.js?v=a36331dc76" defer></script><script src="../assets/nextexam.min.js?v=ce55c59d0e" defer></script><script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { updateViaCache: "none" });</script></body></html>

@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="20261029153203">
+<meta name="build" content="20261029180011">
 <title>🔎 البحث — بكل الموقع</title>
 <meta name="description" content="🔎 البحث — بكل الموقع — دروس تقنيات الأشعة للمرحلة الثانية: محاضرات مسموعة، أسئلة، أطلس حالات.">
 <meta name="theme-color" content="#3B4A8C" media="(prefers-color-scheme: light)">
@@ -13,10 +13,10 @@
 <link rel="stylesheet" href="../assets/app.min.css?v=b82fe5524f">
 <link rel="preload" href="../assets/fonts/cairo-600-800.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="preload" href="../assets/fonts/plex-arabic-500.woff2?v=1" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:"Cairo";font-style:normal;font-weight:600 800;font-display:swap;src:url("../assets/fonts/cairo-600-800.woff2?v=1") format("woff2")}@font-face{font-family:"IBM Plex Sans Arabic";font-style:normal;font-weight:400;font-display:swap;src:url("../assets/fonts/plex-arabic-400.woff2?v=1") format("woff2")}@font-face{font-family:"IBM Plex Sans Arabic";font-style:normal;font-weight:500;font-display:swap;src:url("../assets/fonts/plex-arabic-500.woff2?v=1") format("woff2")}@font-face{font-family:"IBM Plex Sans Arabic";font-style:normal;font-weight:600;font-display:swap;src:url("../assets/fonts/plex-arabic-600.woff2?v=1") format("woff2")}@font-face{font-family:"IBM Plex Sans Arabic";font-style:normal;font-weight:700;font-display:swap;src:url("../assets/fonts/plex-arabic-700.woff2?v=1") format("woff2")}</style>
 <link rel="icon" href="../assets/icon-192.png">
-</head><body><div class="wrap">
+<link rel="stylesheet" href="../assets/calm.min.css?v=54937d74c9"><link rel="stylesheet" href="../assets/lang.min.css?v=d8f158d77b"><script>try{if(localStorage.getItem("t:theme")==='"dark"')document.documentElement.dataset.theme="dark"}catch(e){}try{if(/[?&]lang=en/.test(location.search)||(!/[?&]lang=ar/.test(location.search)&&localStorage.getItem("t:lang")==="en")){document.documentElement.lang="en";document.documentElement.dir="ltr"}}catch(e){}try{if(!/\/preview\//.test(location.pathname)){var _d=document.documentElement;_d.dataset.live="1";if(localStorage.getItem("t:gate-on")==="1")_d.dataset.gate="on"}}catch(e){}</script></head><body class="calm ported"><div class="wrap" role="main">
 
-<header class="top"><a class="back" href="../lessons/">‹ الرئيسية</a><span class="crumb"></span></header>
-<h1>🔎 ابحث بكل الموقع</h1><p class="sub">المحاضرات، الأسئلة، الأطلس، المصطلحات، الفحوصات الملوّنة، والفيزياء — بالإنكليزي أو العربي، ويتحمّل الغلط الإملائي.</p>
+<div class="cbar sticky"><a class="back" href="../lessons/"><span aria-hidden="true">‹</span><span class="bl">الرئيسية</span></a><span class="tools"><a class="tbtn" href="./" aria-label="البحث (ويّا 🎤)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></a><a class="tbtn" href="../me/" aria-label="👤 مساحتي" data-locked><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></svg></a><span class="disp" role="group" aria-label="العرض"><span class="lang" role="radiogroup" aria-label="اللغة" data-cur="1"><span class="thumb" aria-hidden="true"></span><button type="button" role="radio" lang="ar" aria-label="العربية" aria-checked="true" tabindex="0">ع</button><button type="button" role="radio" lang="en" aria-label="English" aria-checked="false" tabindex="-1">ENG</button></span><i class="sep" aria-hidden="true"></i><button type="button" class="tbtn" data-theme-toggle aria-label="الوضع الليلي"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg></button></span></span></div><nav class="crumbs" aria-label="أنت هنا"><a href="../lessons/">الرئيسية</a><i aria-hidden="true">›</i><span aria-current="page">البحث</span></nav>
+<h1 class="noterm">ابحث بكل الموقع</h1><p class="sub">المحاضرات، الأسئلة، الأطلس، المصطلحات، الفحوصات الملوّنة، والفيزياء — بالإنكليزي أو العربي، ويتحمّل الغلط الإملائي.</p>
 <div class="sbox"><input id="sq" type="search" placeholder="مثلاً: pneumonia أو ذات الرئة أو كسر الرسغ…" autocomplete="off"></div>
 <p class="hint" id="sn"></p><div class="list" id="sr"></div>
 </div>
@@ -25,9 +25,9 @@
 <script src="../assets/cloud.min.js?v=82ba066fd8"></script>
 <script src="../assets/tools.min.js?v=f7ee3d51fe"></script>
 <script src="../assets/staffdoor.min.js?v=f7935021de"></script>
-<script src="../assets/smart.min.js?v=390c922c7a"></script>
+<script src="../assets/smart.min.js?v=d00826aa2f"></script>
 <script src="../assets/voice.min.js?v=a36331dc76" defer></script>
 <script src="../assets/listen.min.js?v=67ba7f1847" defer></script>
-<script src="../assets/nextexam.min.js?v=86f184fa96" defer></script>
-<script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { updateViaCache: "none" });</script>
-</body></html>
+<script src="../assets/nextexam.min.js?v=ce55c59d0e" defer></script>
+
+<a class="fab" href="../assistant/" aria-label="اسأل المساعد"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="11" rx="4"/><path d="M12 4v3.5M9 12.5h.01M15 12.5h.01M9.5 15.5h5"/></svg><span class="fl">اسأل المساعد</span><span class="fs" aria-hidden="true">اسأل</span></a><script src="../assets/calm.min.js?v=4a17ffd229" defer></script><script src="../assets/staffdoor.min.js?v=f7935021de" defer></script><script src="../assets/lang.min.js?v=02323461bb" defer></script><script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { updateViaCache: "none" });</script></body></html>

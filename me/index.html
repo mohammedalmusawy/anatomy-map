@@ -1,0 +1,214 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>مساحتي</title>
+<meta name="description" content="مساحتي — دروس تقنيات الأشعة للمرحلة الثانية: محاضرات مسموعة، أسئلة، أطلس حالات."><link rel="manifest" href="../manifest.webmanifest"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/plex-arabic-400.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="preload" href="../assets/fonts/cairo-600-800.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="../assets/fonts.min.css?v=13f308a09f">
+<link rel="stylesheet" href="../assets/app.min.css?v=b82fe5524f"><link rel="stylesheet" href="../assets/calm.min.css?v=54937d74c9"><link rel="stylesheet" href="../assets/lang.min.css?v=d8f158d77b"><style>
+.me-top { display: flex; align-items: center; gap: 12px; margin: 4px 0 14px; }
+.me-top .av { width: 48px; height: 48px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; font: 800 var(--t-lg) var(--title-font); flex: none; }
+.me-top b { font-family: var(--title-font); font-size: var(--t-lg); display: block; line-height: 1.4; }
+.me-top small { color: var(--muted); font-size: var(--t-xs); }
+.chips-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.chip2 { min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); font: 600 var(--t-sm) var(--title-font); cursor: pointer; }
+.chip2[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); }
+.stat3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 14px; }
+.stat3 div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: center; }
+.stat3 b { display: block; font: 800 var(--t-lg) var(--title-font); }
+.stat3 small { color: var(--muted); font-size: var(--t-xs); }
+.slim { background: var(--accent-soft); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; font-size: var(--t-sm); margin: 0 0 14px; }
+.task { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 0 0 8px; color: var(--ink); }
+.task .ck { width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); font-size: var(--t-lg); cursor: pointer; }
+.task.done .ck { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.task.done b { text-decoration: line-through; text-decoration-color: var(--muted); color: var(--muted); }
+.task b { font-family: var(--title-font); font-size: var(--t-sm); line-height: 1.45; display: block; }
+.task small { color: var(--muted); font-size: var(--t-xs); }
+.task .go { color: var(--brand); font-weight: 700; font-size: var(--t-sm); min-height: 44px; display: flex; align-items: center; }
+.timer { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; margin: 14px 0; }
+.timer b { font: 800 var(--t-xl) var(--title-font); direction: ltr; }
+.qday { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin: 0 0 14px; }
+.qday b { font-family: var(--title-font); display: block; margin-bottom: 4px; }
+.row-in { display: flex; gap: 6px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 4px 6px 4px 4px; margin: 8px 0; }
+.row-in input, .row-in textarea { flex: 1; min-width: 0; border: 0; background: none; font: inherit; color: var(--ink); padding: 8px; resize: vertical; }
+.row-in input:focus, .row-in textarea:focus { outline: none; }
+.mic, .lang { min-width: 44px; min-height: 44px; border: 0; background: var(--brand-soft); color: var(--brand); border-radius: 12px; font: 700 var(--t-sm) var(--title-font); cursor: pointer; }
+.lang { background: none; border: 1px solid var(--line); }
+.note { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin: 0 0 8px; border-inline-start: 4px solid var(--line); }
+.note.c1 { border-inline-start-color: #C9B48A; } .note.c2 { border-inline-start-color: #A9B6E3; } .note.c3 { border-inline-start-color: #ABC9AE; }
+.note .nh { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: var(--t-xs); }
+.note p { margin: 4px 0 6px; }
+.note .tags { display: flex; flex-wrap: wrap; gap: 6px; font-size: var(--t-xs); }
+.note .tags span { background: var(--brand-soft); color: var(--brand); border-radius: 999px; padding: 1px 10px; }
+.note .tags a { color: var(--brand); font-weight: 700; }
+.bars { display: grid; gap: 10px; margin: 0 0 14px; }
+.bars .br { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; font-size: var(--t-sm); }
+.bars .br .pbar { grid-column: 1 / -1; }
+.wk { display: grid; grid-template-columns: repeat(7, 1fr); align-items: end; gap: 6px; height: 120px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px; margin: 0 0 6px; }
+.wk i { display: block; background: var(--brand); opacity: .55; border-radius: 6px 6px 3px 3px; }
+.wk i.today { opacity: 1; }
+.wkl { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; font-size: var(--t-xs); color: var(--muted); margin: 0 0 14px; padding: 0 12px; }
+.sheet { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 0 14px; margin: 0 0 14px; }
+.sheet > summary { min-height: 52px; display: flex; align-items: center; font: 700 var(--t-sm) var(--title-font); cursor: pointer; list-style: none; color: var(--brand); }
+.sheet > summary::-webkit-details-marker { display: none; }
+.sheet[open] { padding-bottom: 14px; }
+.plan-day { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; margin: 0 0 8px; display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: start; }
+.plan-day .d { font: 700 var(--t-xs) var(--title-font); color: var(--muted); }
+.plan-day .d b { display: block; color: var(--ink); font-size: var(--t-md); }
+.plan-day ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; font-size: var(--t-sm); }
+.plan-day.rest { background: var(--bg); }
+.plan-day.exam { border-color: var(--brand); background: var(--brand-soft); }
+.tbl { width: 100%; border-collapse: collapse; font-size: var(--t-sm); }
+.tbl th, .tbl td { text-align: start; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.tbl th { color: var(--muted); font-weight: 600; font-size: var(--t-xs); }
+.code { font: 700 var(--t-sm) ui-monospace, "SF Mono", Menlo, monospace; direction: ltr; letter-spacing: .04em; background: var(--brand-soft); color: var(--brand); border-radius: 8px; padding: 2px 8px; white-space: nowrap; }
+.ib { min-width: 44px; min-height: 44px; border: 1px solid var(--line); background: var(--card); border-radius: 10px; cursor: pointer; font-size: var(--t-sm); }
+.scroll-x { overflow-x: auto; }
+.gate { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; gap: 14px; max-width: 420px; margin: 0 auto; }
+.gate .flab { display: block; font: 700 var(--t-sm) var(--title-font); margin: 4px 0 6px; }
+.gate .err { color: var(--bad); font: 600 var(--t-sm) var(--title-font); margin: 0 0 8px; }
+.gate .steps { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0; font: 700 var(--t-xs) var(--title-font); color: var(--muted); }
+.gate .steps li { padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; }
+.gate .steps li.on { background: var(--brand-soft); color: var(--brand); border-color: var(--brand); }
+.gate form { display: grid; gap: 8px; } .gate section { display: grid; gap: 12px; }
+.gate .tin { width: 100%; min-height: 48px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--ink); font: inherit; padding: 0 12px; }
+.gate input { width: 100%; min-height: 56px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); font: 700 var(--t-xl) ui-monospace, Menlo, monospace; text-align: center; letter-spacing: .12em; direction: ltr; }
+.welcome { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 12px; }
+.welcome b { font: 800 var(--t-lg) var(--title-font); }
+.ltabs.four { grid-template-columns: repeat(4, 1fr); }
+</style><style>
+.big4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 12px; }
+.big { min-height: 96px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); color: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; font: inherit; }
+.big span { font-size: var(--t-2xl); line-height: 1; } .big b { font: 700 var(--t-md) var(--title-font); }
+.big[aria-expanded="true"] { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); }
+.bigsheet { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 12px 14px 14px; margin: 0 0 14px; }
+.bsh { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; } .bsh b { font: 800 var(--t-md) var(--title-font); }
+.ib { min-width: 44px; min-height: 44px; }
+.chip2 { min-height: 44px; }
+.row-in .vbox { margin: 0; flex: none; display: inline-flex; gap: 6px; } .vmsg { display: block; font-size: var(--t-xs); color: var(--muted); margin: -4px 4px 8px; } .row-in .vbox button { min-width: 44px; height: 44px; }
+.qen { font-weight: 600; margin: 6px 0 2px; } .qar { color: var(--muted); margin: 0 0 8px; }
+.qo { display: grid; gap: 8px; } .qopt { min-height: 48px; text-align: start; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 12px; padding: 8px 12px; font: inherit; cursor: pointer; display: grid; gap: 2px; }
+.qopt small { color: var(--muted); } .qopt.right { border-color: var(--ok); background: var(--ok-soft); } .qopt.wrong { border-color: #C0504D; }
+.qw { margin: 8px 0; font-size: var(--t-sm); } .score { font: 800 var(--t-2xl) var(--title-font); text-align: center; margin: 4px 0; }
+.qday .cbtn, .bigsheet .cbtn, .sheet .cbtn { margin-top: 8px; }
+.pvbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; } .pvbar .cbtn { min-height: 44px; font-size: var(--t-sm); padding: 0 14px; }
+.tour .box small { color: var(--muted); }
+.task > span { min-width: 0; } .task .go { min-width: 44px; justify-content: center; } .task b, .note p, .slim { overflow-wrap: anywhere; }
+.note .chips-row { margin: 6px 0 0; }
+.note .tags .tm { color: var(--brand); font-weight: 700; cursor: pointer; }
+.syncline { margin: 0 0 12px; } .syncline:empty { display: none; }
+.rrows, .lrows { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.rrows li { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 4px 4px 4px 10px; font-size: var(--t-sm); }
+.rrows li > span:first-child { min-width: 0; overflow-wrap: anywhere; } .rrows .ra { display: flex; gap: 4px; flex: none; }
+.lrows li { display: grid; gap: 4px; border-bottom: 1px solid var(--line); padding: 8px 0; font-size: var(--t-sm); } .lrows li:last-child { border-bottom: 0; }
+.lrows a { color: var(--ink); text-decoration: none; min-height: 32px; display: block; } .lrows b { font-weight: 600; overflow-wrap: anywhere; }
+.lrows .lm { display: flex; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: var(--t-xs); }
+.sheet.lecs > summary { color: var(--ink); font-weight: 600; } .lsub { font: 700 var(--t-sm) var(--title-font); margin: 12px 0 0; color: var(--brand); }
+.tin { width: 100%; min-height: 48px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--ink); font: inherit; padding: 0 12px; box-sizing: border-box; margin: 4px 0 8px; }
+.note .tags a { overflow-wrap: anywhere; }
+</style>
+<script>try{if(localStorage.getItem("t:theme")==='"dark"')document.documentElement.dataset.theme="dark"}catch(e){}
+try{if(/[?&]lang=en/.test(location.search)||(!/[?&]lang=ar/.test(location.search)&&localStorage.getItem("t:lang")==="en")){document.documentElement.lang="en";document.documentElement.dir="ltr"}}catch(e){}try{if(!/\/preview\//.test(location.pathname)){var _d=document.documentElement;_d.dataset.live="1";if(localStorage.getItem("t:gate-on")==="1")_d.dataset.gate="on"}}catch(e){}</script>
+<meta name="theme-color" content="#4B5A8A" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#12151C" media="(prefers-color-scheme: dark)"><link rel="apple-touch-icon" href="../assets/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="build" content="20261029180038"></head><body class="calm" data-gated="1"><div class="wrap" role="main">
+<div class="cbar sticky"><a class="back" href="../lessons/"><span aria-hidden="true">‹</span><span class="bl">الرئيسية</span></a><span class="tools"><a class="tbtn" href="../search/" aria-label="البحث (ويّا 🎤)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></a><a class="tbtn" href="./" aria-label="👤 مساحتي" data-locked><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></svg></a><span class="disp" role="group" aria-label="العرض"><span class="lang" role="radiogroup" aria-label="اللغة" data-cur="1"><span class="thumb" aria-hidden="true"></span><button type="button" role="radio" lang="ar" aria-label="العربية" aria-checked="true" tabindex="0">ع</button><button type="button" role="radio" lang="en" aria-label="English" aria-checked="false" tabindex="-1">ENG</button></span><i class="sep" aria-hidden="true"></i><button type="button" class="tbtn" data-theme-toggle aria-label="الوضع الليلي"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg></button></span></span></div><nav class="crumbs" aria-label="أنت هنا"><a href="../lessons/">الرئيسية</a><i aria-hidden="true">›</i><span aria-current="page">مساحتي</span></nav>
+<div class="me-top"><span class="av" aria-hidden="true">👤</span><span><h1 class="noterm">مساحتي</h1><small class="hi">أهلاً 👋 · يوم حلو للدراسة</small></span></div>
+
+<div class="ltabs four" id="ltabs" role="tablist"><button class="ltab" role="tab" id="t-today" data-tab="today" aria-controls="p-today" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c2.8-1 5.8-1 9 1 3.2-2 6.2-2 9-1v13c-2.8-1-5.8-1-9 1-3.2-2-6.2-2-9-1z"/><path d="M12 6.5v13"/></svg>اليوم</button><button class="ltab" role="tab" id="t-progress" data-tab="progress" aria-controls="p-progress" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>تقدّمي</button><button class="ltab" role="tab" id="t-notes" data-tab="notes" aria-controls="p-notes" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.5A2.5 2.5 0 0 1 19 7v13H7.5A2.5 2.5 0 0 1 5 17.5z"/><path d="M5 17.5A2.5 2.5 0 0 1 7.5 15H19M9 8h6M9 11h4"/></svg>ملاحظاتي</button><button class="ltab" role="tab" id="t-plan" data-tab="plan" aria-controls="p-plan" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>خطتي</button></div>
+<div class="tpanel" role="tabpanel" id="p-today" hidden><p class="slim syncline" id="syncline" role="status" aria-live="polite"></p><div id="myday"></div><div id="pnotify"></div><div class="stat3" id="st3"></div><div id="exline"></div><div id="ptoday"></div>
+<div class="timer"><span><small id="ptlab">📚 جلسة 25 دقيقة</small><br><b id="ptclock">25:00</b></span><button type="button" class="cbtn" id="ptgo">⏱️ ابدأ جلسة</button></div>
+<div class="pvbar"><button type="button" class="cbtn ghost" id="pvhelp" aria-label="شلون أستخدم مساحتي؟">؟ شلون أستخدمها</button></div>
+</div>
+<div class="tpanel" role="tabpanel" id="p-progress" hidden><div id="pprog"></div><div id="pout"></div></div>
+<div class="tpanel" role="tabpanel" id="p-notes" hidden><div id="pnotes"></div></div>
+<div class="tpanel" role="tabpanel" id="p-plan" hidden><div id="pbuild"></div><div id="pdays"></div></div>
+</div><a class="fab" href="../assistant/" aria-label="اسأل المساعد"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="11" rx="4"/><path d="M12 4v3.5M9 12.5h.01M15 12.5h.01M9.5 15.5h5"/></svg><span class="fl">اسأل المساعد</span><span class="fs" aria-hidden="true">اسأل</span></a><script src="../assets/listen.min.js?v=67ba7f1847" defer></script><script src="../assets/cloud-config.min.js?v=275841b2a6"></script><script src="../assets/net.min.js?v=b38f4438db"></script><script src="m/account.js" defer></script><script src="m/voice-input.js" defer></script><script src="m/plan.js" defer></script><script src="m/track.js" defer></script><script src="m/notes.js" defer></script><script src="m/myspace.js" defer></script><script src="m/sync.js" defer></script><script src="m/notify.js" defer></script><script>
+// 🧩 ربط الوحدات بالمعاينة: بيانات الموقع الحقيقية + بيانات الطالب من جهازه بس.
+document.addEventListener("DOMContentLoaded", async () => {
+  const root = new URL("../", location.href).href, $ = (s) => document.querySelector(s);
+  const J = (u) => fetch(u).then((r) => { if (!r.ok) throw r.status; return r.json(); });
+  const esc = (x) => String(x ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const LSg = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+  let study, lex, D;
+  try { [study, lex, D] = await Promise.all([J(root + "study/data.json"), J(root + "assets/audio/terms/lex.json").catch(() => ({})), J("data.json")]); }
+  catch (e) { $("#myday").innerHTML = '<p class="slim" role="alert">ما گدرنا نحمّل بيانات المحاضرات هسه. تأكد من النت وحدّث الصفحة.</p>'; return; }
+  const cat = Plan.catalog(study, D.extra);
+  const lectures = cat.map((l) => Object.assign({}, l, { questions: study[l.subject].lectures.find((x) => x.type === l.type && x.num === l.num).questions || [] }));
+  const ix = Notes.index({ catalog: cat, lex, cases: D.cases });
+  const subjects = [...new Map(cat.map((l) => [l.subject, l.subject_ar])).entries()];
+  const exam = Plan.examFromCache(LSg("t:nextexam", null));
+  const REG = { "صدر": "xray/chest", "بطن": "xray/abdomen", "فقرات": "xray/lumbar-spine", "كسور": "xray/long-bones" };
+  Track.start();
+  const facts = (d) => Track.facts(Track.state(), d, LSg("t:progress", {}));
+  const nm = MySpace.studentName(); if (nm) { const b = $(".me-top .hi"); if (b) b.textContent = `أهلاً، ${nm} 👋`; }
+
+  let plan = Plan.load();
+  if (plan) { const r = Plan.rebalance(plan, Plan.dayKey(), facts); if (r.changed) plan = Plan.save(r.plan); }
+  const scores = () => { const p = LSg("t:progress", {}), s = {}; cat.forEach((l) => { if (p[l.quiz]) s[l.id] = p[l.quiz].best; }); return s; };
+  const paint = () => {
+    const S = Track.summarize(Track.state(), { catalog: cat, atlas: D.atlas, progress: LSg("t:progress", {}), srs: LSg("t:srs", {}), rest: Plan.restDays(plan) });
+    const f = facts(Plan.dayKey());
+    $("#st3").innerHTML = `<div><b>🔥 ${S.streak}</b><small>${S.streak === 1 ? "يوم" : "أيام"} ورا بعض</small></div><div><b>${plan ? plan.goal.lectures : "—"}</b><small>هدف الأسبوع (محاضرات)</small></div><div><b>${f.min} د</b><small>اليوم</small></div>`;
+    $("#exline").innerHTML = exam ? `<div class="slim">📅 الامتحان القادم: ${esc((subjects.find(([k]) => k === exam.subject) || [0, exam.subject])[1])}${/^\d{4}-\d{2}-\d{2}$/.test(exam.date) ? " · " + esc(Plan.arDate(exam.date)) : ""}</div>` : "";
+    Plan.renderToday($("#ptoday"), plan, f, { root });
+    Plan.renderDays($("#pdays"), plan, {});
+    Track.renderProgress($("#pprog"), S, { root });
+  };
+  MySpace.mountToday($("#myday"), { root, lectures, ix, examDate: exam && exam.date });
+  if (window.BotNotify) BotNotify.mount($("#pnotify"), { root });   // 🔔 مطفي لحد tg_link.on (الزائر ← ولا شي)
+  Notes.mount($("#pnotes"), { root, ix, subjects, examKnown: !!exam, examDate: exam && exam.date });
+  Track.renderOutside($("#pout"), { subjects, onAdd: paint });
+  Plan.renderBuilder($("#pbuild"), { catalog: cat, exam, root, onMake: (sel) => {
+    const S = Track.summarize(Track.state(), { catalog: cat, progress: LSg("t:progress", {}) });
+    const it = Notes.intentToday(), reg = it && REG[String(it).split(" ").pop()];
+    const regs = [...new Set((reg ? [reg] : []).concat(["xray/chest", "xray/abdomen", "xray/long-bones"]))].map((k) => `devices/${k.replace("/", "/cases/")}/`);
+    const ex2 = sel.examDate ? { subject: sel.subjects.length === 1 ? sel.subjects[0] : (exam && exam.date === sel.examDate ? exam.subject : null), date: sel.examDate, lectures: exam && exam.date === sel.examDate ? exam.lectures : [] } : null;
+    plan = Plan.save(Plan.make(Object.assign(sel, { lectures: cat, exam: ex2 || (exam && (!sel.subjects.length || sel.subjects.includes(exam.subject)) ? exam : null),
+      done: S.lectures.filter((l) => l.done).map((l) => l.id), mistakes: Object.keys(LSg("t:mistakes", {})).length, scores: scores(), regions: regs })));
+    paint(); $("#pdays").scrollIntoView({ behavior: "smooth", block: "start" });
+  } });
+  document.addEventListener("click", (ev) => {
+    const ck = ev.target.closest("[data-task] .ck");
+    if (ck) {
+      if (ck.getAttribute("aria-disabled") === "true") return;   // انحسبت وحدها
+      const id = ck.closest("[data-task]").dataset.task; plan = Plan.toggle(id, facts(Plan.dayKey())) || plan;
+      setTimeout(() => { const n = document.querySelector(`[data-task="${CSS.escape(id)}"] .ck`); if (n) n.focus(); }, 30);   // بعد إعادة الرسم (plan:change)
+      return;
+    }
+    const g = ev.target.closest("[data-goto]"); if (g) { ev.preventDefault(); const t = document.getElementById("t-" + g.dataset.goto); if (t) t.click(); }
+  });
+  ["track:change", "plan:change", "notes:change"].forEach((e) => document.addEventListener(e, () => setTimeout(paint, 0)));
+  // ⏱️ 25 + 5
+  const tm = Plan.timer({ onTick: (x) => { $("#ptclock").textContent = x ? x.label : "25:00"; $("#ptlab").textContent = !x ? "📚 جلسة 25 دقيقة" : x.phase === "work" ? `📚 جلسة ${x.round} · ركّز` : "☕ استراحة 5 دقايق"; $("#ptgo").textContent = x ? "⏹️ وقّف" : "⏱️ ابدأ جلسة"; } });
+  $("#ptgo").onclick = () => (tm.running ? tm.stop() : tm.start());
+  $("#pvhelp").onclick = () => MySpace.tour(true);
+  // 🧪 بيانات تجريبية (المعاينة بس) حتى يبيّن الشكل
+  if ($("#pvseed")) $("#pvseed").onclick = () => {
+    const d0 = Plan.dayKey();
+    Track.mutate((st) => {
+    cat.slice(0, 7).forEach((l, i) => { const n = (D.extra[l.id] || {}).sections || 6; for (let k = 1; k <= Math.max(1, n - (i % 3)); k++) Track.rec.open(st, l.id, "s" + k, n); for (let k = 0; k < 6 - (i % 4); k++) Track.rec.heard(st, l.id, "s1", k, 8); });
+    [1500, 2400, 900, 0, 3000, 2100, 1700].forEach((s, i) => Track.rec.time(st, s, null, Plan.addDays(d0, i - 6)));
+    ["xray/chest", "xray/abdomen"].forEach((r, j) => D.cases.filter((c) => c.href.includes(r.replace("/", "/cases/") + "/")).slice(0, 12 - j * 6).forEach((c) => Track.rec.caseSeen(st, r, c.slug)));
+    const p = LSg("t:progress", {}); cat.slice(0, 5).forEach((l, i) => { p[l.quiz] = { best: 60 + i * 8, last: 55 + i * 8, t: Date.now() - i * 864e5 }; });
+    localStorage.setItem("t:progress", JSON.stringify(p));
+    localStorage.setItem("t:last", JSON.stringify({ url: cat[2].learn, title: cat[2].title, sub: "اسمع · القسم 4", tab: "listen" }));
+    Track.rec.fixed(st);
+    cat.slice(0, 5).forEach((l, i) => Track.rec.quiz(st, l.quiz, 5 + (i % 3), 10, Date.now() - (i + 3) * 864e5));
+    });
+    if (!Notes.all().length) { Notes.add({ text: "Anode heel effect: الشدة أقوى جهة الكاثود، فالجزء الأسمك من المريض جهة الكاثود.", kind: "hard", ix }); Notes.add({ text: "شنو الفرق بين Effective dose و Equivalent dose بالامتحان؟", kind: "ask", ix }); }
+    location.reload();
+  };
+  paint();
+  MySpace.tour();
+  // ☁️ الحساب: الزائر ← ولا طلب للشبكة؛ الطالب المسجّل ← دمج ويّا حسابه
+  const sl = $("#syncline"), showSync = () => { sl.textContent = Sync.label(); };
+  document.addEventListener("sync:status", showSync);
+  document.addEventListener("sync:applied", () => { plan = Plan.load(); paint(); const n = MySpace.studentName(); if (n) { const b = $(".me-top .hi"); if (b) b.textContent = `أهلاً، ${n} 👋`; } });
+  Sync.start().then(() => { showSync(); const n = MySpace.studentName(); if (n) { const b = $(".me-top .hi"); if (b) b.textContent = `أهلاً، ${n} 👋`; } });
+  // 🧪 المعاينة: الروابط تروح لنسخ المعاينة إذا موجودة (حتى التتبّع والـ ✅ التلقائي يشتغلون)، والصفحات الحيّة ما تتغيّر
+  const PV = new Set(D.pv || []), pvRoot = new URL("../preview/", location.href).href;
+  if (/\/preview\//.test(location.pathname)) document.addEventListener("click", (ev) => {   // بالمعاينة بس (بالحي الروابط حية أصلاً)
+    const a = ev.target.closest && ev.target.closest("a[href]"); if (!a || !a.href.startsWith(root)) return;
+    let r = a.href.slice(root.length).split("#")[0]; const h = a.href.includes("#") ? "#" + a.href.split("#")[1] : "";
+    const m = r.match(/^devices\/([^/]+)\/cases\/([^/]+)\/$/); if (m) r = `atlas/${m[1]}/${m[2]}/`;
+    if (PV.has(r)) a.href = pvRoot + r + h;
+  }, true);
+});
+</script><script src="../assets/calm.min.js?v=4a17ffd229" defer></script><script src="../assets/staffdoor.min.js?v=f7935021de" defer></script><script src="../assets/lang.min.js?v=02323461bb" defer></script><script src="../assets/cloud.min.js?v=82ba066fd8"></script><script src="../assets/tools.min.js?v=f7ee3d51fe"></script><script src="../assets/voice.min.js?v=a36331dc76" defer></script><script src="../assets/nextexam.min.js?v=ce55c59d0e" defer></script><script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { updateViaCache: "none" });</script></body></html>

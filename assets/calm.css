@@ -202,6 +202,11 @@ body.calm { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
 /* 🔒 أقسام الطلاب */
 .lock { display: inline-flex; align-items: center; gap: 4px; font-size: var(--t-xs); color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; margin-top: 6px; }
 body[data-role="student"] .lock { display: none; }
+/* 🔓 v3 حي (29/10): البوابة مطفية ← ولا قفل ولا «لطلاب المرحلة الثانية». html[data-gate=on] بس (من t:gate-on / settings.gate) */
+html[data-live]:not([data-gate="on"]) .lock, html[data-live]:not([data-gate="on"]) .g-on { display: none !important; }
+html[data-live][data-gate="on"] .g-off { display: none !important; }
+.hhero .codel { display: block; text-align: center; margin: 8px 0 0; font-size: var(--t-sm); }
+.hhero .codel a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--brand); font-weight: 700; }
 .gatedlg { position: fixed; inset: 0; z-index: 70; background: rgba(29,32,39,.38); display: flex; align-items: flex-end; justify-content: center; padding: 16px; }
 .gatedlg[hidden] { display: none; }
 .gatedlg .box { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 20px; max-width: 440px; width: 100%; display: grid; gap: 12px; margin-bottom: env(safe-area-inset-bottom); }
@@ -491,7 +496,7 @@ body.calm.asst { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
 /* أول دخول: سطر واحد يشرح الموقع */
 .tagline { text-align: center; color: var(--ink); font-size: var(--t-sm); margin: 10px auto 0; max-width: 34ch; line-height: 1.7; }
 /* ⚠️ احتمال خطأ: بين قوسين جنب الكلمة، سطر هادئ، بلا بطاقة (نص الأستاذ ما يتغيّر) */
-.calm .perr-in { font-size: .84em; color: var(--accent); text-decoration: none; border-bottom: 1px dotted currentColor; white-space: normal; font-family: var(--body-font); direction: rtl; unicode-bidi: isolate; }
+.calm .perr-in { font-size: .84em; color: #6E5229; text-decoration: none; border-bottom: 1px dotted currentColor; white-space: normal; font-family: var(--body-font); direction: rtl; unicode-bidi: isolate; }
 .cbar .back { min-width: 0; flex: 0 1 auto; }
 .cbar .back .bl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 42vw; }
 .cbar .tools { flex: none; }
@@ -783,3 +788,6 @@ body[data-role="student"] .pvtool [data-role-set="student"], body[data-role="vis
 @media (min-width: 1024px) { body.lec .fab { inset-inline-end: auto; inset-inline-start: max(16px, env(safe-area-inset-left)); } }   /* المحاضرة: تحت عمود التبويبات (يمين) مو فوق النص */
 .calm .tsticky.stuck .slab { display: none; }
 .mylist .ok bdi { display: block; }
+
+/* ⚡ v3 حي: «احتمال خطأ» بتباين ≥ 4.5 بالفاتح، والليلي يرجع للون الهادئ */
+:root[data-theme="dark"] .calm .perr-in { color: var(--accent); }

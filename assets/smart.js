@@ -167,6 +167,7 @@
       chat.lastElementChild.remove();
       if (r.disabled) return say("bot", "🤖 المساعد مطفي حالياً.");
       if (r.limit) return say("bot", "وصلت حد اليوم (" + (r.max || 15) + " سؤال). ارجع باچر 🌙 — وهسه تگدر تستعمل 🎯 رشّحلي.");
+      if (r.paused) return say("bot", "⏸️ المساعد متوقف مؤقتاً، ويرجع أول الشهر. باقي الموقع كله يشتغل عادي: البحث و«رشّحلي» والمحاضرات.");
       if (r.budget || r.error) return say("bot", "المساعد مو متوفر هسه. البحث و«رشّحلي» يشتغلون عادي.");
       if (r.intent === "exams") { say("bot", `📅 <a href="${root}exams/">افتح قسم الامتحانات</a>`); return; }
       if (r.intent === "recommend") { recommender("recommend", params.get("subject")); return; }

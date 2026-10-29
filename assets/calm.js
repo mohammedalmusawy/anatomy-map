@@ -18,10 +18,41 @@
   });
 
   // ── 🎓 أقسام الطلاب (بالمعاينة: زر «زائر / طالب» للعرض؛ بالموقع الحقيقي الدور من الجلسة) ──
-  const role = LS.get("pv-role", "visitor"); document.body.dataset.role = role;
+  // 🌿 v3 حي (29/10): برا /preview/ الدور من جلسة الطالب الحقيقية (t:acct-session) أو «👁️ شوف كطالب»، والبوابة من settings.gate
+  // (staffdoor.js هو اللي يقفل فعلاً لما تنفتح). البوابة مطفية ← ولا قفل ولا نافذة كود.
+  const LIVE = !/\/preview\//.test(location.pathname);
+  if (LIVE) document.documentElement.dataset.live = "1";
+  const alive = (x) => !!(x && x.user && (x.refresh_token || (x.expires_at && x.expires_at * 1000 > Date.now())));
+  const sess = (() => { try { const x = JSON.parse(localStorage.getItem("t:acct-session") || "null"); return alive(x) && ((x.user.app_metadata || {}).role === "student") ? x : null; } catch (e) { return null; } })();
+  const liveRole = () => { try { if (sess || localStorage.getItem("t:staff-view") === "1") return "student"; } catch (e) {} return "visitor"; };
+  const role = LIVE ? liveRole() : LS.get("pv-role", "visitor"); document.body.dataset.role = role;
   $$("[data-name-only]").forEach((el) => { el.hidden = role !== "student"; });
   $$("[data-visitor-only]").forEach((el) => { el.hidden = role === "student"; });
-  document.addEventListener("click", (ev) => {
+  if (LIVE && sess) {   // «أهلاً، <الاسم>» من الجلسة إذا موجود (وإلا «أهلاً 👋» بس)
+    const md = sess.user.user_metadata || {}, nm = String(md.full_name || md.name || "").trim().split(/\s+/)[0];
+    if (nm) $$("[data-hello]").forEach((el) => { el.textContent = `أهلاً، ${nm} 👋`; });
+  }
+  // 🔗 رابط الدخول المباشر من لوحة الطلاب (…/?code=RAD-…) ← شاشة الدخول بنفس الكود
+  try {
+    const qc = new URLSearchParams(location.search).get("code"), man0 = document.querySelector('link[rel="manifest"]');
+    if (LIVE && qc && man0 && !/\/login\/(index\.html)?$/.test(location.pathname) && !/\/admin\//.test(location.pathname)) {
+      location.replace(new URL("login/?code=" + encodeURIComponent(qc), new URL(".", man0.href)).href); return;
+    }
+  } catch (e) {}
+  let gateOn = LIVE && document.documentElement.dataset.gate === "on";
+  const applyGate = () => {
+    $$("[data-gate-href]").forEach((a) => {   // «📚 ادخل لمحاضراتك»: البوابة مطفية ← المحاضرات مباشرة؛ مفتوحة والزائر بلا كود ← الدخول بالكود
+      if (!a.dataset.offHref) a.dataset.offHref = a.getAttribute("href");
+      a.setAttribute("href", gateOn && role !== "student" ? a.dataset.gateHref : a.dataset.offHref);
+    });
+  };
+  applyGate();
+  if (LIVE && window.Net && window.Net.on && window.Net.settings) Promise.resolve(window.Net.settings()).then((S) => {
+    gateOn = !!(S && S.gate && S.gate.on);
+    if (gateOn) document.documentElement.dataset.gate = "on"; else delete document.documentElement.dataset.gate;
+    applyGate();
+  }).catch(() => {});
+  if (!LIVE) document.addEventListener("click", (ev) => {
     const r = ev.target.closest("[data-role-set]"); if (r) { LS.set("pv-role", r.dataset.roleSet); location.reload(); return; }
     const l = ev.target.closest("[data-locked]");
     if (!l || document.body.dataset.role === "student") return;
@@ -30,8 +61,8 @@
     $("#gatego", dlg).href = $("#gatego", dlg).dataset.base + "?next=" + encodeURIComponent(new URL(l.getAttribute("href") || "", location.href).pathname);
     dlg.hidden = false; $("#gatego", dlg).focus();
   });
-  // صفحة لطلابنا انفتحت مباشرة بدون كود ← نفس النافذة، و«تمام» يرجّعه للرئيسية
-  if (document.body.dataset.gated && role !== "student" && $("#gatedlg")) {
+  // صفحة لطلابنا انفتحت مباشرة بدون كود ← نفس النافذة، و«تمام» يرجّعه للرئيسية (المعاينة بس؛ بالحي staffdoor.js)
+  if (!LIVE && document.body.dataset.gated && role !== "student" && $("#gatedlg")) {
     const dlg = $("#gatedlg"), go = $("#gatego", dlg);
     go.href = go.dataset.base + "?next=" + encodeURIComponent(location.pathname);
     const cl = $("[data-close]", dlg); cl.textContent = "‹ رجوع للرئيسية";
@@ -88,6 +119,7 @@
   if (page) {
     const prevSec = (secmap[page.url] || 0);
     LS.set("last", Object.assign(page, { t: Date.now(), tab: (location.hash || "#read").slice(1), sec: prevSec }));
+    LS.set("lastlec", LS.get("last", null));   // نسخة ثابتة: tools.js يكتب t:last بصفحات الاختبار (بلا عنوان المادة)
   }
   const man = document.querySelector('link[rel="manifest"]'), base = man ? new URL(".", man.href).href : document.baseURI;
   const resumeHTML = (x, sample) => {
@@ -97,11 +129,14 @@
       (x.secs ? `<span class="pbar" role="progressbar" aria-label="تقدّمك بالمحاضرة" aria-valuemin="0" aria-valuemax="${x.secs}" aria-valuenow="${x.sec || 0}"><i style="width:${pct}%"></i></span>` +
         `<small class="pn">القسم ${x.sec || 1} من ${x.secs}</small>` : "") + `</span><span class="go">كمّل ‹</span>`;
   };
-  const res = $("#resume"), last = LS.get("last", null);
-  if (res && role === "student") {
-    const ok = last && last.url && /^preview\/learn\/[^/]+\/(theory|practical)\/\d+\/$/.test(last.url) && last.title && last.sub;
-    let x = ok ? Object.assign({}, last, { sec: secmap[last.url] || last.sec || 0 }) : null, sample = false;
-    if (!x && res.dataset.sample) { try { x = JSON.parse(res.dataset.sample); sample = true; } catch (e) {} }
+  const okLast = (v) => v && v.url && /^(preview\/)?learn\/[^/]+\/(theory|practical)\/\d+\/$/.test(v.url) && v.title && v.sub;
+  let last = LS.get("last", null);
+  if (LIVE) { const ll = LS.get("lastlec", null); if (!okLast(last) && okLast(ll)) last = ll; if (okLast(last)) last = Object.assign({}, last, { url: last.url.replace(/^preview\//, "") }); }
+  const res = $("#resume");
+  if (res && (role === "student" || LIVE)) {   // بالحي: أي أحد عنده آخر محاضرة بجهازه (بلا «مثال»)
+    const ok = okLast(last);
+    let x = ok ? Object.assign({}, last, { sec: secmap[last.url] || secmap["preview/" + last.url] || last.sec || 0 }) : null, sample = false;
+    if (!x && res.dataset.sample && !LIVE) { try { x = JSON.parse(res.dataset.sample); sample = true; } catch (e) {} }
     if (x) { res.href = new URL(x.url + (x.tab && x.tab !== "read" ? "#" + x.tab : ""), base).href; res.innerHTML = resumeHTML(x, sample); res.hidden = false; }
   }
   // صفحة المحاضرة: أبعد قسم وصله (قراءة أو استماع) ← «القسم n من N»
@@ -172,13 +207,13 @@
     $$("[data-view]", seg.closest(".tpanel") || seg.parentElement).forEach((v) => { v.hidden = v.dataset.view !== b.dataset.v; });
     LS.set("readv", b.dataset.v);
   }));
-  const rv = LS.get("readv", "text"); $$(`.seg button[data-v="${rv}"]`).forEach((b) => b.click());
+  const rv = LS.get("readv", "text"); if (rv !== "text") $$(`.seg button[data-v="${rv}"]`).forEach((b) => b.click());   // ⚡ «النص» هو الافتراضي بالـ HTML
 
   // ── شريط تقدّم القراءة (خفيف) ──
   const bar = $(".rprog i");
   if (bar) {
     const upd = () => { const h = document.documentElement.scrollHeight - innerHeight; bar.style.width = (h > 0 ? Math.min(100, (scrollY / h) * 100) : 0) + "%"; };
-    addEventListener("scroll", upd, { passive: true }); upd();
+    addEventListener("scroll", upd, { passive: true }); requestAnimationFrame(() => setTimeout(upd, 0));   // ⚡ بلا تخطيط إجباري وقت التحميل
   }
 
   // ═════ 📱 الأجهزة (29/10): كيبورد ولمس ═════
@@ -190,8 +225,14 @@
   }
   // المصطلح المنقّط: أول مرة بس ينوصل له بـ Tab (الباقي بالماوس/اللمس) حتى الكيبورد ما يمر على 400 كلمة
   let dq = 0;
-  const dedupe = () => { dq = 0; const seen = new Set(); $$(".tm[data-k]").forEach((t) => { const k = t.dataset.k; if (seen.has(k)) { if (t.tabIndex !== -1) t.tabIndex = -1; } else { seen.add(k); if (t.tabIndex !== 0) t.tabIndex = 0; } }); };
-  new MutationObserver((ms) => { if (!dq && ms.some((m) => m.addedNodes.length)) dq = setTimeout(dedupe, 300); }).observe(document.body, { childList: true, subtree: true });
+  const dedupe = () => {   // ⚡ (v3 حي) دفعات وقت الفراغ
+    dq = 0; const seen = new Set(), all = $$(".tm[data-k]"); let i = 0;
+    const step = () => { const t0 = performance.now(); for (; i < all.length && performance.now() - t0 < 12; i++) { const t = all[i], k = t.dataset.k, ti = t.getAttribute("tabindex");
+      if (seen.has(k)) { if (ti !== "-1") t.setAttribute("tabindex", "-1"); } else { seen.add(k); if (ti !== "0") t.setAttribute("tabindex", "0"); } }
+      if (i < all.length) (window.requestIdleCallback ? requestIdleCallback(step, { timeout: 1200 }) : setTimeout(step, 30)); };
+    step();
+  };
+  // ⚡ (v3 حي) dedupe ينادى من آخر tidyTerms (مراقب واحد مجدول وقت الفراغ بدل مراقبين بكل إضافة)
   // صور الحالات: تنفتح بالكيبورد (Enter/مسافة)، والتركيز يروح لزر الإغلاق ويرجع للصورة
   let lbFrom = null;
   $$(".case .xi").forEach((x) => {
@@ -232,12 +273,12 @@
   });
 
   // 🔗 روابط تكتبها سكربتات الموقع (البحث، المساعد، أدوات الطالب) للصفحات الحية ← نسخة المعاينة (preview/map.json)
-  const PRE = new URL("preview/", base).href;
+  const PRE = LIVE ? base : new URL("preview/", base).href;
   let MAPJ = null;
   const remapHref = (a) => {
     if (!MAPJ || !a.href || a.dataset.pvmap) return;
     const u = new URL(a.href, location.href);
-    if (u.origin !== location.origin || !u.href.startsWith(base) || u.href.startsWith(PRE)) return;
+    if (u.origin !== location.origin || !u.href.startsWith(base) || (!LIVE && u.href.startsWith(PRE))) return;
     let rel = u.pathname.slice(new URL(base).pathname.length).replace(/index\.html$/, "");
     const to = MAPJ[rel];
     if (to == null) return;
@@ -246,7 +287,7 @@
     a.dataset.pvmap = "1";
   };
   const remapAll = (root) => $$("a[href]", root).forEach(remapHref);
-  fetch(new URL("map.json", PRE)).then((r) => (r.ok ? r.json() : null)).then((j) => { MAPJ = j; remapAll(document); }).catch(() => {});
+  fetch(LIVE ? new URL("assets/v3-map.json", base) : new URL("map.json", PRE)).then((r) => (r.ok ? r.json() : null)).then((j) => { MAPJ = j; remapAll(document); }).catch(() => {});
   document.addEventListener("click", (ev) => { const a = ev.target.closest && ev.target.closest("a[href]"); if (a) remapHref(a); }, true);
 
   // 🔎 نتائج البحث: الحالة و«أعراض الحالة» نفس الرابط ← نتيجة وحدة
@@ -262,15 +303,20 @@
   const HEAD = "h1,h2,h3,summary,.cmpt,.gh,.h1en";
   const unmark = (t) => { const s = document.createElement("span"); s.className = "noterm"; s.textContent = t.textContent; t.replaceWith(s); };
   let tq = 0;
+  const idle = (f) => (window.requestIdleCallback ? requestIdleCallback(f, { timeout: 1200 }) : setTimeout(f, 30));
   const tidyTerms = () => {
     tq = 0;
-    $$(".tm[data-k]").forEach((t) => { if (!t.classList.contains("demo") && t.closest(HEAD) && !t.closest(".tod")) unmark(t); });
+    // ⚡ (v3 حي) نجمع شنو ينشال أول (قراءة بس)، وبعدين نشيله دفعات صغيرة وقت الفراغ (كانت مهمتين طويلة ~150ms بالمحاضرات الطويلة على الموبايل)
+    const ops = [];
+    $$(HEAD.split(",").map((h) => h + " .tm[data-k]").join(",")).forEach((t) => { if (!t.classList.contains("demo") && !t.closest(".tod")) ops.push(t); });
     $$(".read section, .lsec, article.case, .step, .rich, .term, .q").forEach((box) => {
       const seen = new Set();
-      $$(".tm[data-k]", box).forEach((t) => { if (seen.has(t.dataset.k)) unmark(t); else seen.add(t.dataset.k); });
+      $$(".tm[data-k]", box).forEach((t) => { if (seen.has(t.dataset.k)) ops.push(t); else seen.add(t.dataset.k); });
     });
+    const step = () => { const t0 = performance.now(); while (ops.length && performance.now() - t0 < 12) { const t = ops.pop(); if (t.isConnected && t.classList.contains("tm")) unmark(t); } if (ops.length) idle(step); else idle(dedupe); };
+    idle(step);
   };
-  new MutationObserver((ms) => { if (!tq && ms.some((m) => [...m.addedNodes].some((n) => n.nodeType === 1 && (n.classList.contains("tm") || n.querySelector && n.querySelector(".tm"))))) tq = setTimeout(tidyTerms, 250); })
+  new MutationObserver((ms) => { if (!tq && ms.some((m) => [...m.addedNodes].some((n) => n.nodeType === 1))) tq = setTimeout(() => idle(tidyTerms), 250); })
     .observe(document.body, { childList: true, subtree: true });
   document.addEventListener("listen:ready", () => setTimeout(tidyTerms, 600));
 

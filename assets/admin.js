@@ -207,7 +207,7 @@
   // «🙏 الشكر» القديم انشال من التبويبات (29/10): الشكر صار بجدول people ← «🙏 الفريق والشكر» (AdminPeople). الدالة thanks() تبقى بلا تبويب.
   const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
     ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "🔑 المساعدين" } : {}), ...(window.AdminDept ? { dept: "🏛️ رئيس القسم" } : {}),
-    ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), ...(window.AdminStudents ? { students: "🎓 الطلاب" } : {}), security: "🔐 الأمان" };
+    ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), ...(window.AdminStudents ? { students: "🎓 الطلاب" } : {}), ...(window.AdminNotify ? { notify: "🔔 التنبيهات" } : {}), security: "🔐 الأمان" };
   box.innerHTML = `<div class="tm-hello"><span><b>⚙️ لوحة الإدارة</b> · أهلاً محمد</span><span><button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button></span></div>
     ${ost.mfa_required ? "" : '<div class="alert lg-warn"><b>🔐 كمّل حماية الدخول</b><p>هسه الدخول برمز الإيميل بس. من «🔐 الأمان»: حط كلمة سر، وضيف رمز التحقق بـ «كلمات السر» بالآيفون، وجرّب الدخول الجديد مرة وحدة — بعدها تتفعّل الحماية وحدها.</p><a class="btn" href="#security">🔐 الأمان</a></div>'}
     <nav class="dtabs">${Object.entries(tabs).map(([k, v]) => `<a href="#${k}" data-t="${k}">${v}</a>`).join("")}</nav><div id="pane"></div>
@@ -260,9 +260,16 @@
     if (error) { box.textContent = "ما گدرنا نقرا الصرف."; return; }
     const r = (Array.isArray(data) ? data[0] : data) || {};
     const usd = (r.tin || 0) * (bud.price_in ?? 0.1) / 1e6 + (r.tout || 0) * (bud.price_out ?? 0.5) / 1e6;
-    const fc = usd / Math.max(1, d.getUTCDate()) * days, cap = bud.monthly_usd ?? 50, pct = Math.round(usd / cap * 100);
-    box.innerHTML = `<b>الصرف هذا الشهر:</b> ${usd.toFixed(2)}$ من ${cap}$ (${pct}%) · ${r.asks || 0} سؤال<br>` +
-      `<b>التوقع لآخر الشهر:</b> ≈ ${fc.toFixed(2)}$ ${fc >= cap ? "⚠️ يعبر الحد — المساعد يوگف وحده لما يوصل" : fc >= cap * (bud.alert_pct ?? 70) / 100 ? "⚠️ قريب من الحد" : "✅ ضمن الحد"}`;
+    // 💵 الميزانية الذكية: الحالية = الأساس + درجات هالشهر (assistant_budget_steps)، والسقف cap_usd
+    const base = bud.monthly_usd ?? 50, step = bud.step_usd ?? 25, top = bud.cap_usd ?? 100;
+    const { data: steps } = await sb.from("assistant_budget_steps").select("level").eq("month", m);
+    const lv = (steps || []).reduce((a, x) => Math.max(a, x.level), 0), paused = lv >= 10;
+    const cap = Math.min(top, base + step * lv);
+    const fc = usd / Math.max(1, d.getUTCDate()) * days, pct = Math.round(usd / cap * 100);
+    box.innerHTML = `<b>الصرف هذا الشهر:</b> ${usd.toFixed(2)}$ · ${r.asks || 0} سؤال<br>` +
+      `<b>الميزانية الحالية:</b> ${cap}$ (${pct}%)${lv && !paused ? ` — ارتفعت وحدها ${lv} مرة` : ""} · الأساس ${base}$ والسقف ${top}$، وترجع ${base}$ أول الشهر` +
+      (paused ? `<br>⛔ <b>المساعد متوقف مؤقتاً</b> لحد أول الشهر (وصل السقف)` : "") + `<br>` +
+      `<b>التوقع لآخر الشهر:</b> ≈ ${fc.toFixed(2)}$ ${fc >= top ? "⚠️ يعبر السقف — المساعد يوگف بلطف لما يوصل" : fc >= cap ? "↗️ الميزانية راح ترتفع وحدها" : "✅ ضمن الميزانية"}`;
   }
   async function control() {
     const [ann, sec, bud, gate, req] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget"), getSet("gate"), getSet("code_requests")]);
@@ -510,7 +517,7 @@
   }
 
   const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(), team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
-    dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats(),
+    dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats(), notify: () => window.AdminNotify ? AdminNotify.mount(pane, sb) : stats(),
     students: () => window.AdminStudents ? AdminStudents.mount(pane, sb) : stats() }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();
 

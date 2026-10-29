@@ -22,7 +22,7 @@
       const keys = Object.keys(S).filter((k) => (S[k].pages || []).includes(el.dataset.path));
       const names = docs.filter((d) => keys.includes(d.section)).map((d) => esc(d.name));
       if (!names.length) return;
-      el.innerHTML = `🙏 بدعم وتحفيز: ${names.join("، ")} · <a href="${root}preview/team/#thanks">شكر وتقدير</a>`;
+      el.innerHTML = `🙏 بدعم وتحفيز: ${names.join("، ")} · <a href="${root}team/#thanks">شكر وتقدير</a>`;
       el.hidden = false;
     });
   });

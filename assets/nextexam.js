@@ -80,7 +80,7 @@
       <p class="nexam-rev">للمراجعة فقط — مو توقّع لأسئلة الامتحان</p>
       <div class="nexam-b"><a class="nexam-btn" href="${review}">📝 راجع المشمول</a><a class="nexam-btn alt" href="${rec}">🎯 رشّحلي</a></div>
       ${c.examsOn ? `<a class="nexam-x" href="${root}exams/">📅 قسم الامتحانات${more > 0 ? ` (+${more} امتحان خلال أسبوعين)` : ""} · <b>للمراجعة فقط</b></a>` : ""}`;
-    const at = document.querySelector(".wrap > .hero") || document.querySelector(".wrap > h1 + .sub") || document.querySelector(".wrap > h1") || document.querySelector(".wrap > header.top");
+    const at = [...document.querySelectorAll(".wrap > .hhero, .wrap > .resume")].filter((x) => !x.hidden).pop() || document.querySelector(".wrap > .hero") || document.querySelector(".wrap > h1 + .sub") || document.querySelector(".wrap > h1") || document.querySelector(".wrap > header.top");
     if (at) at.insertAdjacentElement("afterend", el); else (document.querySelector(".wrap") || document.body).prepend(el);
   }
 
