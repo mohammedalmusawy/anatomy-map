@@ -295,11 +295,14 @@
   }
 
   // ═════ v3b (مراجعتين مستقلتين 29/10) ═════
-  // 📨 «اطلب كودك»: يفتح شرح «قريباً» (زر البوت مطفي لحد «فعّل طلب الأكواد»)
+  // 📨 «اطلب كودك»: يفتح شرح «شلون تاخذ الكود»؛ زر البوت يطلع بس إذا settings.code_requests.on (ماكو «قريباً»)
   document.addEventListener("click", (ev) => {
     const b = ev.target.closest("[data-reqcode]"); if (!b) return;
     const n = b.parentElement.querySelector("[data-reqnote]"); if (!n) return;
     n.hidden = !n.hidden; b.setAttribute("aria-expanded", !n.hidden);
+    const bot = n.querySelector("[data-bot]");
+    if (bot && !n.hidden && window.Net && window.Net.on && window.Net.settings)
+      Promise.resolve(window.Net.settings()).then((S) => { bot.hidden = !(S && S.code_requests && S.code_requests.on); }).catch(() => {});
   });
 
   // 🔗 روابط تكتبها سكربتات الموقع (البحث، المساعد، أدوات الطالب) للصفحات الحية ← نسخة المعاينة (preview/map.json)

@@ -41,7 +41,6 @@
 <p class="bnmsg" role="status" aria-live="polite"></p></section>`;
     } else {
       el.innerHTML = `<section class="bn" aria-labelledby="bn-h"><h3 id="bn-h">🔔 تنبيهات البوت ✅ مربوطة</h3>
-${st.sending ? "" : "<p>الإرسال يبدأ قريباً — اختياراتك تنحفظ من هسه.</p>"}
 <fieldset style="border:0;margin:0;padding:0"><legend class="sr-only" style="position:absolute;clip:rect(0 0 0 0)">شنو يوصلك</legend>
 ${TYPES.map(([k, t, d]) => `<label class="bnrow"><span><b>${esc(t)}</b><small>${esc(d)}</small></span><input type="checkbox" data-bnk="${k}"${st.prefs[k] ? " checked" : ""}></label>`).join("")}</fieldset>
 <div class="bnact"><button type="button" class="cbtn ghost" data-bn="unlink">🔕 فك الربط</button></div>
@@ -85,7 +84,7 @@ ${TYPES.map(([k, t, d]) => `<label class="bnrow"><span><b>${esc(t)}</b><small>${
 
   async function load(el, o) {
     const st = await call({ action: "status" });
-    if (st.status !== 200 || !st.available) { el.innerHTML = ""; return; }   // مطفي أو مو طالب ← ولا شي يبين
+    if (st.status !== 200 || !st.available || !st.sending) { el.innerHTML = ""; return; }   // مطفي، أو الإرسال بعده ما بادي (30/10)، أو مو طالب ← ولا شي يبين
     render(el, st, o);
   }
 

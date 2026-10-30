@@ -12,7 +12,7 @@ html[lang="en"] h2 .en, html[lang="en"] h3 .en { display: inline; font-size: inh
 
 /* «EN soon»: نص عربي ما إله ترجمة بعد */
 [data-ensoon]::after {
-  content: "EN soon"; display: inline-block; margin-inline-start: 6px; padding: 1px 6px; vertical-align: middle;
+  content: "AR"; display: inline-block; margin-inline-start: 6px; padding: 1px 6px; vertical-align: middle;
   border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--card); color: var(--muted);
   font: 600 .66rem/1.5 system-ui, sans-serif; letter-spacing: .02em; direction: ltr; unicode-bidi: isolate;
 }

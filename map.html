@@ -219,7 +219,7 @@ svg.body{display:block;width:100%;height:auto;max-height:66vh}
           <path class="rg live pulse" data-r="foot" d="M79 395h17l5 13c0 3-2 4-5 4H76c-3 0-4-2-3-5z"/>
         </g>
       </svg>
-      <div class="legend"><span><i style="background:var(--accent)"></i>متاح الآن</span><span><i style="background:var(--body)"></i>قريبًا</span></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>متاح الآن</span></div>
     </div>
     <div class="chips" id="chips"></div>
   </section>
@@ -664,7 +664,7 @@ async function lesson(r,k,m){
 }
 
 document.querySelectorAll(".rg").forEach(p=>p.addEventListener("click",()=>{
-  const r=p.dataset.r; REGIONS[r] ? openSheet(r) : XONLY[r] ? lesson(r,"bones","xray") : toast((SOON[r]||"هذا الجزء")+" — قريبًا");
+  const r=p.dataset.r; REGIONS[r] ? openSheet(r) : XONLY[r] ? lesson(r,"bones","xray") : toast("اختر منطقة ملوّنة");
 }));
 $("chips").innerHTML=Object.entries({...REGIONS,...XONLY}).map(([k,v])=>`<button class="chip" data-r="${k}"><b>${v.ar}</b><span class="en">${v.en.split(" (")[0]}</span></button>`).join("");
 document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>XONLY[b.dataset.r] ? lesson(b.dataset.r,"bones","xray") : openSheet(b.dataset.r)));

@@ -158,7 +158,7 @@
     async function ask(q) {
       say("me", esc(q));
       const s = await settings();
-      if (!ON || !s.assistant) { say("bot", "🤖 المحادثة بالذكاء الاصطناعي تشتغل قريباً. هسه تگدر تستعمل <b>🎯 رشّحلي</b> و<b>📝 لخّصلي</b> فوق، و<a href='" + root + "search/'>🔎 البحث</a>."); return; }
+      if (!ON || !s.assistant) { say("bot", "🤖 تگدر تستعمل <b>🎯 رشّحلي</b> و<b>📝 لخّصلي</b> فوق، و<a href='" + root + "search/'>🔎 البحث</a> بكل الموقع."); return; }
       say("bot", "<i class='typing'>…</i>");
       const body = JSON.stringify({ device: window.Cloud && Cloud.dev, q, ctx: params.get("subject") ? { subject: params.get("subject") } : null });
       const post = (tok) => fetch(`${C.url}/functions/v1/study-assistant`, { method: "POST", headers: { ...H, Authorization: "Bearer " + (tok || C.anon) }, body });

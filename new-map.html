@@ -781,7 +781,7 @@ async function lesson(r,k,m){
 }
 
 document.querySelectorAll(".rg").forEach(p=>p.addEventListener("click",()=>{
-  const r=p.dataset.r; REGIONS[r] ? openSheet(r) : XONLY[r] ? lesson(r,"bones","xray") : toast((SOON[r]||"هذا الجزء")+" — قريبًا");
+  const r=p.dataset.r; REGIONS[r] ? openSheet(r) : XONLY[r] ? lesson(r,"bones","xray") : toast("اختر منطقة ملوّنة");
 }));
 $("chips").innerHTML=Object.entries({...REGIONS,...XONLY}).map(([k,v])=>`<button class="chip" data-r="${k}"><b>${v.ar}</b><span class="en">${v.en.split(" (")[0]}</span></button>`).join("");
 document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>XONLY[b.dataset.r] ? lesson(b.dataset.r,"bones","xray") : openSheet(b.dataset.r)));

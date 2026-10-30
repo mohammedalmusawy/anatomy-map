@@ -94,7 +94,7 @@
    "items": [
     {
      "lecture_id": "radiography_t02",
-     "title_ar": "جودة الصورة وعوامل التعرض",
+     "title_ar": "جودة الصورة وعوامل التعرّض",
      "title_en": "Image Quality, Exposure Factors, Brightness, Contrast, Resolution, Distortion and Noise",
      "kind": "theory",
      "num": 2,
@@ -209,6 +209,14 @@
  ],
  "hard_topics": [
   {
+   "topic_en": "Dose Limits for Tissues and Organs",
+   "topic_ar": "حدود الجرعة للأنسجة والأعضاء",
+   "lecture_id": "protection_t04",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.54,
+   "attempts": 71
+  },
+  {
    "topic_en": "Sources of Ionizing Radiation",
    "topic_ar": "مصادر الإشعاع المؤيِّن",
    "lecture_id": "protection_p01",
@@ -239,14 +247,6 @@
    "subject_ar": "التصوير",
    "error_rate": 0.45,
    "attempts": 96
-  },
-  {
-   "topic_en": "Time",
-   "topic_ar": "الوقت",
-   "lecture_id": "protection_p03",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.43,
-   "attempts": 49
   }
  ],
  "missed_questions": [
@@ -259,28 +259,28 @@
    "attempts": 42
   },
   {
-   "q_en": "The effective dose limit for members of the general public is:",
-   "q_ar": "حد الجرعة الفعالة لأفراد عامة الناس هو:",
-   "lecture_id": "protection_t04",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.61,
-   "attempts": 47
-  },
-  {
-   "q_en": "Alpha particles (α) are:",
-   "q_ar": "جسيمات ألفا (α) هي:",
+   "q_en": "About how many chest X-rays (≈ 0.1 mSv each) give the same dose as one year of natural background (2 – 3 mSv)?",
+   "q_ar": "تقريباً كم صورة صدر (≈ 0.1 ملّي سيفرت لكل صورة) تعادل جرعة سنة من الخلفية الطبيعية (2 – 3 ملّي سيفرت)؟",
    "lecture_id": "protection_p01",
    "subject_ar": "الوقاية",
-   "error_rate": 0.59,
-   "attempts": 35
+   "error_rate": 0.6,
+   "attempts": 18
   },
   {
-   "q_en": "In a postero-anterior (PA) projection, the central ray:",
-   "q_ar": "في الإسقاط الخلفي الأمامي (PA)، الشعاع المركزي:",
+   "q_en": "An MRI image divides the head into a front part and a back part. In which plane was it taken?",
+   "q_ar": "صورة رنين تقسم الرأس إلى جزء أمامي وجزء خلفي. في أي مستوى أُخذت؟",
    "lecture_id": "radiography_t01",
    "subject_ar": "التصوير",
    "error_rate": 0.58,
    "attempts": 31
+  },
+  {
+   "q_en": "According to the UNSCEAR 2008 chart, natural radiation makes up about:",
+   "q_ar": "حسب مخطط UNSCEAR 2008، يشكّل الإشعاع الطبيعي نحو:",
+   "lecture_id": "protection_t01",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.55,
+   "attempts": 53
   }
  ],
  "exam_period": {

@@ -282,8 +282,8 @@ rep('window.Studio={open,select,color:colorOf};',
   select(k,true); }
 window.Studio={open,select,reveal,color:colorOf};''')
 
-# كل مناطق الخريطة صارت متاحة، فما نحتاج «قريبًا» بدليل الألوان
-rep('<span><i style="background:var(--accent)"></i>متاح الآن</span><span><i style="background:var(--body)"></i>قريبًا</span>',
+# كل مناطق الخريطة صارت متاحة (و30/10 انشال «قريبًا» من map.html نفسها)
+rep('<span><i style="background:var(--accent)"></i>متاح الآن</span>',
     '<span><i style="background:var(--accent)"></i>كل الأجزاء متاحة</span>')
 
 open(dst, "w", encoding="utf-8").write(h)

@@ -445,17 +445,21 @@
       await sb.auth.signOut({ scope: "local" }).catch(() => {});
       root.innerHTML = `<p class="hint">${esc(me.msg || "ما گدرنا نفتح اللوحة.")}</p><p><a class="btn" href="./">رجوع لصفحة الدخول</a></p>`; return;
     }
-    const draft = me.status !== 200;            // السيرفر بعده ما تحدّث ← اللوحة تشتغل بالأرقام بس، والأزرار «قريباً»
+    const draft = me.status !== 200;            // السيرفر بعده ما تحدّث ← اللوحة تشتغل بالأرقام بس، واللي مو جاهز ما يطلع
     if (draft) { const s = await call({ action: "stats" }); me = { name: s.viewer || "", title: "رئيس قسم تقنيات الأشعة" }; }
     const ACT = [
       ["word", "✍️", "كلمة رئيس القسم", me.word && me.word.length ? "تطلع بالرئيسية" : "اكتب كلمتك للطلاب", true],
       ["welcome", "👋", "جملة الترحيب", "تطلع مرة وحدة بأول زيارة"],
       ["photo", "🖼️", "صورتك", "دائرية صغيرة"],
-      ["ann", "📢", "إعلان للطلاب", "", false, "قريباً"],
+      // 🙈 30/10: أي فعل مو مفعّل بالسيرفر ما يطلع أبداً (بلا «قريباً») — يطلع بس لما head_me يرجّع features.<k> = true
+      ["ann", "📢", "إعلان للطلاب", ""],
       ["voice", "💬", "صوتك يوصل", me.voice_stale ? `🕖 ${me.voice_stale} ما انفتحت من أسبوع` : "رسائل الطلاب لك", false, me.voice_locked ? "🔐 مقفول" : me.voice_on ? (me.voice_new ? `${me.voice_new} جديدة` : "مفعّل") : "مطفي"],
-      ["report", "📄", "تقرير القسم الشهري", "", false, "قريباً"],
+      ["report", "📄", "تقرير القسم الشهري", ""],
     ];
     if (me.launch_armed && !me.launched) ACT.push(["launch", "🚀", "إطلاق المنصة رسمياً", "مرة وحدة"]);
+    const FEAT = me.features || {};
+    const ready = (k) => (k === "ann" || k === "report" || k === "launch" ? FEAT[k] === true : k === "voice" ? !draft : true);
+    for (let i = ACT.length - 1; i >= 0; i--) if (!ready(ACT[i][0])) ACT.splice(i, 1);
     const home = () => {
       root.innerHTML = `<div class="hp">
         <div class="hp-top">${me.photo_url ? `<img src="${esc(me.photo_url)}" alt="" width="56" height="56">` : ""}
@@ -467,7 +471,7 @@
         <details class="hp-more"><summary>المزيد ▾</summary><div class="hd-row"><button class="btn ghost" type="button" data-k="stats">📊 أرقام القسم</button>
           <button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button></div><div id="dv-self"></div></details>
         <p class="hp-owner">${esc(OWNER_LINE)} — صاحب المنصة وصانعها، وبرعايتكم الكريمة 🌿</p>
-        ${draft ? SOON : ""}</div>`;
+        </div>`;
       root.querySelector("#hp-out").onclick = async () => { await sb.auth.signOut({ scope: "local" }).catch(() => {}); location.reload(); };
       root.querySelectorAll("[data-k]").forEach((b) => (b.onclick = () => screen(b.dataset.k)));
       if (window.AdminSelf) AdminSelf.tools(root.querySelector("#dv-self"));
@@ -479,10 +483,11 @@
       f.onsubmit = async (ev) => {
         ev.preventDefault(); m.textContent = "لحظة…";
         const body = read(f); const rr = await call({ action, ...body });
-        if (rr.status === 200) { Object.assign(me, body); m.textContent = "✅ انحفظ."; } else m.textContent = draft || later(rr) ? "⏳ يشتغل بعد تحديث السيرفر." : rr.msg || "ما صار.";
+        if (rr.status === 200) { Object.assign(me, body); m.textContent = "✅ انحفظ."; } else m.textContent = draft || later(rr) ? "ما انحفظ هسه. جرّب مرة ثانية بعدين." : rr.msg || "ما صار.";
       };
     };
     function screen(k) {
+      if (k !== "stats" && !ready(k)) return home();   // فعل مخفي ما ينفتح حتى لو انطلب
       if (k === "stats") { root.innerHTML = '<div class="hp hp-scr"><button class="hp-back" type="button">‹ رجوع</button><div id="hp-st"><p class="hint">لحظة…</p></div></div>'; root.querySelector(".hp-back").onclick = home; return stats(root.querySelector("#hp-st"), sb); }
       if (k === "word") {
         const W = me.word || [];
@@ -507,7 +512,7 @@
         f.onsubmit = async (ev) => {
           ev.preventDefault(); const file = f.p.files[0]; if (!file) return (m.textContent = "اختر صورة.");
           m.textContent = "لحظة…";
-          try { const rr = await call({ action: "head_photo", webp: await b64(await squareWebp(file)) }); m.textContent = rr.status === 200 ? "✅ انحفظت." : "⏳ يشتغل بعد تحديث السيرفر."; if (rr.photo_url) me.photo_url = rr.photo_url; }
+          try { const rr = await call({ action: "head_photo", webp: await b64(await squareWebp(file)) }); m.textContent = rr.status === 200 ? "✅ انحفظت." : "ما انحفظت هسه. جرّب مرة ثانية بعدين."; if (rr.photo_url) me.photo_url = rr.photo_url; }
           catch (e) { m.textContent = "الصورة ما انقرت. جرّب ثانية."; }
         };
         return;
@@ -528,14 +533,14 @@
       }
       if (k === "voice") return voiceScreen();
       if (k === "report") {
-        scr("📄 تقرير القسم الشهري", `<p class="hd-note">صفحة A4 بأرقام مجمّعة بلا أسماء طلاب (أي رقم أقل من 5 ما يطلع). <b>قريباً.</b></p>
+        scr("📄 تقرير القسم الشهري", `<p class="hd-note">صفحة A4 بأرقام مجمّعة بلا أسماء طلاب (أي رقم أقل من 5 ما يطلع).</p>
           <div class="hp-prev"><b>تقرير القسم — ‹الشهر›</b><p class="hint">… الأرقام المجمّعة …</p><p class="hd-own">${esc(OWNER_FOOTER)} · ${esc(me.name)}، ${esc(me.title || "")}</p></div>
-          <div class="hd-row"><button class="btn" type="button" disabled>⬇️ نزّل PDF (قريباً)</button></div>`);
+          <div class="hd-row"><button class="btn" type="button" data-report-pdf>⬇️ نزّل PDF</button></div>`);
         return;
       }
       if (k === "launch") {
         scr("🚀 إطلاق المنصة رسمياً", `<p class="hd-note">ضغطة وحدة بالعمر. يطلع بصفحة «عن المنصة»: «أطلقها رئيس القسم بتاريخ …».</p>
-          <div class="hd-row"><button class="btn" type="button" disabled>🚀 أطلق المنصة (قريباً)</button></div>`);
+          <div class="hd-row"><button class="btn" type="button" data-launch>🚀 أطلق المنصة</button></div>`);
       }
     }
     // 💬 58 «صوتك يوصل» (مسودة): الرئيس بس يشغّل. القائمة بلا نص؛ الفتح بس يجيب النص ويكتب 👁️ «انقرت» بالسيرفر.
@@ -550,7 +555,7 @@
       scr("💬 صوتك يوصل", '<p class="hint">لحظة…</p>');
       let r = await call({ action: "head_voice_list" });
       if (r.status !== 200) {
-        scr("💬 صوتك يوصل", `<p class="hd-note">رسائل الطلاب إلك (مقترح، شكوى، رأي، شكر) — باسمهم أو بدون اسم.</p><label class="sw"><input type="checkbox" disabled> استقبل رسائل الطلاب</label>${SOON.replace("53", "58")}`);
+        scr("💬 صوتك يوصل", `<p class="hd-note">رسائل الطلاب إلك (مقترح، شكوى، رأي، شكر) — باسمهم أو بدون اسم.</p><p class="hint">ما گدرنا نجيب الرسائل هسه. جرّب بعد شوية.</p>`);
         return;
       }
       const num = (n) => (n == null ? "0" : esc(n));
