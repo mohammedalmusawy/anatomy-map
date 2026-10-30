@@ -30,8 +30,20 @@ ${s ? `<ul>
 <li>آخر 7 أيام: ${esc(s.week)} رسالة · فكّوا/حظروا البوت: ${esc(s.blocked_week)} · فشلت: ${esc(s.failed_week)}</li>
 <li>مفعّلين: ⏰ ${esc(o.reminders || 0)} · 📅 ${esc(o.exams || 0)} · 🗓️ ${esc(o.plan || 0)} · 📚 ${esc(o.lectures || 0)}</li></ul>` : "<p>ما گدرنا نقرا الأرقام.</p>"}`;
     const msg = el.querySelector(".an-msg");
+    // ✋ 59: «ربط التليغرام» و«إرسال التنبيهات» يوصلون للطلاب الحقيقيين ← تأكيد أول (التجربة والملخص بلا تأكيد)
+    const ASK = {
+      "tg_link.on": ["تشغّل ربط التليغرام؟ يطلع زر «🔔 فعّل تنبيهات البوت» بمساحتي للطلاب، والبوت يقبل الربط.", "تطفّي ربط التليغرام؟ الزر يختفي والبوت ما يقبل ربط جديد."],
+      "notify.on": ["تشغّل إرسال التنبيهات؟ رسائل حقيقية توصل للطلاب المربوطين بالبوت.", "توقف إرسال التنبيهات للطلاب؟"],
+    };
     el.querySelectorAll("input[data-k]").forEach((x) => x.addEventListener("change", async () => {
-      const k = x.dataset.k, f = x.dataset.f;
+      const k = x.dataset.k, f = x.dataset.f, q = ASK[k + "." + f];
+      if (q) {
+        const want = x.checked; x.checked = !want; x.disabled = true;
+        const ok = await window.AdminAsk(x.closest("label"), want ? q[0] : q[1], { yes: want ? "نعم، شغّله" : "نعم، طفّيه" });
+        x.disabled = false;
+        if (!ok) { x.focus(); return; }
+        x.checked = want;
+      }
       const { data: cur } = await sb.from("settings").select("value").eq("key", k).maybeSingle();
       const value = Object.assign({}, (cur && cur.value) || {}, { [f]: x.checked });
       const { error } = await sb.from("settings").upsert({ key: k, value, at: new Date().toISOString() });

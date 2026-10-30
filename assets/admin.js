@@ -5,6 +5,34 @@
 //   المساعد (role supervisor) ← StaffPanel (supervisor.js) · رئيس القسم (role dept) ← AdminDept.viewer (أرقام مجمّعة بس).
 //   الطالب: دخوله بـ account.js (مفتاح جلسة ثاني) — ما تغيّر شي.
 // كل الصلاحيات بالسيرفر (is_admin / staff_can / الدوال)؛ هذا الملف واجهة بس. ولا رقم ينحفظ هنا.
+
+// ✋ 59 (30/10): خطوة تأكيد داخل الصفحة (مو نافذة المتصفح) — نفس شكل البطاقة (.alert) والأزرار (.btn) الموجودة.
+//   AdminAsk(where, text, {yes, no}) ← Promise<boolean>. تنحط بعد العنصر where (أو داخله إذا خلية جدول). Esc = لا.
+window.AdminAsk = function (where, text, o) {
+  o = o || {};
+  return new Promise((done) => {
+    if (!where || !where.isConnected) return done(false);
+    const host = where.closest ? where.closest("td,th") : null;
+    const prev = (host || where.parentNode).querySelector(":scope > .adm-ask");
+    if (prev && prev.__done) prev.__done(false);
+    const box = document.createElement("div");
+    box.className = "alert adm-ask"; box.setAttribute("role", "alertdialog"); box.setAttribute("aria-live", "assertive");
+    const p = document.createElement("p"); p.textContent = text; box.appendChild(p);
+    const y = document.createElement("button"), n = document.createElement("button");
+    y.type = n.type = "button"; y.className = "btn" + (o.danger ? " adm-ask-d" : ""); n.className = "btn ghost";
+    y.textContent = o.yes || "نعم، كمّل"; n.textContent = o.no || "لا، رجوع";
+    box.append(y, " ", n);
+    const fin = (v) => { if (box.__fin) return; box.__fin = 1; box.remove(); done(v); };
+    box.__done = fin;
+    y.onclick = () => fin(true); n.onclick = () => fin(false);
+    box.addEventListener("keydown", (e) => { if (e.key === "Escape") { e.preventDefault(); fin(false); } });
+    if (host) host.appendChild(box); else where.insertAdjacentElement("afterend", box);
+    y.focus({ preventScroll: true }); box.scrollIntoView({ block: "nearest" });
+  });
+};
+// 🔁 59: كل فتح تبويب ← إشارة جديدة (المستمعين القدام على #pane ينشالون، ما يتكررون بعد إعادة الفتح)
+window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if (s) s.addEventListener("abort", () => ac.abort(), { once: true }); return ac.signal; } };
+
 (async function () {
   const C = window.STUDY_CLOUD || {}, box = document.getElementById("admin");
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -248,6 +276,8 @@
       <h2>📆 الزوار يومياً</h2>${table(daily.data, [["day", "اليوم"], ["visitors", "زوار"], ["views", "مشاهدات"]])}`;
     pane.querySelectorAll("[data-al]").forEach((b) => b.onclick = async () => {
       const a = (alerts.data || []).find((x) => String(x.id) === b.dataset.al);
+      if (a.kind === "exam_activity" && b.dataset.s === "approved"
+        && !(await AdminAsk(b.closest(".alert"), "تشغّل قسم الامتحانات للطلاب هسه؟ تطلع أيقونة «📅 الامتحانات» بالرئيسية للكل.", { yes: "نعم، شغّله" }))) return;
       await sb.from("alerts").update({ status: b.dataset.s }).eq("id", a.id);
       if (a.kind === "exam_activity" && b.dataset.s === "approved") await setSection("exams", true);
       stats();
@@ -296,8 +326,17 @@
       <label>تنبيه بالبوت عند (%) <input id="bp" type="number" min="10" max="100" value="${bud.alert_pct ?? 70}"></label><button class="btn" id="bs">حفظ</button>`;
     spend(bud);
     document.getElementById("ans").onclick = async () => { await sb.from("settings").upsert({ key: "announcement", value: { text: document.getElementById("an").value, on: document.getElementById("anon").checked } }); alert("انحفظ"); };
-    document.getElementById("sx").onchange = (e) => setSection("exams", e.target.checked);
-    document.getElementById("sa").onchange = (e) => setSection("assistant", e.target.checked);
+    // ✋ 59: تشغيل/إطفاء قسم للطلاب ← تأكيد داخل الصفحة أول
+    const askSec = (k, onMsg, offMsg) => async (e) => {
+      const el = e.target, want = el.checked;
+      el.checked = !want; el.disabled = true;
+      const ok = await AdminAsk(el.closest("label"), want ? onMsg : offMsg, { yes: want ? "نعم، شغّله" : "نعم، طفّيه" });
+      el.disabled = false;
+      if (!ok) { el.focus(); return; }
+      el.checked = want; await setSection(k, want);
+    };
+    document.getElementById("sx").onchange = askSec("exams", "تشغّل قسم الامتحانات للطلاب؟ تطلع أيقونة «📅 الامتحانات» بالرئيسية للكل.", "تطفّي قسم الامتحانات؟ الأيقونة تختفي من الرئيسية (الجدول يبقى).");
+    document.getElementById("sa").onchange = askSec("assistant", "تشغّل «🤖 مساعد الطالب» للطلاب؟ يبدأ يصرف من الميزانية.", "تطفّي «🤖 مساعد الطالب» للطلاب؟");
     // 🎓 مفتاحين البوابة (29/10): دمج ويّا القيم الموجودة (open، الحدود) — تأكيد قبل أي تغيير لأنه يغيّر دخول الطلاب الحقيقيين
     const flip = async (key, el, onMsg, offMsg) => {
       if (!confirm(el.checked ? onMsg : offMsg)) { el.checked = !el.checked; return; }
@@ -403,7 +442,12 @@
       const add = list.filter((x) => !x.id).map(({ id, ...v }) => v);
       if (add.length) { const { error } = await sb.from("exams").insert(add); if (error) return alert(error.message); }
       try { localStorage.removeItem("t:nextexam"); } catch (e) { /* */ }
-      await setSection("exams", true); alert("انحفظ، وقسم الامتحانات تفعّل."); exams();
+      // ✋ 59: الحفظ ما يشغّل القسم للطلاب وحده — يسأل أول (إذا بعده مطفي)
+      const save = document.getElementById("save");
+      if ((await getSet("sections")).exams === true) { alert("انحفظ."); exams(); return; }
+      const on = await AdminAsk(save, "انحفظ الجدول. تشغّل قسم الامتحانات للطلاب هسه؟ تطلع أيقونة «📅 الامتحانات» بالرئيسية للكل.", { yes: "نعم، شغّله", no: "لا، بعدين" });
+      if (on) await setSection("exams", true);
+      alert(on ? "انحفظ، وقسم الامتحانات تفعّل." : "انحفظ. القسم بعده مطفي للطلاب (تشغّله من «🎛️ التحكم»)."); exams();
     };
     document.getElementById("arch").onclick = async () => { if (!confirm("خلصت الامتحانات؟ ينتقل الجدول للأرشيف وتختفي الأيقونة.")) return;
       await sb.from("exams").update({ archived: true }).eq("archived", false); await setSection("exams", false); exams(); };
@@ -455,7 +499,10 @@
   // 🔐 الأمان (29/10، الرقم السري): رقمي · اطلع من كل الأجهزة · آخر الدخولات · الطوارئ
   async function security() {
     pane.innerHTML = '<p class="hint">لحظة…</p>';
-    const { data: logs } = await sb.from("staff_login_log").select("at, who, role, device, remember, tg").order("at", { ascending: false }).limit(15);
+    const [{ data: logs }, { data: aud }] = await Promise.all([
+      sb.from("staff_login_log").select("at, who, role, device, remember, tg").order("at", { ascending: false }).limit(15),
+      sb.from("admin_audit").select("at, actor_role, action, target").order("id", { ascending: false }).limit(30),   // 🧾 59 (قبل الهجرة: ماكو جدول ← فارغ)
+    ]);
     const ROLE = { owner: "المالك", supervisor: "مساعد", dept: "رئيس القسم" };
     const tg403 = (logs || []).some((l) => l.tg === "http_403" || l.tg === "http_400");
     pane.innerHTML = `<h2>🔐 أمان الدخول</h2>
@@ -466,6 +513,7 @@
       <div class="sd-card ad-in">${pinForm("pf", pinOn)}<p class="sd-msg" id="pfm" role="status" aria-live="polite"></p></div>
       <h3>الأجهزة</h3><button class="btn ghost" id="allout" type="button">🚪 اطلع من كل الأجهزة</button>
       <h3>آخر الدخولات</h3>${(logs || []).length ? `<div class="scroll-x"><table class="adm"><tr><th>الوقت (بغداد)</th><th>منو</th><th>الجهاز</th><th>البوت</th></tr>${logs.map((l) => `<tr><td>${esc(new Date(new Date(l.at).getTime() + 3 * 3600e3).toISOString().slice(0, 16).replace("T", " "))}</td><td>${esc(l.who)} <small>${esc(ROLE[l.role] || "")}</small></td><td dir="ltr">${esc(l.device || "")}${l.remember ? " · 30d" : ""}</td><td>${l.tg === "ok" ? "✅" : "—"}</td></tr>`).join("")}</table></div>` : '<p class="hint">ماكو دخول بعد.</p>'}
+      <h3>🧾 سجل الإدارة</h3>${(aud || []).length ? `<div class="scroll-x"><table class="adm"><tr><th>الوقت (بغداد)</th><th>منو</th><th>الفعل</th><th>على</th></tr>${aud.map((l) => `<tr><td>${esc(new Date(new Date(l.at).getTime() + 3 * 3600e3).toISOString().slice(0, 16).replace("T", " "))}</td><td>${esc(ROLE[l.actor_role] || l.actor_role)}</td><td>${esc(l.action)}</td><td dir="ltr"><small>${esc(l.target || "")}</small></td></tr>`).join("")}</table></div>` : '<p class="hint">ماكو تغييرات مسجّلة بعد.</p>'}
       <details><summary>إذا ضاع الإيميل والرقم (طريق الطوارئ)</summary><p class="hint">من الماك بالـ Terminal بمجلد _النظام شغّل: <code dir="ltr">supabase db query --linked --workdir . -f "supabase/طوارئ-دخول-المالك.sql"</code> — يرجّع دخول «رمز يوصل للإيميل» بصفحة الدخول، وبعدها حط رقم جديد من هنا.</p></details>`;
     const pf = pane.querySelector("#pf");
     pf.onsubmit = (e) => { e.preventDefault(); savePin(pane, "pf", pane.querySelector("#pfm")); };
@@ -476,7 +524,9 @@
     };
   }
 
-  const show = () => { const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(), team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
+  let tabAC = null;
+  const show = () => { if (tabAC) tabAC.abort(); tabAC = new AbortController(); window.AdminTab.signal = tabAC.signal;
+    const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(), team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
     dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats(), notify: () => window.AdminNotify ? AdminNotify.mount(pane, sb) : stats(),
     students: () => window.AdminStudents ? AdminStudents.mount(pane, sb) : stats() }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();
@@ -506,6 +556,7 @@
 #admin .tm-exp,#admin .tm-req{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin:0 0 8px;display:grid;gap:4px}
 #admin .tm-chips{display:flex;flex-wrap:wrap;gap:6px}#admin .tm-chip{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:13px}
 #admin .tm-form{display:grid;gap:10px}#admin .tm-msg.bad{color:#B3261E;font-weight:700}
+#admin .adm-ask{margin:8px 0}#admin td .adm-ask{min-width:230px}#admin .adm-ask p{margin:0 0 8px;font-weight:600}#admin .adm-ask .btn{min-height:44px}
 #admin .ib{min-width:44px;min-height:44px}#admin .tm-cards{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}#admin .tm-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:10px}#admin .tm-card-h{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}#admin .tm-card-h small{display:block;color:var(--muted)}#admin .tm-card-r{display:flex;align-items:end;justify-content:space-between;gap:8px;flex-wrap:wrap}#admin .tm-exp-f{max-width:200px}#admin .tm-card-a{display:flex;flex-wrap:wrap;gap:6px}#admin .tm-perms legend{padding:0 4px}#admin .scroll-x{overflow-x:auto}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .lg-msg.bad,:root:not([data-theme=light]) #admin .tm-msg.bad{color:#FF8A80}}
 :root[data-theme=dark] .lg-msg.bad,:root[data-theme=dark] #admin .tm-msg.bad{color:#FF8A80}`;

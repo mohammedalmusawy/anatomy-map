@@ -35,7 +35,12 @@
   window.StaffPin = { pinForm, pinRead, ready };
   if (!window.__onceHide) { window.__onceHide = 1; document.addEventListener("click", (ev) => { const b = ev.target.closest && ev.target.closest("[data-once-hide]"); if (b) b.closest(".tm-once").remove(); }); }
 
+  let mountAC = null;   // 🔁 59: فتح التبويب مرة ثانية ← المستمعين القدام ينشالون (ما يتكررون)
   async function mount(pane, sb) {
+    if (mountAC) mountAC.abort();
+    mountAC = new AbortController();
+    const on = { signal: window.AdminTab ? AdminTab.own(mountAC) : mountAC.signal };
+    const ask = (el, t, o) => window.AdminAsk(el, t, o);   // ✋ 59: تأكيد داخل الصفحة (admin.js)
     const api = async (body) => {
       const { data: { session } } = await sb.auth.getSession();
       const r = await fetch(`${C.url}/functions/v1/supervisor`, { method: "POST",
@@ -67,10 +72,15 @@
 
     async function status() {
       const r = await api({ action: "admin_status" });
+      if (on.signal.aborted) return;   // 🔁 59: التبويب انسد قبل ما يوصل الرد
       if (r.status !== 200) { $("#tm-list").innerHTML = `<p class="hint">ما گدرت أجيب البيانات (${r.status}).</p>`; return; }
       $("#tm-on").innerHTML = `${r.on ? "✅ حسابات المساعدين شغّالة" : "⏸️ حسابات المساعدين موقوفة للكل"} <button class="btn ghost" id="tm-feat">${r.on ? "⏸️ أوقف الكل" : "▶️ شغّلها"}</button>
         ${r.forwarded ? ` · ↪️ ${r.forwarded} طلب كود محوّل لك` : ""}`;
-      $("#tm-feat").onclick = async () => { await api({ action: "admin_feature", on: !r.on }); status(); log(true); };
+      $("#tm-feat").onclick = async () => {
+        // ✋ 59: «⏸️ أوقف الكل» ← تأكيد أول
+        if (r.on && !(await ask($("#tm-on"), "توقف حسابات كل المساعدين؟ كلهم يطلعون من أجهزتهم وما يگدرون يدخلون لحد ما تشغّلها.", { yes: "نعم، أوقف الكل" }))) return;
+        await api({ action: "admin_feature", on: !r.on }); status(); log(true);
+      };
       $("#tm-rn").textContent = `بالقائمة: ${r.roster} اسم. المساعد ما يشوفها؛ الدالة تقارن الاسم الموحّد بس.`;
       // بطاقات بدل جدول (تنقرا زين بالموبايل 375px وبالشاشة الكبيرة)
       $("#tm-list").innerHTML = r.supervisors.length ? `<div class="tm-cards">` +
@@ -87,6 +97,7 @@
     }
     async function queue() {
       const r = await api({ action: "admin_queue" });
+      if (on.signal.aborted) return;
       const q = r.queue || [];
       $("#tm-q").innerHTML = q.length ? `<table class="adm"><thead><tr><th>النوع</th><th>المحاضرة</th><th>التفاصيل</th><th>من</th><th>الحالة</th><th>قرارك</th></tr></thead><tbody>` +
         q.map((x) => `<tr data-q="${x.id}"><td>${x.kind === "upload" ? "📤 ملف" : "🚩 ناقصة"}</td><td>${esc(x.subject)} · ${TYPE[x.ltype]} ${x.num ?? "؟"}</td>
@@ -99,6 +110,7 @@
     }
     async function expected() {
       const r = await api({ action: "admin_expected_get" });
+      if (on.signal.aborted) return;
       $("#tm-exp").innerHTML = (r.expected || []).length ? `<table class="adm"><thead><tr><th>المادة</th><th>النازل</th><th>الناقص</th><th>العدد الكلي</th></tr></thead><tbody>` +
         r.expected.map((x) => `<tr data-s="${esc(x.subject)}" data-t="${x.ltype}"><td>${esc(x.subject_ar)} · ${TYPE[x.ltype]}</td><td>${x.done.map((d) => d.num).join("، ")}</td>
           <td>${x.missing.join("، ") || "—"}</td><td><input type="number" min="0" max="60" value="${x.total ?? ""}" placeholder="مو محدد" style="width:6em" data-e="total"> <button class="ib" data-e="save" title="احفظ">💾</button></td></tr>`).join("") + "</tbody></table>"
@@ -107,6 +119,7 @@
     async function log(reset) {
       if (reset) lastId = null;
       const r = await api({ action: "admin_log", before: lastId ?? undefined });
+      if (on.signal.aborted) return;
       const rows = r.log || [];
       const html = rows.map((l) => `<tr><td>${t16(l.at)}</td><td>${esc(l.who)}${l.actor === "admin" ? " <small>(أنت)</small>" : ""}</td><td>${esc(ACT[l.action] || l.action)}</td><td>${esc(l.target || "")}</td><td>${l.ok ? "✅" : "⛔ مرفوض"}</td></tr>`).join("");
       if (reset || !lastId) $("#tm-log").innerHTML = rows.length ? `<table class="adm"><thead><tr><th>الوقت</th><th>منو</th><th>الفعل</th><th>على</th><th></th></tr></thead><tbody>${html}</tbody></table>` : '<p class="hint">ماكو أفعال بعد.</p>';
@@ -140,7 +153,7 @@
       const p = ev.target.dataset.p;
       if (p) { await api({ action: "admin_perms", id: tr.dataset.id, [p]: ev.target.checked }); log(true); return; }
       if (ev.target.dataset.a === "exp") { await api({ action: "admin_expiry", id: tr.dataset.id, expires_at: ev.target.value || null }); status(); log(true); }
-    });
+    }, on);
     pane.addEventListener("submit", async (ev) => {
       const f = ev.target.closest("form[data-pin-for]"); if (!f) return;
       ev.preventDefault();
@@ -152,7 +165,7 @@
       if (r.status !== 200) { m.className = "tm-msg bad"; m.textContent = r.msg || "ما صار."; return; }
       $("#tm-out").innerHTML = ready(card ? card.dataset.name : r.name, r.login_url); f.remove(); status(); log(true);
       $("#tm-out").scrollIntoView({ block: "nearest" });
-    });
+    }, on);
     pane.addEventListener("click", async (ev) => {
       const b = ev.target.closest("button"); if (!b) return;
       if (b.hasAttribute("data-pin-x")) { b.closest("form").remove(); return; }
@@ -160,7 +173,12 @@
       const tr = b.closest("tr") || b.closest(".tm-card");
       if (b.dataset.a && tr && tr.dataset.id) {
         const id = tr.dataset.id, a = b.dataset.a;
-        if (a === "toggle") { await api({ action: "admin_toggle", id, enabled: b.textContent.includes("رجّع") }); status(); log(true); return; }
+        if (a === "toggle") {
+          const back = b.textContent.includes("رجّع");
+          // ✋ 59: ⏸️ إيقاف مساعد ← تأكيد أول (الرجوع بلا تأكيد)
+          if (!back && !(await ask(b.closest(".tm-card-a") || b, `توقف «${tr.dataset.name}»؟ يطلع من كل أجهزته وما يگدر يدخل لحد ما ترجّعه.`, { yes: "نعم، أوقفه" }))) return;
+          await api({ action: "admin_toggle", id, enabled: back }); status(); log(true); return;
+        }
         if (a === "pin") { const bx = tr.querySelector(".tm-pinbox"); bx.innerHTML = bx.innerHTML ? "" : pinForm(id); const f = bx.querySelector("input"); if (f) f.focus(); return; }
         if (a === "signout") { if (!confirm(`تطلّع «${tr.dataset.name}» من كل أجهزته؟ يگدر يدخل مرة ثانية برقمه.`)) return; const r = await api({ action: "admin_signout", id }); alert(r.status === 200 ? "✅ طلع من كل أجهزته." : r.msg || "ما صار."); log(true); return; }
         if (a === "delete") { const n = prompt(`حذف الحساب نهائياً (السجل يبقى). اكتب الاسم بالضبط للتأكيد:\n${tr.dataset.name}`); if (!n) return; const r = await api({ action: "admin_delete", id, confirm: true, confirm_name: n }); if (r.status !== 200) alert("ما انحذف (الاسم ما طابق؟)"); status(); log(true); return; }
@@ -180,7 +198,7 @@
         if (!confirm("أشيل الاسم من القائمة الرسمية؟")) return;
         await api({ action: "admin_roster_remove", name_key: row.dataset.k, confirm: true }); row.remove(); status(); log(true);
       }
-    });
+    }, on);
     status(); queue(); expected(); log(true);
   }
   window.AdminTeam = { mount };

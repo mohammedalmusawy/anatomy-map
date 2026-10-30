@@ -87,6 +87,9 @@
     const root = man ? new URL(".", man.href).href : new URL("../", location.href).href;
     const src = (ph) => !ph ? "" : ph.startsWith("assets/") ? root + ph : `${C.url}/storage/v1/object/public/people/${ph}`;
     const av = (p) => p.photo ? `<img class="ap-av" src="${esc(src(p.photo))}" alt="" width="44" height="44" loading="lazy">` : `<span class="ap-av" aria-hidden="true">${esc(mono(p.name))}</span>`;
+    // 👤 59: المساعد ما يگدر ينشر اسم (السيرفر يرفض) ← «يطلع بالموقع» مطفي ومقفول إله، ويّا ملاحظة واضحة
+    let asst = false;
+    try { const { data } = await sb.auth.getSession(); asst = ((data && data.session && data.session.user && data.session.user.app_metadata) || {}).role === "supervisor"; } catch (e) { asst = false; }
     pane.innerHTML = CSS + `<h2>👥 الفريق والشكر</h2>
       <p class="hint">الأسماء هنا تطلع بصفحة «فريق المنصة» (والأطباء اللي إلهم «قسم الأطلس» يطلعون بسطر «🙏 بدعم وتحفيز» آخر صفحات الأطلس). ماكو حذف: «إخفاء» يشيله من الموقع ويبقى هنا. رتّب بالسحب من ⠿ أو بالأسهم.</p>
       <form class="ap-f" id="ap-form" novalidate>
@@ -99,7 +102,8 @@
         <div class="ap-ph"><span class="ap-av" id="ap-prev" aria-hidden="true">؟</span>
           <label style="flex:1">صورة (اختياري — تنقص دائرة وتنضغط وحدها)<input type="file" id="ap-file" accept="image/*"></label>
           <button type="button" class="ap-b" id="ap-nophoto" hidden>بلا صورة</button></div>
-        <label class="ap-chk"><input type="checkbox" id="ap-vis" checked> يطلع بالموقع</label>
+        <label class="ap-chk"><input type="checkbox" id="ap-vis"${asst ? " disabled" : " checked"}> يطلع بالموقع</label>
+        ${asst ? '<p class="hint" id="ap-vis-note">👁️ ينضاف مخفي. الظهور بالموقع يقرّره محمد (يشغّله من لوحته).</p>' : ""}
         <div class="ap-acts"><button type="submit" class="ap-b pri" id="ap-save">💾 حفظ</button><button type="button" class="ap-b" id="ap-cancel" hidden>إلغاء التعديل</button></div>
         <p class="ap-msg" id="ap-msg" role="status" aria-live="polite"></p>
       </form>
@@ -131,14 +135,14 @@
     $("#ap-nophoto").onclick = () => { photo = null; clear = true; $("#ap-file").value = ""; preview(); };
 
     function resetForm() {
-      edit = null; photo = null; clear = false; $("#ap-form").reset(); $("#ap-vis").checked = true; $("#ap-note-n").textContent = "0/80";
+      edit = null; photo = null; clear = false; $("#ap-form").reset(); $("#ap-vis").checked = !asst; $("#ap-vis").disabled = asst; $("#ap-note-n").textContent = "0/80";
       $("#ap-ft").textContent = "➕ إضافة شخص"; $("#ap-cancel").hidden = true; syncTag(); preview();
     }
     $("#ap-cancel").onclick = () => { resetForm(); msg(""); };
     function startEdit(p) {
       edit = p; photo = null; clear = false;
       $("#ap-name").value = p.name; $("#ap-title").value = p.title || ""; $("#ap-note").value = p.note || ""; $("#ap-note").dispatchEvent(new Event("input")); $("#ap-grp").value = p.grp; $("#ap-tag").value = p.tag || "";
-      $("#ap-vis").checked = !!p.visible; $("#ap-file").value = "";
+      $("#ap-vis").checked = !!p.visible; $("#ap-vis").disabled = asst && !p.visible; $("#ap-file").value = "";
       $("#ap-ft").textContent = "✏️ تعديل: " + p.name; $("#ap-cancel").hidden = false; syncTag(); preview(); msg("");
       $("#ap-form").scrollIntoView({ behavior: "smooth", block: "start" }); $("#ap-name").focus({ preventScroll: true });
     }
@@ -210,6 +214,7 @@
       const li = b.closest("li"), p = rows.find((r) => r.id === li.dataset.id); if (!p) return;
       if (b.hasAttribute("data-edit")) return startEdit(p);
       if (b.hasAttribute("data-vis")) {
+        if (asst && !p.visible) { msg("👁️ الظهور بالموقع يقرّره محمد. گلّه يشغّله من لوحته.", "bad"); return; }
         b.disabled = true;
         const { error } = await sb.from("people").update({ visible: !p.visible }).eq("id", p.id);
         if (error) { msg("⚠️ " + error.message, "bad"); b.disabled = false; return; }

@@ -16,7 +16,12 @@
   const d10 = (t) => (t ? String(t).slice(0, 10) : "—");
   const copy = async (s, b) => { try { await navigator.clipboard.writeText(s); const o = b.textContent; b.textContent = "✔️"; setTimeout(() => (b.textContent = o), 1200); } catch (e) { prompt("انسخ:", s); } };
 
+  let mountAC = null;   // 🔁 59: فتح التبويب مرة ثانية ← المستمعين القدام ينشالون (ما يتكررون)
   async function mount(pane, sb) {
+    if (mountAC) mountAC.abort();
+    mountAC = new AbortController();
+    const on = { signal: window.AdminTab ? AdminTab.own(mountAC) : mountAC.signal };
+    const ask = (el, t, o) => window.AdminAsk(el, t, o);   // ✋ 59: تأكيد داخل الصفحة (admin.js)
     const api = async (body) => {
       const { data: { session } } = await sb.auth.getSession();
       const r = await fetch(`${C.url}/functions/v1/dept-stats`, { method: "POST",
@@ -45,9 +50,15 @@
 
     async function load() {
       const r = await api({ action: "admin_list" });
+      if (on.signal.aborted) return;   // 🔁 59: التبويب انسد قبل ما يوصل الرد
       if (r.status !== 200) { $("#dp-list").innerHTML = `<p class="hint">ما گدرت أجيب البيانات (${r.status}).</p>`; return; }
       $("#dp-on").innerHTML = `${r.on ? "✅ حساب رئيس القسم مفعّل" : "⏸️ دخول رئيس القسم مطفي — ولا أحد يگدر يدخل لحد ما تفعّله"} <button class="btn ghost" id="dp-feat">${r.on ? "⏸️ طفّيه" : "▶️ فعّله"}</button>`;
-      $("#dp-feat").onclick = async () => { if (!r.on && !confirm("تفعّل دخول رئيس القسم؟")) return; await api({ action: "admin_feature", on: !r.on }); load(); };
+      $("#dp-feat").onclick = async () => {
+        if (!r.on && !confirm("تفعّل دخول رئيس القسم؟")) return;
+        // ✋ 59: «⏸️ طفّيه» ← تأكيد أول
+        if (r.on && !(await ask($("#dp-on"), "تطفّي دخول رئيس القسم للكل؟ يطلع من كل أجهزته وما يگدر يدخل لحد ما تفعّله.", { yes: "نعم، طفّيه" }))) return;
+        await api({ action: "admin_feature", on: !r.on }); load();
+      };
       names = Object.fromEntries(r.viewers.map((v) => [v.id, v.name]));
       $("#dp-list").innerHTML = r.viewers.length ? `<table class="adm"><thead><tr><th>الاسم</th><th>الحالة</th><th>آخر دخول</th><th>ينتهي</th><th>إدارة</th></tr></thead><tbody>` +
         r.viewers.map((v) => `<tr data-id="${esc(v.id)}" data-name="${esc(v.name)}">
@@ -63,6 +74,7 @@
     }
     async function log(id) {
       const r = await api({ action: "admin_logins", id });
+      if (on.signal.aborted) return;
       $("#dp-log").innerHTML = (r.logins || []).length ? `<table class="adm"><tbody>${r.logins.map((l) => `<tr><td>${esc(names[l.viewer_id] || "")}</td><td>${esc(String(l.at).replace("T", " ").slice(0, 16))}</td><td>${l.ok ? "✅" : "⛔"}</td><td dir="ltr"><small>${esc(l.ua || "")}</small></td></tr>`).join("")}</tbody></table>` : '<p class="hint">ماكو دخول بعد.</p>';
     }
 
@@ -77,7 +89,7 @@
       const sec = ev.target.closest("[data-sec]");
       if (sec) { await api({ action: "admin_sections", sections: { [sec.dataset.sec]: { on: sec.checked } } }); return; }
       if (ev.target.dataset.a === "exp") await api({ action: "admin_expiry", id: ev.target.closest("tr").dataset.id, expires_at: ev.target.value || null });
-    });
+    }, on);
     pane.addEventListener("submit", async (ev) => {
       const f = ev.target.closest("form[data-pin-for]"); if (!f || !SP) return;
       ev.preventDefault();
@@ -90,7 +102,7 @@
       f.querySelectorAll("input").forEach((i) => (i.value = ""));
       if (r.status !== 200) { m.className = "tm-msg bad"; m.textContent = r.msg || "ما صار."; return; }
       $("#dp-out").innerHTML = SP.ready(tr.dataset.name, r.login_url); load();
-    });
+    }, on);
     pane.addEventListener("click", async (ev) => {
       if (ev.target.closest && ev.target.closest("[data-pin-x]")) { ev.target.closest("form").remove(); return; }
       const cp = ev.target.closest("button[data-cp]"); if (cp) return copy(cp.dataset.cp, cp);
@@ -106,12 +118,17 @@
       if (a === "signout") { if (!confirm(`تطلّع «${name}» من كل أجهزته؟`)) return; const rr = await api({ action: "admin_signout", id }); alert(rr.status === 200 ? "✅ طلع من كل أجهزته." : rr.msg || "ما صار."); return; }
       if (a === "log") return log(id);
       let r;
-      if (a === "toggle") r = await api({ action: "admin_toggle", id, enabled: b.textContent.includes("▶️") });
+      if (a === "toggle") {
+        const back = b.textContent.includes("▶️");
+        // ✋ 59: ⏸️ إيقاف رئيس القسم ← تأكيد أول (التشغيل بلا تأكيد)
+        if (!back && !(await ask(b, `توقف حساب «${name}»؟ يطلع من كل أجهزته وما يگدر يدخل لحد ما ترجّعه (▶️).`, { yes: "نعم، أوقفه" }))) return;
+        r = await api({ action: "admin_toggle", id, enabled: back });
+      }
       // 🏛️ 53: حساب رئيس القسم ما ينحذف — ينقفل بس (التاريخ والشهادات والتقارير تبقى باسمه، وتگدر تفتحه بضغطة)
       if (a === "lock") { if (!confirm(`تقفل حساب «${name}»؟ ما ينحذف شي، ويطلع من كل أجهزته، وتگدر تفتحه بعدين بضغطة.`)) return; r = await api({ action: "admin_lock", id }); }
       if (r && r.status !== 200) alert(r.msg || "صار خطأ");
       load();
-    });
+    }, on);
     load();
   }
   // 📊 أرقام القسم (اللوحة القديمة، قراءة بس) — هسه تحت «المزيد» بلوحة الرئيس الجديدة

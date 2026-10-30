@@ -12,7 +12,11 @@
   const arDays = (n) => (n = Math.abs(Math.round(+n || 0))) === 1 ? "يوم" : n === 2 ? "يومين" : n >= 3 && n <= 10 ? `${n} أيام` : `${n} يوم`;   // عبارة كاملة
   const copy = async (s, btn) => { try { await navigator.clipboard.writeText(s); const o = btn.textContent; btn.textContent = "✔️"; setTimeout(() => (btn.textContent = o), 1200); } catch (e) { prompt("انسخ:", s); } };
 
+  let mountAC = null;   // 🔁 59: فتح التبويب مرة ثانية ← المستمعين القدام ينشالون (ما يتكررون)
   async function mount(pane, sb) {
+    if (mountAC) mountAC.abort();
+    mountAC = new AbortController();
+    const on = { signal: window.AdminTab ? AdminTab.own(mountAC) : mountAC.signal };
     const api = async (body) => {
       const { data: { session } } = await sb.auth.getSession();
       const r = await fetch(`${C.url}/functions/v1/students-admin`, { method: "POST",
@@ -32,6 +36,7 @@
 
     async function list() {
       const r = await api({ action: "list" });
+      if (on.signal.aborted) return;   // 🔁 59: التبويب انسد قبل ما يوصل الرد
       if (r.status !== 200) { $("#st-list").innerHTML = `<p class="hint">ما گدرت أجيب القائمة (${r.status}).</p>`; return; }
       const rows = r.students || [];
       $("#st-list").innerHTML = rows.length ? `<table class="adm"><thead><tr><th>الاسم الثلاثي</th><th>الكود</th><th>دزّه</th><th>آخر دخول</th><th>الأجهزة</th><th>السلسلة</th><th>إدارة</th></tr></thead><tbody>` +
@@ -44,6 +49,7 @@
     }
     async function requests() {
       const r = await api({ action: "list_requests" });
+      if (on.signal.aborted) return;
       $("#st-req-on").textContent = r.on ? "· مفعّل" : "· مطفي (يشتغل لما تگول «فعّل طلب الأكواد»)";
       const rows = (r.requests || []).filter((x) => x.status === "pending");
       $("#st-req").innerHTML = rows.length ? `<table class="adm"><tbody>` + rows.map((x) => `<tr data-req="${x.id}"><td><b>${esc(x.full_name)}</b>${x.tg_username ? ` <small dir="ltr">@${esc(x.tg_username)}</small>` : ""}${x.dup ? " <small>⚠️ مكرر</small>" : ""}</td><td>${ago(x.at)}</td>
@@ -69,7 +75,9 @@
     pane.addEventListener("click", async (ev) => {
       const rq = ev.target.closest("[data-r]");
       if (rq) {
-        const id = Number(rq.closest("tr").dataset.req);
+        const tr = rq.closest("tr"), id = Number(tr.dataset.req), yes = rq.dataset.r === "approve_request", who = tr.querySelector("b") ? tr.querySelector("b").textContent : "";
+        // ✋ 59: موافقة/رفض طلب الكود ← تأكيد أول (الموافقة تسوي كود وتدزّه بالبوت)
+        if (!(await window.AdminAsk(rq, yes ? `توافق على «${who}»؟ ينسواله كود وينرسل إله بالبوت.` : `ترفض طلب «${who}»؟`, { yes: yes ? "نعم، وافق" : "نعم، ارفض" }))) return;
         const r = await api({ action: rq.dataset.r, id });
         alert(r.msg || (r.ok ? (r.full_name ? `✅ ${r.full_name}${r.sent ? " — وصله الكود بالبوت" : " — ⚠️ ما وصلته رسالة البوت، دزّه يدوي"}` : "تم") : "صار خطأ"));
         requests(); list(); return;
@@ -92,7 +100,7 @@
       if (r.status !== 200) return alert(r.msg || "صار خطأ");
       if (a === "rotate") alert(`الكود الجديد: ${r.code}`);
       list();
-    });
+    }, on);
     list(); requests();
   }
   window.AdminStudents = { mount };
