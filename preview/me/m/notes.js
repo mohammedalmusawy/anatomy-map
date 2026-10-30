@@ -3,7 +3,7 @@
 //   المسا «شنو أصعب شي واجهك اليوم؟» / «شنو تعلمت اليوم؟» ← الجواب يصير ملاحظة بتاريخها، ويفيد الخطة (Notes.intentToday) والتقدّم.
 // · القوالب: 📌 نقطة صعبة | ❓ سؤال للأستاذ | 🧠 ملخص | ⏰ تذكير (Notes.reminders() جاهزة للتنبيهات بعدين).
 // · وهو يكتب: نلگى أسماء المحاضرات ومصطلحات المعجم وحالات الأطلس ← روابط «افتح»، ونقترح وسوم (#صدر #أجهزة …) والمادة.
-// · بحث، تثبيت 📌، لون هادئ، ومن وين انكتبت (صفحة / محاضرة / حالة / مصطلح).
+// · بحث، ⭐ مهمة (نفس حقل pin القديم: تنرفع لفوق + ترجع وقت المراجعة وقبل الامتحان — learn.js، 30/10)، لون هادئ، ومن وين انكتبت (صفحة / محاضرة / حالة / مصطلح).
 // · «✨ رتّبها» = خطّاف اختياري للمساعد (Notes.assistant) — هسه بس ترتيب محلي، وما يتصل بأي خدمة.
 // كلشي بجهاز الطالب (localStorage «t:notes»)، وما ينرسل شي. Notes.export()/import() جاهزة للمزامنة بعدين.
 (function (root, factory) {
@@ -223,9 +223,9 @@
     const links = (n.links || []).map((l) => l.type === "term"
       ? `<span class="tm" tabindex="0" role="button" data-k="${esc(l.key)}" dir="ltr">${esc(l.title)} 🔊</span>`
       : l.href ? `<a href="${esc(/^https:/.test(l.href) || l.href === "#" ? l.href : root + l.href)}">افتح: ${esc(l.title)} ‹</a>` : "").join("");
-    return `<div class="note c${n.color || 0}" data-note="${esc(n.id)}"><div class="nh"><span>${n.pin ? "📌 مثبّتة · " : ""}${k.icon} ${k.label}${n.ctx ? " · " + esc(CTX[n.ctx.kind] || "") : ""}${n.remind ? ` · ⏰ ${esc(n.remind.label)}` : ""}</span><span>${esc(ago)}</span></div>` +
+    return `<div class="note c${n.color || 0}" data-note="${esc(n.id)}"><div class="nh"><span>${n.pin ? "⭐ مهمة · " : ""}${k.icon} ${k.label}${n.ctx ? " · " + esc(CTX[n.ctx.kind] || "") : ""}${n.remind ? ` · ⏰ ${esc(n.remind.label)}` : ""}</span><span>${esc(ago)}</span></div>` +
       `<p dir="auto">${esc(n.text).replace(/\n/g, "<br>")}</p><div class="tags">${(n.tags || []).map((t) => `<span>${esc(t)}</span>`).join("")}${links}${ctxLink(n)}</div>` +
-      `<div class="chips-row"><button type="button" class="ib" data-act="pin" aria-pressed="${!!n.pin}" aria-label="ثبّت الملاحظة">📌</button>` +
+      `<div class="chips-row"><button type="button" class="ib" data-act="pin" aria-pressed="${!!n.pin}" aria-label="علّمها مهمة" title="⭐ مهمة: ترجعلك وقت المراجعة وقبل الامتحان">⭐</button>` +
       `<button type="button" class="ib" data-act="color" aria-label="غيّر اللون">🎨</button><button type="button" class="ib" data-act="del" aria-label="امسح الملاحظة">🗑️</button></div></div>`;
   }
   // o = { root, ix, subjects:[[key,name]], examKnown, examDate }
