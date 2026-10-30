@@ -105,6 +105,7 @@
       </form>
       <div id="ap-list"><p class="hint">لحظة…</p></div>`;
     const $ = (s) => pane.querySelector(s);
+    let headOn = false;   // 🏛️ ظهور رئيس القسم المنشور (للرعاة)
     let rows = [], edit = null, photo = null /* {blob,ext,path?} جديدة */, clear = false, blobUrl = null;
     // 💬 عدّاد «كلمة شكر» (80 حرف كحد أقصى)
     $("#ap-note").addEventListener("input", () => { $("#ap-note-n").textContent = $("#ap-note").value.length + "/80"; });
@@ -148,6 +149,7 @@
       if (name.length < 2) { msg("⚠️ اكتب الاسم.", "bad"); $("#ap-name").focus(); return; }
       const grp = $("#ap-grp").value;
       const row = { name, title: $("#ap-title").value.trim().replace(/\s+/g, " "), note: $("#ap-note").value.trim().replace(/\s+/g, " ").slice(0, 80), grp, tag: grp === "doctors" ? $("#ap-tag").value : "", visible: $("#ap-vis").checked };
+      if (grp === "patrons") row.patron = true;   // 🏛️ الراعي يبقى راعي (ما يطلع وهو مطفي، حتى لو انتقل لمجموعة ثانية)
       $("#ap-save").disabled = true; msg("⏳ أحفظ…");
       try {
         if (photo) row.photo = photo.path || (photo.path = await upload(sb, photo));   // إعادة المحاولة ما ترفع نسخة ثانية
@@ -161,24 +163,26 @@
           const { error } = await sb.from("people").insert(row);
           if (error) throw error;
         }
-        dropCache(); msg(edit ? "✅ انحفظ التعديل." : "✅ انضاف.", "ok"); resetForm(); await load();
+        const pat = grp === "patrons" || (edit && edit.patron);
+        dropCache(); msg((edit ? "✅ انحفظ التعديل." : "✅ انضاف.") + (pat && row.visible && !headOn ? " يظهر لما يتفعّل ظهور رئيس القسم." : ""), "ok"); resetForm(); await load();
       } catch (e) { msg("⚠️ ما انحفظ: " + (e.message || e), "bad"); }
       finally { $("#ap-save").disabled = false; }
     };
     const nextSort = (grp) => rows.filter((r) => r.grp === grp).reduce((m, r) => Math.max(m, r.sort || 0), 0) + 10;
 
     async function load() {
-      const { data, error } = await sb.from("people").select("id,name,title,note,grp,photo,visible,sort,tag").order("grp").order("sort");
+      const { data, error } = await sb.from("people").select("*").order("grp").order("sort");   // 🏛️ * ← patron/name_en (54) بلا ما ينكسر قبل الهجرة
+      try { const { data: s } = await sb.from("settings").select("value").eq("key", "dept_head").maybeSingle(); headOn = !!(s && s.value && s.value.on === true); } catch (e) { headOn = false; }
       if (error) { $("#ap-list").innerHTML = `<p class="hint">ما گدرت أجيب القائمة (${esc(error.message)}).</p>`; return; }
       rows = data || []; draw();
     }
     function draw(focus) {
       $("#ap-list").innerHTML = GRP.map(([k, t]) => {
         const xs = rows.filter((r) => r.grp === k).sort((a, b) => a.sort - b.sort);
-        return `<h3 class="ap-g">${t} <small class="hint">(${xs.length})</small></h3>` + (k === "patrons" ? '<p class="hint">🏛️ رؤساء القسم السابقين. يظهرون بالموقع بس لما ظهور رئيس القسم مفعّل، وغيرها مخفيين (ولا اسم).</p>' : "") + (xs.length ? `<ul class="ap-list" data-grp="${k}">` + xs.map((p, i) => `
+        return `<h3 class="ap-g">${t} <small class="hint">(${xs.length})</small></h3>` + (k === "patrons" ? `<p class="hint">رؤساء القسم السابقون. يطلعون بالموقع بس وقت ما ظهور رئيس القسم مفعّل.${headOn ? "" : " (هسه مطفي)"}</p>` : "") + (xs.length ? `<ul class="ap-list" data-grp="${k}">` + xs.map((p, i) => `
           <li class="ap-row${p.visible ? "" : " off"}" data-id="${p.id}">
             <span class="ap-h" role="img" aria-label="اسحب للترتيب" title="اسحب للترتيب">⠿</span>${av(p)}
-            <span class="ap-t"><b>${esc(p.name)}${p.visible ? "" : ' <span class="ap-tag">مخفي</span>'}${p.tag ? ` <span class="ap-tag">${esc((TAGS.find((x) => x[0] === p.tag) || ["", p.tag])[1])}</span>` : ""}</b>${p.title ? `<small>${esc(p.title)}</small>` : ""}${p.note ? `<small class="ap-note">💬 ${esc(p.note)}</small>` : ""}</span>
+            <span class="ap-t"><b>${esc(p.name)}${p.visible ? "" : ' <span class="ap-tag">مخفي</span>'}${p.patron && p.visible && !headOn ? ' <span class="ap-tag">يظهر لما يتفعّل الظهور</span>' : ""}${p.tag ? ` <span class="ap-tag">${esc((TAGS.find((x) => x[0] === p.tag) || ["", p.tag])[1])}</span>` : ""}</b>${p.title ? `<small>${esc(p.title)}</small>` : ""}${p.note ? `<small class="ap-note">💬 ${esc(p.note)}</small>` : ""}</span>
             <span class="ap-acts">
               <button type="button" class="ap-b" data-up aria-label="انقل ${esc(p.name)} لفوق"${i ? "" : " disabled"}>▲</button>
               <button type="button" class="ap-b" data-down aria-label="انقل ${esc(p.name)} لجوّه"${i < xs.length - 1 ? "" : " disabled"}>▼</button>
@@ -209,7 +213,9 @@
         b.disabled = true;
         const { error } = await sb.from("people").update({ visible: !p.visible }).eq("id", p.id);
         if (error) { msg("⚠️ " + error.message, "bad"); b.disabled = false; return; }
-        p.visible = !p.visible; dropCache(); msg(p.visible ? `✅ ${p.name} يطلع بالموقع.` : `🙈 ${p.name} انخفى من الموقع (باقي هنا).`, "ok"); draw([p.id, "data-vis"]); return;
+        const on = !p.visible; dropCache(); await load();   // الحالة من القاعدة، مو تخمين
+        msg(!on ? `🙈 ${p.name} انخفى من الموقع (باقي هنا).` : p.patron && !headOn ? `👁 ${p.name}: يظهر لما يتفعّل ظهور رئيس القسم.` : `✅ ${p.name} يطلع بالموقع.`, "ok");
+        const nb = $("#ap-list").querySelector(`li[data-id="${p.id}"] [data-vis]`); if (nb) nb.focus(); return;
       }
       const up = b.hasAttribute("data-up"); if (!up && !b.hasAttribute("data-down")) return;
       const ids = order(p.grp), i = ids.indexOf(p.id), j = up ? i - 1 : i + 1;

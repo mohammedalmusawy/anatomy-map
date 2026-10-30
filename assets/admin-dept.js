@@ -151,7 +151,7 @@
     s.textContent = `.hd-card{background:var(--card,#fff);border:1px solid var(--line,#ddd);border-radius:18px;padding:16px;margin:10px 0 14px;display:grid;gap:12px}
 .hd-who{display:flex;align-items:center;gap:12px}.hd-who img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--line,#ddd);background:var(--bg,#f6f2ea);flex:none}
 .hd-who img[data-neutral]{padding:8px;object-fit:contain}.hd-who b{display:block;font-family:var(--title-font,inherit)}.hd-who small{color:var(--muted,#666)}
-.hd-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 12px;font-size:.88rem;border:1px solid var(--line,#ddd);background:var(--bg,#f6f2ea);color:var(--ink,#222)}
+.hd-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 12px;font-size:.86rem;border:0;background:color-mix(in srgb,var(--muted,#666) 14%,transparent);color:var(--muted,#555)}
 .hd-pill.on{background:var(--brand-soft,#ecedf4)}
 .hd-f{display:grid;gap:4px}.hd-f span{font-weight:600;font-size:.92rem;color:var(--muted,#666)}
 .hd-f input,.hd-f textarea{width:100%;box-sizing:border-box;min-height:44px;font:inherit;font-size:16px;border:1px solid var(--line,#ccc);border-radius:12px;padding:8px 12px;background:var(--card,#fff);color:var(--ink,#222)}
@@ -320,7 +320,7 @@
       headAdmin(box, api);
     };
     changeFlow(box.querySelector("#hd-chg"), api, h, () => headAdmin(box, api));
-    formerList(box.querySelector("#hd-fl"), api, formers, () => headAdmin(box, api));
+    formerList(box.querySelector("#hd-fl"), api, formers, () => headAdmin(box, api), r.public_on === true);
   }
 
   /** 🔄 تغيير رئيس القسم: (1) البيانات + رقم مؤقت → (2) معاينة + تأكيد بكتابة الاسم → (3) جاهز (سلّم الرقم بإيدك). */
@@ -382,6 +382,7 @@
       <div class="tm-once" role="status"><b>✅ تبدّل رئيس القسم: ${esc(x.name)}</b>
         <p>الرقم المؤقت ينتهي: <b>${esc(fmtL(exp))}</b> (72 ساعة). سلّمه بإيدك أو برسالة خاصة — ما ينرسل بالبوت أبداً.</p>
         <p class="hint">الظهور بالموقع انطفى. فعّله بعد ما يوافق.</p>
+        <p class="hint">🛡️ تذكير: ضيف اسم الرئيس السابق (والجديد) لملف <code>_النظام/head-names.local.txt</code> حتى فحص البناء يمنع ظهوره بالغلط وهو مطفي.</p>
         <p><button class="btn ghost" type="button" data-d>تم</button></p></div>`;
       el.querySelector("[data-d]").onclick = done;
     };
@@ -389,15 +390,15 @@
   }
 
   /** 🗂️ رؤساء القسم السابقين: ماكو حذف. 🔓 أعد فتح الدخول (بس) · 🙏 أضف للشكر — ويّا «تراجع». */
-  function formerList(el, api, list, done) {
+  function formerList(el, api, list, done, publicOn) {
     if (!list.length) { el.innerHTML = '<p class="hint">ماكو رؤساء سابقين بعد.</p>'; return; }
     el.innerHTML = list.map((x) => `<article data-id="${esc(x.id)}" data-viewer="${esc(x.viewer_id || "")}" data-name="${esc(x.name)}">
       <div class="hd-who">${avatar(x.photo_url)}<div><b>${esc(x.name)}</b><small>${esc(x.title)} · ${esc(d10(x.from_date))} – ${esc(d10(x.to_date))}</small></div></div>
       <p class="hd-kept">محفوظ باسمه: ${esc(x.counts?.certs ?? 0)} شهادة · ${esc(x.counts?.anns ?? 0)} إعلان · ${esc(x.counts?.reports ?? 0)} تقرير · ${esc(x.counts?.words ?? 0)} كلمة</p>
       <div class="hd-row"><span class="hd-pill">${x.locked ? "🔒 مقفول" : "🔓 الدخول مفتوح"}</span>
         ${x.locked ? '<button class="btn ghost" type="button" data-f="reopen">🔓 أعد فتح الدخول</button>' : ""}
-        ${x.thanked ? '<span class="hd-pill">🏛️ برعاة المنصة</span>' : '<button class="btn ghost" type="button" data-f="thank">🙏 أضف للشكر</button>'}</div>
-      ${x.locked ? '<p class="hd-note">«أعد فتح» حتى يشوف تاريخه بس. يرجع رئيساً حالياً فقط عن طريق «🔄 تغيير رئيس القسم».</p>' : ""}</article>`).join("");
+        ${x.thanked ? '<span class="hd-pill">🏛️ ضمن رعاة المنصة</span>' : '<button class="btn ghost" type="button" data-f="thank">🙏 أضف للشكر</button>'}</div>
+      ${x.locked ? '<p class="hd-note">🔓 «أعد فتح» = يشوف تاريخه بس، ما يرجع رئيس. للرجوع رئيساً: «🔄 تغيير رئيس القسم».</p>' : ""}</article>`).join("");
     el.onclick = async (ev) => {
       const b = ev.target.closest("button[data-f]"); if (!b) return;
       const a = b.closest("article"), n = a.dataset.name;
@@ -406,7 +407,7 @@
       if (rr.status !== 200) return alert(later(rr) ? "⏳ بعد تحديث السيرفر (مسودة 53)." : rr.msg || "ما صار.");
       done();
       if (b.dataset.f === "reopen") toast(`🔓 انفتح دخول «${n}» — لمشاهدة تاريخه بس.`, a.dataset.viewer ? async () => { await api({ action: "admin_lock", id: a.dataset.viewer }); done(); } : null);
-      else toast(`🏛️ «${n}» انضاف لـ «رعاة المنصة». تگدر تخفيه من «الفريق والشكر».`);
+      else toast(publicOn ? `🏛️ «${n}» انضاف لـ «رعاة المنصة».` : `🏛️ انضاف لـ «رعاة المنصة» — يطلع بالموقع لما يتفعّل ظهور رئيس القسم.`);
     };
   }
 
