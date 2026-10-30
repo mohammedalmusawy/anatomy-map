@@ -32,13 +32,13 @@
     const $ = (s) => pane.querySelector(s);
     let names = {};
     const SP = window.StaffPin;
-    const st = (v) => !v.enabled ? (v.has_password ? "⏸️ موقوف" : "💤 مطفي — ينتظر «فعّل حساب الدكتور حيدر»") : v.expires_at && new Date(v.expires_at) <= new Date() ? "⌛ منتهي"
+    const st = (v) => !v.enabled ? (v.has_password ? "⏸️ موقوف" : "💤 مطفي — ينتظر «فعّل حساب رئيس القسم» من محمد") : v.expires_at && new Date(v.expires_at) <= new Date() ? "⌛ منتهي"
       : v.has_password && !v.must_change ? "✅ فعّال" : "⏳ ماكو رقم بعد";
 
     async function load() {
       const r = await api({ action: "admin_list" });
       if (r.status !== 200) { $("#dp-list").innerHTML = `<p class="hint">ما گدرت أجيب البيانات (${r.status}).</p>`; return; }
-      $("#dp-on").innerHTML = `${r.on ? "✅ حساب رئيس القسم مفعّل" : "⏸️ مطفي — ولا أحد يگدر يدخل (يشتغل لما تگول «فعّل حساب الدكتور حيدر»)"} <button class="btn ghost" id="dp-feat">${r.on ? "⏸️ طفّيه" : "▶️ فعّله"}</button>`;
+      $("#dp-on").innerHTML = `${r.on ? "✅ حساب رئيس القسم مفعّل" : "⏸️ مطفي — ولا أحد يگدر يدخل (يشتغل لما تگول «فعّل حساب رئيس القسم» من محمد)"} <button class="btn ghost" id="dp-feat">${r.on ? "⏸️ طفّيه" : "▶️ فعّله"}</button>`;
       $("#dp-feat").onclick = async () => { if (!r.on && !confirm("تفعّل دخول رئيس القسم؟")) return; await api({ action: "admin_feature", on: !r.on }); load(); };
       names = Object.fromEntries(r.viewers.map((v) => [v.id, v.name]));
       $("#dp-list").innerHTML = r.viewers.length ? `<table class="adm"><thead><tr><th>الاسم</th><th>الحالة</th><th>آخر دخول</th><th>ينتهي</th><th>إدارة</th></tr></thead><tbody>` +
