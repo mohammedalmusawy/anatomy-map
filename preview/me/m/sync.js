@@ -112,20 +112,9 @@
     prefs: { cloud: "prefs", lk: Object.values(PREFS),
       read: (S) => { const m = {}; for (const k in PREFS) { const v = S.get(PREFS[k], null); if (v != null) m[k] = v; } return m; },
       write: (S, m) => { for (const k in PREFS) if (m[k] != null) S.set(PREFS[k], m[k]); else S.del(PREFS[k]); }, ts: (v) => v && v.t },
-    // 🧠 تعلّم شخصي (30/10، مسودة 52 — learn.js): الغلط بأوقاته يتجمّع (اتحاد)، والباقي الأحدث يغلب. للمالك بس (RLS نفسها).
-    learn: { cloud: "learn", lk: "t:learn", read: (S) => map(S.get("t:learn", {})), write: (S, m) => S.set("t:learn", m), ts: (v) => v && v.t, ev: "learn:change",
-      combine: (x, y) => {
-        if (isObj(x) && isObj(y) && Array.isArray(x.w) && Array.isArray(y.w)) {   // ساعة جهاز سابقة ما تزرع أوقات بالمستقبل (≤ باچر)
-          const lim = Date.now() + 864e5, w = [...new Set(x.w.concat(y.w).map(num))].filter((t) => t > 0 && t <= lim).sort((a, b) => a - b).slice(-12);
-          return { t: Math.min(Math.max(num(x.t), num(y.t)), lim), w }; }
-        if (!isObj(x) || !isObj(y)) return isObj(x) ? x : y;
-        return num(y.t) > num(x.t) ? y : num(x.t) > num(y.t) ? x : (hash(x) >= hash(y) ? x : y);
-      } },
     reminders: { cloud: null, lk: "t:reminders", read: (S) => byId(S.get("t:reminders", [])), write: (S, m) => S.set("t:reminders", Object.values(m).sort((x, y) => num(x.at) - num(y.at))), ts: (v) => v && v.t, ev: "reminders:change" },
   };
-  const ALL_LOCAL = ["t:notes", "t:mistakes", "t:favs", "t:progress", "t:srs", "t:plan", "t:track", "t:track-remote", "t:reminders", "t:learn", ...Object.values(PREFS)];
-  // 🧠 «learn» بالسحابة يحتاج هجرة 20261030000052_learn_state.sql (مكتوبة، مو مطبّقة). لحد ما تنطبّق ← STUDY_CLOUD.learn = false ← يبقى بالجهاز بس.
-  const CLOUD_LEARN = () => !!(typeof window !== "undefined" && window.STUDY_CLOUD && window.STUDY_CLOUD.learn === true);
+  const ALL_LOCAL = ["t:notes", "t:mistakes", "t:favs", "t:progress", "t:srs", "t:plan", "t:track", "t:track-remote", "t:reminders", ...Object.values(PREFS)];
 
   // ── المحرّك: S = تخزين ({get,set,del})، api = السحابة، device، now() ──
   // api: { get(key) → {value, updated_at}|null, cas(key, value, updated_at|null) → bool, rem: {list, insert, update, remove} }
@@ -243,13 +232,11 @@
       return { changed, again: false, partial };
     }
     async function all(only) {
-      const res = {}, list = only || ["notes", "mistakes", "favorites", "progress", "srs", "prefs", "plan", "track", "reminders"].concat(CLOUD_LEARN() ? ["learn"] : []);
+      const res = {}, list = only || ["notes", "mistakes", "favorites", "progress", "srs", "prefs", "plan", "track", "reminders"];
       let err = null;
       for (const k of list) {   // كل نوع لحاله: إذا واحد فشل (مثلاً كبير هواية) الباقي يكمّل
         try { res[k] = await (k === "plan" ? plan() : k === "track" ? track() : k === "reminders" ? reminders() : keyed(k)); }
-        catch (e) { if (e instanceof TypeError || e.name === "AbortError" || e.message === "auth") throw e;
-          if (k === "learn") { res[k] = { changed: false, again: false, partial: true, err: "learn" }; continue; }   // 🧠 الهجرة ما انطبّقت بعد (رفض المفتاح) ← حالة «جزئية» هادئة، مو «ملاحظاتك كثيرة»
-          err = err || e; res[k] = { changed: false, again: false, partial: true, err: e.message }; }
+        catch (e) { if (e instanceof TypeError || e.name === "AbortError" || e.message === "auth") throw e; err = err || e; res[k] = { changed: false, again: false, partial: true, err: e.message }; }
       }
       if (err && Object.values(res).every((x) => x.err)) throw err;
       return res;
@@ -265,7 +252,6 @@
     try {
       const x = JSON.parse(a), y = JSON.parse(b);
       if (Array.isArray(x) && Array.isArray(y)) { const m = byId(x); y.forEach((v) => { if (v && v.id != null) m[String(v.id)] = v; }); return JSON.stringify(Object.values(m)); }
-      if (k === "t:learn" && isObj(x) && isObj(y)) { const o = Object.assign({}, x); for (const id in y) o[id] = id in o ? KINDS.learn.combine(o[id], y[id]) : y[id]; return JSON.stringify(o); }   // أوقات الغلط تنجمع
       if (isObj(x) && isObj(y)) return JSON.stringify(Object.assign({}, x, y));
     } catch (e) {}
     return b;
@@ -395,8 +381,8 @@
     if (sw === "switched" || sw === "restored") emit("sync:applied", { kinds: ["all"] });
     state.mode = "cloud";
     eng = engine({ S: LS, api: restApi(A), device: LS.get("t:device", null) || LSraw.get("t:device") || "dev" });
-    ["notes:change", "plan:change", "track:change", "reminders:change", "quiz:finish", "learn:change", "learn:saved"].forEach((n) => document.addEventListener(n, () => schedule(2000)));
-    addEventListener("storage", (e) => { if (e.key && /^t:(notes|plan|track|reminders|mistakes|favs|progress|srs|last|learn)$/.test(e.key)) schedule(2000); });
+    ["notes:change", "plan:change", "track:change", "reminders:change", "quiz:finish"].forEach((n) => document.addEventListener(n, () => schedule(2000)));
+    addEventListener("storage", (e) => { if (e.key && /^t:(notes|plan|track|reminders|mistakes|favs|progress|srs|last)$/.test(e.key)) schedule(2000); });
     addEventListener("online", () => schedule(300));
     document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") schedule(500); });
     setInterval(() => { if (document.visibilityState === "visible") run(); }, 60e3);

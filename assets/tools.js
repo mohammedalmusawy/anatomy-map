@@ -10,16 +10,6 @@
   const here = location.href.split("#")[0];
   const rel = here.startsWith(root) ? here.slice(root.length) : location.pathname;
   const key = (q) => (q.q_en || "").slice(0, 120);
-  // 🧠 أخطائي المتكررة (30/10، مسودة المرحلة 52): كل غلط ينحفظ بوقته بجهاز الطالب (t:learn «m:<السؤال>» أو «m:term:<المصطلح>»)
-  // حتى «صفحتي» (learn.js) تعرف المفهوم اللي يتكرر غلطه. ما ينرسل لأي مكان (بس مزامنة حسابه هو إذا مسجّل).
-  const miss = (k) => { try {   // ما يكسر أخطائي ولا المراجعة حتى لو التخزين خربان
-    if (!k) return; let L = LS.get("learn", {}); if (!L || typeof L !== "object" || Array.isArray(L)) L = {};
-    const id = "m:" + k, it = L[id] && typeof L[id] === "object" && Array.isArray(L[id].w) ? L[id] : { w: [] };
-    const now = Date.now(), day = (t) => new Date(t).toDateString(), last = it.w[it.w.length - 1];
-    if (last && day(last) === day(now)) return;   // (مراجعة 30/10) مرة وحدة باليوم لكل سؤال ← «3 مرات» = 3 مناسبات
-    it.w = it.w.concat(now).slice(-12); it.t = now; L[id] = it; LS.set("learn", L);
-    document.dispatchEvent(new CustomEvent("learn:change"));
-  } catch (e) {} };
 
   // ── 1) من الاختبار: نسجّل الأخطاء والتقدّم ──
   document.addEventListener("quiz:answer", (ev) => {
@@ -29,7 +19,6 @@
     if (!ok) m[k] = { q, page: rel, title: document.title, streak: 0, t: Date.now() };
     else if (m[k]) { m[k].streak = (m[k].streak || 0) + 1; if (m[k].streak >= 2) delete m[k]; } // صح مرتين ورا بعض ← ينشال
     LS.set("mistakes", m);
-    if (!ok) miss(k);   // بعد حفظ أخطائي
   });
   document.addEventListener("quiz:finish", (ev) => {
     const { ok, n } = ev.detail;
@@ -205,7 +194,6 @@
         box.querySelector("#rvs").onclick = () => box.querySelector("#rva").classList.remove("hidden");
         box.querySelectorAll("[data-k]").forEach((b) => b.onclick = () => {
           const s = st[t.en] || { box: 0 }; s.box = +b.dataset.k ? Math.min(5, s.box + 1) : 0; s.due = day + GAP[s.box]; st[t.en] = s; LS.set("srs", st);
-          if (!+b.dataset.k) miss("term:" + t.en);
           if (window.Cloud) Cloud.log("review", t.en);
           i++; next();
         });
