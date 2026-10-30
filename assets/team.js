@@ -11,6 +11,7 @@
   const GROUPS = [
     ["team", "👥", "فريق المنصة", "", "team"],
     ["doctors", "🩺", "شكر وتقدير", "لأطباء دعموا الطلاب بالصور الشعاعية، وكانوا عوناً لهم بعلمهم وتشجيعهم.", "thanks"],
+    ["patrons", "🏛️", "رعاة المنصة", "", "patrons"],   // 🏛️ 54: يطلع بس إذا ظهور رئيس القسم مفعّل (settings.dept_head.on) وفيه أحد
     ["special", "🤝", "شكر خاص", "", "special"],
     ["supporters", "💛", "داعمون", "", "supporters"],
     ["supervision", "🔬", "الإشراف العلمي", "", "supervision"],
@@ -34,7 +35,11 @@
       : `<span class="pp-av pp-mono" aria-hidden="true">${esc(mono(p.name))}</span>`;
     return `<li class="pp">${av}<span class="pp-t"><b>${esc(p.name)}</b>${p.title ? `<small>${esc(p.title)}</small>` : ""}${p.note ? `<span class="pp-note">${esc(p.note)}</span>` : ""}</span></li>`;
   };
+  // 🏛️ 54: «رعاة المنصة» مربوطة بظهور رئيس القسم — مطفي (أو ما نعرف بعد) ← المجموعة ما تنرسم أبداً، حتى لو وصل صف (دفاع ثاني بعد القاعدة)
+  let headOn = false;
+  const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
   const render = (rows) => GROUPS.map(([k, ic, title, sub, anc]) => {
+    if (k === "patrons" && !headOn) return "";
     const xs = rows.filter((r) => r.grp === k).sort((a, b) => (a.sort || 0) - (b.sort || 0));
     if (!xs.length) return "";
     const big = k === "team";
@@ -49,12 +54,19 @@
     const html = render(rows);
     if (html !== box.innerHTML) box.innerHTML = html;
   };
+  let last = null;
+  const apply0 = apply;
+  const applyL = (rows) => { last = rows; apply0(rows); };
+  const H = { apikey: C.anon, Authorization: "Bearer " + C.anon };
+  if (LOCAL && window.__HEAD_PREVIEW && window.__HEAD_PREVIEW.on === true) headOn = true;   // 🧪 معاينة محلية بس
+  else fetch(`${C.url}/rest/v1/settings?select=value&key=eq.dept_head`, { headers: H }).then((r) => (r.ok ? r.json() : []))
+    .then((d) => { headOn = !!(d && d[0] && d[0].value && d[0].value.on === true); if (headOn && last) apply0(last); }).catch(() => {});
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
-  if (cached) apply(cached.d);   // يرسم المحفوظ فوراً، وبعدين الجديد من الشبكة (التعديل يطلع فوراً)
+  if (cached) applyL(cached.d);   // يرسم المحفوظ فوراً، وبعدين الجديد من الشبكة (التعديل يطلع فوراً)
   fetch(`${C.url}/rest/v1/people?select=id,name,title,note,grp,photo,sort&visible=eq.true&order=grp.asc,sort.asc`,
     { headers: { apikey: C.anon, Authorization: "Bearer " + C.anon } })
     .then((r) => (r.ok ? r.json() : null))
-    .then((d) => { if (!d) return; try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d })); } catch (e) {} apply(d); })
+    .then((d) => { if (!d) return; try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d })); } catch (e) {} applyL(d); })
     .catch(() => {});
 })();

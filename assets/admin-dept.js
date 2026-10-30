@@ -224,6 +224,7 @@
   async function headAdmin(box, api) {
     if (!box) return;
     hdCss();
+    const wasOpen = [...box.querySelectorAll("details.hd-details[open]")].map((d) => d.id);   // بعد أي فعل: نفس الأقسام تبقى مفتوحة
     const [r, L] = await Promise.all([api({ action: "admin_head_get" }), api({ action: "admin_list" })]);
     if (r.status !== 200) {
       box.innerHTML = `<section class="hd-card"><b>🏛️ رئيس القسم الحالي</b>${later(r) ? SOON : `<p class="hint">ما گدرت أجيب الإعداد (${esc(r.status)}).</p>`}
@@ -266,6 +267,7 @@
     </section>
     <details class="hd-details" id="hd-change"><summary>🔄 تغيير رئيس القسم</summary><div id="hd-chg"></div></details>
     <details class="hd-details" id="hd-formers"><summary>🗂️ رؤساء القسم السابقين (${formers.length})</summary><div class="hd-fm" id="hd-fl"></div></details>`;
+    wasOpen.forEach((id) => { const d = box.querySelector("#" + id); if (d) d.open = true; });
     const f = box.querySelector("#hd-form"), msg = f.querySelector(".tm-msg");
     autosize(f);
     f.photo.onchange = async () => {
@@ -338,7 +340,7 @@
         <label class="hd-f"><span>رقم مؤقت (8–12 رقم)</span><input name="pin" inputmode="numeric" dir="ltr" maxlength="12" value="${esc(v.pin || "")}" autocomplete="off">
           <small>يشتغل <b>72 ساعة بس</b>. بأول دخول يختار رقمه الخاص، وبعدها يگدر يغيّره أي وقت.</small></label>
         <div class="hd-row"><button class="btn ghost" type="button" data-s>🎲 اقترح رقم</button></div>
-        <label class="sw"><input type="checkbox" name="thank" ${v.thank ? "checked" : ""}> أضف ${cur.name ? `«${esc(cur.name)}»` : "الرئيس السابق"} لـ «شكر لمن دعم المنصة»</label>
+        <label class="sw"><input type="checkbox" name="thank" ${v.thank ? "checked" : ""}> أضف ${cur.name ? `«${esc(cur.name)}»` : "الرئيس السابق"} لـ «رعاة المنصة» (صفحة الشكر)</label>
         <div class="hd-row"><button class="btn" type="submit">التالي ›</button><span class="tm-msg" role="status"></span></div></form>`;
       const f = el.querySelector("form");
       f.querySelector("[data-s]").onclick = () => { f.pin.value = suggest(); };
@@ -359,7 +361,7 @@
         <li>➕ حساب جديد: <b>${esc(x.name)}</b> — ${esc(x.title)}، من ${esc(x.from)}.</li>
         <li>⏳ الرقم المؤقت يشتغل 72 ساعة بس، وبأول دخول يختار رقمه.</li>
         <li>🔒 الظهور بالموقع ينطفي لحد ما يوافق الرئيس الجديد وتفعّله إنت.</li>
-        ${x.thank ? "<li>🙏 السابق ينضاف لـ «شكر لمن دعم المنصة».</li>" : ""}
+        ${x.thank ? "<li>🙏 السابق ينضاف لـ «رعاة المنصة» بصفحة الشكر (يظهر بس وقت ما ظهور رئيس القسم مفعّل).</li>" : ""}
       </ul>
       <form class="hd-fm" novalidate><label class="hd-f"><span>حتى تأكد، اكتب اسم الرئيس الجديد بالضبط</span><input name="c" maxlength="120" autocomplete="off"></label>
         <div class="hd-row"><button class="btn" type="submit">✅ بدّل رئيس القسم</button><button class="btn ghost" type="button" data-b>‹ رجوع</button><span class="tm-msg" role="status"></span></div></form>`;
@@ -394,17 +396,17 @@
       <p class="hd-kept">محفوظ باسمه: ${esc(x.counts?.certs ?? 0)} شهادة · ${esc(x.counts?.anns ?? 0)} إعلان · ${esc(x.counts?.reports ?? 0)} تقرير · ${esc(x.counts?.words ?? 0)} كلمة</p>
       <div class="hd-row"><span class="hd-pill">${x.locked ? "🔒 مقفول" : "🔓 الدخول مفتوح"}</span>
         ${x.locked ? '<button class="btn ghost" type="button" data-f="reopen">🔓 أعد فتح الدخول</button>' : ""}
-        ${x.thanked ? '<span class="hd-pill">🙏 بصفحة الشكر</span>' : '<button class="btn ghost" type="button" data-f="thank">🙏 أضف للشكر</button>'}</div>
-      ${x.locked ? '<p class="hd-note">«أعد فتح» يرجّع الدخول بس — ما يصير الرئيس الحالي ولا يگدر يغيّر شي.</p>' : ""}</article>`).join("");
+        ${x.thanked ? '<span class="hd-pill">🏛️ برعاة المنصة</span>' : '<button class="btn ghost" type="button" data-f="thank">🙏 أضف للشكر</button>'}</div>
+      ${x.locked ? '<p class="hd-note">«أعد فتح» حتى يشوف تاريخه بس. يرجع رئيساً حالياً فقط عن طريق «🔄 تغيير رئيس القسم».</p>' : ""}</article>`).join("");
     el.onclick = async (ev) => {
       const b = ev.target.closest("button[data-f]"); if (!b) return;
       const a = b.closest("article"), n = a.dataset.name;
-      if (b.dataset.f === "thank" && !confirm(`تضيف «${n}» لـ «شكر لمن دعم المنصة»؟`)) return;
+      if (b.dataset.f === "thank" && !confirm(`تضيف «${n}» لـ «🏛️ رعاة المنصة» بصفحة الشكر؟\n(يظهر بس لما ظهور رئيس القسم مفعّل)`)) return;
       const rr = await api({ action: b.dataset.f === "reopen" ? "admin_reopen_head" : "admin_thank_former", id: a.dataset.id });
       if (rr.status !== 200) return alert(later(rr) ? "⏳ بعد تحديث السيرفر (مسودة 53)." : rr.msg || "ما صار.");
       done();
-      if (b.dataset.f === "reopen") toast(`🔓 انفتح دخول «${n}» (الدخول بس).`, a.dataset.viewer ? async () => { await api({ action: "admin_lock", id: a.dataset.viewer }); done(); } : null);
-      else toast(`🙏 «${n}» انضاف لصفحة الشكر. تگدر تخفيه من «الفريق والشكر».`);
+      if (b.dataset.f === "reopen") toast(`🔓 انفتح دخول «${n}» — لمشاهدة تاريخه بس.`, a.dataset.viewer ? async () => { await api({ action: "admin_lock", id: a.dataset.viewer }); done(); } : null);
+      else toast(`🏛️ «${n}» انضاف لـ «رعاة المنصة». تگدر تخفيه من «الفريق والشكر».`);
     };
   }
 

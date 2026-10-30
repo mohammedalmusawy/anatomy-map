@@ -5,7 +5,7 @@
 (function () {
   "use strict";
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const GRP = [["team", "👥 فريق المنصة"], ["doctors", "🩺 أطباء دعموا بالصور"], ["special", "🤝 شكر خاص"], ["supporters", "💛 داعمون"], ["supervision", "🔬 الإشراف العلمي"]];
+  const GRP = [["team", "👥 فريق المنصة"], ["doctors", "🩺 أطباء دعموا بالصور"], ["patrons", "🏛️ رعاة المنصة"], ["special", "🤝 شكر خاص"], ["supporters", "💛 داعمون"], ["supervision", "🔬 الإشراف العلمي"]];
   const TAGS = [["", "— لا —"], ["chest-abdomen", "الصدر والبطن"], ["spine-joints", "الفقرات والمفاصل"], ["fractures", "الكسور"], ["paeds", "الأطفال"]];
   const MAX = 50 * 1024, PREFIX = ["الصيدلانية", "الصيدلاني", "الدكتورة", "الدكتور", "أ.د.", "د.", "م."];
   const mono = (name) => {
@@ -175,7 +175,7 @@
     function draw(focus) {
       $("#ap-list").innerHTML = GRP.map(([k, t]) => {
         const xs = rows.filter((r) => r.grp === k).sort((a, b) => a.sort - b.sort);
-        return `<h3 class="ap-g">${t} <small class="hint">(${xs.length})</small></h3>` + (xs.length ? `<ul class="ap-list" data-grp="${k}">` + xs.map((p, i) => `
+        return `<h3 class="ap-g">${t} <small class="hint">(${xs.length})</small></h3>` + (k === "patrons" ? '<p class="hint">🏛️ رؤساء القسم السابقين. يظهرون بالموقع بس لما ظهور رئيس القسم مفعّل، وغيرها مخفيين (ولا اسم).</p>' : "") + (xs.length ? `<ul class="ap-list" data-grp="${k}">` + xs.map((p, i) => `
           <li class="ap-row${p.visible ? "" : " off"}" data-id="${p.id}">
             <span class="ap-h" role="img" aria-label="اسحب للترتيب" title="اسحب للترتيب">⠿</span>${av(p)}
             <span class="ap-t"><b>${esc(p.name)}${p.visible ? "" : ' <span class="ap-tag">مخفي</span>'}${p.tag ? ` <span class="ap-tag">${esc((TAGS.find((x) => x[0] === p.tag) || ["", p.tag])[1])}</span>` : ""}</b>${p.title ? `<small>${esc(p.title)}</small>` : ""}${p.note ? `<small class="ap-note">💬 ${esc(p.note)}</small>` : ""}</span>
