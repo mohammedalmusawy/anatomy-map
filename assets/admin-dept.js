@@ -435,7 +435,7 @@
       ["welcome", "👋", "جملة الترحيب", "تطلع مرة وحدة بأول زيارة"],
       ["photo", "🖼️", "صورتك", "دائرية صغيرة"],
       ["ann", "📢", "إعلان للطلاب", "", false, "قريباً"],
-      ["voice", "💬", "صوتك يوصل", me.voice_stale ? `🕖 ${me.voice_stale} ما انفتحت من أسبوع` : "رسائل الطلاب لك", false, me.voice_on ? (me.voice_new ? `${me.voice_new} جديدة` : "مفعّل") : "مطفي"],
+      ["voice", "💬", "صوتك يوصل", me.voice_stale ? `🕖 ${me.voice_stale} ما انفتحت من أسبوع` : "رسائل الطلاب لك", false, me.voice_locked ? "🔐 مقفول" : me.voice_on ? (me.voice_new ? `${me.voice_new} جديدة` : "مفعّل") : "مطفي"],
       ["report", "📄", "تقرير القسم الشهري", "", false, "قريباً"],
     ];
     if (me.launch_armed && !me.launched) ACT.push(["launch", "🚀", "إطلاق المنصة رسمياً", "مرة وحدة"]);
@@ -444,6 +444,7 @@
         <div class="hp-top">${me.photo_url ? `<img src="${esc(me.photo_url)}" alt="" width="56" height="56">` : ""}
           <div><p>أهلاً ${esc(me.name)}</p><small>${esc(me.title || "")}</small></div><button class="btn ghost" type="button" id="hp-out">خروج</button></div>
         <p class="hd-note">${me.public_on ? "✅ لمستك ظاهرة بالموقع." : "🔒 لمستك تطلع بالموقع بعد التفعيل. تگدر تجهّزها هسه."}</p>
+        ${me.voice_pin_notice ? `<p class="hd-note" role="alert">🔐 تم تغيير رقمك من المالك.${me.voice_locked ? " «صوتك يوصل» مقفول لحد ما تختار رقمك بنفسك." : ""}</p>` : ""}
         <nav class="hp-acts" aria-label="لوحة رئيس القسم">${ACT.map(([k, i, t, sub, main, tag]) =>
           `<button type="button" data-k="${k}" class="${main ? "main" : ""}"><span class="i" aria-hidden="true">${i}</span><span class="t">${t}${sub ? `<small>${sub}</small>` : ""}</span>${tag ? `<span class="hp-tag">${tag}</span>` : ""}<span aria-hidden="true">‹</span></button>`).join("")}</nav>
         <details class="hp-more"><summary>المزيد ▾</summary><div class="hd-row"><button class="btn ghost" type="button" data-k="stats">📊 أرقام القسم</button>
@@ -548,22 +549,29 @@
         return it.length ? `<ul class="vh-list">${it.map(row).join("")}</ul>` : '<p class="hint">ماكو رسائل بهالفلتر.</p>';
       };
       const sel = (n, label, opts) => `<label class="vh-f"><span>${label}</span><select name="${n}"><option value="">الكل</option>${Object.entries(opts).map(([k, v]) => `<option value="${k}" ${F[n] === k ? "selected" : ""}>${Array.isArray(v) ? v.join(" ") : esc(v)}</option>`).join("")}</select></label>`;
-      const annText = `📢 فعّل رئيس القسم ${me.name} خدمة «صوتك يوصل»، اكتب مقترحك أو رأيك، وكل رسالة تقراها رئاسة القسم مباشرة`;
+      const annText = `📢 فعّل رئيس القسم ${me.name} خدمة «صوتك يوصل»، اكتب مقترحك أو رأيك، وكل رسالة تقراها رئاسة القسم`;
       const main = () => {
-        scr("💬 صوتك يوصل", `<div class="vh">
-          <label class="vh-sw" style="display:flex;flex-direction:row;align-items:center"><input type="checkbox" role="switch" data-v="on" ${r.voice_on ? "checked" : ""}><span><b>استقبل رسائل الطلاب</b><small>${r.voice_on ? "✅ مفعّل — الطلاب يشوفون «💬 صوتك يوصل» بصفحتهم." : "مطفي — ولا طالب يشوفها. إنت بس تشغّلها."}</small></span></label>
+        const has = r.voice_on || (r.items || []).length;
+        const settings = `<label class="vh-sw" style="display:flex;flex-direction:row;align-items:center"><input type="checkbox" role="switch" data-v="on" ${r.voice_on ? "checked" : ""}><span><b>استقبل رسائل الطلاب</b><small>${r.voice_on ? "✅ مفعّل — الطلاب يشوفون «💬 صوتك يوصل» بصفحتهم." : "مطفي — ولا طالب يشوفها. إنت بس تشغّلها."}</small></span></label>
           ${r.voice_on ? `<div class="hp-prev vh-ann"><small class="hint">📢 إعلان الإطلاق باسمك (يطلع للطلاب — الإرسال مطفي بالمسودة)</small><div class="annbar" data-by="head" style="border-radius:12px">${esc(annText)}</div></div>` : ""}
-          <label class="sw vh-rem"><input type="checkbox" data-v="rem" ${r.voice_reminder ? "checked" : ""}> 🔔 تذكير شهري لطيف للطلاب (القناة + البوت) <small class="hint">— مطفي افتراضياً</small></label>
+          <label class="sw vh-rem"><input type="checkbox" data-v="rem" ${r.voice_reminder ? "checked" : ""}> 🔔 تذكير شهري لطيف للطلاب (القناة + البوت) <small class="hint">— مطفي افتراضياً</small></label>`;
+        scr("💬 صوتك يوصل", `<div class="vh">
+          ${r.voice_pin_notice ? `<p class="vh-stale vh-pin" role="alert">🔐 تم تغيير رقمك من المالك.${r.voice_locked ? " الرسائل مقفولة لحد ما تختار رقمك بنفسك (🔢 رقمي)." : ""} <button type="button" class="btn ghost" data-v="ack">فهمت</button></p>` : ""}
           ${r.stale ? `<p class="vh-stale" role="status">🕖 ${r.stale === 1 ? "عندك رسالة وحدة" : `عندك ${esc(r.stale)} رسائل`} ما انفتحت من أكثر من 7 أيام.</p>` : ""}
-          ${r.voice_on || (r.items || []).length ? `<div class="vh-flt">${sel("kind", "النوع", K)}${sel("status", "الحالة", S)}${sel("area", "عن", A)}</div>
+          ${has ? `<div class="vh-flt">${sel("kind", "النوع", K)}${sel("status", "الحالة", S)}${sel("area", "عن", A)}</div>
           <div data-vlist>${list()}</div>
-          ${sumBox(r.month || {})}` : '<p class="hint">لما تشغّلها، تطلع هنا رسائل الطلاب وأرقام الشهر.</p>'}
+          ${sumBox(r.month || {})}
+          <details class="vh-said"><summary>⚙️ الإعدادات (التشغيل، الإعلان، التذكير)</summary>${settings}</details>` : `${settings}<p class="hint">لما تشغّلها، تطلع هنا رسائل الطلاب وأرقام الشهر.</p>`}
           <details class="vh-said"><summary>✅ «قلتم فسوّينا» — ملخص عام للفصل</summary><p class="hint">يطلع للطلاب بشاشة «صوتك يوصل». اكتب بالعموم، بلا اقتباس من أي رسالة.</p>
             <form class="hd-fm" data-said novalidate><label class="hd-f"><span>الفصل</span><input name="term" maxlength="40" placeholder="الفصل الأول"></label>
             ${ta("text", "الملخص", 600, "", "مثال: طلبتم ملخص صوتي لكل محاضرة، فصار.")}<div class="hd-row"><button class="btn" type="submit">💾 احفظ</button><span class="tm-msg" role="status" aria-live="polite"></span></div></form></details>
           <p class="hint vh-priv">🔒 «بدون اسم» يوصلك دفعة الصبح وبتاريخ اليوم بس (بلا ساعة) حتى ما ينعرف صاحبها. محمد يشوف الأعداد بس.</p></div>`);
         const q = (x) => root.querySelector(x);
-        q('[data-v="on"]').onchange = async (ev) => { const on = ev.target.checked; const rr = await call({ action: "head_voice_toggle", on }); if (rr.status === 200) { r.voice_on = on; me.voice_on = on; } else ev.target.checked = !on; main(); };
+        q('[data-v="on"]').onchange = async (ev) => {
+          const on = ev.target.checked;
+          if (!on && !confirm("تطفّي «صوتك يوصل»؟ الطلاب ما يگدرون يرسلون لحد ما تشغّلها، والرسائل الموجودة تبقى.")) { ev.target.checked = true; return; }
+          const rr = await call({ action: "head_voice_toggle", on }); if (rr.status === 200) { r.voice_on = on; me.voice_on = on; } else ev.target.checked = !on; main(); };
+        const ack = q('[data-v="ack"]'); if (ack) ack.onclick = async () => { await call({ action: "head_voice_ack" }); r.voice_pin_notice = false; main(); };
         q('[data-v="rem"]').onchange = async (ev) => { const rr = await call({ action: "head_voice_reminder", on: ev.target.checked }); if (rr.status !== 200) ev.target.checked = !ev.target.checked; else r.voice_reminder = ev.target.checked; };
         root.querySelectorAll(".vh-flt select").forEach((x) => (x.onchange = () => { F[x.name] = x.value; q("[data-vlist]").innerHTML = list(); }));
         if (q("[data-vlist]")) q("[data-vlist]").onclick = (ev) => { const b = ev.target.closest("[data-vid]"); if (b) openMsg(b.dataset.vid); };
@@ -577,7 +585,7 @@
         const x = (r.items || []).find((y) => y.id === id); if (x && x.status === "received") x.status = "opened";
         const back = () => main();
         scr(`${K[m.kind] ? K[m.kind].join(" ") : "💬"} · ${esc(A[m.area] || "")}`, `<div class="vh">
-          <p class="hint">${esc(m.day)} · ${m.named ? `🙋 <b>${esc(m.name)}</b>` : "🕶️ بدون اسم"}${m.area_ref ? " · " + esc(m.area_ref) : ""} · ${esc(S[m.state] || "")}</p>
+          <p class="hint">${esc(m.day)} · ${m.named ? `🙋 <b>${esc(m.name)}</b>` : "🕶️ بدون اسم"}${m.area_ref ? " · " + esc(m.area_ref) : ""} · <b data-vstate>${esc(S[m.state] || "")}</b></p>
           ${m.risk ? `<div class="vh-riskbox" role="note"><b>⚠️ تنبيه خطر</b>بالرسالة كلمات عن إيذاء النفس أو تهديد.
             <ol><li>اقرأها هسه بهدوء.</li><li>${m.named ? "تواصل ويّا الطالب اليوم عن طريق الإرشاد التربوي/النفسي بالكلية." : "بدون اسم: ما نگدر نوصل لصاحبها — اكتب رد عام هادئ بيه أرقام الدعم."}</li>
             <li>إذا بيها خطر على أحد: بلّغ الجهة المختصة بالكلية.</li></ol><small>عدم ذكر الاسم يحدّ من التدخل. «صوتك يوصل» مو قناة طوارئ.</small></div>` : ""}
@@ -590,8 +598,14 @@
           <p><button class="btn ghost vh-arch" type="button" data-arch>🗄️ أرشف (مسيئة)</button> <small class="hint">تختفي من القائمة بلا حذف.</small></p></div>`);
         root.querySelector(".hp-back").onclick = back;
         const f = root.querySelector("[data-reply]"), msg = f.querySelector(".tm-msg"); autosize(f);
-        root.querySelectorAll("[data-s]").forEach((b) => (b.onclick = async () => { const rr = await call({ action: "head_voice_status", id, status: b.dataset.s }); msg.textContent = rr.status === 200 ? `✅ صارت «${S[b.dataset.s]}».` : rr.msg || "ما صار."; if (rr.status === 200 && x) x.status = b.dataset.s; }));
-        f.onsubmit = async (ev) => { ev.preventDefault(); const rr = await call({ action: "head_voice_reply", id, text: f.t.value }); msg.textContent = rr.status === 200 ? "✅ وصل الرد للطالب." : rr.msg || "ما صار."; if (rr.status === 200 && x) x.has_reply = true; };
+        let replied = !!m.reply;
+        const setState = (st) => { m.state = st; if (x) x.status = st; root.querySelector("[data-vstate]").textContent = S[st] || ""; };
+        root.querySelectorAll("[data-s]").forEach((b) => (b.onclick = async () => {
+          if (b.dataset.s === "declined" && !replied) { msg.textContent = "«ما ممكن» يحتاج سبب: اكتب الرد أول وأرسله."; f.t.focus(); return; }
+          if (b.dataset.s !== "in_progress" && !confirm(`تخلّيها «${S[b.dataset.s]}»؟ ما ترجع لورا (إلا إذا الطالب باسمه ضغط «ما انحلّت»).`)) return;
+          const rr = await call({ action: "head_voice_status", id, status: b.dataset.s });
+          msg.textContent = rr.status === 200 ? `✅ صارت «${S[rr.state || b.dataset.s]}».` : rr.msg || "ما صار."; if (rr.status === 200) setState(rr.state || b.dataset.s); }));
+        f.onsubmit = async (ev) => { ev.preventDefault(); const rr = await call({ action: "head_voice_reply", id, text: f.t.value }); msg.textContent = rr.status === 200 ? "✅ وصل الرد للطالب." : rr.msg || "ما صار."; if (rr.status === 200) { replied = true; if (x) x.has_reply = true; } };
         root.querySelector("[data-arch]").onclick = async () => { if (!confirm("تأرشفها؟ تختفي من القائمة (ما تنحذف).")) return; const rr = await call({ action: "head_voice_archive", id }); if (rr.status === 200) { r.items = (r.items || []).filter((y) => y.id !== id); back(); } };
       }
       main();

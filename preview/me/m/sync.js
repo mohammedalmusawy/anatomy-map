@@ -123,7 +123,7 @@
       } },
     reminders: { cloud: null, lk: "t:reminders", read: (S) => byId(S.get("t:reminders", [])), write: (S, m) => S.set("t:reminders", Object.values(m).sort((x, y) => num(x.at) - num(y.at))), ts: (v) => v && v.t, ev: "reminders:change" },
   };
-  const ALL_LOCAL = ["t:notes", "t:mistakes", "t:favs", "t:progress", "t:srs", "t:plan", "t:track", "t:track-remote", "t:reminders", "t:learn", ...Object.values(PREFS)];
+  const ALL_LOCAL = ["t:notes", "t:mistakes", "t:favs", "t:progress", "t:srs", "t:plan", "t:track", "t:track-remote", "t:reminders", "t:learn", "t:voice", ...Object.values(PREFS)];   // 💬 58: «رسائلي» تنشال على جنب ويّا بيانات الطالب (جهاز مشترك)
   // 🧠 «learn» بالسحابة يحتاج هجرة 20261030000052_learn_state.sql (مكتوبة، مو مطبّقة). لحد ما تنطبّق ← STUDY_CLOUD.learn = false ← يبقى بالجهاز بس.
   const CLOUD_LEARN = () => !!(typeof window !== "undefined" && window.STUDY_CLOUD && window.STUDY_CLOUD.learn === true);
 
