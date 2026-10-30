@@ -14,8 +14,9 @@
   try { hit = new URLSearchParams(location.search).get("t") || ""; } catch (e) {}
   if (hit) {
     const want = hit.toLowerCase().trim();
-    const at = [set, ...Object.keys(D).filter((k) => k !== set)].find((k) => D[k].some((t) => String(t.en).toLowerCase() === want));
-    if (at) { set = at; q = hit; const tq = $("#tq"); if (tq) tq.value = hit; } else hit = "";
+    const is = (t) => String(t.en).toLowerCase() === want || (t.al || []).some((a) => String(a).toLowerCase() === want);   // (30/10) الصيغة القديمة ← المدخل الأساسي
+    const at = [set, ...Object.keys(D).filter((k) => k !== set)].find((k) => D[k].some(is));
+    if (at) { const m = D[at].find(is); set = at; hit = m.en; q = hit; const tq = $("#tq"); if (tq) tq.value = hit; } else hit = "";
   }
 
   function chips() {

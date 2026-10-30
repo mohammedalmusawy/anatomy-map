@@ -191,6 +191,8 @@
     const D = JSON.parse(tdata.textContent), all = D.ours.concat(D.general, D.symptoms || []);   // + مصطلحات الأعراض (28/10)
     const GAP = [0, 1, 3, 7, 14, 30], day = Math.floor(Date.now() / 864e5);
     const st = LS.get("srs", {});
+    // (30/10) دمج المكررات: تقدّم المراجعة على الصيغة القديمة ينتقل للمدخل الأساسي (والقديم يبقى)
+    let mv = false; all.forEach((t) => (t.al || []).forEach((a) => { if (st[a] && !st[t.en]) { st[t.en] = st[a]; mv = true; } })); if (mv) LS.set("srs", st);
     const due = () => all.filter((t) => { const s = st[t.en]; return !s || s.due <= day; });
     const label = () => { rv.textContent = `🔁 راجع اليوم (${Math.min(20, due().length)})`; };
     label();

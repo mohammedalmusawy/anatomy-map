@@ -58,7 +58,8 @@
   // «Alpha (α) / Beta (β)» = «alpha beta»؛ «Directly / Indirectly» و«X-ray» و«Subtalar (talocalcaneal) joint» تنطابق بنفس الطريقة
   const norm = (s) => s.toLowerCase().replace(/\([^a-zà-ÿ)]*\)/g, " ").replace(/[\s\u2010-\u2015\/()-]+/g, " ").trim();
   const GAP = /^[\s\u2010-\u2015\/()\u0370-\u03ff-]{1,8}$/;
-  const CI = new Map(), CS = new Map();   // CI: حساس لا (كلمات)، CS: حساس للحروف (مختصرات مثل CT وkVp وmA)
+  const CI = new Map(), CS = new Map(), AL = {};   // AL (30/10، دمج المكررات): slug قديم/بديل ← slug المدخل الأساسي
+  const K = (k) => (LEX && LEX[k] ? k : AL[k] || k);   // CI: حساس لا (كلمات)، CS: حساس للحروف (مختصرات مثل CT وkVp وmA)
   let MAXW = 1;
   function index(lex) {
     LEX = lex;
@@ -78,6 +79,12 @@
       if (bare !== en) put(bare, k);
       (en.match(/\(([A-Za-z0-9]{2,8})\)/g) || []).forEach((p) => put(p.slice(1, -1), k));
     }
+    for (const k in lex) (Array.isArray(lex[k][4]) ? lex[k][4] : []).forEach((a) => {   // الصيغ البديلة: نفس البطاقة والصوت
+      put(a, k);
+      const b = a.replace(/\s*\([^)]*\)/g, "").replace(/\s*—.*$/, "").trim();
+      if (b !== a) put(b, k);
+      const s = slug(a); if (!lex[s]) AL[s] = k;
+    });
   }
   const SKIP = "script,style,noscript,textarea,input,select,option,button,a,code,pre,svg,label,.tm,.tpop,.noterm,[contenteditable],.lctl";
   const TOK = /[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9'’]*/g;
@@ -145,11 +152,11 @@
   pop.className = "tpop"; pop.id = "tpop"; pop.hidden = true; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-live", "polite");
   let popFor = null;
   function showPop(el) {
-    const d = LEX[el.dataset.k]; if (!d) return;
+    const kk = K(el.dataset.k), d = LEX[kk]; if (!d) return;
     if (!pop.isConnected) document.body.appendChild(pop);
     pop.innerHTML = `<b dir="ltr">${esc(d[0])}</b><span class="ar">${esc(d[1])}</span><span class="pr">${d[2]} <bdi dir="ltr">${esc(d[3])}</bdi></span>` +
-      `<span class="pb"><button type="button" class="say1" data-k="${el.dataset.k}" aria-label="اسمع لفظ ${esc(d[0])}">🔊</button>` +
-      `<button type="button" class="say1 slow" data-k="${el.dataset.k}" data-r="0.75" aria-label="لفظ بطيء ${esc(d[0])}">🐢</button></span>`;
+      `<span class="pb"><button type="button" class="say1" data-k="${kk}" aria-label="اسمع لفظ ${esc(d[0])}">🔊</button>` +
+      `<button type="button" class="say1 slow" data-k="${kk}" data-r="0.75" aria-label="لفظ بطيء ${esc(d[0])}">🐢</button></span>`;
     // الموبايل (29/10، ملاحظة محمد): ورقة صغيرة بأسفل الشاشة، ما تغطي العنوان ولا الأزرار؛ والكلمة تبقى ظاهرة فوقها
     const sheet = SHEET.matches;
     pop.classList.toggle("sheet", sheet);
@@ -168,6 +175,7 @@
   }
   function hidePop() { pop.hidden = true; popFor = null; }
   function sayTerm(k, r, btn) {
+    k = K(k);
     stop();
     word.pause();
     document.querySelectorAll(".say1.on,.tm.on").forEach((x) => x.classList.remove("on"));
@@ -241,7 +249,7 @@
     const k1 = t.closest(".say1[data-k]");
     if (k1) { sayTerm(k1.dataset.k, +(k1.dataset.r || 1), k1); return true; }
     const tm = t.closest(".tm");
-    if (tm && !tm.classList.contains("demo") && LEX[tm.dataset.k]) { showPop(tm); sayTerm(tm.dataset.k, 1, tm); return true; }
+    if (tm && !tm.classList.contains("demo") && LEX[K(tm.dataset.k)]) { showPop(tm); sayTerm(tm.dataset.k, 1, tm); return true; }
     if (!box || !box.contains(t)) return false;
     if (t === ctl("lall")) { mode === "all" ? stop() : play([...box.querySelectorAll(".ls")], "all"); return true; }
     if (t === ctl("lpause")) { if (cur) main.paused ? main.play() : main.pause(); return true; }
@@ -312,6 +320,6 @@
   }).catch(() => {});
   window.addEventListener("hashchange", openHash);
   const slug = (t) => String(t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
-  window.Listen = { mount, mark: queue, info: (k) => LEX[k], find: (en) => LEX[slug(en)], ready: () => ready, stop: () => { stop(); word.pause(); } };
+  window.Listen = { mount, mark: queue, info: (k) => LEX[K(k)], find: (en) => LEX[K(slug(en))], ready: () => ready, stop: () => { stop(); word.pause(); } };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => mount()); else mount();
 })();
