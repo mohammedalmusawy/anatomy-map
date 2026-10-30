@@ -70,3 +70,5 @@ html[lang="en"] .keyp .en, html[lang="en"] .toc .en { display: inline; font-size
 html:not([lang="en"]) .keyp .en, html:not([lang="en"]) .toc .en { display: none; }
 html[lang="en"] .dtabs.tri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 html[lang="en"] .dtabs.tri a { min-width: 0; white-space: normal; text-align: center; }
+/* 52b (30/10، المراجع المستقل): «احتمال خطأ» المترجم بوضع ENG يمشي من اليسار — بالعربي يبقى rtl مثل ما هو */
+html[lang="en"] bdi.perr-bd, html[lang="en"] .perr-in { direction: ltr; unicode-bidi: isolate; }
