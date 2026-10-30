@@ -435,7 +435,7 @@
       ["welcome", "👋", "جملة الترحيب", "تطلع مرة وحدة بأول زيارة"],
       ["photo", "🖼️", "صورتك", "دائرية صغيرة"],
       ["ann", "📢", "إعلان للطلاب", "", false, "قريباً"],
-      ["voice", "💬", "رسائل الطلاب (بلا أسماء)", "صوتك يوصل", false, me.voice_on ? "مفعّل" : "مطفي"],
+      ["voice", "💬", "صوتك يوصل", me.voice_stale ? `🕖 ${me.voice_stale} ما انفتحت من أسبوع` : "رسائل الطلاب لك", false, me.voice_on ? (me.voice_new ? `${me.voice_new} جديدة` : "مفعّل") : "مطفي"],
       ["report", "📄", "تقرير القسم الشهري", "", false, "قريباً"],
     ];
     if (me.launch_armed && !me.launched) ACT.push(["launch", "🚀", "إطلاق المنصة رسمياً", "مرة وحدة"]);
@@ -508,12 +508,7 @@
         f.oninput = upd; upd(); f.onsubmit = (ev) => ev.preventDefault();
         return;
       }
-      if (k === "voice") {
-        scr("💬 رسائل الطلاب (بلا أسماء)", `<p class="hd-note">رسائل من الطلاب بلا أسماء (فكرة، مشكلة، شكر)، توصلك دفعة أسبوعية. <b>مطفي بهالمسودة.</b></p>
-          <form class="hd-fm" novalidate><label class="sw"><input type="checkbox" disabled> استقبل رسائل الطلاب</label>
-          <p class="hint">يتفعّل بعد موافقة محمد على طريقة الخصوصية.</p></form>`);
-        return;
-      }
+      if (k === "voice") return voiceScreen();
       if (k === "report") {
         scr("📄 تقرير القسم الشهري", `<p class="hd-note">صفحة A4 بأرقام مجمّعة بلا أسماء طلاب (أي رقم أقل من 5 ما يطلع). <b>قريباً.</b></p>
           <div class="hp-prev"><b>تقرير القسم — ‹الشهر›</b><p class="hint">… الأرقام المجمّعة …</p><p class="hd-own">${esc(OWNER_FOOTER)} · ${esc(me.name)}، ${esc(me.title || "")}</p></div>
@@ -525,7 +520,102 @@
           <div class="hd-row"><button class="btn" type="button" disabled>🚀 أطلق المنصة (قريباً)</button></div>`);
       }
     }
+    // 💬 58 «صوتك يوصل» (مسودة): الرئيس بس يشغّل. القائمة بلا نص؛ الفتح بس يجيب النص ويكتب 👁️ «انقرت» بالسيرفر.
+    async function voiceScreen() {
+      vCss();
+      const K = { idea: ["💡", "مقترح"], complaint: ["📝", "شكوى"], opinion: ["💬", "رأي"], thanks: ["🌷", "شكر"] };
+      const A = { subject: "المادة", lecture: "المحاضرة", services: "الخدمات", dept: "القسم", platform: "المنصة", other: "غيره" };
+      const S = { received: "✓✓ جديدة", opened: "👁️ قريتها", in_progress: "🔄 قيد المتابعة", done: "✔️ تمت", declined: "✔️ ما ممكن" };
+      const F = { kind: "", status: "", area: "" };
+      scr("💬 صوتك يوصل", '<p class="hint">لحظة…</p>');
+      let r = await call({ action: "head_voice_list" });
+      if (r.status !== 200) {
+        scr("💬 صوتك يوصل", `<p class="hd-note">رسائل الطلاب إلك (مقترح، شكوى، رأي، شكر) — باسمهم أو بدون اسم.</p><label class="sw"><input type="checkbox" disabled> استقبل رسائل الطلاب</label>${SOON.replace("53", "58")}`);
+        return;
+      }
+      const num = (n) => (n == null ? "0" : esc(n));
+      const sumBox = (m) => `<div class="vh-sum"><b>📊 هذا الشهر (${esc(m.month || "")})</b><div class="vh-grid">
+          <span><b>${num(m.total)}</b><small>الكل</small></span><span><b>${num(m.replied)}</b><small>رديت عليها</small></span>
+          ${Object.entries(K).map(([k, [i, t]]) => `<span><b>${num((m.by_kind || {})[k])}</b><small>${i} ${t}</small></span>`).join("")}</div>
+          <small class="hint">الأرقام الصغيرة تطلع «أقل من 5» حتى بالتقرير الشهري.</small></div>`;
+      const row = (x) => `<li><button type="button" class="vh-it${x.status === "received" ? " new" : ""}" data-vid="${esc(x.id)}">
+          <span class="k" aria-hidden="true">${K[x.kind] ? K[x.kind][0] : "💬"}</span>
+          <span class="m"><b>${K[x.kind] ? K[x.kind][1] : ""} · ${esc(A[x.area] || "")}${x.area_ref ? " · " + esc(x.area_ref) : ""}</b>
+          <small>${esc(x.day)} · ${x.named ? "🙋 باسمه" : "🕶️ بدون اسم"}${x.has_image ? " · 🖼️" : ""}${x.risk ? ' · <em class="vh-risk">⚠️ تنبيه خطر</em>' : ""}${x.late ? ' · <em class="vh-late">🕖 أكثر من 7 أيام</em>' : ""}</small></span>
+          <span class="s">${esc(S[x.status] || "")}${x.has_reply ? " · 💬" : ""}</span></button></li>`;
+      const list = () => {
+        const it = (r.items || []).filter((x) => (!F.kind || x.kind === F.kind) && (!F.status || x.status === F.status) && (!F.area || x.area === F.area));
+        return it.length ? `<ul class="vh-list">${it.map(row).join("")}</ul>` : '<p class="hint">ماكو رسائل بهالفلتر.</p>';
+      };
+      const sel = (n, label, opts) => `<label class="vh-f"><span>${label}</span><select name="${n}"><option value="">الكل</option>${Object.entries(opts).map(([k, v]) => `<option value="${k}" ${F[n] === k ? "selected" : ""}>${Array.isArray(v) ? v.join(" ") : esc(v)}</option>`).join("")}</select></label>`;
+      const annText = `📢 فعّل رئيس القسم ${me.name} خدمة «صوتك يوصل»، اكتب مقترحك أو رأيك، وكل رسالة تقراها رئاسة القسم مباشرة`;
+      const main = () => {
+        scr("💬 صوتك يوصل", `<div class="vh">
+          <label class="vh-sw" style="display:flex;flex-direction:row;align-items:center"><input type="checkbox" role="switch" data-v="on" ${r.voice_on ? "checked" : ""}><span><b>استقبل رسائل الطلاب</b><small>${r.voice_on ? "✅ مفعّل — الطلاب يشوفون «💬 صوتك يوصل» بصفحتهم." : "مطفي — ولا طالب يشوفها. إنت بس تشغّلها."}</small></span></label>
+          ${r.voice_on ? `<div class="hp-prev vh-ann"><small class="hint">📢 إعلان الإطلاق باسمك (يطلع للطلاب — الإرسال مطفي بالمسودة)</small><div class="annbar" data-by="head" style="border-radius:12px">${esc(annText)}</div></div>` : ""}
+          <label class="sw vh-rem"><input type="checkbox" data-v="rem" ${r.voice_reminder ? "checked" : ""}> 🔔 تذكير شهري لطيف للطلاب (القناة + البوت) <small class="hint">— مطفي افتراضياً</small></label>
+          ${r.stale ? `<p class="vh-stale" role="status">🕖 ${r.stale === 1 ? "عندك رسالة وحدة" : `عندك ${esc(r.stale)} رسائل`} ما انفتحت من أكثر من 7 أيام.</p>` : ""}
+          ${r.voice_on || (r.items || []).length ? `<div class="vh-flt">${sel("kind", "النوع", K)}${sel("status", "الحالة", S)}${sel("area", "عن", A)}</div>
+          <div data-vlist>${list()}</div>
+          ${sumBox(r.month || {})}` : '<p class="hint">لما تشغّلها، تطلع هنا رسائل الطلاب وأرقام الشهر.</p>'}
+          <details class="vh-said"><summary>✅ «قلتم فسوّينا» — ملخص عام للفصل</summary><p class="hint">يطلع للطلاب بشاشة «صوتك يوصل». اكتب بالعموم، بلا اقتباس من أي رسالة.</p>
+            <form class="hd-fm" data-said novalidate><label class="hd-f"><span>الفصل</span><input name="term" maxlength="40" placeholder="الفصل الأول"></label>
+            ${ta("text", "الملخص", 600, "", "مثال: طلبتم ملخص صوتي لكل محاضرة، فصار.")}<div class="hd-row"><button class="btn" type="submit">💾 احفظ</button><span class="tm-msg" role="status" aria-live="polite"></span></div></form></details>
+          <p class="hint vh-priv">🔒 «بدون اسم» يوصلك دفعة الصبح وبتاريخ اليوم بس (بلا ساعة) حتى ما ينعرف صاحبها. محمد يشوف الأعداد بس.</p></div>`);
+        const q = (x) => root.querySelector(x);
+        q('[data-v="on"]').onchange = async (ev) => { const on = ev.target.checked; const rr = await call({ action: "head_voice_toggle", on }); if (rr.status === 200) { r.voice_on = on; me.voice_on = on; } else ev.target.checked = !on; main(); };
+        q('[data-v="rem"]').onchange = async (ev) => { const rr = await call({ action: "head_voice_reminder", on: ev.target.checked }); if (rr.status !== 200) ev.target.checked = !ev.target.checked; else r.voice_reminder = ev.target.checked; };
+        root.querySelectorAll(".vh-flt select").forEach((x) => (x.onchange = () => { F[x.name] = x.value; q("[data-vlist]").innerHTML = list(); }));
+        if (q("[data-vlist]")) q("[data-vlist]").onclick = (ev) => { const b = ev.target.closest("[data-vid]"); if (b) openMsg(b.dataset.vid); };
+        const sf = q("[data-said]"); autosize(sf);
+        sf.onsubmit = async (ev) => { ev.preventDefault(); const m = sf.querySelector(".tm-msg"); const rr = await call({ action: "head_voice_said", term: sf.term.value, text: sf.text.value }); m.textContent = rr.status === 200 ? "✅ انحفظ، ويطلع للطلاب." : rr.msg || "ما صار."; };
+      };
+      async function openMsg(id) {
+        scr("💬 رسالة", '<p class="hint">لحظة…</p>');
+        const m = await call({ action: "head_voice_open", id });   // 👁️ السيرفر يكتب «انقرت» هنا بس
+        if (m.status !== 200) { scr("💬 رسالة", `<p class="hint">${esc(m.msg || "ما انفتحت.")}</p>`); return; }
+        const x = (r.items || []).find((y) => y.id === id); if (x && x.status === "received") x.status = "opened";
+        const back = () => main();
+        scr(`${K[m.kind] ? K[m.kind].join(" ") : "💬"} · ${esc(A[m.area] || "")}`, `<div class="vh">
+          <p class="hint">${esc(m.day)} · ${m.named ? `🙋 <b>${esc(m.name)}</b>` : "🕶️ بدون اسم"}${m.area_ref ? " · " + esc(m.area_ref) : ""} · ${esc(S[m.state] || "")}</p>
+          ${m.risk ? `<div class="vh-riskbox" role="note"><b>⚠️ تنبيه خطر</b>بالرسالة كلمات عن إيذاء النفس أو تهديد.
+            <ol><li>اقرأها هسه بهدوء.</li><li>${m.named ? "تواصل ويّا الطالب اليوم عن طريق الإرشاد التربوي/النفسي بالكلية." : "بدون اسم: ما نگدر نوصل لصاحبها — اكتب رد عام هادئ بيه أرقام الدعم."}</li>
+            <li>إذا بيها خطر على أحد: بلّغ الجهة المختصة بالكلية.</li></ol><small>عدم ذكر الاسم يحدّ من التدخل. «صوتك يوصل» مو قناة طوارئ.</small></div>` : ""}
+          <div class="vh-body">${esc(m.text).replace(/\n/g, "<br>")}</div>
+          ${m.image_url ? `<img class="vh-img" src="${esc(m.image_url)}" alt="صورة مرفقة">` : ""}
+          ${m.reply ? `<div class="vh-reply"><b>💬 ردك</b>${esc(m.reply)}</div>` : ""}
+          <div class="hd-row vh-acts"><button class="btn ghost" type="button" data-s="in_progress">🔄 قيد المتابعة</button><button class="btn ghost" type="button" data-s="done">✔️ تمت</button><button class="btn ghost" type="button" data-s="declined">ما ممكن</button></div>
+          <form class="hd-fm" data-reply novalidate>${ta("t", "💬 رد (يشوفه الطالب برقم المتابعة)", 1000, m.reply || "", m.named ? "" : "بدون اسم: الرد يوصل برقم المتابعة بس، والمرسل يبقى مجهول.")}
+            <div class="hd-row"><button class="btn" type="submit">💬 أرسل الرد</button><span class="tm-msg" role="status" aria-live="polite"></span></div></form>
+          <p><button class="btn ghost vh-arch" type="button" data-arch>🗄️ أرشف (مسيئة)</button> <small class="hint">تختفي من القائمة بلا حذف.</small></p></div>`);
+        root.querySelector(".hp-back").onclick = back;
+        const f = root.querySelector("[data-reply]"), msg = f.querySelector(".tm-msg"); autosize(f);
+        root.querySelectorAll("[data-s]").forEach((b) => (b.onclick = async () => { const rr = await call({ action: "head_voice_status", id, status: b.dataset.s }); msg.textContent = rr.status === 200 ? `✅ صارت «${S[b.dataset.s]}».` : rr.msg || "ما صار."; if (rr.status === 200 && x) x.status = b.dataset.s; }));
+        f.onsubmit = async (ev) => { ev.preventDefault(); const rr = await call({ action: "head_voice_reply", id, text: f.t.value }); msg.textContent = rr.status === 200 ? "✅ وصل الرد للطالب." : rr.msg || "ما صار."; if (rr.status === 200 && x) x.has_reply = true; };
+        root.querySelector("[data-arch]").onclick = async () => { if (!confirm("تأرشفها؟ تختفي من القائمة (ما تنحذف).")) return; const rr = await call({ action: "head_voice_archive", id }); if (rr.status === 200) { r.items = (r.items || []).filter((y) => y.id !== id); back(); } };
+      }
+      main();
+    }
     home();
+  }
+
+  function vCss() {
+    if (document.getElementById("vh-css")) return;
+    const s = document.createElement("style"); s.id = "vh-css";
+    s.textContent = `.vh{display:grid;gap:12px}.hp .vh .vh-sw{display:flex;flex-direction:row;align-items:center;gap:12px;min-height:56px;padding:12px 14px;border:1px solid var(--line,#ddd);border-radius:16px;background:var(--card,#fff);cursor:pointer}
+.hp .vh .vh-sw>span{flex:1;min-width:0}.vh-sw input{width:44px;height:26px;flex:none;accent-color:var(--brand,#4B5A8A)}.vh-sw b{display:block;font-family:var(--title-font,inherit)}.vh-sw small{color:var(--muted,#666)}
+.vh-rem{min-height:44px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.vh-stale{background:color-mix(in srgb,var(--accent,#c98a1b) 18%,transparent);color:var(--ink,#222);border:1px solid color-mix(in srgb,var(--accent,#c98a1b) 45%,transparent);border-radius:12px;padding:10px 12px;margin:0}
+.vh-flt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.vh-f{display:grid;gap:4px;font-size:.86rem}.vh-f select{min-height:44px;border:1px solid var(--line,#ddd);border-radius:12px;background:var(--bg,#fff);color:var(--ink,#222);font:inherit;padding:0 8px;width:100%}
+.vh-list{list-style:none;padding:0;margin:0;display:grid;gap:8px}.vh-it{display:flex;align-items:center;gap:10px;width:100%;min-height:60px;padding:10px 12px;border:1px solid var(--line,#ddd);border-radius:14px;background:var(--card,#fff);color:var(--ink,#222);font:inherit;text-align:start;cursor:pointer}
+.vh-it.new{border-inline-start:4px solid var(--brand,#4B5A8A)}.vh-it .k{font-size:1.4rem}.vh-it .m{flex:1;min-width:0}.vh-it .m b{display:block;font-family:var(--title-font,inherit);overflow-wrap:anywhere}.vh-it small{color:var(--muted,#666)}
+.vh-it .s{font-size:.86rem;font-weight:700;color:var(--brand,#4B5A8A);white-space:nowrap}.vh-risk{color:var(--bad,#b3261e);font-style:normal;font-weight:700}.vh-late{color:var(--muted,#666);font-style:normal;font-weight:700}
+.vh-sum{background:var(--card,#fff);border:1px solid var(--line,#ddd);border-radius:16px;padding:12px 14px}.vh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}.vh-grid span{background:var(--bg,#f6f2ea);border-radius:12px;padding:8px;text-align:center}.vh-grid b{display:block;font-family:var(--title-font,inherit)}.vh-grid small{color:var(--muted,#666);font-size:.8rem}
+.vh-said summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700}.vh-priv{margin:0}
+.vh-body{background:var(--card,#fff);border:1px solid var(--line,#ddd);border-radius:14px;padding:14px;line-height:1.9;overflow-wrap:anywhere}.vh-img{max-width:100%;border-radius:12px;border:1px solid var(--line,#ddd)}
+.vh-reply{background:var(--brand-soft,#eef);border-radius:12px;padding:12px;line-height:1.8}.vh-reply b{display:block}.vh-acts .btn{min-height:44px}
+.vh-riskbox{background:color-mix(in srgb,var(--bad,#b3261e) 12%,transparent);color:var(--ink,#222);border:1px solid var(--bad,#b3261e);border-radius:14px;padding:12px 14px;line-height:1.8}.vh-riskbox b{display:block;font-family:var(--title-font,inherit)}.vh-riskbox ol{margin:6px 0;padding-inline-start:20px}
+.vh-ann .annbar{margin-top:6px}@media(max-width:520px){.vh-flt{grid-template-columns:1fr 1fr}.vh-flt .vh-f:last-child{grid-column:1/-1}}`;
+    document.head.appendChild(s);
   }
 
   /** 🔢 «اختر رقمك» — أول دخول برقم مؤقت (72 ساعة). o = {ticket, name, expires, api?}. ماكو جلسة لحد ما يختار. */
