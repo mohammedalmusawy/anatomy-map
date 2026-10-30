@@ -16,3 +16,6 @@ user_api.env
 .playwright-mcp/
 listen-*.png
 draft/
+
+# 🛡️ 53: قائمة أسماء رؤساء القسم للفحص — محلية بس
+head-names.local.txt

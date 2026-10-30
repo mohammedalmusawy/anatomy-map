@@ -12,7 +12,7 @@
   const C = window.STUDY_CLOUD || {};
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const NAMES = { active_students: "👥 الطلاب الفعّالين (يومي/أسبوعي)", top_lectures: "📚 أكثر المحاضرات مشاهدة لكل مادة",
-    hardest: "🧩 أصعب المواضيع + أكثر الأسئلة غلط (مجمّعة)", exam_engagement: "📅 التفاعل وقت الامتحانات", announcement: "📣 إعلان قصير لرئيس القسم" };
+    hardest: "🧩 أصعب المواضيع + أكثر الأسئلة غلط (مجمّعة)", exam_engagement: "📅 التفاعل وقت الامتحانات" };   // 🏛️ 53: صندوق إعلان المالك انشال (الإعلان صار من لوحة الرئيس)
   const d10 = (t) => (t ? String(t).slice(0, 10) : "—");
   const copy = async (s, b) => { try { await navigator.clipboard.writeText(s); const o = b.textContent; b.textContent = "✔️"; setTimeout(() => (b.textContent = o), 1200); } catch (e) { prompt("انسخ:", s); } };
 
@@ -25,41 +25,40 @@
     };
     pane.innerHTML = `<h2>🏛️ رئيس القسم</h2>
       <div id="hd-admin"></div>
-      <h3>حساب الدخول</h3>
+      <details class="hd-details" id="hd-legacy"><summary>المزيد — الحسابات والأرقام والسجل</summary>
       <p id="dp-on"></p>
-      <p class="hint">يدخل من الباب المخفي (5 ضغطات على عنوان الموقع) بـ<b>رقمه السري بس</b> — إنت تحدده هنا، ويگدر يغيّره (اختياري). ويندوز، موبايل، آيباد، أي متصفح. يشوف أرقام مجمّعة بس، وأي رقم أقل من 5 طلاب ما يطلع. ماكو أسماء ولا أكواد ولا ملاحظات، وما يگدر يغيّر أي شي.</p>
+      <p class="hint">يدخل من الباب المخفي (5 ضغطات على عنوان الموقع) برقمه السري بس — إنت تحدده، وهو يگدر يغيّره. يشوف أرقام مجمّعة بس، وأي رقم أقل من 5 طلاب ما يطلع. ماكو أسماء ولا أكواد ولا ملاحظات.</p>
       <div id="dp-out" aria-live="polite"></div>
       <details class="tm-new"><summary>➕ حساب ثاني (اختياري)</summary><label class="tm-f"><span>الاسم</span><input id="dp-name" value="" maxlength="120"></label>
       <label class="tm-f"><span>ينتهي (اختياري)</span><input id="dp-exp" type="date"></label>
       <label class="tm-f"><span>الرقم السري (8 أرقام أو أكثر)</span><input id="dp-pin" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12"></label>
-      <p><button class="btn" id="dp-make">➕ سوّي الحساب</button></p></details>
+      <p><button class="btn ghost" id="dp-make">➕ سوّي الحساب</button></p></details>
       <h3>الحسابات</h3><div class="scroll-x" id="dp-list">…</div>
-      <h3>الأجزاء اللي تنعرض</h3><div id="dp-secs"></div>
-      <h3>سجل الدخول</h3><div class="scroll-x" id="dp-log"></div>`;
+      <h3>الأجزاء اللي تنعرض بلوحته</h3><div id="dp-secs"></div>
+      <h3>سجل الدخول</h3><div class="scroll-x" id="dp-log"></div></details>`;
     const $ = (s) => pane.querySelector(s);
     headAdmin(pane.querySelector("#hd-admin"), api);   // 🏛️ 53
     let names = {};
     const SP = window.StaffPin;
-    const st = (v) => !v.enabled ? (v.has_password ? "⏸️ موقوف" : "💤 مطفي — ينتظر «فعّل حساب رئيس القسم» من محمد") : v.expires_at && new Date(v.expires_at) <= new Date() ? "⌛ منتهي"
+    const st = (v) => !v.enabled ? (v.has_password ? "⏸️ موقوف" : "💤 مطفي — ينتظر تفعيلك") : v.expires_at && new Date(v.expires_at) <= new Date() ? "⌛ منتهي"
       : v.has_password && !v.must_change ? "✅ فعّال" : "⏳ ماكو رقم بعد";
 
     async function load() {
       const r = await api({ action: "admin_list" });
       if (r.status !== 200) { $("#dp-list").innerHTML = `<p class="hint">ما گدرت أجيب البيانات (${r.status}).</p>`; return; }
-      $("#dp-on").innerHTML = `${r.on ? "✅ حساب رئيس القسم مفعّل" : "⏸️ مطفي — ولا أحد يگدر يدخل (يشتغل لما تگول «فعّل حساب رئيس القسم» من محمد)"} <button class="btn ghost" id="dp-feat">${r.on ? "⏸️ طفّيه" : "▶️ فعّله"}</button>`;
+      $("#dp-on").innerHTML = `${r.on ? "✅ حساب رئيس القسم مفعّل" : "⏸️ دخول رئيس القسم مطفي — ولا أحد يگدر يدخل لحد ما تفعّله"} <button class="btn ghost" id="dp-feat">${r.on ? "⏸️ طفّيه" : "▶️ فعّله"}</button>`;
       $("#dp-feat").onclick = async () => { if (!r.on && !confirm("تفعّل دخول رئيس القسم؟")) return; await api({ action: "admin_feature", on: !r.on }); load(); };
       names = Object.fromEntries(r.viewers.map((v) => [v.id, v.name]));
       $("#dp-list").innerHTML = r.viewers.length ? `<table class="adm"><thead><tr><th>الاسم</th><th>الحالة</th><th>آخر دخول</th><th>ينتهي</th><th>إدارة</th></tr></thead><tbody>` +
         r.viewers.map((v) => `<tr data-id="${esc(v.id)}" data-name="${esc(v.name)}">
-          <td><b>${esc(v.name)}</b>${!v.enabled || !r.on ? `<br><button class="btn" data-a="activate" type="button">✅ فعّل الحساب + حدد رقمه</button>` : ""}<div class="tm-pinbox"></div></td><td>${st(v)}</td>
+          <td><b>${esc(v.name)}</b>${!v.enabled || !r.on ? `<br><button class="btn ghost" data-a="activate" type="button">✅ فعّل الحساب + حدد رقمه</button>` : ""}<div class="tm-pinbox"></div></td><td>${st(v)}</td>
           <td>${d10(v.last_login)}</td><td><input type="date" value="${esc(v.expires_at ? d10(v.expires_at) : "")}" data-a="exp" aria-label="تاريخ الانتهاء"></td>
           <td><button class="ib" data-a="toggle" title="${v.enabled ? "إيقاف" : "تشغيل"}">${v.enabled ? "⏸️" : "▶️"}</button> <button class="ib" data-a="resetpw" title="🔑 إعادة تعيين الرقم" aria-label="إعادة تعيين الرقم">🔑</button> <button class="ib" data-a="signout" title="اطلع من كل أجهزته" aria-label="اطلع من كل أجهزته">🚪</button>
           <button class="ib" data-a="log" title="سجل الدخول">🧾</button> <button class="ib" data-a="lock" title="🔒 قفل (بلا حذف)" aria-label="قفل الحساب">🔒</button></td></tr>`).join("") + "</tbody></table>"
         : '<p class="hint">ماكو حسابات بعد.</p>';
       const secs = Object.fromEntries(r.sections.map((s) => [s.key, s]));
       $("#dp-secs").innerHTML = Object.entries(NAMES).map(([k, label]) => `<label class="sw"><input type="checkbox" data-sec="${k}" ${secs[k] && secs[k].on_ ? "checked" : ""}> ${label}</label><br>`).join("") +
-        `<textarea id="dp-ann" rows="2" maxlength="280" placeholder="نص الإعلان (280 حرف بالكثير)">${esc(secs.announcement && secs.announcement.value ? secs.announcement.value.text : "")}</textarea>
-        <button class="btn ghost" id="dp-ann-save">💾 احفظ الإعلان</button>`;
+"";
       log();
     }
     async function log(id) {
@@ -94,7 +93,6 @@
     });
     pane.addEventListener("click", async (ev) => {
       if (ev.target.closest && ev.target.closest("[data-pin-x]")) { ev.target.closest("form").remove(); return; }
-      if (ev.target.id === "dp-ann-save") { await api({ action: "admin_sections", sections: { announcement: { value: { text: $("#dp-ann").value } } } }); ev.target.textContent = "✔️ انحفظ"; return; }
       const cp = ev.target.closest("button[data-cp]"); if (cp) return copy(cp.dataset.cp, cp);
       const b = ev.target.closest("button[data-a]"); if (!b) return;
       const tr = b.closest("tr"), id = tr.dataset.id, name = tr.dataset.name, a = b.dataset.a;
@@ -144,7 +142,7 @@
   const OWNER_LINE = "فكرة وتطوير: محمد آل مسافر الموسوي";              // ثابت — نفس head.py (ماكو إعداد يغيّره)
   const OWNER_FOOTER = "منصة طلاب تقنيات الأشعة · تطوير محمد الموسوي";
   const AV = (() => { try { return new URL("assets/favicon.svg", document.querySelector('link[rel="manifest"]').href).href; } catch (e) { return "../assets/favicon.svg"; } })();                                   // شعار القسم بدل الصورة إذا ماكو صورة (مو صورة شخص)
-  const fmtD = (t) => { try { return new Date(t).toLocaleString("ar-IQ", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Baghdad" }); } catch (e) { return d10(t); } };
+  const fmtD = (t) => { try { return new Date(t).toLocaleString("ar-IQ-u-nu-latn", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Baghdad" }); } catch (e) { return d10(t); } };
   const later = (r) => r.status === 400 || r.status === 404 || r.status === 0;   // الفعل بعده ما انرفع للسيرفر (مسودة)
   const SOON = '<p class="hint">⏳ هذا الجزء يشتغل بعد ما تنرفع تحديثات السيرفر (مسودة 53). ما يتغيّر شي هسه.</p>';
   function hdCss() {
@@ -179,7 +177,13 @@
 .hp-prev{border:1px dashed var(--line,#ccc);border-radius:16px;padding:12px;background:var(--bg,#f6f2ea)}
 .hp-prev .hd-word{margin:0}.hp-owner{text-align:center;font-size:.84rem;color:var(--muted,#666);margin:6px 0 0}
 .hp-ann-badge{display:inline-block;background:var(--brand,#4b5a8a);color:var(--brand-ink,#fff);border-radius:999px;padding:2px 10px;font-size:.84rem}
-.hp-more>summary{min-height:48px;display:flex;align-items:center;cursor:pointer;color:var(--muted,#666)}`;
+.hp-more>summary{min-height:48px;display:flex;align-items:center;cursor:pointer;color:var(--muted,#666)}
+.hd-f textarea{resize:none;overflow:hidden;line-height:1.7}.hd-stat{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg,#f6f2ea);border-radius:12px;padding:8px 12px}
+.hd-stat span{flex:1;min-width:180px}.hd-stat .btn{width:auto;padding:8px 14px;font-size:14px;min-height:44px}
+.hd-card details.hd-en>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:var(--muted,#666);font-size:.92rem}
+.hd-toast{position:fixed;inset-inline:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:1000;max-width:520px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--ink,#222);color:var(--bg,#fff);border-radius:14px;padding:10px 14px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.hd-toast button{background:none;border:1px solid currentColor;color:inherit;border-radius:10px;min-height:44px;padding:0 12px;font:inherit;cursor:pointer}
+.cp-eye{display:flex;gap:8px;align-items:center}.cp-eye input{flex:1}.cp-eye button{min-width:56px;min-height:48px;border:1px solid var(--line,#ccc);border-radius:14px;background:transparent;color:var(--brand,#3B4A8C);font:inherit;cursor:pointer}`;
     document.head.appendChild(s);
   }
   /** صورة دائرية مضغوطة (WebP ≤ 50 KB، 256px) بالمتصفح — قبل الرفع. */
@@ -196,14 +200,31 @@
     });
   }
   const b64 = (blob) => new Promise((r) => { const f = new FileReader(); f.onload = () => r(String(f.result).split(",")[1]); f.readAsDataURL(blob); });
-  const avatar = (url) => url ? `<img src="${esc(url)}" alt="" width="56" height="56">` : `<img src="${AV}" alt="" width="56" height="56" data-neutral>`;
-  const wordPreview = (name, title, lines) => `<section class="hd-word"><h2 class="hd-wt">كلمة رئيس القسم</h2><blockquote class="hd-q">${lines.filter(Boolean).map((l) => `<p>${esc(l)}</p>`).join("") || "<p>…</p>"}</blockquote><p class="hd-by"><span>${esc(name || "…")}، ${esc(title || "")}</span></p></section>`;
+  const avatar = (url) => (url ? `<img src="${esc(url)}" alt="" width="56" height="56">` : "");   // ماكو صورة ← ماكو دائرة
+  const wordPreview = (name, title, lines) => `<section class="hd-word"><h2 class="hd-wt">كلمة رئيس القسم</h2><blockquote class="hd-q">${lines.filter(Boolean).map((l) => `<p>${esc(l)}</p>`).join("") || "<p>…</p>"}</blockquote><p class="hd-by"><span>— ${esc(name || "…")}، ${esc(title || "")}</span></p></section>`;
+  /** حقل نص يكبر وحده + عدّاد (Western digits). */
+  const ta = (name, label, max, val, hint) => `<label class="hd-f"><span>${label}</span><textarea name="${name}" rows="1" maxlength="${max}" data-max="${max}">${esc(val || "")}</textarea>
+    <small><span data-cnt="${name}">${String(val || "").length}</span>/${max}${hint ? ` · ${hint}` : ""}</small></label>`;
+  function autosize(root) {
+    const fit = (x) => { x.style.height = "auto"; x.style.height = x.scrollHeight + 2 + "px"; const c = root.querySelector(`[data-cnt="${x.name}"]`); if (c) c.textContent = x.value.length; };
+    root.querySelectorAll("textarea[data-max]").forEach((x) => { x.addEventListener("input", () => fit(x)); requestAnimationFrame(() => fit(x)); });
+  }
+  /** تنبيه صغير ويّا «تراجع» (8 ثواني). */
+  function toast(text, undo) {
+    document.querySelector(".hd-toast")?.remove();
+    const el = document.createElement("div"); el.className = "hd-toast"; el.setAttribute("role", "status");
+    el.innerHTML = `<span>${esc(text)}</span>${undo ? '<button type="button">↩️ تراجع</button>' : ""}`;
+    document.body.appendChild(el);
+    const t = setTimeout(() => el.remove(), 8000);
+    if (undo) el.querySelector("button").onclick = async () => { clearTimeout(t); el.remove(); await undo(); };
+  }
+  const fmtL = (t) => { try { return new Date(t).toLocaleString("ar-IQ-u-nu-latn", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Baghdad" }); } catch (e) { return d10(t); } };
 
-  // 🏛️ لوحة محمد: الإعداد الواحد + تغيير الرئيس + السابقين
+  // 🏛️ لوحة محمد: بطاقة وحدة «رئيس القسم الحالي» (البيانات + حالة الدخول + الظهور) + تغيير الرئيس + السابقين
   async function headAdmin(box, api) {
     if (!box) return;
     hdCss();
-    const r = await api({ action: "admin_head_get" });
+    const [r, L] = await Promise.all([api({ action: "admin_head_get" }), api({ action: "admin_list" })]);
     if (r.status !== 200) {
       box.innerHTML = `<section class="hd-card"><b>🏛️ رئيس القسم الحالي</b>${later(r) ? SOON : `<p class="hint">ما گدرت أجيب الإعداد (${esc(r.status)}).</p>`}
         <p class="hd-own">✍️ ${esc(OWNER_LINE)} — ثابت، ما يتغيّر من هنا ولا من لوحة رئيس القسم.</p></section>`;
@@ -211,39 +232,54 @@
     }
     const h = r.head || {}, formers = r.formers || [];
     const W = Array.isArray(h.word) ? h.word : [];
+    const vw = (L.viewers || []).find((v) => v.id === h.viewer_id) || (L.viewers || [])[0] || null;
+    const acc = r.account || (vw && { enabled: vw.enabled, has_pin: vw.has_password, temp: vw.must_change, temp_expires_at: vw.temp_expires_at, last_login: vw.last_login });
+    const loginOn = L.on === true;
+    const status = !acc ? "ماكو حساب دخول بعد"
+      : !loginOn || !acc.enabled ? "💤 الدخول مطفي — ينتظر تفعيلك"
+      : acc.temp ? `⏳ رقم مؤقت ينتهي ${fmtL(acc.temp_expires_at)}`
+      : acc.has_pin ? `✅ يدخل برقمه${acc.last_login ? ` · آخر دخول ${d10(acc.last_login)}` : ""}` : "⏳ ماكو رقم بعد";
     box.innerHTML = `<section class="hd-card" id="hd-cur" aria-labelledby="hd-cur-t">
       <div class="hd-row" style="justify-content:space-between"><b id="hd-cur-t">🏛️ رئيس القسم الحالي</b>
         <span class="hd-pill ${r.public_on ? "on" : ""}">${r.public_on ? "✅ ظاهر بالموقع" : "🔒 مطفي — ما يطلع بالموقع"}</span></div>
       <div class="hd-who">${avatar(h.photo_url)}<div><b>${esc(h.name || "—")}</b><small>${esc(h.title || "")}${h.since ? ` · من ${esc(d10(h.since))}` : ""}</small></div></div>
+      <div class="hd-stat"><span>🔐 ${esc(status)}</span>${acc ? '<button class="btn ghost" type="button" data-h="pin">🔑 رقم جديد</button>' : ""}
+        ${acc && (!loginOn || !acc.enabled) ? '<button class="btn ghost" type="button" data-h="login">▶️ فعّل الدخول</button>' : ""}</div>
+      <div id="hd-pinbox"></div>
       <form id="hd-form" class="hd-fm" novalidate>
         <label class="hd-f"><span>الاسم</span><input name="name" maxlength="120" value="${esc(h.name || "")}"></label>
         <label class="hd-f"><span>المنصب</span><input name="title" maxlength="120" value="${esc(h.title || "رئيس قسم تقنيات الأشعة")}"></label>
-        <label class="hd-f"><span>جملة الترحيب (تطلع مرة وحدة بأول زيارة)</span><input name="welcome" maxlength="140" value="${esc(h.welcome || "")}"><small>جملة قصيرة، 140 حرف بالكثير.</small></label>
-        <label class="hd-f"><span>كلمة رئيس القسم — السطر الأول</span><input name="w1" maxlength="90" value="${esc(W[0] || "")}"></label>
-        <label class="hd-f"><span>السطر الثاني (اختياري)</span><input name="w2" maxlength="90" value="${esc(W[1] || "")}"></label>
+        ${ta("welcome", "جملة الترحيب (تطلع مرة وحدة بأول زيارة)", 140, h.welcome)}
+        ${ta("w1", "كلمة رئيس القسم — السطر الأول", 90, W[0])}
+        ${ta("w2", "السطر الثاني (اختياري)", 90, W[1])}
         <label class="sw"><input type="checkbox" name="word_on" ${h.word_on !== false ? "checked" : ""}> اعرض «كلمة رئيس القسم» بالرئيسية</label>
-        <div class="hd-row"><label class="btn ghost" style="width:auto;cursor:pointer">🖼️ اختر صورة<input type="file" accept="image/*" name="photo" hidden></label>
-          <small class="hd-note">دائرية صغيرة. تبقى خاصة لحد التفعيل. أيقونة الموقع تبقى شعار القسم.</small></div>
+        <details class="hd-en"><summary>الاسم بالإنكليزي (اختياري — لوضع ENG)</summary>
+          <label class="hd-f"><span>Name</span><input name="name_en" maxlength="120" dir="ltr" value="${esc(h.name_en || "")}"></label>
+          <label class="hd-f"><span>Title</span><input name="title_en" maxlength="120" dir="ltr" value="${esc(h.title_en || "")}" placeholder="Head of the Department of Radiology Techniques"></label></details>
+        <div class="hd-row"><label class="btn ghost" style="width:auto;cursor:pointer">🖼️ ${h.photo_url ? "بدّل الصورة" : "أضف صورة"}<input type="file" accept="image/*" name="photo" hidden></label>
+          <small class="hd-note">دائرية صغيرة، تبقى خاصة لحد التفعيل.</small></div>
         <div class="hd-row"><button class="btn" type="submit">💾 احفظ</button><span class="tm-msg" role="status" aria-live="polite"></span></div>
       </form>
       <div class="hd-row"><button class="btn ghost" type="button" data-h="public">${r.public_on ? "⏸️ أخفِ من الموقع" : "▶️ فعّل الظهور بالموقع"}</button>
-        <small class="hd-note">${r.public_on ? "الاسم والصورة والكلمة ظاهرة بالموقع." : "التفعيل إلك بس، وبعد موافقة رئيس القسم. لحد ذاك ولا اسم ولا صورة بأي صفحة."}</small></div>
-      <p class="hd-own">✍️ لمسة صاحب المنصة ثابتة بكل مكان: «${esc(OWNER_LINE)}» و«${esc(OWNER_FOOTER)}». إنت (المالك) فوق رئيس القسم: ما يگدر يشيلك ولا يغيّر اسمك أو صلاحياتك أو هالسطور.</p>
+        <small class="hd-note">${r.public_on ? "الاسم والصورة والكلمة ظاهرة بالموقع." : "بعد موافقته. لحد ذاك ولا اسم ولا صورة بأي صفحة."}</small></div>
+      <p class="hd-own">✍️ سطورك ثابتة بكل مكان: «${esc(OWNER_LINE)}» و«${esc(OWNER_FOOTER)}». إنت فوق رئيس القسم: ما يگدر يشيلك ولا يغيّر اسمك أو صلاحياتك أو هالسطور.</p>
     </section>
     <details class="hd-details" id="hd-change"><summary>🔄 تغيير رئيس القسم</summary><div id="hd-chg"></div></details>
-    <details class="hd-details" id="hd-formers" ${formers.length ? "" : ""}><summary>🗂️ رؤساء القسم السابقين (${formers.length})</summary><div class="hd-fm" id="hd-fl"></div></details>`;
+    <details class="hd-details" id="hd-formers"><summary>🗂️ رؤساء القسم السابقين (${formers.length})</summary><div class="hd-fm" id="hd-fl"></div></details>`;
     const f = box.querySelector("#hd-form"), msg = f.querySelector(".tm-msg");
+    autosize(f);
     f.photo.onchange = async () => {
       const file = f.photo.files[0]; if (!file) return;
       msg.textContent = "لحظة…";
       try { const blob = await squareWebp(file); const rr = await api({ action: "admin_head_photo", webp: await b64(blob) });
-        msg.textContent = rr.status === 200 ? "✅ انحفظت الصورة (خاصة لحد التفعيل)." : later(rr) ? "⏳ بعد تحديث السيرفر." : rr.msg || "ما صار.";
-        if (rr.status === 200 && rr.photo_url) box.querySelector(".hd-who img").outerHTML = avatar(rr.photo_url);
+        msg.textContent = rr.status === 200 ? "✅ انحفظت الصورة." : later(rr) ? "⏳ بعد تحديث السيرفر." : rr.msg || "ما صار.";
+        if (rr.status === 200) headAdmin(box, api);
       } catch (e) { msg.textContent = "الصورة ما انقرت. جرّب صورة ثانية."; }
     };
     f.onsubmit = async (ev) => {
       ev.preventDefault();
-      const body = { action: "admin_head_save", name: f.name.value.trim(), title: f.title.value.trim(), welcome: f.welcome.value.trim(), word: [f.w1.value.trim(), f.w2.value.trim()].filter(Boolean), word_on: f.word_on.checked };
+      const body = { action: "admin_head_save", name: f.name.value.trim(), title: f.title.value.trim(), welcome: f.welcome.value.trim(), word: [f.w1.value.trim(), f.w2.value.trim()].filter(Boolean),
+        word_on: f.word_on.checked, name_en: f.name_en.value.trim(), title_en: f.title_en.value.trim() };
       if (body.name.length < 2) { msg.textContent = "اكتب الاسم."; return; }
       msg.textContent = "لحظة…"; const rr = await api(body);
       msg.textContent = rr.status === 200 ? "✅ انحفظ." + (r.public_on ? " يتحدّث بالموقع خلال دقائق." : " (ما يطلع بالموقع لحد التفعيل)") : later(rr) ? "⏳ بعد تحديث السيرفر." : rr.msg || "ما صار.";
@@ -252,9 +288,33 @@
       if (!r.public_on) {
         const t = prompt("تفعيل ظهور رئيس القسم بالموقع (الاسم + الصورة + الكلمة + سطر «بإشراف»).\nبس بعد ما يوافق هو. اكتب «وافق» حتى تأكد:");
         if (t === null) return; if (t.trim() !== "وافق") return alert("ما تفعّل شي.");
-      } else if (!confirm("تخفي رئيس القسم من الموقع؟ (ما ينحذف شي)")) return;
+      } else if (!confirm("تخفي رئيس القسم من الموقع؟ الصورة ترجع خاصة. ما ينحذف شي.")) return;
       const rr = await api({ action: "admin_head_public", on: !r.public_on, confirm: r.public_on ? undefined : "وافق" });
       if (rr.status !== 200) return alert(later(rr) ? "⏳ بعد تحديث السيرفر." : rr.msg || "ما صار.");
+      headAdmin(box, api);
+    };
+    const pb = box.querySelector("[data-h=pin]");
+    if (pb) pb.onclick = () => {
+      const bx = box.querySelector("#hd-pinbox");
+      if (bx.innerHTML) { bx.innerHTML = ""; return; }
+      bx.innerHTML = `<form class="tm-pin hd-fm" data-hd-pin novalidate><label class="hd-f"><span>الرقم الجديد (8–12 رقم)</span><input type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12" data-pin="1"></label>
+        <label class="hd-f"><span>أعده مرة ثانية</span><input type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12" data-pin="2"></label>
+        <div class="hd-row"><button class="btn ghost" type="submit">💾 احفظ الرقم</button><span class="tm-msg" role="status"></span></div></form>`;
+      const pf = bx.querySelector("form"); pf.querySelector("input").focus();
+      pf.onsubmit = async (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const v = window.StaffPin ? StaffPin.pinRead(pf) : { err: "ما جاهز." }, m = pf.querySelector(".tm-msg");
+        if (v.err) return (m.textContent = v.err);
+        const rr = await api({ action: "admin_set_pin", id: acc && (h.viewer_id || vw.id), pin: v.pin });
+        pf.querySelectorAll("input").forEach((i) => (i.value = ""));
+        m.textContent = rr.status === 200 ? "✅ انحفظ. سلّمه بإيدك." : rr.msg || "ما صار.";
+      };
+    };
+    const lb = box.querySelector("[data-h=login]");
+    if (lb) lb.onclick = async () => {
+      if (!confirm("تفعّل دخول رئيس القسم؟ (يدخل برقمه — الظهور بالموقع يبقى مثل ما هو)")) return;
+      if (!loginOn) await api({ action: "admin_feature", on: true });
+      if (vw && !vw.enabled) await api({ action: "admin_toggle", id: vw.id, enabled: true });
       headAdmin(box, api);
     };
     changeFlow(box.querySelector("#hd-chg"), api, h, () => headAdmin(box, api));
@@ -263,7 +323,12 @@
 
   /** 🔄 تغيير رئيس القسم: (1) البيانات + رقم مؤقت → (2) معاينة + تأكيد بكتابة الاسم → (3) جاهز (سلّم الرقم بإيدك). */
   function changeFlow(el, api, cur, done) {
-    const suggest = () => { let s; do { s = String(Math.floor(1e9 + Math.random() * 9e9)).slice(0, 10); } while (/(\d)\1{3}|0123|1234|2345|3456|4567|5678|6789|9876|8765|7654/.test(s)); return s; };
+    const suggest = () => {   // L8: crypto.getRandomValues — 10 أرقام، بلا تكرار ولا تسلسل
+      const a = new Uint32Array(10); let s;
+      do { crypto.getRandomValues(a); s = Array.from(a, (x) => x % 10).join(""); if (s[0] === "0") s = "7" + s.slice(1); }
+      while (/(\d)\1{2}|0123|1234|2345|3456|4567|5678|6789|9876|8765|7654|6543|5432|4321|3210/.test(s) || new Set(s).size < 5);
+      return s;
+    };
     const step1 = (v = {}) => {
       el.innerHTML = `<div class="hd-steps"><b>1. البيانات</b>‹ 2. تأكيد ‹ 3. جاهز</div>
       <form class="hd-fm" novalidate>
@@ -290,10 +355,10 @@
       el.innerHTML = `<div class="hd-steps">1. البيانات ‹ <b>2. تأكيد</b> ‹ 3. جاهز</div>
       <ul class="hd-sum">
         <li>🔒 حساب ${cur.name ? `«${esc(cur.name)}»` : "الرئيس الحالي"} <b>ينقفل</b> ويطلع من كل أجهزته — <b>ما ينحذف</b> شي.</li>
-        <li>🗂️ ينتقل لـ «رؤساء القسم السابقين»: شهاداته وإعلاناته وتقاريره وكلمته تبقى باسمه.</li>
+        <li>🗂️ ينتقل لـ «رؤساء القسم السابقين»: شهاداته وإعلاناته وتقاريره وكلمته تبقى باسمه، وصورته ترجع خاصة.</li>
         <li>➕ حساب جديد: <b>${esc(x.name)}</b> — ${esc(x.title)}، من ${esc(x.from)}.</li>
         <li>⏳ الرقم المؤقت يشتغل 72 ساعة بس، وبأول دخول يختار رقمه.</li>
-        <li>🔄 كل مكان يذكر رئيس القسم يتحدّث وحده (${r0(x)}).</li>
+        <li>🔒 الظهور بالموقع ينطفي لحد ما يوافق الرئيس الجديد وتفعّله إنت.</li>
         ${x.thank ? "<li>🙏 السابق ينضاف لـ «شكر لمن دعم المنصة».</li>" : ""}
       </ul>
       <form class="hd-fm" novalidate><label class="hd-f"><span>حتى تأكد، اكتب اسم الرئيس الجديد بالضبط</span><input name="c" maxlength="120" autocomplete="off"></label>
@@ -309,36 +374,37 @@
         step3(x, rr);
       };
     };
-    const r0 = (x) => (x.title ? "الرئيسية، عن المنصة، الإعلانات، التقارير الجديدة، الشهادات الجديدة" : "");
     const step3 = (x, rr) => {
       const exp = rr.temp_expires_at || new Date(Date.now() + 72 * 3600e3).toISOString();
       el.innerHTML = `<div class="hd-steps">1. البيانات ‹ 2. تأكيد ‹ <b>3. جاهز</b></div>
       <div class="tm-once" role="status"><b>✅ تبدّل رئيس القسم: ${esc(x.name)}</b>
-        <p>الرقم المؤقت ينتهي: <b>${esc(fmtD(exp))}</b> (72 ساعة). سلّمه بإيدك أو برسالة خاصة — ما ينرسل بالبوت أبداً.</p>
-        <p class="hint">الظهور بالموقع يبقى مثل ما هو. إذا مطفي، يبقى مطفي لحد ما توافق إنت بعد موافقته.</p>
+        <p>الرقم المؤقت ينتهي: <b>${esc(fmtL(exp))}</b> (72 ساعة). سلّمه بإيدك أو برسالة خاصة — ما ينرسل بالبوت أبداً.</p>
+        <p class="hint">الظهور بالموقع انطفى. فعّله بعد ما يوافق.</p>
         <p><button class="btn ghost" type="button" data-d>تم</button></p></div>`;
       el.querySelector("[data-d]").onclick = done;
     };
     step1();
   }
 
-  /** 🗂️ رؤساء القسم السابقين: ماكو حذف. 🔓 أعد فتح الحساب بضغطة · 🙏 أضف للشكر. */
+  /** 🗂️ رؤساء القسم السابقين: ماكو حذف. 🔓 أعد فتح الدخول (بس) · 🙏 أضف للشكر — ويّا «تراجع». */
   function formerList(el, api, list, done) {
     if (!list.length) { el.innerHTML = '<p class="hint">ماكو رؤساء سابقين بعد.</p>'; return; }
-    el.innerHTML = list.map((x) => `<article data-id="${esc(x.id)}" data-name="${esc(x.name)}">
+    el.innerHTML = list.map((x) => `<article data-id="${esc(x.id)}" data-viewer="${esc(x.viewer_id || "")}" data-name="${esc(x.name)}">
       <div class="hd-who">${avatar(x.photo_url)}<div><b>${esc(x.name)}</b><small>${esc(x.title)} · ${esc(d10(x.from_date))} – ${esc(d10(x.to_date))}</small></div></div>
       <p class="hd-kept">محفوظ باسمه: ${esc(x.counts?.certs ?? 0)} شهادة · ${esc(x.counts?.anns ?? 0)} إعلان · ${esc(x.counts?.reports ?? 0)} تقرير · ${esc(x.counts?.words ?? 0)} كلمة</p>
-      <div class="hd-row"><span class="hd-pill">${x.locked ? "🔒 مقفول" : "🔓 مفتوح (يشوف تاريخه بس)"}</span>
-        ${x.locked ? '<button class="btn ghost" type="button" data-f="reopen">🔓 أعد فتح الحساب</button>' : ""}
-        ${x.thanked ? '<span class="hd-pill">🙏 بصفحة الشكر</span>' : '<button class="btn ghost" type="button" data-f="thank">🙏 أضف للشكر</button>'}</div></article>`).join("");
+      <div class="hd-row"><span class="hd-pill">${x.locked ? "🔒 مقفول" : "🔓 الدخول مفتوح"}</span>
+        ${x.locked ? '<button class="btn ghost" type="button" data-f="reopen">🔓 أعد فتح الدخول</button>' : ""}
+        ${x.thanked ? '<span class="hd-pill">🙏 بصفحة الشكر</span>' : '<button class="btn ghost" type="button" data-f="thank">🙏 أضف للشكر</button>'}</div>
+      ${x.locked ? '<p class="hd-note">«أعد فتح» يرجّع الدخول بس — ما يصير الرئيس الحالي ولا يگدر يغيّر شي.</p>' : ""}</article>`).join("");
     el.onclick = async (ev) => {
       const b = ev.target.closest("button[data-f]"); if (!b) return;
       const a = b.closest("article"), n = a.dataset.name;
-      if (b.dataset.f === "reopen" && !confirm(`تفتح حساب «${n}»؟ يگدر يدخل ويشوف تاريخه (شهاداته وتقاريره وإعلاناته). ما يصير الرئيس الحالي.`)) return;
       if (b.dataset.f === "thank" && !confirm(`تضيف «${n}» لـ «شكر لمن دعم المنصة»؟`)) return;
       const rr = await api({ action: b.dataset.f === "reopen" ? "admin_reopen_head" : "admin_thank_former", id: a.dataset.id });
       if (rr.status !== 200) return alert(later(rr) ? "⏳ بعد تحديث السيرفر (مسودة 53)." : rr.msg || "ما صار.");
       done();
+      if (b.dataset.f === "reopen") toast(`🔓 انفتح دخول «${n}» (الدخول بس).`, a.dataset.viewer ? async () => { await api({ action: "admin_lock", id: a.dataset.viewer }); done(); } : null);
+      else toast(`🙏 «${n}» انضاف لصفحة الشكر. تگدر تخفيه من «الفريق والشكر».`);
     };
   }
 
@@ -366,20 +432,20 @@
       ["welcome", "👋", "جملة الترحيب", "تطلع مرة وحدة بأول زيارة"],
       ["photo", "🖼️", "صورتك", "دائرية صغيرة"],
       ["ann", "📢", "إعلان للطلاب", "", false, "قريباً"],
-      ["voice", "💬", "صوتك يوصل", "رسائل الطلاب بلا أسماء", false, me.voice_on ? "مفعّل" : "مطفي"],
+      ["voice", "💬", "رسائل الطلاب (بلا أسماء)", "صوتك يوصل", false, me.voice_on ? "مفعّل" : "مطفي"],
       ["report", "📄", "تقرير القسم الشهري", "", false, "قريباً"],
     ];
     if (me.launch_armed && !me.launched) ACT.push(["launch", "🚀", "إطلاق المنصة رسمياً", "مرة وحدة"]);
     const home = () => {
       root.innerHTML = `<div class="hp">
-        <div class="hp-top">${me.photo_url ? `<img src="${esc(me.photo_url)}" alt="" width="56" height="56">` : `<img src="${AV}" alt="" width="56" height="56" data-neutral>`}
+        <div class="hp-top">${me.photo_url ? `<img src="${esc(me.photo_url)}" alt="" width="56" height="56">` : ""}
           <div><p>أهلاً ${esc(me.name)}</p><small>${esc(me.title || "")}</small></div><button class="btn ghost" type="button" id="hp-out">خروج</button></div>
-        <p class="hd-note">${me.public_on ? "✅ لمستك ظاهرة بالموقع." : "🔒 لمستك تطلع بالموقع بعد ما يفعّلها محمد. تگدر تجهّزها هسه."}</p>
+        <p class="hd-note">${me.public_on ? "✅ لمستك ظاهرة بالموقع." : "🔒 لمستك تطلع بالموقع بعد التفعيل. تگدر تجهّزها هسه."}</p>
         <nav class="hp-acts" aria-label="لوحة رئيس القسم">${ACT.map(([k, i, t, sub, main, tag]) =>
           `<button type="button" data-k="${k}" class="${main ? "main" : ""}"><span class="i" aria-hidden="true">${i}</span><span class="t">${t}${sub ? `<small>${sub}</small>` : ""}</span>${tag ? `<span class="hp-tag">${tag}</span>` : ""}<span aria-hidden="true">‹</span></button>`).join("")}</nav>
         <details class="hp-more"><summary>المزيد ▾</summary><div class="hd-row"><button class="btn ghost" type="button" data-k="stats">📊 أرقام القسم</button>
           <button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button></div><div id="dv-self"></div></details>
-        <p class="hp-owner">${esc(OWNER_LINE)} — صاحب المنصة وصانعها. وإنت ترعاها 🌿</p>
+        <p class="hp-owner">${esc(OWNER_LINE)} — صاحب المنصة وصانعها، وبرعايتكم الكريمة 🌿</p>
         ${draft ? SOON : ""}</div>`;
       root.querySelector("#hp-out").onclick = async () => { await sb.auth.signOut({ scope: "local" }).catch(() => {}); location.reload(); };
       root.querySelectorAll("[data-k]").forEach((b) => (b.onclick = () => screen(b.dataset.k)));
@@ -400,21 +466,21 @@
       if (k === "word") {
         const W = me.word || [];
         scr("✍️ كلمة رئيس القسم", `<p class="hd-note">سطرين قصار للطلاب. تتبدّل بالرئيسية أول ما تحفظ${me.public_on ? "" : " (بعد التفعيل)"}.</p>
-          <form class="hd-fm" novalidate><label class="hd-f"><span>السطر الأول</span><input name="w1" maxlength="90" value="${esc(W[0] || "")}"></label>
-          <label class="hd-f"><span>السطر الثاني (اختياري)</span><input name="w2" maxlength="90" value="${esc(W[1] || "")}"></label>
+          <form class="hd-fm" novalidate>${ta("w1", "السطر الأول", 90, W[0])}${ta("w2", "السطر الثاني (اختياري)", 90, W[1])}
           <div class="hp-prev" aria-label="معاينة">${wordPreview(me.name, me.title, W)}</div>${saveBtn("💾 احفظ الكلمة")}</form>`);
-        const f = root.querySelector("form"), pv = root.querySelector(".hp-prev");
+        const f = root.querySelector("form"), pv = root.querySelector(".hp-prev"); autosize(f);
         f.oninput = () => (pv.innerHTML = wordPreview(me.name, me.title, [f.w1.value, f.w2.value]));
         return wire("head_word_set", (f) => ({ word: [f.w1.value.trim(), f.w2.value.trim()].filter(Boolean) }));
       }
       if (k === "welcome") {
         scr("👋 جملة الترحيب", `<p class="hd-note">تطلع للطالب مرة وحدة بأول زيارة، ويّا صورتك وزر «يلا نبدأ».</p>
-          <form class="hd-fm" novalidate><label class="hd-f"><span>الجملة</span><textarea name="w" rows="3" maxlength="140">${esc(me.welcome || "")}</textarea><small>140 حرف بالكثير.</small></label>${saveBtn("💾 احفظ")}</form>`);
+          <form class="hd-fm" novalidate>${ta("w", "الجملة", 140, me.welcome)}${saveBtn("💾 احفظ")}</form>`);
+        autosize(root.querySelector("form"));
         return wire("head_welcome_set", (f) => ({ welcome: f.w.value.trim() }));
       }
       if (k === "photo") {
         scr("🖼️ صورتك", `<p class="hd-note">صورة دائرية صغيرة (وجه واضح). تبقى خاصة لحد التفعيل. أيقونة الموقع تبقى شعار القسم.</p>
-          <form class="hd-fm" novalidate><div class="hd-who">${me.photo_url ? `<img src="${esc(me.photo_url)}" alt="" width="56" height="56">` : `<img src="${AV}" alt="" width="56" height="56" data-neutral>`}<div><b>${esc(me.name)}</b><small>معاينة</small></div></div>
+          <form class="hd-fm" novalidate><div class="hd-who">${me.photo_url ? `<img src="${esc(me.photo_url)}" alt="" width="56" height="56">` : '<small class="hd-note">ماكو صورة بعد.</small>'}<div><b>${esc(me.name)}</b><small>معاينة</small></div></div>
           <label class="hd-f"><span>اختر صورة</span><input type="file" name="p" accept="image/*"></label>${saveBtn("💾 احفظ الصورة")}</form>`);
         const f = root.querySelector("form"), m = f.querySelector(".tm-msg");
         f.onsubmit = async (ev) => {
@@ -440,7 +506,7 @@
         return;
       }
       if (k === "voice") {
-        scr("💬 صوتك يوصل", `<p class="hd-note">رسائل من الطلاب بلا أسماء (فكرة، مشكلة، شكر)، توصلك دفعة أسبوعية. <b>مطفي بهالمسودة.</b></p>
+        scr("💬 رسائل الطلاب (بلا أسماء)", `<p class="hd-note">رسائل من الطلاب بلا أسماء (فكرة، مشكلة، شكر)، توصلك دفعة أسبوعية. <b>مطفي بهالمسودة.</b></p>
           <form class="hd-fm" novalidate><label class="sw"><input type="checkbox" disabled> استقبل رسائل الطلاب</label>
           <p class="hint">يتفعّل بعد موافقة محمد على طريقة الخصوصية.</p></form>`);
         return;
@@ -463,23 +529,28 @@
   function choosePin(root, o) {
     hdCss(); if (window.StaffDoor && StaffDoor.css) StaffDoor.css();
     const name = String(o.name || "").trim();
+    const eye = (id) => `<div class="cp-eye"><input id="${id}" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12" lang="en">
+      <button type="button" data-eye="${id}" aria-pressed="false" aria-label="إظهار الرقم">إظهار</button></div>`;
     root.innerHTML = `<div class="sd-card" id="cp">
-      <h1>اختر رقمك</h1>
-      <p class="sd-sub">أهلاً${name ? ` ${esc(name)}` : ""} 🌿 الرقم اللي استلمته مؤقت${o.expires ? ` (ينتهي ${esc(fmtD(o.expires))})` : " (72 ساعة)"}.<br>اختار رقم خاص بيك — محد يعرفه غيرك.</p>
+      <h1>اختر رقماً</h1>
+      <p class="sd-sub">أهلاً${name ? ` ${esc(name)}` : ""} 🌿 الرقم اللي استلمته مؤقت${o.expires ? ` (ينتهي ${esc(fmtD(o.expires))})` : " (72 ساعة)"}.<br>اختر رقماً خاصاً بيك — محد يعرفه غيرك.</p>
       <form id="cpf" novalidate>
-        <label class="sd-lab" for="cp1">رقمك الجديد (8–12 رقم)</label>
-        <input id="cp1" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
-        <label class="sd-lab" for="cp2">أعده مرة ثانية</label>
-        <input id="cp2" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
-        <p class="sd-sub" style="font-size:.85rem">مو تسلسل (12345678) ولا رقم مكرر. تگدر تغيّره بعدين أي وقت من لوحتك.</p>
+        <label class="sd-lab" for="cp1">رقمك الجديد (8–12 رقماً)</label>${eye("cp1")}
+        <label class="sd-lab" for="cp2">أعده مرة ثانية</label>${eye("cp2")}
+        <p class="sd-sub" style="font-size:.85rem">مو تسلسل (12345678) ولا رقم مكرر، ومو نفس الرقم المؤقت. تگدر تغيّره بعدين أي وقت من لوحتك.</p>
         <button class="sd-btn" type="submit">احفظ رقمي وادخل</button></form>
       <p class="sd-msg" id="cpm" role="status" aria-live="polite"></p></div>`;
+    root.querySelectorAll("[data-eye]").forEach((b) => (b.onclick = () => {
+      const i = root.querySelector("#" + b.dataset.eye), show = i.type === "password";
+      i.type = show ? "text" : "password"; b.textContent = show ? "إخفاء" : "إظهار"; b.setAttribute("aria-pressed", String(show));
+      b.setAttribute("aria-label", show ? "إخفاء الرقم" : "إظهار الرقم");
+    }));
     const $ = (q) => root.querySelector(q), m = $("#cpm");
     $("#cpf").onsubmit = async (ev) => {
       ev.preventDefault();
       const a = digits($("#cp1").value), b = digits($("#cp2").value);
       if (a !== b) return (m.textContent = "الرقمين مو متطابقين.");
-      if (!/^\d{8,12}$/.test(a)) return (m.textContent = "الرقم 8–12 رقم.");
+      if (!/^\d{8,12}$/.test(a)) return (m.textContent = "الرقم 8–12 رقماً.");
       m.textContent = "لحظة…";
       let r;
       try {
