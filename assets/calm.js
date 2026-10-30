@@ -282,7 +282,7 @@
       const y = scrollY, end = y + innerHeight >= document.documentElement.scrollHeight - 120;
       clearTimeout(idle); idle = setTimeout(settle, 180);
       if (Math.abs(y - y0) < 8) return;
-      fab.classList.toggle("tuck", y > y0 && y > 160 && !end); y0 = y;
+      if (y > y0 && y > 160 && !end) fab.classList.add("tuck"); y0 = y;   // (52b) الصعود ما يطلّعه فوق محتوى — settle يقرر (بلا رمشة)
     }, { passive: true });
     addEventListener("resize", () => { clearTimeout(idle); idle = setTimeout(settle, 180); });
     addEventListener("load", () => setTimeout(settle, 300));

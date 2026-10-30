@@ -61,10 +61,14 @@
       orig.set(t.firstChild, t.firstChild.nodeValue); t.firstChild.nodeValue = h.textContent;
     });
     // عنصر نصّه الكامل بالقاموس بس مقسوم بمصطلح منقّط (.tm) — مثل «الأشعة الملونة للرحم (HSG)» ← نترجمه كله
-    [].forEach.call(document.querySelectorAll("small, b, p, h1, h2, h3, li, span, a, figcaption"), function (el) {
+    // (52c) وكذلك الصيغ W<sub>T</sub> (sub.fx من listen.js): المفتاح يرجع «W_T» مثل القاموس
+    var isFx = function (c) { return c.tagName === "SUB" && c.classList.contains("fx"); };
+    [].forEach.call(document.querySelectorAll("small, b, p, h1, h2, h3, li, span, a, figcaption, bdi, em, strong, label, div"), function (el) {
       if (el.closest(SKIP) || !el.firstElementChild || elOrig.has(el)) return;
-      if ([].some.call(el.children, function (c) { return !c.classList.contains("tm"); })) return;
-      var k = el.textContent.replace(/\s+/g, " ").trim(); if (!AR.test(k) || !DICT[k]) return;
+      if ([].some.call(el.children, function (c) { return !c.classList.contains("tm") && !isFx(c); })) return;
+      var k = el.textContent, fx = el.querySelector("sub.fx");
+      if (fx) { var cl = el.cloneNode(true); [].forEach.call(cl.querySelectorAll("sub.fx"), function (x) { x.replaceWith("_" + (x.getAttribute("data-r") || x.textContent)); }); k = cl.textContent; }
+      k = k.replace(/\s+/g, " ").trim(); if (!AR.test(k) || !DICT[k]) return;
       elOrig.set(el, el.innerHTML); el.textContent = DICT[k];
     });
     texts(function (n) {

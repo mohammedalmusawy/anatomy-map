@@ -354,7 +354,7 @@
         score = { right: 0, n: 0 }; reviewing(!!open); quiet();
       }
       if (!open) { reviewing(false); const k = pick(Object.assign({ L: load(), ix: o.ix, now, today }, c)); el._card = k; el.innerHTML = k ? cardHTML(k, Object.assign({ sel }, o)) : "";
-        if (o.hint) { o.hint.hidden = !k; const t = o.hint.querySelector("span"); if (t) t.textContent = k && k.type === "mistake" ? "🧠 عندك مراجعة دقيقتين ↓" : "💡 عندك اقتراح صغير بخطة اليوم ↓"; } }
+        if (o.hint) { o.hint.hidden = !k || k.type === "ask"; /* (52b) سؤال المادة بلا سطر تنبيه */ const t = o.hint.querySelector("span"); if (t) t.textContent = k && k.type === "mistake" ? "🧠 عندك مراجعة دقيقتين ↓" : "💡 عندك اقتراح صغير بخطة اليوم ↓"; } }
       if (tel) renderToday();
     };
     const renderToday = () => { const list = todayList(load(), dayKey()); tel.innerHTML = todayHTML(list, o); if (o.onToday) o.onToday(list.length); };
@@ -406,7 +406,7 @@
       }
       if (a === "reask") { sel = { like: null, hard: null }; mutate((L) => act.reask(L), true); paint(true); focusNext(); return; }
       if (a === "asksave") { mutate((L) => act.ask(L, sel.like, sel.hard), true); sel = { like: null, hard: null }; say("انحفظ اختيارك"); paint(true); focusNext(); return; }
-      if (a === "askskip") { mutate((L) => act.ask(L, null, null), true); sel = { like: null, hard: null }; paint(true); focusNext(); return; }
+      if (a === "askskip") { mutate((L) => act.ask(L, sel.like || null, null), true); sel = { like: null, hard: null }; paint(true); focusNext(); return; }
       if (a === "asklater") { mutate((L) => act.snooze(L, "ask", 2), true); sel = { like: null, hard: null }; paint(true); focusNext(); return; }
       if (a === "starsok" && k) { mutate((L) => { act.starSeen(L, k.list.map((n) => n.id)); if (k.mode === "exam") { act.addToday(L, k); L[`d:${dayKey()}:${k.id}`].done = true; } }, true); say("عاشت إيدك، راجعتها."); paint(true); focusNext(); return; }
       if (a === "tick") { mutate((L) => act.toggleToday(L, b.closest("[data-ltask]").dataset.ltask), true); const key = b.closest("[data-ltask]").dataset.ltask; renderToday(); const nb = tel.querySelector(`[data-ltask="${CSS.escape(key)}"] .ck`); if (nb) nb.focus(); return; }

@@ -62,7 +62,7 @@ body { transition: opacity .18s ease; }
 .ltoast.on { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) { .lang .thumb, body, .ltoast { transition: none; } }
-@media (max-width: 400px) { .lang { --seg-w: 46px; } .cbar .tools { gap: 5px; } .disp .tbtn { min-width: 38px; } }
+@media (max-width: 400px) { .lang { --seg-w: 46px; } .cbar .tools { gap: 5px; } .disp .tbtn { min-width: 44px; } }   /* (52b) هدف لمس 44 حتى تحت 400px */
 html[lang="en"] .hen { display: none; }
 html[lang="en"] .h1en { display: none; }
 html[lang="en"] .tod .m { display: none; }   /* مصطلح اليوم: المعنى واللفظ بالحروف العربية للعربي بس */

@@ -92,8 +92,10 @@
     const box = document.getElementById("mexam"); if (!box || !c || !c.examsOn) return;
     const up = pick(c.rows || []); if (!up.length) return;
     const x = up[0], name = (SUBJ[x.subject] || x.subject) + (x.type ? ` (${TYP[x.type]})` : "");
-    box.innerHTML = `<div class="ex2" role="note"><span class="dd">${x.left === 0 ? "<b>0</b><small>اليوم</small>" : `<b${dayParts(x.left)[1] ? "" : ' class="w"'}>${dayParts(x.left)[0]}</b>${dayParts(x.left)[1] ? `<small>${dayParts(x.left)[1]}</small>` : ""}`}</span>
-      <span><strong><span>أقرب امتحان:</span> ${esc(name)}</strong><p>${esc(arDate(x.when))} · ${inDays(x.left)}</p><p><a href="${root}exams/">📅 قسم الامتحانات ‹</a></p></span></div>`;
+    // (52b مراجعة) العدّ يطلع مرة وحدة بس: «اليوم» / «باچر» / «يومين» كلمة، أو رقم + «أيام/يوم» — والسطر تحته التاريخ بس
+    const dp = dayParts(x.left), word = x.left === 0 ? "اليوم" : x.left === 1 ? "باچر" : dp[1] ? null : dp[0];
+    box.innerHTML = `<div class="ex2" role="note"><span class="dd">${word ? `<b class="w">${word}</b>` : `<b>${dp[0]}</b><small>${dp[1]}</small>`}</span>
+      <span><strong><span>أقرب امتحان:</span> ${esc(name)}</strong><p>${esc(arDate(x.when))}</p><p><a href="${root}exams/">📅 قسم الامتحانات ‹</a></p></span></div>`;
   }
   load().then(icon).then((c) => (rel === "me/" ? meCard(c) : render(c))).catch(() => {});
 })();

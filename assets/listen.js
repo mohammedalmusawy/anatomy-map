@@ -20,7 +20,7 @@
       const a = m.index + m[1].length;
       if (a > p) f.appendChild(document.createTextNode(t.slice(p, a)));
       f.appendChild(document.createTextNode(m[2]));
-      const sb = document.createElement("sub"); sb.className = "fx"; sb.textContent = m[3] || m[4]; f.appendChild(sb);
+      const sb = document.createElement("sub"); sb.className = "fx"; sb.textContent = m[3] || m[4]; sb.setAttribute("data-r", m[3] != null ? "{" + m[3] + "}" : m[4]); f.appendChild(sb);
       p = m.index + m[0].length;
     }
     if (p < t.length) f.appendChild(document.createTextNode(t.slice(p)));

@@ -857,3 +857,11 @@ bdi.perr-bd { direction: rtl; unicode-bidi: isolate; }
 /* ₓ 52b (30/10): الصيغ W<sub>T</sub> (طبقة عرض من listen.js) — صغيرة وما تكبّر ارتفاع السطر */
 sub.fx { font-size: .72em; line-height: 0; vertical-align: -.25em; font-style: normal; }
 .ex2 .dd b.w { font-size: var(--t-lg); line-height: 1.2; }   /* 📅 52b: «يومين» كلمة، مو رقم كبير */
+/* 🧭 52b (مراجعة): تباين كلمات الشريط السفلي ≥ 4.5:1 فاتح وليلي (العادي والحالي) — داخل .nmob بس، والخلفية شبه مصمتة */
+@media (max-width: 719px) {
+  .nnav.nmob { --nm-ink: #474B55; --nm-cur: #36426E; --nm-curbg: #E3E6F1; background: color-mix(in srgb, var(--card) 98%, transparent); }
+  :root[data-theme="dark"] .nnav.nmob { --nm-ink: #C9CCD3; --nm-cur: #C9D2F2; --nm-curbg: #343B52; }
+  .nmob .nn { color: var(--nm-ink); }
+  .nmob .nn[aria-current="page"] { color: var(--nm-cur); }
+  .nmob .nn[aria-current="page"] .ico { background: var(--nm-curbg); }
+}

@@ -166,7 +166,7 @@
     const devName = { xray: "🩻 الأشعة السينية", ct: "🌀 المفراس", mri: "🧲 الرنين", ultrasound: "🔊 السونار" };
     const groups = {};
     S.atlas.forEach((a) => { (groups[a.dev] = groups[a.dev] || []).push(a); });
-    const sp = dayParts(S.streak);   // «يومين» بدل «2 أيام» (52b)
+    const sp = S.streak ? dayParts(S.streak) : ["—", "أيام"];   // «يومين» بدل «2 أيام» (52b)؛ صفر ← «—» مو «0 يوم» (52c)
     el.innerHTML = `<div class="stat3"><div><b>🔥 ${sp[0]}</b><small>${sp[1] ? sp[1] + " ورا بعض" : "ورا بعض"}</small></div>` +
       `<div><b>${S.quiz.avg == null ? "—" : S.quiz.avg + "%"}</b><small>معدل الاختبارات${S.quiz.up ? ` · ${S.quiz.up > 0 ? "↑" : "↓"} ${Math.abs(S.quiz.up)}%` : ""}</small></div>` +
       `<div><b>${S.fixed}</b><small>غلط تصلّح</small></div></div>` +
