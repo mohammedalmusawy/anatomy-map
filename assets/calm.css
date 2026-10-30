@@ -403,6 +403,7 @@ body[data-role="student"] .demo-role [data-role-set="student"], body[data-role="
 .c1 .si { background: var(--s-radiography); color: var(--s-radiography-ink); } .c2 .si { background: var(--s-anatomy); color: var(--s-anatomy-ink); }
 .c3 .si { background: var(--s-examinations); color: var(--s-examinations-ink); } .c4 .si { background: var(--s-equipment); color: var(--s-equipment-ink); }
 .c5 .si { background: var(--s-protection); color: var(--s-protection-ink); } .c6 .si { background: var(--s-ct); color: var(--s-ct-ink); }
+.c7 .si { background: var(--hl); color: var(--ink); }   /* 61: «الامتحانات» — تطلع بس والقسم مشغّل */
 .hcard .lock { grid-column: 2; justify-self: start; }
 .tod { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; margin-top: 14px; }
 .tod small { color: var(--muted); font-size: var(--t-xs); }
@@ -581,6 +582,7 @@ html { overflow-x: clip; }
   .wrap.hwrap .hgrid > .hcard { grid-column: span 2; }
   .wrap.hwrap .hgrid > .hcard.big { grid-column: 1 / -1; }
   .wrap.hwrap .hgrid > .hcard:nth-child(5):nth-last-child(2), .wrap.hwrap .hgrid > .hcard:nth-child(6):last-child { grid-column: span 3; }
+  .wrap.hwrap .hgrid:has(> .c7[hidden]) > .c5, .wrap.hwrap .hgrid:has(> .c7[hidden]) > .c6 { grid-column: span 3; }   /* 61: الامتحانات مخفية ← نفس الشكل القديم */
   /* صفحة منطقة بالأطلس: الحالات عمودين */
   .calm.ported .wrap:has(> article.case) { max-width: 1160px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; align-items: start; }
   .calm.ported .wrap:has(> article.case) > * { grid-column: 1 / -1; min-width: 0; }

@@ -53,8 +53,8 @@
   // 📅 أيقونة «الامتحانات» بالرئيسية (الأيقونة الوقتية الوحيدة): تطلع بس إذا القسم مفعّل (sections.exams) + اكو امتحان مؤكَّد جاي.
   // غير هيچ (مطفي، ماكو امتحان، بلا نت وماكو نسخة) تبقى مخفية — نفس الحال قبل.
   function icon(c) {
-    const on = !!(c && c.examsOn && pick(c.rows || [], 3650).length);
-    document.querySelectorAll("[data-exams-icon]").forEach((a) => a.classList.toggle("hidden", !on));
+    const on = !!(c && c.examsOn);   // (61، قرار محمد) تطلع بس لما يشغّل قسم الامتحانات، وتختفي لما يطفيه
+    document.querySelectorAll("[data-exams-icon]").forEach((a) => { a.classList.toggle("hidden", !on); a.hidden = !on; });
     return c;
   }
 
