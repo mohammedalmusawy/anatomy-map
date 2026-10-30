@@ -5,7 +5,7 @@
 (function () {
   "use strict";
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const GRP = [["team", "👥 فريق المنصة"], ["doctors", "🩺 أطباء دعموا بالصور"], ["patrons", "🏛️ رعاة المنصة"], ["special", "🤝 شكر خاص"], ["supporters", "💛 داعمون"], ["supervision", "🔬 الإشراف العلمي"]];
+  const GRP = [["team", "👥 فريق المنصة"], ["patrons", "🏛️ رعاة المنصة"], ["doctors", "🩺 أطباء دعموا بالصور"], ["special", "🤝 شكر خاص"], ["supporters", "💛 داعمون"], ["supervision", "🔬 الإشراف العلمي"]];
   const TAGS = [["", "— لا —"], ["chest-abdomen", "الصدر والبطن"], ["spine-joints", "الفقرات والمفاصل"], ["fractures", "الكسور"], ["paeds", "الأطفال"]];
   const MAX = 50 * 1024, PREFIX = ["الصيدلانية", "الصيدلاني", "الدكتورة", "الدكتور", "أ.د.", "د.", "م."];
   const mono = (name) => {
