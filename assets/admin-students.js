@@ -8,7 +8,8 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const link = (code) => `${SITE}?code=${encodeURIComponent(code)}`;
   const waText = (name, code) => `أهلاً ${name.split(" ")[0]}، هذا كودك لموقع دروس تقنيات الأشعة: ${code} — أو افتح الرابط مباشرة: ${link(code)} (يشتغل على 3 أجهزة بالكثير، لا تشاركه)`;
-  const ago = (t) => { if (!t) return "—"; const d = Math.floor((Date.now() - new Date(t)) / 864e5); return d <= 0 ? "اليوم" : d === 1 ? "أمس" : `قبل ${d} يوم`; };
+  const ago = (t) => { if (!t) return "—"; const d = Math.floor((Date.now() - new Date(t)) / 864e5); return d <= 0 ? "اليوم" : d === 1 ? "أمس" : "قبل " + arDays(d); };
+  const arDays = (n) => (n = Math.abs(Math.round(+n || 0))) === 1 ? "يوم" : n === 2 ? "يومين" : n >= 3 && n <= 10 ? `${n} أيام` : `${n} يوم`;   // عبارة كاملة
   const copy = async (s, btn) => { try { await navigator.clipboard.writeText(s); const o = btn.textContent; btn.textContent = "✔️"; setTimeout(() => (btn.textContent = o), 1200); } catch (e) { prompt("انسخ:", s); } };
 
   async function mount(pane, sb) {

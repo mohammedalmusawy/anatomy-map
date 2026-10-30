@@ -8,6 +8,34 @@
 (function () {
   if (window.Listen) return;
   const root = new URL("../", document.currentScript.src).href;
+  // ₓ (52b، 30/10) الصيغ: «W_T» ← W<sub>T</sub> (و H_T,R · D_T · X_{YZ}). طبقة عرض بس: نص الأستاذ والـ JSON ما يتغيّرون،
+  //    وتوقيت جمل السمع (data-s/data-e) بمكانه. ما تلمس الروابط والملفات والكود والحقول: الأساس حرف كبير (أو حرفين) وقبله فراغ/قوس.
+  const FX = /(^|[^A-Za-z0-9_\/.:@#?&-])([A-ZΣΔ][a-z]?)_(?:\{([^{}]{1,10})\}|([A-Za-z0-9]{1,3}(?:,[A-Za-z0-9]{1,3})?))(?![A-Za-z0-9_\/]|\.[A-Za-z0-9])/g;
+  const FXSKIP = "script,style,noscript,textarea,input,select,option,code,pre,svg,title,[contenteditable],.nosub,sub,sup";
+  const fxTest = (t) => { FX.lastIndex = 0; return FX.test(t); };
+  function fxNode(n) {   // يرجّع أول عقدة جديدة (أو null إذا ماكو شي)
+    const t = n.nodeValue; if (!t || t.indexOf("_") < 0 || !fxTest(t)) return null;
+    const f = document.createDocumentFragment(); let p = 0, m; FX.lastIndex = 0;
+    while ((m = FX.exec(t))) {
+      const a = m.index + m[1].length;
+      if (a > p) f.appendChild(document.createTextNode(t.slice(p, a)));
+      f.appendChild(document.createTextNode(m[2]));
+      const sb = document.createElement("sub"); sb.className = "fx"; sb.textContent = m[3] || m[4]; f.appendChild(sb);
+      p = m.index + m[0].length;
+    }
+    if (p < t.length) f.appendChild(document.createTextNode(t.slice(p)));
+    const first = f.firstChild; n.parentNode.replaceChild(f, n); return first;
+  }
+  function fxIn(el) {
+    if (!el) return; if (el.nodeType === 3) { if (el.parentElement && !el.parentElement.closest(FXSKIP)) fxNode(el); return; }
+    if (el.closest && el.closest(FXSKIP)) return;
+    const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.nodeValue.indexOf("_") < 0 || n.parentElement.closest(FXSKIP) ? 2 : 1) });
+    const list = []; while (w.nextNode()) list.push(w.currentNode); list.forEach(fxNode);
+  }
+  // lang.js (وضع ENG): نص مترجم بيه صيغة ← نلفّه بـ span ونرجّع نفس العقدة الأصلية وقت الرجوع للعربي
+  window.SubFx = { test: fxTest, wrap(n) { const sp = document.createElement("span"); sp.className = "fxw"; n.parentNode.replaceChild(sp, n); sp.textContent = n.nodeValue; fxIn(sp); return sp; }, run: fxIn };
+  const fxGo = () => { fxIn(document.body); new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((x) => { if (x.nodeType === 1 && x.classList.contains("fx")) return; fxIn(x); }))).observe(document.body, { childList: true, subtree: true }); };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fxGo); else fxGo();
   const esc = (x) => String(x || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const main = new Audio(), word = new Audio();
   let LEX = {}, ready = null;

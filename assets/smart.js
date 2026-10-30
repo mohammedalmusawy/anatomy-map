@@ -3,6 +3,7 @@
 (function () {
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const dayParts = (n) => (n = Math.abs(Math.round(+n || 0))) === 2 ? ["يومين", ""] : [String(n), n >= 3 && n <= 10 ? "أيام" : "يوم"];   // [الرقم الكبير، الوحدة] للبطاقات
   const root = new URL(".", document.querySelector('link[rel="manifest"]').href).href;
   const C = window.STUDY_CLOUD || {}, ON = !!(C.url && C.anon);
   const H = { apikey: C.anon, Authorization: "Bearer " + C.anon, "Content-Type": "application/json" };
@@ -216,7 +217,7 @@
       qs.sort((a, b) => b.s.rate - a.s.rate);
       const top = qs[0];
       return `<section class="exam"><h2>${esc(S.name)}${x.type ? ` (${x.type === "theory" ? "نظري" : "عملي"})` : ""} <bdi class="en">${esc(S.en)}</bdi></h2>
-        <p class="when">🗓️ ${esc(when)} · ${left > 0 ? `باقي <b>${left}</b> يوم` : left === 0 ? "<b>اليوم</b>" : "خلص"}</p>
+        <p class="when">🗓️ ${esc(when)} · ${left > 0 ? (dayParts(left)[1] ? `باقي <b>${dayParts(left)[0]}</b> ${dayParts(left)[1]}` : `باقي <b>${dayParts(left)[0]}</b>`) : left === 0 ? "<b>اليوم</b>" : "خلص"}</p>
         ${x.postponed_to ? `<p class="post">⏩ تأجلت المادة إلى يوم ${esc(x.postponed_to)}</p>` : ""}
         ${sure ? `<p class="inc">📚 المشمول: ${inc.map((L) => `${esc(L.type_ar)} م${L.num}`).join("، ")}</p>` : `<p class="inc">📚 المشمول: ما متأكدين بعد — نحدّثه أول ما يوصل خبر.<br><small>لحد ما يتأكد، المراجعة تحت من المحاضرات اللي نزلت لحد هسه.</small></p>`}
         ${top ? `<div class="topq">⭐ <b>السؤال الأكثر غلط</b>${DISC}${qcard(top.q, top.L, ai, top.s)}</div>` : ""}

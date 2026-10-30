@@ -24,6 +24,8 @@
   const KEEP_DAYS = 120, KEEP_LOG = 300;
   const DEV_ORDER = ["xray", "ct", "mri", "ultrasound"];
   const OUT_TYPES = ["📗 كتاب", "🏫 محاضرة الكلية", "🏥 مستشفى/تدريب", "🩻 صور أشعة", "✏️ غيره"];
+  const arDays = (n) => (n = Math.abs(Math.round(+n || 0))) === 1 ? "يوم" : n === 2 ? "يومين" : n >= 3 && n <= 10 ? `${n} أيام` : `${n} يوم`;   // عبارة كاملة
+  const dayParts = (n) => (n = Math.abs(Math.round(+n || 0))) === 2 ? ["يومين", ""] : [String(n), n >= 3 && n <= 10 ? "أيام" : "يوم"];   // [الرقم الكبير، الوحدة] للبطاقات
 
   // «محاضرة وحدة / محاضرتين / 3 محاضرات / 11 محاضرة»
   const arCount = (n, one = "محاضرة", two = "محاضرتين", many = "محاضرات") =>
@@ -164,7 +166,8 @@
     const devName = { xray: "🩻 الأشعة السينية", ct: "🌀 المفراس", mri: "🧲 الرنين", ultrasound: "🔊 السونار" };
     const groups = {};
     S.atlas.forEach((a) => { (groups[a.dev] = groups[a.dev] || []).push(a); });
-    el.innerHTML = `<div class="stat3"><div><b>🔥 ${S.streak}</b><small>${S.streak === 1 ? "يوم" : "أيام"} ورا بعض</small></div>` +
+    const sp = dayParts(S.streak);   // «يومين» بدل «2 أيام» (52b)
+    el.innerHTML = `<div class="stat3"><div><b>🔥 ${sp[0]}</b><small>${sp[1] ? sp[1] + " ورا بعض" : "ورا بعض"}</small></div>` +
       `<div><b>${S.quiz.avg == null ? "—" : S.quiz.avg + "%"}</b><small>معدل الاختبارات${S.quiz.up ? ` · ${S.quiz.up > 0 ? "↑" : "↓"} ${Math.abs(S.quiz.up)}%` : ""}</small></div>` +
       `<div><b>${S.fixed}</b><small>غلط تصلّح</small></div></div>` +
       `<h2>المحاضرات</h2><div class="bars">${S.subjects.map((s) => bar(s.name, `${s.done}/${s.total} · ${s.left ? `باقي ${s.left}` : "✓"}`, s.pct)).join("")}</div>` +
@@ -342,7 +345,7 @@
     if (opts.debug) window.__track = st;
   }
 
-  return { KEY, OUT_TYPES, dayKey, addDays, arCount, empty, rec, prune, facts, ratios, streak, summarize, hm,
+  return { KEY, OUT_TYPES, dayKey, addDays, arCount, arDays, dayParts, empty, rec, prune, facts, ratios, streak, summarize, hm,
     renderProgress, renderOutside, start, load, add, combine,
     state: st, mutate, save: flush,
     facts_today: (progress) => facts(st(), dayKey(), progress),

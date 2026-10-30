@@ -38,6 +38,7 @@
   const DAILY = { 30: "30د", 60: "ساعة", 120: "ساعتين" };
   const SLOTS = ["الصبح · البيت", "بعد الدوام · الكلية", "العصر · البيت", "بالليل · البيت"];
   const GAPS = [1, 3, 7];             // مراجعة متباعدة بعد يوم، 3 أيام، أسبوع
+  const arDays = (n) => (n = Math.abs(Math.round(+n || 0))) === 1 ? "يوم" : n === 2 ? "يومين" : n >= 3 && n <= 10 ? `${n} أيام` : `${n} يوم`;   // عبارة كاملة
   const REVIEW_MIN = 5, EXTRA_MIN = 5, MIN_PART = 8, REST_WDAY = 5;   // الراحة الافتراضية: الجمعة
   const ICON = { read: "📖", listen: "🎧", quiz: "📝", review: "🔁", terms: "🔁", mistakes: "📕", cases: "🩻", recap: "🔁", focus: "🎯", missed: "🎯", rest: "😌", exam: "📅" };
 
@@ -166,7 +167,7 @@
       }
       due.slice(0, 3).forEach(([id, g]) => {
         const l = byId[id]; if (!l) return;
-        day.tasks.push(mk(day, "review", { lec: id, title: `راجع: ${l.title}`, sub: `${short(l)} · +${g} ${g === 1 ? "يوم" : "أيام"} · 10 أسئلة سريعة`, min: REVIEW_MIN, href: l.quiz, auto: { quiz: l.quiz } }));
+        day.tasks.push(mk(day, "review", { lec: id, title: `راجع: ${l.title}`, sub: `${short(l)} · +${arDays(g)} · 10 أسئلة سريعة`, min: REVIEW_MIN, href: l.quiz, auto: { quiz: l.quiz } }));
         cap -= REVIEW_MIN;
       });
       if (carryQuiz) { day.tasks.push(carryQuiz(day)); cap -= carryQuiz.min; carryQuiz = null; }

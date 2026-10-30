@@ -267,12 +267,28 @@
   // 🤖 العائم: يتنحّى وقت النزول بالقراءة ويرجع وقت الصعود/آخر الصفحة، ويختفي وقت الكتابة (كيبورد الموبايل)
   const fab = $(".fab");
   if (fab) {
-    let y0 = scrollY;
+    let y0 = scrollY, idle = 0;
+    // (52b، 30/10) ما يقعد فوق محتوى: لما يوقف التمرير نفحص شنو تحته (5 نقاط)؛ إذا بطاقة/زر/نص ← يتنحّى، وإذا فراغ (آخر الصفحة) ← يطلع
+    const SOLID = "a,button,input,textarea,select,label,summary,img,svg,figure,video,canvas,table,p,li,h1,h2,h3,h4,h5,h6,blockquote,pre,.big,.ccard,.card,.task,.note,.timer,.mdet,.lxc,article,.case,.cbtn,.chip2,.go2,.tm,.ls";
+    const covers = () => {
+      const b = fab.getBoundingClientRect(); if (!b.width) return false;
+      const bot = innerHeight - (parseFloat(getComputedStyle(fab).bottom) || 0);   // مكانه الطبيعي (بلا تنحّي/حركة)
+      const r = { left: b.left, right: b.right, top: bot - b.height, bottom: bot };
+      const pts = [[r.left + 4, r.top + 4], [r.right - 4, r.top + 4], [r.left + 4, r.bottom - 4], [r.right - 4, r.bottom - 4], [(r.left + r.right) / 2, (r.top + r.bottom) / 2]];
+      return pts.some(([x, y]) => (document.elementsFromPoint ? document.elementsFromPoint(x, y) : []).some((el) => !fab.contains(el) && el.closest && el.closest(SOLID) && !el.closest(".nnav,.nmob,.fab")));
+    };
+    const settle = () => { const end = scrollY + innerHeight >= document.documentElement.scrollHeight - 8; fab.classList.toggle("tuck", !end && covers()); };
     addEventListener("scroll", () => {
       const y = scrollY, end = y + innerHeight >= document.documentElement.scrollHeight - 120;
+      clearTimeout(idle); idle = setTimeout(settle, 180);
       if (Math.abs(y - y0) < 8) return;
       fab.classList.toggle("tuck", y > y0 && y > 160 && !end); y0 = y;
     }, { passive: true });
+    addEventListener("resize", () => { clearTimeout(idle); idle = setTimeout(settle, 180); });
+    addEventListener("load", () => setTimeout(settle, 300));
+    document.addEventListener("load", (ev) => { if (ev.target && ev.target.tagName === "IMG") { clearTimeout(idle); idle = setTimeout(settle, 250); } }, true);   // صور الأطلس تكبّر الصفحة
+    setTimeout(settle, 600);
+    if ("MutationObserver" in window) { let mt = 0; new MutationObserver(() => { clearTimeout(mt); mt = setTimeout(settle, 250); }).observe(document.body, { childList: true, subtree: true }); }
     document.addEventListener("focusin", (ev) => { if (ev.target.matches("input,textarea,select,[contenteditable]")) fab.classList.add("tuck"); });
     document.addEventListener("focusout", (ev) => { if (ev.target.matches("input,textarea,select,[contenteditable]")) fab.classList.remove("tuck"); });
     fab.addEventListener("focus", () => fab.classList.remove("tuck"));

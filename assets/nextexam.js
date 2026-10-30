@@ -13,6 +13,8 @@
   const KEY = "t:nextexam", TTL = 15 * 60e3, WINDOW = 14;
   const SUBJ = { anatomy: "التشريح", radiography: "التصوير الشعاعي", protection: "الوقاية من الإشعاع", examinations: "الفحوصات الشعاعية", ct: "أجهزة التصوير المقطعي", equipment: "أجهزة الأشعة التقليدية" };
   const TYP = { theory: "نظري", practical: "عملي" };
+  const arDays = (n) => (n = Math.abs(Math.round(+n || 0))) === 1 ? "يوم" : n === 2 ? "يومين" : n >= 3 && n <= 10 ? `${n} أيام` : `${n} يوم`;   // عبارة كاملة
+  const dayParts = (n) => (n = Math.abs(Math.round(+n || 0))) === 2 ? ["يومين", ""] : [String(n), n >= 3 && n <= 10 ? "أيام" : "يوم"];   // [الرقم الكبير، الوحدة] للبطاقات
   const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
   const MONTHS = ["كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول"];
 
@@ -23,7 +25,7 @@
   };
   const utc = (s) => Date.parse(String(s) + "T00:00:00Z");
   const arDate = (s) => { const d = new Date(utc(s)); return `${DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`; };
-  const inDays = (n) => n === 0 ? "اليوم" : n === 1 ? "باچر" : n === 2 ? "بعد يومين" : n <= 10 ? `بعد ${n} أيام` : `بعد ${n} يوم`;
+  const inDays = (n) => n === 0 ? "اليوم" : n === 1 ? "باچر" : "بعد " + arDays(n);
 
   async function load() {
     try { const c = JSON.parse(localStorage.getItem(KEY) || "null"); if (c && Date.now() - c.at < TTL) return c; } catch (e) {}
@@ -90,7 +92,7 @@
     const box = document.getElementById("mexam"); if (!box || !c || !c.examsOn) return;
     const up = pick(c.rows || []); if (!up.length) return;
     const x = up[0], name = (SUBJ[x.subject] || x.subject) + (x.type ? ` (${TYP[x.type]})` : "");
-    box.innerHTML = `<div class="ex2" role="note"><span class="dd"><b>${x.left}</b><small>${x.left === 0 ? "اليوم" : x.left === 1 ? "يوم" : "أيام"}</small></span>
+    box.innerHTML = `<div class="ex2" role="note"><span class="dd">${x.left === 0 ? "<b>0</b><small>اليوم</small>" : `<b${dayParts(x.left)[1] ? "" : ' class="w"'}>${dayParts(x.left)[0]}</b>${dayParts(x.left)[1] ? `<small>${dayParts(x.left)[1]}</small>` : ""}`}</span>
       <span><strong><span>أقرب امتحان:</span> ${esc(name)}</strong><p>${esc(arDate(x.when))} · ${inDays(x.left)}</p><p><a href="${root}exams/">📅 قسم الامتحانات ‹</a></p></span></div>`;
   }
   load().then(icon).then((c) => (rel === "me/" ? meCard(c) : render(c))).catch(() => {});

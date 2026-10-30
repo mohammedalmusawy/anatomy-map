@@ -72,7 +72,7 @@
       var par = n.parentElement;
       if (par.querySelector(':scope > .en, :scope > .h1en')) { orig.set(n, n.nodeValue); n.nodeValue = ""; return; }
       var v = tr(n.nodeValue);
-      if (v != null) { orig.set(n, n.nodeValue); n.nodeValue = v; return; }
+      if (v != null) { orig.set(n, n.nodeValue); n.nodeValue = v; if (window.SubFx && v.indexOf("_") > -1 && window.SubFx.test(v)) fxRep.push([window.SubFx.wrap(n), n]); return; }   // ₓ (52b) صيغة بالترجمة ← W<sub>T</sub>
       var b = par.closest(BLOCK) || par;          // ما إله ترجمة ← عربي + «EN soon»
       if (b.closest("[data-ensoon]") && b.closest("[data-ensoon]") !== b) return;
       if (!b.hasAttribute("data-ensoon")) { b.setAttribute("data-ensoon", ""); b.setAttribute("dir", "rtl"); b.setAttribute("lang", "ar"); marked.push(b); }
@@ -99,7 +99,9 @@
     });
     var t = DICT[titleAr.replace(/ · معاينة$/, "")]; document.title = t ? t + " · Preview" : titleAr;
   }
+  var fxRep = [];
   function toAr() {
+    fxRep.forEach(function (x) { if (x[0].parentNode) x[0].parentNode.replaceChild(x[1], x[0]); }); fxRep = [];   // نرجّع العقدة الأصلية قبل الاستعادة
     elOrig.forEach(function (h, el) { el.innerHTML = h; }); elOrig.clear();
     orig.forEach(function (v, n) { n.nodeValue = v; }); orig.clear();
     marked.forEach(function (b) { b.removeAttribute("data-ensoon"); b.removeAttribute("dir"); b.removeAttribute("lang"); }); marked = [];

@@ -854,3 +854,6 @@ bdi.perr-bd { direction: rtl; unicode-bidi: isolate; }
 }
 @media print { .nnav.nmob { display: none; } }
 .idn .calmline { color: var(--brand); font: 600 var(--t-sm)/1.5 var(--title-font); margin: 6px 0 0; }
+/* ₓ 52b (30/10): الصيغ W<sub>T</sub> (طبقة عرض من listen.js) — صغيرة وما تكبّر ارتفاع السطر */
+sub.fx { font-size: .72em; line-height: 0; vertical-align: -.25em; font-style: normal; }
+.ex2 .dd b.w { font-size: var(--t-lg); line-height: 1.2; }   /* 📅 52b: «يومين» كلمة، مو رقم كبير */
