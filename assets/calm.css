@@ -823,3 +823,34 @@ body[data-role="student"] .pvtool [data-role-set="student"], body[data-role="vis
 .fb.ok .why { font-weight: 500; font-size: var(--t-sm); margin-top: 4px; color: var(--ink); }
 /* 30/10: «احتمال خطأ» داخل جملة إنكليزية ← معزول بـ <bdi dir="rtl"> (app.css يخلّي bdi = ltr، فنرجّعه هنا) */
 bdi.perr-bd { direction: rtl; unicode-bidi: isolate; }
+
+/* 🧭 51 (30/10، موافقة محمد): بالموبايل صف التنقل صار شريط سفلي ثابت قريب من الإبهام — نفس الأزرار الثلاثة.
+   اللابتوب ≥720 ما تغيّر (داخل الشريط العلوي). العناصر الثابتة بالأسفل ترتفع فوقه. */
+@media (max-width: 719px) {
+  :root { --bnav: 60px; }
+  .nnav.nmob { position: fixed; inset-inline: 0; bottom: 0; z-index: 45; margin: 0; gap: 0;
+    padding: 4px max(8px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(8px, env(safe-area-inset-left));
+    min-height: calc(var(--bnav) + env(safe-area-inset-bottom)); box-sizing: border-box;
+    background: color-mix(in srgb, var(--card) 94%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line); }
+  .nmob .nn { flex-direction: column; gap: 3px; min-height: 52px; padding: 0 4px; border: 0; background: none; border-radius: 12px;
+    color: var(--muted); font-size: var(--t-xs); }
+  .nmob .nn .ico { width: 1.35rem; height: 1.35rem; color: currentColor; }
+  .nmob .nn[aria-current="page"] { color: var(--brand); background: none; }
+  .nmob .nn[aria-current="page"] .ico { stroke-width: 2.2; }
+  .nmob .nn:hover { border-color: transparent; }
+  body.calm:has(.nmob) { padding-bottom: calc(var(--bnav) + 88px + env(safe-area-inset-bottom)); }
+  body:has(.nmob) .fab { bottom: calc(var(--bnav) + 12px + env(safe-area-inset-bottom)); }
+  body:has(.nmob) .ltoast { bottom: calc(var(--bnav) + 76px + env(safe-area-inset-bottom, 0px)); }
+  body.calm.asst:has(.nmob) { padding-bottom: calc(var(--bnav) + 24px + env(safe-area-inset-bottom)); }
+  body:has(.nmob) .asst .ask, body.asst:has(.nmob) .ask { bottom: calc(var(--bnav) + 10px + env(safe-area-inset-bottom)); }
+  body:has(.nmob) .sd-pill { bottom: calc(var(--bnav) + 12px + env(safe-area-inset-bottom)); }
+  /* من المراجعة المستقلة: التمرير التلقائي (السؤال التالي، الأطلس) ما يوقف تحت الشريط */
+  html:has(.nmob) { scroll-padding-bottom: calc(var(--bnav) + 16px + env(safe-area-inset-bottom)); }
+  body:has(.nmob) .gz { z-index: 46; }   /* «خمّن الحالة» نافذة كاملة إلها رجوع ← فوق الشريط */
+  body:has(.nmob) .tpop.sheet { bottom: calc(var(--bnav) + 8px + env(safe-area-inset-bottom)); }
+  .nmob .nn[aria-current="page"] { font-weight: 800; }
+  .nmob .nn[aria-current="page"] .ico { background: var(--brand-soft); border-radius: 999px; padding: 3px 14px; box-sizing: content-box; }
+}
+@media print { .nnav.nmob { display: none; } }
+.idn .calmline { color: var(--brand); font: 600 var(--t-sm)/1.5 var(--title-font); margin: 6px 0 0; }
