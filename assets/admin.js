@@ -115,6 +115,11 @@
       const body = { action: isOwn() ? "owner_login" : "pin_login", pin, remember, dev: DEV.get(), ...(isOwn() ? { email } : {}) };
       const r = await fn("staff-auth", body);
       $("#lp").value = ""; b.disabled = false;
+      // 🏛️ 53 (مسودة): رئيس قسم جديد دخل برقم مؤقت (72 ساعة) ← «اختر رقمك» قبل أي جلسة (السيرفر ما يعطي session لحد ما يختار)
+      if (r.status === 200 && r.must_choose && window.AdminDept && AdminDept.choosePin)
+        return AdminDept.choosePin(box, { ticket: r.ticket, name: r.name, expires: r.temp_expires_at, onSession: async (s) => {
+          const { error } = await sb.auth.setSession({ access_token: s.access_token, refresh_token: s.refresh_token });
+          if (error) return loginView("انحفظ رقمك. ادخل بيه هسه."); location.reload(); } });
       if (r.status !== 200 || !r.session) return msg(r.msg || "ما گدرنا ندخل.");
       LSx.set("adm:remember", remember ? "1" : "0");
       if (remember) DEV.set(r.device);

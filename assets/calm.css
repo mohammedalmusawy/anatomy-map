@@ -865,3 +865,25 @@ sub.fx { font-size: .72em; line-height: 0; vertical-align: -.25em; font-style: n
   .nmob .nn[aria-current="page"] { color: var(--nm-cur); }
   .nmob .nn[aria-current="page"] .ico { background: var(--nm-curbg); }
 }
+
+/* 🏛️ 53 (مسودة 30/10): «المنصب مو الشخص» — لمسة رئيس القسم (مخفية لحد التفعيل) + سطر صاحب المنصة (ثابت) */
+.ownerline { margin: 2px 0 0; font-size: var(--t-xs); color: var(--muted); text-align: center; letter-spacing: .1px; }
+.hd-line { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0 0; font-size: var(--t-xs); color: var(--muted); }
+.hd-line b { color: var(--ink); font-weight: 600; }
+.hd-av { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex: none; border: 1px solid var(--line); background: var(--card); }
+.hd-av[data-neutral] { padding: 4px; object-fit: contain; }
+.hd-av.sm { width: 24px; height: 24px; }
+.hd-av.lg { width: 72px; height: 72px; margin: 0 auto 6px; display: block; }
+.hd-word { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; margin: 16px 0 4px; }
+.hd-word .hd-wt { font: 600 var(--t-sm) var(--title-font); color: var(--muted); margin: 0 0 4px; }
+.hd-q { margin: 0; padding-inline-start: 12px; border-inline-start: 2px solid var(--accent-soft); }
+.hd-q p { margin: 0; line-height: 1.9; }
+.hd-by { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; font-size: var(--t-xs); color: var(--muted); }
+.hd-about .hd-by { font-size: var(--t-sm); color: var(--ink); }
+.hd-badge { display: inline-block; background: color-mix(in srgb, #fff 20%, transparent); border-radius: 999px; padding: 0 8px; margin-inline-end: 4px; font-size: .92em; }
+.hd-wel { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 16px; background: color-mix(in srgb, var(--ink) 38%, transparent); }
+.hd-box { width: min(360px, 100%); background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r); padding: 22px 20px 18px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,.18); }
+.hd-wn { margin: 0; font: 700 var(--t-md) var(--title-font); }
+.hd-wn small { display: block; font: 400 var(--t-xs) var(--body-font); color: var(--muted); }
+.hd-wq { margin: 12px 0 16px; line-height: 1.9; }
+.hd-box .cbtn { width: 100%; min-height: 48px; justify-content: center; }

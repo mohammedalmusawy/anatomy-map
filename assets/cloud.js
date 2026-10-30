@@ -46,7 +46,11 @@
     const sec = S.sections || {};
     window.STUDY_SETTINGS = sec;
     const a = S.announcement || {};
-    if (a.on && a.text) document.body.insertAdjacentHTML("afterbegin", `<div class="annbar">📣 ${esc(a.text)}</div>`);
+    // 🏛️ 53 (مسودة): إعلان رئيس القسم (a.by = "head") عليه شارة «📢 من رئيس القسم» — بس إذا ظهور الرئيس مفعّل (settings.dept_head.on)
+    const byHead = a.by === "head" && S.dept_head && S.dept_head.on === true;
+    if (a.on && a.text) document.body.insertAdjacentHTML("afterbegin", byHead
+      ? `<div class="annbar" data-by="head"><span class="hd-badge">📢 من رئيس القسم</span> ${esc(a.text)}</div>`
+      : `<div class="annbar">📣 ${esc(a.text)}</div>`);
     if (sec.exams) document.querySelectorAll(".exams-only").forEach((x) => x.classList.remove("hidden"));
     if (sec.assistant) {
       document.querySelectorAll(".assistant-only").forEach((x) => x.classList.remove("hidden"));
