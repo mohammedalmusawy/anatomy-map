@@ -56,7 +56,7 @@
       $("#dp-feat").onclick = async () => {
         if (!r.on && !confirm("تفعّل دخول رئيس القسم؟")) return;
         // ✋ 59: «⏸️ طفّيه» ← تأكيد أول
-        if (r.on && !(await ask($("#dp-on"), "تطفّي دخول رئيس القسم للكل؟ يطلع من كل أجهزته وما يگدر يدخل لحد ما تفعّله.", { yes: "نعم، طفّيه" }))) return;
+        if (r.on && !(await ask($("#dp-on"), "تطفّي دخول رئيس القسم للكل؟ يطلع من كل أجهزته وما يگدر يدخل لحد ما تفعّله.", { danger: true, yes: "نعم، طفّيه" }))) return;
         await api({ action: "admin_feature", on: !r.on }); load();
       };
       names = Object.fromEntries(r.viewers.map((v) => [v.id, v.name]));
@@ -121,7 +121,7 @@
       if (a === "toggle") {
         const back = b.textContent.includes("▶️");
         // ✋ 59: ⏸️ إيقاف رئيس القسم ← تأكيد أول (التشغيل بلا تأكيد)
-        if (!back && !(await ask(b, `توقف حساب «${name}»؟ يطلع من كل أجهزته وما يگدر يدخل لحد ما ترجّعه (▶️).`, { yes: "نعم، أوقفه" }))) return;
+        if (!back && !(await ask(b, `توقف حساب «${name}»؟ يطلع من كل أجهزته وما يگدر يدخل لحد ما ترجّعه (▶️).`, { danger: true, yes: "نعم، أوقفه" }))) return;
         r = await api({ action: "admin_toggle", id, enabled: back });
       }
       // 🏛️ 53: حساب رئيس القسم ما ينحذف — ينقفل بس (التاريخ والشهادات والتقارير تبقى باسمه، وتگدر تفتحه بضغطة)
@@ -541,6 +541,8 @@
     // 💬 58 «صوتك يوصل» (مسودة): الرئيس بس يشغّل. القائمة بلا نص؛ الفتح بس يجيب النص ويكتب 👁️ «انقرت» بالسيرفر.
     async function voiceScreen() {
       vCss();
+      // تأكيد داخل الصفحة (AdminAsk من admin.js)، مو نافذة المتصفح
+      const ask = (where, text, o) => (window.AdminAsk ? window.AdminAsk(where, text, o) : Promise.resolve(confirm(text)));
       const K = { idea: ["💡", "مقترح"], complaint: ["📝", "شكوى"], opinion: ["💬", "رأي"], thanks: ["🌷", "شكر"] };
       const A = { subject: "المادة", lecture: "المحاضرة", services: "الخدمات", dept: "القسم", platform: "المنصة", other: "غيره" };
       const S = { received: "✓✓ جديدة", opened: "👁️ قريتها", in_progress: "🔄 قيد المتابعة", done: "✔️ تمت", declined: "✔️ ما ممكن" };
@@ -586,7 +588,7 @@
         const q = (x) => root.querySelector(x);
         q('[data-v="on"]').onchange = async (ev) => {
           const on = ev.target.checked;
-          if (!on && !confirm("تطفّي «صوتك يوصل»؟ الطلاب ما يگدرون يرسلون لحد ما تشغّلها، والرسائل الموجودة تبقى.")) { ev.target.checked = true; return; }
+          if (!on && !(await ask(ev.target.closest("label"), "تطفّي «صوتك يوصل»؟ الطلاب ما يگدرون يرسلون لحد ما تشغّلها، والرسائل الموجودة تبقى.", { danger: true, yes: "نعم، طفّيها" }))) { ev.target.checked = true; return; }
           const rr = await call({ action: "head_voice_toggle", on }); if (rr.status === 200) { r.voice_on = on; me.voice_on = on; } else ev.target.checked = !on; main(); };
         const ack = q('[data-v="ack"]'); if (ack) ack.onclick = async () => { await call({ action: "head_voice_ack" }); r.voice_pin_notice = false; main(); };
         q('[data-v="rem"]').onchange = async (ev) => { const rr = await call({ action: "head_voice_reminder", on: ev.target.checked }); if (rr.status !== 200) ev.target.checked = !ev.target.checked; else r.voice_reminder = ev.target.checked; };
@@ -619,11 +621,11 @@
         const setState = (st) => { m.state = st; if (x) x.status = st; root.querySelector("[data-vstate]").textContent = S[st] || ""; };
         root.querySelectorAll("[data-s]").forEach((b) => (b.onclick = async () => {
           if (b.dataset.s === "declined" && !replied) { msg.textContent = "«ما ممكن» يحتاج سبب: اكتب الرد أول وأرسله."; f.t.focus(); return; }
-          if (b.dataset.s !== "in_progress" && !confirm(`تخلّيها «${S[b.dataset.s]}»؟ ما ترجع لورا (إلا إذا الطالب باسمه ضغط «ما انحلّت»).`)) return;
+          if (b.dataset.s !== "in_progress" && !(await ask(b.closest(".hd-row"), `تخلّيها «${S[b.dataset.s]}»؟ ما ترجع لورا (إلا إذا الطالب باسمه ضغط «ما انحلّت»).`, { yes: "نعم" }))) return;
           const rr = await call({ action: "head_voice_status", id, status: b.dataset.s });
           msg.textContent = rr.status === 200 ? `✅ صارت «${S[rr.state || b.dataset.s]}».` : rr.msg || "ما صار."; if (rr.status === 200) setState(rr.state || b.dataset.s); }));
         f.onsubmit = async (ev) => { ev.preventDefault(); const rr = await call({ action: "head_voice_reply", id, text: f.t.value }); msg.textContent = rr.status === 200 ? "✅ وصل الرد للطالب." : rr.msg || "ما صار."; if (rr.status === 200) { replied = true; if (x) x.has_reply = true; } };
-        root.querySelector("[data-arch]").onclick = async () => { if (!confirm("تأرشفها؟ تختفي من القائمة (ما تنحذف).")) return; const rr = await call({ action: "head_voice_archive", id }); if (rr.status === 200) { r.items = (r.items || []).filter((y) => y.id !== id); back(); } };
+        root.querySelector("[data-arch]").onclick = async (ev) => { if (!(await ask(ev.target.closest("p"), "تأرشفها؟ تختفي من القائمة (ما تنحذف).", { yes: "نعم، أرشفها" }))) return; const rr = await call({ action: "head_voice_archive", id }); if (rr.status === 200) { r.items = (r.items || []).filter((y) => y.id !== id); back(); } };
       }
       main();
     }

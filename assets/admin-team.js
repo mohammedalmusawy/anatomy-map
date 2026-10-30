@@ -78,7 +78,7 @@
         ${r.forwarded ? ` · ↪️ ${r.forwarded} طلب كود محوّل لك` : ""}`;
       $("#tm-feat").onclick = async () => {
         // ✋ 59: «⏸️ أوقف الكل» ← تأكيد أول
-        if (r.on && !(await ask($("#tm-on"), "توقف حسابات كل المساعدين؟ كلهم يطلعون من أجهزتهم وما يگدرون يدخلون لحد ما تشغّلها.", { yes: "نعم، أوقف الكل" }))) return;
+        if (r.on && !(await ask($("#tm-on"), "توقف حسابات كل المساعدين؟ كلهم يطلعون من أجهزتهم وما يگدرون يدخلون لحد ما تشغّلها.", { danger: true, yes: "نعم، أوقف الكل" }))) return;
         await api({ action: "admin_feature", on: !r.on }); status(); log(true);
       };
       $("#tm-rn").textContent = `بالقائمة: ${r.roster} اسم. المساعد ما يشوفها؛ الدالة تقارن الاسم الموحّد بس.`;
@@ -176,7 +176,7 @@
         if (a === "toggle") {
           const back = b.textContent.includes("رجّع");
           // ✋ 59: ⏸️ إيقاف مساعد ← تأكيد أول (الرجوع بلا تأكيد)
-          if (!back && !(await ask(b.closest(".tm-card-a") || b, `توقف «${tr.dataset.name}»؟ يطلع من كل أجهزته وما يگدر يدخل لحد ما ترجّعه.`, { yes: "نعم، أوقفه" }))) return;
+          if (!back && !(await ask(b.closest(".tm-card-a") || b, `توقف «${tr.dataset.name}»؟ يطلع من كل أجهزته وما يگدر يدخل لحد ما ترجّعه.`, { danger: true, yes: "نعم، أوقفه" }))) return;
           await api({ action: "admin_toggle", id, enabled: back }); status(); log(true); return;
         }
         if (a === "pin") { const bx = tr.querySelector(".tm-pinbox"); bx.innerHTML = bx.innerHTML ? "" : pinForm(id); const f = bx.querySelector("input"); if (f) f.focus(); return; }

@@ -218,7 +218,7 @@ html[lang="en"] .vb, html[lang="en"] .vb-row { direction: ltr; text-align: left;
           <div class="code"><b data-code>${esc(x.code)}</b><button type="button" class="cbtn ghost" data-vb="copy">📋 ${L("انسخ", "Copy")}</button></div>
           <p class="sub">📱 ${L("انحفظ بهالجهاز بـ «رسائلي». إذا ضاع الرقم ما ينرجع.", "Saved on this device under “My messages”. If you lose the code, it can’t be recovered.")}</p>
           ${o.bot || (PV && PV.bot) ? `<details class="more"><summary>🔔 ${L("تنبيه بالبوت (اختياري)", "Bot alert (optional)")}</summary>
-            <p class="sub">${L("يوصلك «👁️ انقرت» و«💬 وصلك رد». ⚠️ إذا تليغرامك مربوط بحسابك بالموقع، التنبيه ممكن ينربط بيك؛ للرسائل الحساسة خلّيه مطفي.", "You’ll get “👁️ Read” and “💬 Reply”. ⚠️ If your Telegram is linked to your site account, the alert could be tied to you; leave it off for sensitive messages.")}</p>
+            <p class="sub">${L("يوصلك «👁️ انقرت» و«💬 وصلك رد». ⚠️ التنبيه يربط رسالتك بحساب تليغرامك لحد ما تخلص؛ للرسائل الحساسة خلّيه مطفي.", "You’ll get “👁️ Read” and “💬 Reply”. ⚠️ The alert links your message to your Telegram account until it’s closed; leave it off for sensitive messages.")}</p>
             <div class="acts"><button type="button" class="cbtn ghost" data-vb="bot">🔔 ${L("فعّل التنبيه", "Turn on alert")}</button></div></details>` : ""}
           ${x.support ? SOS() : ""}
           <div class="acts"><button type="button" class="cbtn" data-vb-open="${esc(x.code)}">${L("شوف حالتها", "See its status")}</button><button type="button" class="cbtn ghost" data-vb="home">${L("رجوع", "Back")}</button></div>`;

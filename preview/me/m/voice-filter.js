@@ -13,6 +13,7 @@
       .replace(/[ً-ٰٟـ​-‏]/g, "")
       .replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي")
       .replace(/گ/g, "ك").replace(/چ/g, "ج").replace(/ڤ/g, "ف").replace(/پ/g, "ب")
+      .replace(/['’`]/g, "")                                     // I'm ← im · I'll ← ill
       .replace(/[^\p{L}\p{N}\s]/gu, " ")
       .replace(/(\p{L})\1{2,}/gu, "$1")
       .replace(/\s+/g, " ").trim();
@@ -45,6 +46,7 @@
     for (const x of [...out]) for (const s of SUF) if (x.endsWith(s) && x.length - s.length >= 2) out.add(x.slice(0, -s.length));
     return out;
   };
+  const PRAISE = new Set(["حيوان", "وحش"]);
   const FILL = new Set(["an", "a", "so", "very", "such", "are", "is", "كلش", "جدا", "هوايه", "شكد", "صدك", "اكثر", "حيل"]);
   const cache = new WeakMap();
   const prep = (W) => { let c = cache.get(W); if (c) return c;
@@ -59,6 +61,7 @@
     toks.forEach((t, i) => {
       const f = forms(t);
       if ([...f].some((x) => P.hard.has(x))) return hits.push(t);
+      if (PRAISE.has(t) && toks[i + 1] && toks[i + 1].startsWith("ب")) return;   // «حيوان بالشرح» = مدح
       if ([...f].some((x) => P.soft.has(x))) {   // موجّهة لشخص: «يا/انت/الأستاذ …» قبلها مباشرة، أو قبلها بكلمة حشو («you are an idiot»، «انت كلش غبي»)
         const p1 = toks[i - 1], p2 = toks[i - 2], p3 = toks[i - 3];
         if (P.target.has(p1) || (FILL.has(p1) && (P.target.has(p2) || (FILL.has(p2) && P.target.has(p3))))) hits.push(t);

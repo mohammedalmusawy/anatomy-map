@@ -15,19 +15,21 @@ window.AdminAsk = function (where, text, o) {
     const host = where.closest ? where.closest("td,th") : null;
     const prev = (host || where.parentNode).querySelector(":scope > .adm-ask");
     if (prev && prev.__done) prev.__done(false);
+    const opener = document.activeElement;   // (الحارس) التركيز يرجع للزر اللي فتح السؤال
     const box = document.createElement("div");
     box.className = "alert adm-ask"; box.setAttribute("role", "alertdialog"); box.setAttribute("aria-live", "assertive");
-    const p = document.createElement("p"); p.textContent = text; box.appendChild(p);
+    const p = document.createElement("p"); p.textContent = text; p.id = "adm-ask-" + Math.random().toString(36).slice(2, 9);
+    box.setAttribute("aria-describedby", p.id); box.appendChild(p);
     const y = document.createElement("button"), n = document.createElement("button");
     y.type = n.type = "button"; y.className = "btn" + (o.danger ? " adm-ask-d" : ""); n.className = "btn ghost";
     y.textContent = o.yes || "نعم، كمّل"; n.textContent = o.no || "لا، رجوع";
     box.append(y, " ", n);
-    const fin = (v) => { if (box.__fin) return; box.__fin = 1; box.remove(); done(v); };
+    const fin = (v) => { if (box.__fin) return; box.__fin = 1; box.remove(); if (!v && opener && opener.isConnected && opener.focus) opener.focus({ preventScroll: true }); done(v); };
     box.__done = fin;
     y.onclick = () => fin(true); n.onclick = () => fin(false);
     box.addEventListener("keydown", (e) => { if (e.key === "Escape") { e.preventDefault(); fin(false); } });
     if (host) host.appendChild(box); else where.insertAdjacentElement("afterend", box);
-    y.focus({ preventScroll: true }); box.scrollIntoView({ block: "nearest" });
+    (o.danger ? n : y).focus({ preventScroll: true }); box.scrollIntoView({ block: "nearest" });
   });
 };
 // 🔁 59: كل فتح تبويب ← إشارة جديدة (المستمعين القدام على #pane ينشالون، ما يتكررون بعد إعادة الفتح)
@@ -535,6 +537,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
     if (document.getElementById("adm-auth-css")) return;
     const st = document.createElement("style"); st.id = "adm-auth-css";
     st.textContent = `
+.adm-ask .btn.adm-ask-d{background:var(--bad);border-color:var(--bad);color:var(--card)}.adm-ask .btn.adm-ask-d:focus-visible{outline:3px solid var(--bad);outline-offset:2px}
 #admin .dtabs{flex-wrap:wrap}#admin .dtabs a{flex:1 1 auto;min-width:104px;min-height:44px;display:flex;align-items:center;justify-content:center}
 .lg{max-width:440px;margin:8px auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
 .lg h2{margin-top:0}.lg-tabs{display:flex;gap:6px;margin:0 0 14px;background:var(--bg,transparent);border:1px solid var(--line);border-radius:12px;padding:4px}

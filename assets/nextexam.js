@@ -59,6 +59,7 @@
   }
 
   async function render(c) {
+    if (!c || !c.examsOn) return;   // (30/10، قرار محمد) الكارت ما يطلع للطلاب إلا لما محمد يشغّل قسم الامتحانات بعد ما يتأكد من التواريخ الرسمية
     const up = pick(c.rows || []); if (!up.length) return;
     const x = up[0];
     let S = null;
