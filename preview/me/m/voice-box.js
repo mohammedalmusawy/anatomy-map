@@ -1,6 +1,9 @@
 // 💬 «صوتك يوصل» — واجهة الطالب داخل «صفحتي» (مسودة 58، الجولة 3). **مطفي ومخفي** لحد ما رئيس القسم يشغّله من لوحته:
 //   يرسم بس إذا settings.dept_voice.on = true (نفس قراءة team.js)، أو بالمعاينة المحلية window.__VOICE_PREVIEW (localhost بس).
 //   مطفي ← ولا شي، إلا إذا الطالب عنده رسائل محفوظة بهالجهاز: يطلع «💬 رسائلي» بس (الحالة والردود)، بلا كتابة.
+// 🔒 (31/10، قرار محمد) **للطالب الداخل بكوده الشخصي بس** (جلسة طالب صالحة عبر window.Account: session + student.status = active).
+//   الزائر بلا كود: ولا أيقونة ولا صندوق، ولا نداء شبكة (لا settings ولا الكلمات ولا الدالة). يدخل ← تطلع؛ يطلع ← تختفي وتوقف.
+//   السيرفر هم يرفض أي طلب بلا جلسة طالب (401). ماكو معرّف جهاز يتبعث (انشال t:voice-dev).
 // الشاشات (كلها داخل نفس اللوحة): البداية · النموذج · شكراً (رقم المتابعة) · رسالة (درجات ✓ ✓✓ 👁️ 🔄 ✔️ 💬).
 // الخصوصية: «بدون اسم» الافتراضي · رقم المتابعة يتولّد بالجهاز (السيرفر يخزن بصمته بس) · الصورة تنعاد رسمها بـ canvas ← JPEG بلا EXIF/موقع
 //   (والسيرفر يشيل أي معلومات باقية) · رسائلي بهالجهاز بس (t:voice — تنشال على جنب ويّا بيانات الطالب لما يطلع، sync.js) ·
@@ -9,7 +12,7 @@
   const M = factory();
   if (typeof module === "object" && module.exports) module.exports = M; else root.VoiceBox = M;
 })(typeof self !== "undefined" ? self : this, function () {
-  const KEY = "t:voice", DEV = "t:voice-dev", MAXLIST = 30, IMG_MAX = 300 * 1024;
+  const KEY = "t:voice", MAXLIST = 30, IMG_MAX = 300 * 1024;
   const KINDS = [["idea", "💡", "مقترح", "Suggestion"], ["complaint", "📝", "شكوى", "Complaint"], ["opinion", "💬", "رأي", "Opinion"], ["thanks", "🌷", "شكر", "Thanks"]];
   const AREAS = [["subject", "المادة", "Subject"], ["lecture", "المحاضرة", "Lecture"], ["services", "الخدمات", "Services"], ["dept", "القسم", "Department"], ["platform", "المنصة", "Platform"], ["other", "غيره", "Other"]];
   // درجات الحالة (مثل علامات الواتساب). 👁️ بس لما الرئيس يفتح الرسالة نفسها بلوحته (السيرفر يكتبها، مو المتصفح).
@@ -43,7 +46,12 @@
     const f = STEPS.find((y) => y[0] === s) || STEPS[0]; return `${f[1]} ${L(f[2], f[3])}`;
   }
   const fmtDay = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d || "")); return m ? `${+m[3]}/${+m[2]}/${m[1]}` : ""; };
-  const device = () => { let d = LS.get(DEV, ""); if (!/^[0-9a-f-]{36}$/.test(d)) { d = (typeof crypto !== "undefined" && crypto.randomUUID) ? crypto.randomUUID() : "00000000-0000-4000-8000-" + String(Date.now()).padStart(12, "0").slice(-12); LS.set(DEV, d); } return d; };
+  /** 🔒 الطالب الداخل بكوده بس: جلسة فيها توكن + صف طالب فعّال. غير هيچ ← null (زائر). (المعاينة المحلية: PV.student) */
+  const studentOf = (PV, A) => {
+    if (PV) return PV.student && PV.student.id ? PV.student : null;
+    const s = A && A.state; if (!s || !s.session || !s.session.access_token || !s.student || !s.student.id) return null;
+    return s.student.status === "active" ? s.student : null;
+  };
 
   // ── الصورة: إعادة رسم بـ canvas ← JPEG جديد (بلا EXIF/موقع)، ≤ 300 KB. JPEG حتى بالآيفون (Safari ما يسوّي WebP من canvas). ──
   async function toJpeg(file, max = IMG_MAX) {
@@ -120,21 +128,35 @@ html[lang="en"] .vb, html[lang="en"] .vb-row { direction: ltr; text-align: left;
     const PV = LOCAL && window.__VOICE_PREVIEW ? window.__VOICE_PREVIEW : null;
     const C = window.STUDY_CLOUD || {};
     el.hidden = true; el.innerHTML = ""; el.setAttribute("data-noen", "");
-    const go = (pub) => { const on = !!(pub && pub.on === true); if (on || list().length) start(el, o, Object.assign({}, pub || {}, { on }), PV, C); };
-    if (PV) return go(PV.on === true ? PV : { on: false });
-    if (!C.url || !C.anon) return go({ on: false });
-    fetch(`${C.url}/rest/v1/settings?select=value&key=eq.dept_voice`, { headers: { apikey: C.anon, Authorization: "Bearer " + C.anon } })
-      .then((r) => (r.ok ? r.json() : [])).then((x) => go(x && x[0] && x[0].value)).catch(() => go({ on: false }));
+    let gen = 0, stop = null;   // gen: كل دخول/خروج يبطّل أي نداء قديم بالطريق
+    const who = () => studentOf(PV, window.Account);
+    const down = () => { gen++; if (stop) { stop(); stop = null; } el.hidden = true; el.innerHTML = ""; };
+    const check = () => {
+      if (!who()) return down();   // 🔒 زائر (أو طلع) ← ولا شي، ولا نداء
+      if (stop || check.busy) return;
+      const g = ++gen; check.busy = true;
+      const go = (pub) => { check.busy = false; if (g !== gen || !who()) return;
+        const on = !!(pub && pub.on === true); if (on || list().length) stop = start(el, o, Object.assign({}, pub || {}, { on }), PV, C); };
+      if (PV) return go(PV.on === true ? PV : { on: false });
+      if (!C.url || !C.anon) return go({ on: false });
+      fetch(`${C.url}/rest/v1/settings?select=value&key=eq.dept_voice`, { headers: { apikey: C.anon, Authorization: "Bearer " + C.anon } })
+        .then((r) => (r.ok ? r.json() : [])).then((x) => go(x && x[0] && x[0].value)).catch(() => go({ on: false }));
+    };
+    const A = window.Account;
+    if (!PV && A && typeof A.on === "function") A.on(() => { if (!who()) down(); else if (!stop) { check.busy = false; check(); } });
+    check();
   }
 
   function start(el, o, pub, PV, C) {
     css(); el.hidden = false;
     const W = { words: null };
     const words = async () => W.words || (W.words = PV && PV.words ? PV.words : await fetch((o.wordsUrl || "m/voice-words.json")).then((r) => r.json()).catch(() => ({})));
-    const student = () => { if (PV) return PV.student || null; const A = window.Account; return A && A.state && A.state.session && A.state.student ? A.state.student : null; };
+    const student = () => studentOf(PV, window.Account);
+    let alive = true;
     const api = async (body) => {
+      if (!alive || !student()) return { status: 401, error: "auth" };   // 🔒 بلا جلسة طالب ← ولا نداء
       if (PV && typeof PV.api === "function") return PV.api(body);
-      const A = window.Account, tok = A && A.state && A.state.session ? A.state.session.access_token : C.anon;
+      const tok = window.Account.state.session.access_token;
       try { const r = await fetch(`${C.url}/functions/v1/dept-voice`, { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + tok, "Content-Type": "application/json" }, body: JSON.stringify(body) });
         return { status: r.status, ...(await r.json().catch(() => ({}))) }; } catch (e) { return { status: 0 }; }
     };
@@ -147,6 +169,7 @@ html[lang="en"] .vb, html[lang="en"] .vb-row { direction: ltr; text-align: left;
     const dot = () => { const d = row.querySelector(".vb-dot"), u = unseen(items);
       if (u && !d) row.insertAdjacentHTML("afterbegin", `<span class="vb-dot" role="img" aria-label="${L("تغيّرت حالة رسالة", "A message changed")}"></span>`); else if (!u && d) d.remove(); };
     const poll = async () => {
+      if (!alive) return;
       const codes = items.filter((x) => x.st !== "sent").map((x) => x.code); if (!codes.length) return dot();
       const r = await api({ action: "track", codes });
       if (r && r.items) { items = merge(items, r.items); items.forEach((x) => { if (x.seen === undefined) x.seen = ""; }); save(items); }
@@ -260,7 +283,7 @@ html[lang="en"] .vb, html[lang="en"] .vb-row { direction: ltr; text-align: left;
       const sb = P.querySelector('[data-vb="send"]'); if (sb) { sb.disabled = true; sb.textContent = "📤 " + L("لحظة…", "Sending…"); }
       const code = F.trackCode(), it = { code, kind: d.kind, area: d.area, st: "sent", seen: "sent|0", day: "" };
       items.push(it); save(items);
-      const r = await api({ action: "submit", kind: d.kind, area: d.area, area_ref: d.ref, text: d.text, named: d.named, image: d.image, code, device: device(), force: !!force });
+      const r = await api({ action: "submit", kind: d.kind, area: d.area, area_ref: d.ref, text: d.text, named: d.named, image: d.image, code, force: !!force });
       if (r.status === 200 && r.ok) {
         Object.assign(it, { st: "received", day: r.day || "" }); it.seen = sig(it); save(items);
         cur = Object.assign({}, it, { support: !!(r.support || f.self), arrives: r.arrives || (d.named ? "now" : "morning") }); draft = { kind: "", area: "", ref: "", named: false, text: "", image: null }; stage = null; open("thanks"); return;
@@ -274,7 +297,7 @@ html[lang="en"] .vb, html[lang="en"] .vb-row { direction: ltr; text-align: left;
       if (r.error === "nudge") return say2(`<div class="nudge">🙏 ${esc(r.msg)}<div class="acts"><button type="button" class="cbtn" data-vb="edit">✏️ ${L("عدّل", "Edit")}</button><button type="button" class="cbtn ghost" data-vb="force">${L("أرسل كما هي", "Send as is")}</button></div></div>`);
       say2(`<div class="err">${esc(r.msg || L("ما وصلت. جرّب مرة ثانية.", "Not delivered. Please try again."))}</div>${r.support ? SOS() : ""}`);
     };
-    el.addEventListener("click", async (ev) => {
+    const onClick = async (ev) => {
       const b = ev.target.closest("button"); if (!b || !el.contains(b)) return;
       if (b.hasAttribute("data-vb-toggle")) return toggle();
       if (b.dataset.k) { draft.kind = b.dataset.k; stage = null; return paint(); }
@@ -291,8 +314,8 @@ html[lang="en"] .vb, html[lang="en"] .vb-row { direction: ltr; text-align: left;
       if (a === "bot") { const r = await api({ action: "notify_ticket", code: cur.code }); if (r.ticket) window.open(`${o.bot || PV.bot}?start=vn_${encodeURIComponent(r.ticket)}`, "_blank", "noopener"); else b.textContent = r.status === 0 ? L("تأكد من النت", "Check your connection") : L("ما صار", "Didn’t work"); return; }
       if (a === "reopen") { const r = await api({ action: "reopen", code: cur.code }); if (r.ok) { await poll(); cur = items.find((x) => x.code === cur.code); open("msg"); } return; }
       if (a === "retry") { items = items.filter((x) => x.code !== cur.code); save(items); draft = Object.assign(draft, { kind: cur.kind, area: cur.area }); return open(pub.on ? "form" : "home"); }
-    });
-    el.addEventListener("submit", async (ev) => {
+    };
+    const onSubmit = async (ev) => {
       const f = ev.target.closest("[data-vb-track]"); if (!f) return; ev.preventDefault();
       const F = VF(), c = F.codeNorm(f.c.value), m = P.querySelector("[data-vb-tmsg]");
       if (!F.codeOk(c)) { m.textContent = L("الرقم مو صحيح (20 حرف).", "That code isn’t valid (20 characters)."); return; }
@@ -301,13 +324,18 @@ html[lang="en"] .vb, html[lang="en"] .vb-row { direction: ltr; text-align: left;
         if (!r.items.length) { m.textContent = L("ما لگينا رسالة بهالرقم.", "No message found for that code."); return; }
         items.push({ code: c, kind: r.items[0].kind, area: r.items[0].area, st: r.items[0].status, day: r.items[0].day, seen: "" }); items = merge(items, r.items); items[items.length - 1].seen = sig(items[items.length - 1]); save(items); }
       cur = items.find((x) => x.code === c); open("msg");
-    });
-    if (typeof MutationObserver === "function") new MutationObserver(() => { if (!sending) paint(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });   // ع ⇄ ENG
-    document.addEventListener("sync:applied", () => { items = list(); dot(); if (!P.hidden) paint(); });   // طالب ثاني دخل/طلع ← رسائلي تتبدّل
+    };
+    el.addEventListener("click", onClick); el.addEventListener("submit", onSubmit);
+    const mo = typeof MutationObserver === "function" ? new MutationObserver(() => { if (alive && !sending) paint(); }) : null;
+    if (mo) mo.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });   // ع ⇄ ENG
+    const onSync = () => { if (!alive) return; items = list(); dot(); if (!P.hidden) paint(); };
+    document.addEventListener("sync:applied", onSync);   // طالب ثاني دخل/طلع ← رسائلي تتبدّل
     dot(); poll();
-    setInterval(() => { if (document.visibilityState === "visible") poll(); }, 10 * 60e3);   // خفيف: كل 10 دقايق والصفحة ظاهرة
+    const tick = setInterval(() => { if (document.visibilityState === "visible") poll(); }, 10 * 60e3);   // خفيف: كل 10 دقايق والصفحة ظاهرة
     if (PV && PV.open) { toggle(); if (PV.open === "form") { Object.assign(draft, PV.draft || {}); open("form"); } }
+    return () => { alive = false; clearInterval(tick); document.removeEventListener("sync:applied", onSync);
+      el.removeEventListener("click", onClick); el.removeEventListener("submit", onSubmit); if (mo) mo.disconnect(); };   // 🔒 طلع ← يوقف كلشي
   }
 
-  return { mount, merge, unseen, markSeen, isNew, label, step, STEPS, RANK, KINDS, AREAS, list, save, toJpeg };
+  return { mount, studentOf, merge, unseen, markSeen, isNew, label, step, STEPS, RANK, KINDS, AREAS, list, save, toJpeg };
 });
