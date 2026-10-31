@@ -66,8 +66,8 @@ body { transition: opacity .18s ease; }
 html[lang="en"] .hen { display: none; }
 html[lang="en"] .h1en { display: none; }
 html[lang="en"] .tod .m { display: none; }   /* مصطلح اليوم: المعنى واللفظ بالحروف العربية للعربي بس */
-html[lang="en"] .keyp .en, html[lang="en"] .toc .en { display: inline; font-size: inherit; color: inherit; margin: 0; }
-html:not([lang="en"]) .keyp .en, html:not([lang="en"]) .toc .en { display: none; }
+html[lang="en"] .keyp > .en, html[lang="en"] .toc .en { display: inline; font-size: inherit; color: inherit; margin: 0; }
+html:not([lang="en"]) .keyp > .en, html:not([lang="en"]) .toc .en { display: none; }
 html[lang="en"] .dtabs.tri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 html[lang="en"] .dtabs.tri a { min-width: 0; white-space: normal; text-align: center; }
 /* 52b (30/10، المراجع المستقل): «احتمال خطأ» المترجم بوضع ENG يمشي من اليسار — بالعربي يبقى rtl مثل ما هو */
