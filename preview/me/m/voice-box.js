@@ -109,9 +109,9 @@ html[lang="en"] .vb, html[lang="en"] .vb-row { direction: ltr; text-align: left;
     document.head.appendChild(s);
   }
 
-  // ⚠️ أرقام الدعم: placeholder بس — محمد يتأكد منها قبل التفعيل. ماكو رقم مخترع.
+  // ☎️ (31/10، قرار محمد) 911 بس: الرقم الموحّد الرسمي (مكتب رئيس الوزراء 9/1/2025؛ pmo.iq/?article=2933)، ومحمد تأكد بنفسه إنه يشتغل بذي قار.
   const SOS = () => `<div class="sos" role="note"><b>${L("🤍 إذا أنت أو أحد بخطر هسه", "🤍 If you or someone is in danger now")}</b>${L("كلّم أحد تثق بيه قريب منك، أو روح لأقرب مستشفى.", "Talk to someone you trust nearby, or go to the nearest hospital.")}<br>
-    ${L("أرقام الطوارئ والدعم بالعراق:", "Emergency and support numbers in Iraq:")} <span data-sos-numbers>‹ ${L("الأرقام هنا", "numbers here")} ›</span> <small>(⚠️ ${L("يتأكد محمد من الأرقام قبل التفعيل", "Mohammed must confirm the numbers before launch")})</small><br>
+    ${L("رقم الطوارئ بالعراق:", "Emergency number in Iraq:")} <span data-sos-numbers><b dir="ltr">911</b></span><br>
     <small>${L("«صوتك يوصل» مو قناة طوارئ، والرسائل بدون اسم ما نگدر نوصل لصاحبها.", "This is not an emergency channel, and anonymous senders can’t be reached.")}</small></div>`;
 
   function mount(el, o = {}) {

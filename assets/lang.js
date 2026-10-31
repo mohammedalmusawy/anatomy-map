@@ -73,22 +73,6 @@
       k = k.replace(/\s+/g, " ").trim(); if (!AR.test(k) || !DICT[k]) return;
       elOrig.set(el, el.innerHTML); el.textContent = DICT[k];
     });
-    // (66) سطر بطاقة الأطلس «<b>الحالة:</b> نص فيه مصطلح منقّط» ← العنوان والنص كل واحد من القاموس
-    [].forEach.call(document.querySelectorAll("p, li"), function (el) {
-      var b = el.firstElementChild; if (el.closest(SKIP) || elOrig.has(el) || !b || b.tagName !== "B" || el.firstChild !== b) return;
-      if ([].some.call(el.children, function (c) { return c !== b && c.tagName !== "BDI" && !c.classList.contains("tm"); })) return;
-      if (!el.querySelector(":scope > .tm")) return;   // بلا مصطلح منقّط: مسار النصوص العادي يكفي
-      var lab = b.textContent.replace(/\s+/g, " ").trim(), rest = el.textContent.slice(b.textContent.length).replace(/\s+/g, " ").trim();
-      var rv = DICT[rest];
-      if (!rv && rest.indexOf("·") > -1) {   // «Axial · نص عربي · Bone window»: كل جزء لحاله
-        var ps = rest.split(/\s*·\s*/).map(function (x) { return !AR.test(x) ? x : DICT[x] || null; });
-        if (ps.every(function (x) { return x != null; })) rv = ps.join(" · ");
-      }
-      var dm = !rv && /^([^\u0600-\u06FF]*?)\s+—\s+([\s\S]+)$/.exec(rest);   // «Greyscale (B-mode) — نص عربي»
-      if (dm && DICT[dm[2]]) rv = dm[1] + " — " + DICT[dm[2]];
-      if (!DICT[lab] || !rv) return;
-      elOrig.set(el, el.innerHTML); el.textContent = ""; var nb = document.createElement("b"); nb.textContent = DICT[lab]; el.appendChild(nb); el.appendChild(document.createTextNode(" " + rv));
-    });
     texts(function (n) {
       // عنصر بيه العربي ويّا نسخته الإنكليزية (.en / .h1en) ← نخفي العربي بس (قبل الترجمة، حتى ما يتكرر «IntroductionIntroduction»)
       var par = n.parentElement;
