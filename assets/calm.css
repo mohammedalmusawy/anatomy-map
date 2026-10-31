@@ -344,6 +344,14 @@ body.calm { --g-normal: var(--ok); --g-fracture: var(--brand); --g-dislocation: 
 .calm .opt .oa { font-size: var(--t-sm); }
 .calm .opt .l { width: 30px; height: 30px; font-family: var(--title-font); }
 .calm .opt.right .l, .calm .opt.wrong .l { color: var(--card); }
+/* 🖼️ صورة بالسؤال (31/10): الصورة كاملة بلا قص، خلفية سودة مثل شاشة الأشعة، والضغط يكبّرها */
+.qimg { margin: 14px 0 6px; }
+.qimg > a { display: block; border-radius: 14px; overflow: hidden; background: #000; border: 1px solid var(--line); }
+.qimg img { display: block; width: 100%; max-height: 52vh; object-fit: contain; margin: 0 auto; }
+.qimg figcaption { font-size: var(--t-xs); color: var(--muted); margin-top: 6px; text-align: center; }
+.qimg figcaption a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.fb .qimg { margin-top: 10px; }
+.mq-img { display: block; max-width: 100%; max-height: 160px; border-radius: 10px; background: #000; margin: 4px 0 6px; }
 .calm .fb { border-radius: 14px; font-size: var(--t-sm); border: 1px solid var(--line); }
 .calm .score { font-family: var(--title-font); font-weight: 800; }
 .calm .bar { height: 4px; }

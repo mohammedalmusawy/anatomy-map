@@ -3,7 +3,16 @@
   const data = JSON.parse(document.getElementById("quiz-data").textContent);
   const $ = (id) => document.getElementById(id);
   const LETTERS = ["A", "B", "C", "D"];
-  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // 🖼️ صورة بالسؤال (31/10): img.src من جذر الموقع؛ img.after = تطلع بعد الجواب بس (إذا الصورة تكشفه)
+  const ROOT = ((document.currentScript && document.currentScript.src) || "").replace(/assets\/quiz(\.min)?\.js(\?.*)?$/, "");
+  window.QuizRoot = ROOT;
+  const qimg = (m) => {
+    if (!m || !m.src) return "";
+    const en = document.documentElement.lang === "en", src = esc(ROOT + m.src), alt = esc((en ? m.alt_en || m.alt_ar : m.alt_ar || m.alt_en) || "");
+    const cr = en ? m.credit_en || m.credit : m.credit;
+    return `<figure class="qimg"><a href="${src}" target="_blank" rel="noopener" aria-label="${en ? "Enlarge image" : "كبّر الصورة"}"><img src="${src}" alt="${alt}" decoding="async"></a>${cr ? `<figcaption>${en ? "Source: " : "المصدر: "}${/^https:\/\//.test(m.credit_url || "") ? `<a href="${esc(m.credit_url)}" target="_blank" rel="noopener">${esc(cr)}</a>` : esc(cr)}</figcaption>` : ""}</figure>`;
+  };
 
   const shuffle = (a) => {
     a = a.slice();
@@ -32,6 +41,8 @@
     $("qen").classList.add("noterm");   // 🎧 المشغّل الموحّد (29/10): مصطلحات السؤال ما تتعلّم قبل الجواب (حتى البطاقة ما تكشف الجواب)
     $("qen").textContent = q.q_en;
     $("qar").textContent = q.q_ar;
+    document.querySelectorAll("#play .qimg").forEach((f) => f.remove());
+    if (q.img && !q.img.after) $("opts").insertAdjacentHTML("beforebegin", qimg(q.img));
     $("opts").innerHTML = order.map((k, i) => `
       <button class="opt" data-k="${k}">
         <span class="l">${LETTERS[i]}</span>
@@ -67,9 +78,10 @@
         <div class="ans">الإجابة الصحيحة: <span class="en">${esc(a.en)}</span>${esc(a.ar)}</div>
         <div class="why">💡 ${esc(q.why)}</div>`;
     }
+    if (q.img && q.img.after) fb.insertAdjacentHTML("beforeend", qimg(q.img));
     if (q.perr) {   // (29/10) جواب الأستاذ هو المعتمد، وجنبه بين قوسين التصحيح المحتمل — سطر قصير، مرة وحدة
       const p = q.perr, src = p.source || {};
-      fb.insertAdjacentHTML("beforeend", ` <a class="perr-in" href="${esc(src.url || "")}" target="_blank" rel="noopener">(احتمال خطأ: ${esc(p.short_ar || p.correct_ar || "")})</a>`);
+      fb.insertAdjacentHTML("beforeend", ` <a class="perr-in" href="${/^https:\/\//.test(src.url || "") ? esc(src.url) : ""}" target="_blank" rel="noopener">(احتمال خطأ: ${esc(p.short_ar || p.correct_ar || "")})</a>`);
       fb.classList.remove("hidden");
     }
     const last = pos === round.length - 1;

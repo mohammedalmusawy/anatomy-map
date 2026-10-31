@@ -403,6 +403,7 @@
     const L = "ABCD";
     r.querySelector(".actions").insertAdjacentHTML("beforebegin", `<details id="mylist" class="mylist" open><summary>📕 أخطائي بهالاختبار (${wrongNow.length})</summary>` +
       wrongNow.map((q) => `<div class="mq"><p class="qen" dir="ltr" lang="en">${esc(q.q_en)}</p>${q.q_ar ? `<p class="qar">${esc(q.q_ar)}</p>` : ""}` +
+        (q.img && q.img.src ? `<img class="mq-img" src="${esc((window.QuizRoot || "") + q.img.src)}" alt="${esc((document.documentElement.lang === "en" ? q.img.alt_en || q.img.alt_ar : q.img.alt_ar || q.img.alt_en) || "")}" loading="lazy">` : "") +   // 🖼️ (31/10)
         `<p class="ok">✓ الصحيح: <bdi dir="ltr">${L[q.answer] || ""}. ${esc((q.options[q.answer] || {}).en)}</bdi><bdi>${esc((q.options[q.answer] || {}).ar)}</bdi></p>${q.why ? `<p class="why">ليش؟ ${esc(q.why)}</p>` : ""}</div>`).join("") +
       `</details>`);
   });
