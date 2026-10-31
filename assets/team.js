@@ -64,7 +64,7 @@
   if (cached) { headOn = preview || cached.h === true; apply(cached.d); }   // يرسم المحفوظ فوراً، وبعدين الجديد من الشبكة (التعديل يطلع فوراً)
   // الناس + الظهور المنشور سوا ← رسمة وحدة (القاعدة نفسها تخفي الرعاة وهو مطفي؛ هذا دفاع ثاني)
   Promise.all([
-    fetch(`${C.url}/rest/v1/people?select=*&visible=eq.true&order=grp.asc,sort.asc`, { headers: H }).then((r) => (r.ok ? r.json() : null)),
+    fetch(`${C.url}/rest/v1/people?select=name,name_en,title,grp,photo,sort,note,patron&visible=eq.true&order=grp.asc,sort.asc`, { headers: H }).then((r) => (r.ok ? r.json() : null)),
     preview ? Promise.resolve(true) : fetch(`${C.url}/rest/v1/settings?select=value&key=eq.dept_head`, { headers: H })
       .then((r) => (r.ok ? r.json() : [])).then((x) => !!(x && x[0] && x[0].value && x[0].value.on === true)).catch(() => false),
   ]).then(([d, on]) => {

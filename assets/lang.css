@@ -44,7 +44,7 @@ button[data-ensoon]::after, a.tbtn[data-ensoon]::after { display: none; }
 /* الكبسولة: ع | ENG + 🌙 */
 .disp { display: inline-flex; align-items: center; height: calc(var(--tap) + 2px); border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--card); padding-inline: 0 2px; }
 .disp .sep { width: 1px; height: 22px; background: var(--line); }
-.disp .tbtn { border: 0 !important; background: transparent !important; min-width: 42px; }
+.disp .tbtn { border: 0 !important; background: transparent !important; min-width: 44px; }   /* (66) هدف لمس 44 بكل العروض */
 
 /* الشريط اللاصق: خط رفيع يطلع بس لما تنزل */
 .cbar.sticky { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); border-bottom: 1px solid transparent; }

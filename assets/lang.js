@@ -38,6 +38,8 @@
     var k = t.trim(); if (!k) return null;
     if (DICT[k]) return t.replace(k, DICT[k]);
     var v1 = one(k); if (v1 != null && v1 !== k) return t.replace(k, v1);
+    var d = /^([—–]\s*)([\s\S]+)$/.exec(k);   // (66) «PD sagittal — يُظهر…»: النص بعد الشارحة جملة مترجمة لحالها
+    if (d) { var r = tr(d[2]); if (r != null) return t.replace(k, d[1] + r.trim()); }
     var m = /^(.*[A-Za-z].*?)\s+·\s+[^A-Za-z]*[؀-ۿ][^A-Za-z]*$/.exec(k);
     if (m) return t.replace(k, m[1]);
     // «نظري · م01» ← «Theory · L01»
@@ -70,6 +72,22 @@
       if (fx) { var cl = el.cloneNode(true); [].forEach.call(cl.querySelectorAll("sub.fx"), function (x) { x.replaceWith("_" + (x.getAttribute("data-r") || x.textContent)); }); k = cl.textContent; }
       k = k.replace(/\s+/g, " ").trim(); if (!AR.test(k) || !DICT[k]) return;
       elOrig.set(el, el.innerHTML); el.textContent = DICT[k];
+    });
+    // (66) سطر بطاقة الأطلس «<b>الحالة:</b> نص فيه مصطلح منقّط» ← العنوان والنص كل واحد من القاموس
+    [].forEach.call(document.querySelectorAll("p, li"), function (el) {
+      var b = el.firstElementChild; if (el.closest(SKIP) || elOrig.has(el) || !b || b.tagName !== "B" || el.firstChild !== b) return;
+      if ([].some.call(el.children, function (c) { return c !== b && c.tagName !== "BDI" && !c.classList.contains("tm"); })) return;
+      if (!el.querySelector(":scope > .tm")) return;   // بلا مصطلح منقّط: مسار النصوص العادي يكفي
+      var lab = b.textContent.replace(/\s+/g, " ").trim(), rest = el.textContent.slice(b.textContent.length).replace(/\s+/g, " ").trim();
+      var rv = DICT[rest];
+      if (!rv && rest.indexOf("·") > -1) {   // «Axial · نص عربي · Bone window»: كل جزء لحاله
+        var ps = rest.split(/\s*·\s*/).map(function (x) { return !AR.test(x) ? x : DICT[x] || null; });
+        if (ps.every(function (x) { return x != null; })) rv = ps.join(" · ");
+      }
+      var dm = !rv && /^([^\u0600-\u06FF]*?)\s+—\s+([\s\S]+)$/.exec(rest);   // «Greyscale (B-mode) — نص عربي»
+      if (dm && DICT[dm[2]]) rv = dm[1] + " — " + DICT[dm[2]];
+      if (!DICT[lab] || !rv) return;
+      elOrig.set(el, el.innerHTML); el.textContent = ""; var nb = document.createElement("b"); nb.textContent = DICT[lab]; el.appendChild(nb); el.appendChild(document.createTextNode(" " + rv));
     });
     texts(function (n) {
       // عنصر بيه العربي ويّا نسخته الإنكليزية (.en / .h1en) ← نخفي العربي بس (قبل الترجمة، حتى ما يتكرر «IntroductionIntroduction»)
