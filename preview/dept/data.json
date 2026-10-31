@@ -209,14 +209,6 @@
  ],
  "hard_topics": [
   {
-   "topic_en": "Dose Limits for Tissues and Organs",
-   "topic_ar": "حدود الجرعة للأنسجة والأعضاء",
-   "lecture_id": "protection_t04",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.54,
-   "attempts": 71
-  },
-  {
    "topic_en": "Sources of Ionizing Radiation",
    "topic_ar": "مصادر الإشعاع المؤيِّن",
    "lecture_id": "protection_p01",
@@ -247,24 +239,40 @@
    "subject_ar": "التصوير",
    "error_rate": 0.45,
    "attempts": 96
+  },
+  {
+   "topic_en": "Time",
+   "topic_ar": "الوقت",
+   "lecture_id": "protection_p03",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.43,
+   "attempts": 49
   }
  ],
  "missed_questions": [
   {
-   "q_en": "Which is a reason high-frequency generators are the most widely used?",
-   "q_ar": "أي مما يلي سبب لكون المولّدات عالية التردد الأكثر استعمالاً؟",
+   "q_en": "Generator A works with 100% voltage ripple, and generator B with only a few percent ripple. Which one produces X-rays more efficiently, and why?",
+   "q_ar": "المولّد A يعمل بتموّج جهد 100%، والمولّد B بتموّج بضعة بالمئة فقط. أيّهما يُنتج الأشعة بكفاءة أعلى، ولماذا؟",
    "lecture_id": "equipment_t02",
    "subject_ar": "الأجهزة",
    "error_rate": 0.65,
    "attempts": 42
   },
   {
-   "q_en": "About how many chest X-rays (≈ 0.1 mSv each) give the same dose as one year of natural background (2 – 3 mSv)?",
-   "q_ar": "تقريباً كم صورة صدر (≈ 0.1 ملّي سيفرت لكل صورة) تعادل جرعة سنة من الخلفية الطبيعية (2 – 3 ملّي سيفرت)؟",
+   "q_en": "The effective dose limit for members of the general public is:",
+   "q_ar": "حد الجرعة الفعّالة لأفراد عامة الناس هو:",
+   "lecture_id": "protection_t04",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.61,
+   "attempts": 47
+  },
+  {
+   "q_en": "Which of the following is an indirectly ionizing radiation?",
+   "q_ar": "أيّ مما يأتي إشعاع مؤيِّن غير مباشر؟",
    "lecture_id": "protection_p01",
    "subject_ar": "الوقاية",
-   "error_rate": 0.6,
-   "attempts": 18
+   "error_rate": 0.59,
+   "attempts": 35
   },
   {
    "q_en": "An MRI image divides the head into a front part and a back part. In which plane was it taken?",
@@ -273,14 +281,6 @@
    "subject_ar": "التصوير",
    "error_rate": 0.58,
    "attempts": 31
-  },
-  {
-   "q_en": "According to the UNSCEAR 2008 chart, natural radiation makes up about:",
-   "q_ar": "حسب مخطط UNSCEAR 2008، يشكّل الإشعاع الطبيعي نحو:",
-   "lecture_id": "protection_t01",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.55,
-   "attempts": 53
   }
  ],
  "exam_period": {
