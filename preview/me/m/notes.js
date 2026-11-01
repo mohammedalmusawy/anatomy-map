@@ -46,7 +46,7 @@
     "#مفراس": ["مفراس", "مقطعي", "ct", "hounsfield", "slice"],
     "#امتحان": ["امتحان", "exam"],
   };
-  const TAG_SUBJ = { "#أجهزة": "equipment", "#وقاية": "protection", "#تشريح": "anatomy", "#وضعيات": "radiography", "#ملون": "examinations", "#مفراس": "ct" };
+  const TAG_SUBJ = { "#أجهزة": "equipment", "#وقاية": "protection", "#تشريح": "anatomy", "#وضعيات": "radiography", "#ملون": "examinations", "#مفراس": "ct", "#فيزياء": "physics" };
   const NT = Object.fromEntries(Object.entries(TAGS).map(([t, ws]) => [t, ws.map(norm)]));
   // كلمة إنكليزية قصيرة (ct، rib) لازم تكون كلمة كاملة؛ العربي جزء كلمة يكفي (الصدر، بالرئة)
   // الكلمة القصيرة (3 حروف أو أقل: ct، rib، قلب، جنب) لازم تكون كلمة كاملة (ويسمح بـ «ال/بال/وال» قبل العربي)؛ الأطول جزء كلمة يكفي

@@ -360,7 +360,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       alert("انحفظ"); spend(value);
     };
   }
-  const SUBJ = { anatomy: "تشريح", radiography: "التصوير الشعاعي", protection: "الوقاية", examinations: "الفحوصات الشعاعية", ct: "أجهزة التصوير المقطعي", equipment: "أجهزة الأشعة التقليدية" };
+  const SUBJ = { anatomy: "تشريح", radiography: "التصوير الشعاعي", protection: "الوقاية", examinations: "الفحوصات الشعاعية", ct: "أجهزة التصوير المقطعي", equipment: "أجهزة الأشعة التقليدية", physics: "الفيزياء الإشعاعية", computer: "الحاسوب والذكاء الاصطناعي", baath: "جرائم حزب البعث" };
   // 📅 الامتحانات (27/10، نص + نوع + المشمول 29/10): صورة أو نص ← قراءة (exam-reader) ← مراجعة ← «تأكيد وحفظ». المشمول من قائمة المحاضرات الحقيقية.
   async function exams() {
     const [{ data }, LEC] = await Promise.all([
