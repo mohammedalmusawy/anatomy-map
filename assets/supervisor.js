@@ -26,7 +26,7 @@
       ...(P.codes ? [["codes", "🎓 طلبات الأكواد"]] : []), ...(P.team && window.AdminPeople ? [["team", "👥 الفريق"]] : []),
       ...(P.ads ? [["ads", "📣 الإعلانات"]] : [])];
     let subjects = [];
-    root.innerHTML = `<div class="tm-hello"><span>أهلاً <b>${esc(me.name)}</b> · ${esc(me.title)}</span><span><button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button> <button class="btn ghost" id="sup-out" type="button">خروج</button></span></div>
+    root.innerHTML = `<div class="tm-hello"><span>أهلاً <b>${esc(me.name)}</b> · ${esc(me.title)}</span><span><span class="sd-asw">👁️ شوف الموقع كـ: <button class="btn ghost" type="button" data-as="student">طالب</button> <button class="btn ghost" type="button" data-as="visitor">زائر</button></span> <button class="btn ghost" id="sup-out" type="button">خروج</button></span></div>
       <p class="hint">كل شي ترفعه أو تبلّغ عنه يروح لمحمد للمراجعة، وما ينشر إلا بعد موافقته. وكل فعل ينكتب بالسجل.</p>
       ${tabs.length ? `<nav class="dtabs" role="tablist">${tabs.map(([k, l], i) => `<a href="#${k}" role="tab" data-t="${k}" class="${i === 0 ? "on" : ""}">${l}</a>`).join("")}</nav>` : '<p class="hint">ماكو صلاحيات مفعّلة لحسابك هسه. راسل محمد.</p>'}
       <div id="sup-pane" role="tabpanel"></div><div id="sup-self"></div>`;

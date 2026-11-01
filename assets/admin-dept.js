@@ -469,7 +469,7 @@
         <nav class="hp-acts" aria-label="لوحة رئيس القسم">${ACT.map(([k, i, t, sub, main, tag]) =>
           `<button type="button" data-k="${k}" class="${main ? "main" : ""}"><span class="i" aria-hidden="true">${i}</span><span class="t">${t}${sub ? `<small>${sub}</small>` : ""}</span>${tag ? `<span class="hp-tag">${tag}</span>` : ""}<span aria-hidden="true">‹</span></button>`).join("")}</nav>
         <details class="hp-more"><summary>المزيد ▾</summary><div class="hd-row"><button class="btn ghost" type="button" data-k="stats">📊 أرقام القسم</button>
-          <button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button></div><div id="dv-self"></div></details>
+          <span class="sd-asw">👁️ شوف الموقع كـ: <button class="btn ghost" type="button" data-as="student">طالب</button> <button class="btn ghost" type="button" data-as="visitor">زائر</button></span></div><div id="dv-self"></div></details>
         <p class="hp-owner">${esc(OWNER_LINE)} — صاحب المنصة وصانعها، وبرعايتكم الكريمة 🌿</p>
         </div>`;
       root.querySelector("#hp-out").onclick = async () => { await sb.auth.signOut({ scope: "local" }).catch(() => {}); location.reload(); };

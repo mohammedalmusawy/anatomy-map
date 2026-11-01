@@ -31,7 +31,8 @@
   if (LIVE) document.documentElement.dataset.live = "1";
   const alive = (x) => !!(x && x.user && (x.refresh_token || (x.expires_at && x.expires_at * 1000 > Date.now())));
   const sess = (() => { try { const x = JSON.parse(localStorage.getItem("t:acct-session") || "null"); return alive(x) && ((x.user.app_metadata || {}).role === "student") ? x : null; } catch (e) { return null; } })();
-  const liveRole = () => { try { if (sess || localStorage.getItem("t:staff-view") === "1") return "student"; } catch (e) {} return "visitor"; };
+  const pv = (() => { try { return localStorage.getItem("t:staff-view"); } catch (e) { return null; } })();   // (69) معاينة الطاقم: student/visitor ("1" = طالب)
+  const liveRole = () => { if (pv === "visitor") return "visitor"; if (sess || pv === "student" || pv === "1") return "student"; return "visitor"; };
   const role = LIVE ? liveRole() : LS.get("pv-role", "visitor"); document.body.dataset.role = role;
   $$("[data-name-only]").forEach((el) => { el.hidden = role !== "student"; });
   $$("[data-visitor-only]").forEach((el) => { el.hidden = role === "student"; });
@@ -46,7 +47,7 @@
       location.replace(new URL("login/?code=" + encodeURIComponent(qc), new URL(".", man0.href)).href); return;
     }
   } catch (e) {}
-  let gateOn = LIVE && document.documentElement.dataset.gate === "on";
+  let gateOn = LIVE && (document.documentElement.dataset.gate === "on" || pv === "visitor");
   const applyGate = () => {
     $$("[data-gate-href]").forEach((a) => {   // «📚 ادخل لمحاضراتك»: البوابة مطفية ← المحاضرات مباشرة؛ مفتوحة والزائر بلا كود ← الدخول بالكود
       if (!a.dataset.offHref) a.dataset.offHref = a.getAttribute("href");
@@ -55,7 +56,7 @@
   };
   applyGate();
   if (LIVE && window.Net && window.Net.on && window.Net.settings) Promise.resolve(window.Net.settings()).then((S) => {
-    gateOn = !!(S && S.gate && S.gate.on);
+    gateOn = !!(S && S.gate && S.gate.on) || pv === "visitor";
     if (gateOn) document.documentElement.dataset.gate = "on"; else delete document.documentElement.dataset.gate;
     applyGate();
   }).catch(() => {});

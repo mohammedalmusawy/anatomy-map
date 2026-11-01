@@ -247,7 +247,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
   const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
     ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "🔑 المساعدين" } : {}), ...(window.AdminDept ? { dept: "🏛️ رئيس القسم" } : {}),
     ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), ...(window.AdminStudents ? { students: "🎓 الطلاب" } : {}), ...(window.AdminNotify ? { notify: "🔔 التنبيهات" } : {}), security: "🔐 الأمان" };
-  box.innerHTML = `<div class="tm-hello"><span><b>⚙️ لوحة الإدارة</b> · أهلاً محمد</span><span><button class="btn ghost" type="button" data-as-student>👁️ شوف كطالب</button></span></div>
+  box.innerHTML = `<div class="tm-hello"><span><b>⚙️ لوحة الإدارة</b> · أهلاً محمد</span><span><span class="sd-asw">👁️ شوف الموقع كـ: <button class="btn ghost" type="button" data-as="student">طالب</button> <button class="btn ghost" type="button" data-as="visitor">زائر</button></span></span></div>
     ${pinOn ? "" : '<div class="alert lg-warn"><b>🔢 حدد رقمك السري</b><p>من «🔐 الأمان» حط رقمك السري (8 أرقام أو أكثر)، واطلع وادخل بالإيميل + الرقم مرة وحدة — بعدها دخول رمز الإيميل يوگف وحده.</p><a class="btn" href="#security">🔐 الأمان</a></div>'}
     <nav class="dtabs">${Object.entries(tabs).map(([k, v]) => `<a href="#${k}" data-t="${k}">${v}</a>`).join("")}</nav><div id="pane"></div>
     <p class="hint"><button class="btn ghost" id="out">خروج</button></p>`;

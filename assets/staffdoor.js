@@ -45,6 +45,8 @@
 body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
 .sd-pill{position:fixed;inset-inline-start:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147482000;display:inline-flex;gap:6px;align-items:center;
   min-height:44px;padding:0 16px;border-radius:999px;background:var(--ink,#222);color:var(--card,#fff);font:inherit;font-weight:700;font-size:15px;border:0;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer;text-decoration:none}
+.sd-pv{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:center;padding:4px 12px;padding-top:calc(4px + env(safe-area-inset-top));background:var(--ink,#222);color:var(--card,#fff);font:inherit;font-size:14px;line-height:1.4;position:relative;z-index:50}
+.sd-pv button{min-height:44px;padding:0 12px;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}
 .sd-door{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .sd-msg.bad{color:#FF8A80}}:root[data-theme=dark] .sd-msg.bad{color:#FF8A80}`;
     document.head.appendChild(st);
@@ -78,22 +80,29 @@ body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
   }
 
   // ── 2) «👁️ شوف كطالب» / «⚙️ رجوع للإدارة» ──
+  // (69) «👁️ شوف الموقع كـ: طالب / زائر» — القيمة student أو visitor ("1" القديمة = طالب). للطاقم بس، وما يتغيّر شي للناس.
   const VIEW = "t:staff-view";
-  function asStudent() { LS.set(VIEW, "1"); location.href = ROOT + "lessons/"; }
+  function asView(k) { LS.set(VIEW, k === "visitor" ? "visitor" : "student"); location.href = ROOT + "lessons/"; }
+  function asStudent() { asView("student"); }
   function backToAdmin() { LS.del(VIEW); location.href = ROOT + "admin/"; }
   document.addEventListener("click", (ev) => {
     if (!ev.target.closest) return;
     if (ev.target.closest("[data-as-student]")) { ev.preventDefault(); asStudent(); }
+    const as = ev.target.closest("[data-as]"); if (as) { ev.preventDefault(); asView(as.dataset.as); }
     if (ev.target.closest("[data-back-admin]")) { ev.preventDefault(); backToAdmin(); }
   });
   const inAdmin = /\/admin\/(?:index\.html)?$/.test(location.pathname);
   if (inAdmin) LS.del(VIEW);
-  const staffView = !inAdmin && LS.get(VIEW) === "1" && !!staffSession();
-  if (LS.get(VIEW) === "1" && !staffSession()) LS.del(VIEW);
+  const vraw = LS.get(VIEW), vkind = vraw === "visitor" ? "visitor" : vraw ? "student" : null;
+  const staffView = !inAdmin && !!vkind && !!staffSession();
+  if (vkind && !staffSession()) LS.del(VIEW);
+  // شريط «وضع المعاينة» صغير بأعلى الصفحة (مو عائم، فما يغطي المحتوى)
   function pill() {
-    if (!staffView || document.querySelector(".sd-pill")) return;
+    if (!staffView || document.querySelector(".sd-pv")) return;
     css();
-    document.body.insertAdjacentHTML("beforeend", '<button type="button" class="sd-pill" data-back-admin>⚙️ رجوع للإدارة</button>');
+    const other = vkind === "visitor" ? "student" : "visitor";
+    document.body.insertAdjacentHTML("afterbegin", `<div class="sd-pv" role="status"><span>👁️ وضع المعاينة: <b>${vkind === "visitor" ? "زائر" : "طالب"}</b></span>` +
+      `<button type="button" data-as="${other}">شوف كـ${other === "visitor" ? "زائر" : "طالب"}</button><button type="button" data-back-admin>ارجع ←</button></div>`);
   }
 
   // ── 3) بوابة الطلاب ──
@@ -106,7 +115,7 @@ body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
     return list.some((o) => o.endsWith("$") ? p === o.slice(0, -1) : o.endsWith("*") ? p.startsWith(o.slice(0, -1)) && p.length > o.length - 1 : p.startsWith(o));
   }
   const gated = (p, g) => !match(p, g.open || ["devices/", "atlas/", "contrast/", "terms/$"]) && match(p, g.closed || CLOSED);
-  const allowed = () => staffView || !!studentSession() || !!staffSession();
+  const allowed = () => staffView ? vkind === "student" : !!studentSession() || !!staffSession();
 
   let G = null, REQ = false;
   function dialog(next) {
@@ -180,6 +189,7 @@ body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
     return acc ??= new Promise((ok, no) => { const s = document.createElement("script"); s.src = ROOT + "assets/account.js"; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
   }
   function apply(g) {
+    if (staffView && vkind === "visitor") g = Object.assign({}, g || {}, { on: true });   // معاينة الزائر = شكل الموقع بعد تشغيل البوابة
     G = g;
     LS.set("t:gate-on", g && g.on ? "1" : "0");
     if (!g || !g.on) { document.body.classList.remove("sd-locked"); return; }
@@ -207,5 +217,5 @@ body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 
-  window.StaffDoor = { css, asStudent, backToAdmin, staffSession, studentSession, ROOT };
+  window.StaffDoor = { css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT };
 })();
