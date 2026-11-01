@@ -244,7 +244,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
 
   // ───────── المالك ─────────
   // «🙏 الشكر» القديم انشال من التبويبات (29/10): الشكر صار بجدول people ← «🙏 الفريق والشكر» (AdminPeople). الدالة thanks() تبقى بلا تبويب.
-  const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
+  const tabs = { stats: "📋 الملخص", ...(window.AdminStats ? { insights: "📊 الإحصائيات" } : {}), reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
     ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "🔑 المساعدين" } : {}), ...(window.AdminDept ? { dept: "🏛️ رئيس القسم" } : {}),
     ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), ...(window.AdminStudents ? { students: "🎓 الطلاب" } : {}), ...(window.AdminNotify ? { notify: "🔔 التنبيهات" } : {}), security: "🔐 الأمان" };
   box.innerHTML = `<div class="tm-hello"><span><b>⚙️ لوحة الإدارة</b> · أهلاً محمد</span><span><span class="sd-asw">👁️ شوف الموقع كـ: <button class="btn ghost" type="button" data-as="student">طالب</button> <button class="btn ghost" type="button" data-as="visitor">زائر</button></span></span></div>
@@ -525,7 +525,8 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
 
   let tabAC = null;
   const show = () => { if (tabAC) tabAC.abort(); tabAC = new AbortController(); window.AdminTab.signal = tabAC.signal;
-    const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(), team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
+    const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(),
+    insights: async () => { if (!window.AdminStats) return stats(); const { data: { session: s } } = await sb.auth.getSession(); AdminStats.mount(pane, (b) => fn("owner-stats", b, s && s.access_token)); },   // 📊 71: طلب بس لما يفتح التبويب team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
     dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats(), notify: () => window.AdminNotify ? AdminNotify.mount(pane, sb) : stats(),
     students: () => window.AdminStudents ? AdminStudents.mount(pane, sb) : stats() }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();

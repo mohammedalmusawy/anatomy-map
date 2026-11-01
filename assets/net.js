@@ -36,8 +36,9 @@
   }));
   const inflight = new Map();
 
+  const blk = (t) => !!(window.AM_BLOCK && window.AM_BLOCK(t));   // 🧪 71: اختباراتنا ما تلوّث الإحصائيات (cloud-config.js)
   function get(table, query, ttl = 10 * 60e3) {
-    if (!ON) return Promise.resolve([]);
+    if (!ON || blk(table)) return Promise.resolve([]);
     const key = "t:c:" + table + "?" + query, c = ls.get(key);
     if (c && (Date.now() - c.at < ttl || !online())) return Promise.resolve(c.v);
     if (inflight.has(key)) return inflight.get(key);
@@ -75,7 +76,7 @@
   let busy = false;
   async function flush() {
     if (!ON || busy || !online() || authFails >= 5) return;
-    const x = q(); if (!x.length) return;
+    const x0 = q(), x = x0.filter((e) => !blk(e.t)); if (x.length !== x0.length) save(x); if (!x.length) return;
     busy = true; save([]);                                   // نفرّغ أول (حتى تبويبين ما يرسلون نفس الشي)
     const by = {};
     x.forEach((e) => (by[e.t] = by[e.t] || []).push(e.r));
@@ -92,12 +93,12 @@
   }
 
   function post(table, row) {
-    if (!ON) return Promise.resolve();
+    if (!ON || blk(table)) return Promise.resolve();
     if (!online() || authFails >= 5) { push(table, row); return Promise.resolve(); }
     return send(table, row, false).then((st) => { if (st === -1 || retry(st)) push(table, row); });
   }
 
-  const log = (row) => { if (ON) { push("events", row); } };
+  const log = (row) => { if (ON && !blk("events")) { push("events", row); } };
 
   if (ON) {
     setTimeout(() => flush(), 5e3);                           // أول دفعة بعد ما الصفحة ترتاح (ما تزاحم التحميل)

@@ -10,7 +10,7 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const H = { apikey: C.anon, Authorization: "Bearer " + C.anon };
   const N = window.Net;
-  const get = (t, q, ttl) => N ? N.get(t, q, ttl) : fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => (r.ok ? r.json() : [])).catch(() => []);
+  const get = (t, q, ttl) => window.AM_BLOCK && AM_BLOCK(t) ? Promise.resolve([]) : N ? N.get(t, q, ttl) : fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => (r.ok ? r.json() : [])).catch(() => []);
   const settings = () => (N ? N.settings() : get("settings", "select=key,value").then((r) => Object.fromEntries((r || []).map((x) => [x.key, x.value])))).catch(() => ({}));
   const DISC = '<p class="rev-only">⚠️ <b>للمراجعة فقط — مو توقّع لأسئلة الامتحان</b></p>';
   const MIN_N = 10;   // أقل عدد محاولات (أول محاولة لكل جهاز) حتى سؤال يدخل «الأكثر غلط» — نفس حد daily_stats بالقاعدة
