@@ -7,8 +7,14 @@
     exams: "الامتحانات", me: "مساحتي", assistant: "المساعد", contrast: "الفحوصات الملوّنة", devices: "الأجهزة", search: "البحث",
     guide: "دليل الموقع", tools: "أدوات الطالب", study: "المراجعة", tg: "التليغرام", team: "فريق المنصة", thanks: "شكر وتقدير",
     about: "عن المنصة", physics: "الفيزياء", "map.html": "خريطة التشريح", "new-map.html": "خريطة التشريح الجديدة" };
+  // 🛡️ مفاتيح السيرفر ما تلمس Object.prototype («constructor» …) + أنواع غلط ما تكسر الرسم
+  const own = (o, k) => o != null && typeof o === "object" && Object.prototype.hasOwnProperty.call(o, k);
+  const secName = (k) => { const s = String(k ?? ""); return own(SEC, s) ? SEC[s] : s; };
+  const arr = (v) => (Array.isArray(v) ? v : []);
+  const obj = (v) => (v && typeof v === "object" && !Array.isArray(v) ? v : {});
+  const EN = () => { try { return document.documentElement.lang === "en"; } catch (e) { return false; } };
   const PERIODS = [["today", "اليوم"], ["week", "هالأسبوع"], ["month", "هالشهر"]];
-  const OFF = "الأرقام تبين بعد تفعيل الإحصائيات";
+  const OFF = "الأرقام تبين بعد تفعيل الإحصائيات", BUSY = "حاول بعد شوية";
 
   // عنصر بنص آمن: h("p", {class:"x"}, "نص", عنصر…) — النص دائماً textContent (عقدة نص)
   function h(tag, a, ...kids) {
@@ -36,11 +42,12 @@
   let LEC = null;
   const lectures = () => LEC || (LEC = fetch(new URL("../study/data.json", location.href)).then((r) => r.json()).catch(() => ({})));
   function lecName(D, id) {
-    const m = /^\/?(?:(?:learn|quiz|terms)\/)?([a-z0-9-]+)\/(theory|practical)\/(\d+)\/?$/.exec(String(id || ""));
-    if (!m) return String(id || "—");
-    const s = D[m[1]] || {}, L = (s.lectures || []).find((x) => x.type === m[2] && String(x.num) === m[3]);
-    const t = (m[2] === "theory" ? "نظري" : "عملي") + " م" + m[3];
-    return (s.name ? s.name + " · " : "") + t + (L && L.title_ar ? " — " + L.title_ar : "");
+    const m = /^\/?(?:(?:learn|quiz|terms)\/)?([a-z0-9-]+)\/(theory|practical)\/(\d+)\/?$/.exec(String(id ?? ""));
+    if (!m) return String(id ?? "") || "—";
+    const s = own(D, m[1]) ? obj(D[m[1]]) : {}, L = arr(s.lectures).find((x) => x && x.type === m[2] && String(x.num) === m[3]);
+    const en = EN(), nm = en ? s.en : s.name, ti = L && (en ? L.title_en : L.title_ar);
+    const t = en ? (m[2] === "theory" ? "Theory" : "Practical") + " L" + m[3] : (m[2] === "theory" ? "نظري" : "عملي") + " م" + m[3];
+    return (typeof nm === "string" && nm ? nm + " · " : "") + t + (typeof ti === "string" && ti ? " — " + ti : "");
   }
 
   const kpi = (label, v, sub) => h("div", { class: "os-k" }, h("b", { dir: "ltr" }, v), h("span", null, label), sub ? h("small", null, sub) : null);
@@ -48,7 +55,7 @@
   const quiet = (t) => h("p", { class: "os-q" }, t);
 
   function chart(series) {
-    const pts = (series || []).filter((x) => x && x.day);
+    const pts = arr(series).filter((x) => x && x.day != null && x.day !== "").map((x) => ({ day: String(x.day), devices: x.devices }));
     if (!pts.length) return quiet("ماكو أيام بهالفترة بعد.");
     const W = 600, H = 150, pad = 22, n = pts.length, bw = Math.max(4, Math.min(48, (W - 8) / n - 4));
     const vals = pts.map((x) => isNum(x.devices) ? x.devices : 0), max = Math.max(5, ...vals);
@@ -68,31 +75,32 @@
 
   function splitBox(sp) {
     if (!sp || sp.ready !== true) return quiet("الطلاب: يبين بعد تفعيل الأكواد");
-    const row = (k, label) => { const x = sp[k] || {}; return [kpi(label, num(x.students), pct(x.students_pct)), kpi(label, num(x.visitors), pct(x.visitors_pct))]; };
+    const row = (k, label) => { const x = obj(sp[k]); return [kpi(label, num(x.students), pct(x.students_pct)), kpi(label, num(x.visitors), pct(x.visitors_pct))]; };
     const st = h("div", { class: "os-kp" }), vi = h("div", { class: "os-kp" });
     [["devices", "أجهزة"], ["visits", "زيارات"], ["returning", "رجعوا"]].forEach(([k, l]) => { const [a, b] = row(k, l); st.appendChild(a); vi.appendChild(b); });
     return h("div", { class: "os-two" }, card("👨‍🎓 الطلاب (بالكود)", st), card("🌍 الزوار", vi));
   }
 
   function render(box, d, D) {
-    const u = d.usage || {}, sec = d.sections || {}, lec = d.lectures || {}, q = d.quiz || {}, as = d.assistant || null, bud = d.budget || {};
-    const top = (sec.top || [])[0];
+    const u = obj(d.usage), sec = obj(d.sections), lec = obj(d.lectures), q = obj(d.quiz), as = d.assistant && typeof d.assistant === "object" ? d.assistant : null, bud = obj(d.budget);
+    const sTop = arr(sec.top).filter((x) => x && typeof x === "object"), lTop = arr(lec.top).filter((x) => x && typeof x === "object"), qHard = arr(q.hard).filter((x) => x && typeof x === "object");
+    const top = sTop[0];
     box.appendChild(card("🌐 الاستخدام العام",
       h("div", { class: "os-kp" }, kpi("أجهزة", num(u.devices)), kpi("زيارات", num(u.visits)), kpi("رجعوا", num(u.returning), pct(u.returning_pct)), kpi("معدل يومي", num(u.avg_daily))),
-      top ? h("p", { class: "os-q" }, h("span", null, "أكثر قسم:"), " ", h("b", null, SEC[top.s] ?? String(top.s))) : null,
+      top ? h("p", { class: "os-q" }, h("span", null, "أكثر قسم:"), " ", h("b", null, secName(top.s))) : null,
       (u.suspect || u.test_excluded) ? h("p", { class: "os-q" }, h("span", null, "مستبعد من الأرقام:"), " ", h("bdi", null, num(u.suspect)), " ", h("span", null, "مشبوه"), " · ", h("bdi", null, num(u.test_excluded)), " ", h("span", null, "اختبار آلي")) : null));
-    box.appendChild(splitBox(d.split));
+    box.appendChild(splitBox(obj(d.split)));
 
-    const secL = h("ol", { class: "os-l" }, (sec.top || []).map((x) => h("li", null, h("span", null, SEC[x.s] ?? String(x.s)), h("b", { dir: "ltr" }, num(x.p)))));
-    const lecL = h("ol", { class: "os-l" }, (lec.top || []).slice(0, 5).map((x) => h("li", null, h("span", null, lecName(D, x.id)), h("b", { dir: "ltr" }, num(x.p)))));
+    const secL = h("ol", { class: "os-l" }, sTop.map((x) => h("li", null, h("span", null, secName(x.s)), h("b", { dir: "ltr" }, num(x.p)))));
+    const lecL = h("ol", { class: "os-l" }, lTop.slice(0, 5).map((x) => h("li", null, h("span", null, lecName(D, x.id)), h("b", { dir: "ltr" }, num(x.p)))));
     box.appendChild(card("⭐ الأكثر استعمالاً",
-      h("h4", null, "الأقسام"), (sec.top || []).length ? secL : quiet("ماكو قسم وصل 5 أجهزة بعد."),
+      h("h4", null, "الأقسام"), sTop.length ? secL : quiet("ماكو قسم وصل 5 أجهزة بعد."),
       sec.hidden ? h("p", { class: "os-q" }, h("span", null, "أقسام أصغر من 5 أجهزة:"), " ", h("bdi", null, num(sec.hidden))) : null,
-      h("h4", null, "أكثر 5 محاضرات"), (lec.top || []).length ? lecL : quiet("ماكو محاضرة وصلت 5 أجهزة بعد."),
+      h("h4", null, "أكثر 5 محاضرات"), lTop.length ? lecL : quiet("ماكو محاضرة وصلت 5 أجهزة بعد."),
       lec.small ? h("p", { class: "os-q" }, h("span", null, "محاضرات أصغر من 5 أجهزة:"), " ", h("bdi", null, num(lec.small))) : null,
       h("p", { class: "os-q" }, "الرقم = عدد الأجهزة")));
 
-    const hard = (q.hard || []).map((x) => h("li", null, h("span", { class: "os-qq", dir: "ltr", lang: "en" }, String(x.q ?? "")),
+    const hard = qHard.map((x) => h("li", null, h("span", { class: "os-qq", dir: "ltr", lang: "en" }, String(x.q ?? "")),
       h("small", null, lecName(D, x.quiz)), h("b", { dir: "ltr" }, pct(x.wrong_pct))));
     box.appendChild(card("📝 الاختبارات",
       h("div", { class: "os-kp" }, kpi("أجوبة (أول محاولة)", num(q.answers)), kpi("صح", pct(q.correct_pct)), kpi("أسئلة صعبة", num(q.hard_count))),
@@ -129,9 +137,11 @@
       const D = await lectures();
       if (my !== seq || (sig && sig.aborted)) return;
       body.replaceChildren();
-      if (!r || r.status !== 200) { delete cache[k]; body.appendChild(h("div", { class: "os-off" }, h("b", null, "📊"), h("p", null, OFF))); return; }
+      if (r && r.status === 429) { delete cache[k]; body.appendChild(h("div", { class: "os-off" }, h("b", null, "⏳"), h("p", null, BUSY))); return; }
+      // 200 بلا JSON أو بشكل غريب (ماكو usage ولا empty) ← نفس الحالة الهادئة، وما ينحفظ
+      if (!r || r.status !== 200 || (!r.empty && (!r.usage || typeof r.usage !== "object" || Array.isArray(r.usage)))) { delete cache[k]; body.appendChild(h("div", { class: "os-off" }, h("b", null, "📊"), h("p", null, OFF))); return; }
       if (r.empty) { body.appendChild(h("div", { class: "os-off" }, h("b", null, "🌙"), h("p", null, typeof r.msg === "string" && r.msg ? r.msg : OFF))); return; }
-      if (r.computed_at) when.append(h("span", null, "آخر تحديث:"), " ", h("bdi", { dir: "ltr" }, baghdad(r.computed_at)));
+      if (r.computed_at != null && r.computed_at !== "") when.append(h("span", null, "آخر تحديث:"), " ", h("bdi", { dir: "ltr" }, baghdad(String(r.computed_at))));
       render(body, r, D);
     }
     style();
@@ -166,9 +176,10 @@
 #ostats .os-bar{fill:var(--brand)}#ostats .os-sm{fill:var(--brand);opacity:.4}#ostats .os-ax{stroke:var(--line);stroke-width:1}
 #ostats .os-tx{fill:var(--muted);font-size:12px}
 #ostats .os-off{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:24px 14px;text-align:center;color:var(--muted)}
+#ostats .os-c,#ostats .os-k,#ostats .os-k>*,#ostats .os-q,#ostats .os-l li>*,#ostats .os-off p,#ostats h3,#ostats h4{min-width:0;overflow-wrap:anywhere;word-break:break-word}
 #ostats .os-off b{display:block;font-size:28px}#ostats .os-off p{margin:6px 0 0;font-size:16px}`;
     document.head.appendChild(st);
   }
 
-  window.AdminStats = { mount, _lecName: lecName, _num: num };
+  window.AdminStats = { mount, _lecName: lecName, _num: num, _secName: secName };
 })();

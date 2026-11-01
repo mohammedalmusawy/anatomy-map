@@ -526,7 +526,9 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
   let tabAC = null;
   const show = () => { if (tabAC) tabAC.abort(); tabAC = new AbortController(); window.AdminTab.signal = tabAC.signal;
     const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(),
-    insights: async () => { if (!window.AdminStats) return stats(); const { data: { session: s } } = await sb.auth.getSession(); AdminStats.mount(pane, (b) => fn("owner-stats", b, s && s.access_token)); },   // 📊 71: طلب بس لما يفتح التبويب team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
+    insights: async () => { if (!window.AdminStats) return stats(); const { data: { session: s } } = await sb.auth.getSession(); AdminStats.mount(pane, (b) => fn("owner-stats", b, s && s.access_token)); },
+    // 📊 71: insights = طلب owner-stats بس لما يفتح التبويب
+    team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
     dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats(), notify: () => window.AdminNotify ? AdminNotify.mount(pane, sb) : stats(),
     students: () => window.AdminStudents ? AdminStudents.mount(pane, sb) : stats() }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();
