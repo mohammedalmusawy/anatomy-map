@@ -112,6 +112,10 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
   // ── 3) بوابة الطلاب ──
   const rel = (() => { try { return decodeURIComponent(location.pathname).slice(decodeURIComponent(new URL(ROOT).pathname).length); } catch (e) { return ""; } })();
   const skip = inAdmin || /^(preview|tg|audio-check|telegram)\//.test(rel);
+  // 🎓 70 (قرار محمد 1/11): نطاق البوابة لما يشغّلها محمد (هسه مطفية، وما يتغير شي للناس):
+  //   مقفول على الزائر: learn/ (المحاضرات والـ PDF بصفحاتها) · quiz/ (اختبارات المحاضرات + quiz/mistakes) · terms/<محاضرة> · exams/ · me/
+  //   مفتوح: atlas/ · devices/ · contrast/ · terms/ (القاموس) واختباراتها داخل صفحاتها، وكل شي ثاني.
+  //   tg/listen (Mini App «اسمع المحاضرة») معفي مثل قبل (skip فوق). ماكو مفتاح «محاضرات بس» منفصل.
   const CLOSED = ["learn/", "quiz/", "exams/", "me/", "terms/*"];   // * = صفحة داخلها (مصطلحات محاضرة)؛ terms/ نفسها مفتوحة
   const norm = (p) => p.replace(/index\.html$/, "");
   function match(p, list) {
@@ -224,5 +228,5 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 
-  window.StaffDoor = { css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT };
+  window.StaffDoor = { css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT, gated };
 })();
