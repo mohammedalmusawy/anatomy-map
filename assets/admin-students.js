@@ -1,4 +1,5 @@
 // 🎓 تبويب «الطلاب» بلوحة الإدارة (29/10/2026) — جاهز ومو مربوط بـ admin.js بعد.
+// 70 (مسودة): طلبات الكود من البوت انشالت · أجهزة كل طالب (نوعها + أول وآخر ظهور) · ♻️ صار «سجّل خروج من كل الأجهزة».
 // الربط بعدين (بعد «وافقت»): بـ admin.js ← tabs.students = "🎓 الطلاب" ← AdminStudents.mount(pane, sb).
 // كل شي يمر بدالة students-admin (is_admin بالسيرفر). الأكواد تنعرض من التشفير، وما تنحفظ بالمتصفح.
 (function () {
@@ -28,12 +29,19 @@
       <textarea id="st-names" rows="5" placeholder="أحمد علي حسين&#10;زينب محمد كاظم"></textarea>
       <p><button class="btn" id="st-make">➕ سوّي الأكواد</button> <button class="btn ghost" id="st-csv">⬇️ نسخة CSV (بلا أكواد)</button></p>
       <div id="st-out"></div>
-      <h3>📨 طلبات الكود من البوت <small id="st-req-on"></small></h3><div id="st-req"></div>
       <h3>القائمة</h3><div class="scroll-x" id="st-list"><p class="hint">…</p></div>`;
     const $ = (s) => pane.querySelector(s);
     const actions = (s) => `<button class="ib" data-a="copy" title="نسخ">📋</button> <button class="ib" data-a="link" title="رابط دخول مباشر">🔗</button> ` +
       `<a class="ib" title="واتساب برسالة جاهزة" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(waText(s.full_name, s.code || ""))}">💬</a>`;
 
+    // 📱 70: قائمة الأجهزة (نوعها بكلمتين، أول ظهور، آخر ظهور) + «سجّل خروج من كل الأجهزة»
+    const day = (t) => (t ? String(t).slice(0, 10) : "—");
+    const devs = (s, max) => {
+      const dl = s.device_list || [];
+      return `<details class="stdev"><summary>📱 ${s.devices}/${max}</summary>` +
+        (dl.length ? `<ul>${dl.map((d) => `<li><b>${esc(d.kind)}</b> <small>أول: ${esc(day(d.first_seen))} · آخر: ${esc(ago(d.last_seen))}</small></li>`).join("")}</ul>` +
+          '<button class="btn ghost" data-a="reset" type="button">سجّل خروج من كل الأجهزة</button>' : '<p class="hint">ماكو أجهزة.</p>') + "</details>";
+    };
     async function list() {
       const r = await api({ action: "list" });
       if (on.signal.aborted) return;   // 🔁 59: التبويب انسد قبل ما يوصل الرد
@@ -43,19 +51,10 @@
         rows.map((s) => `<tr data-id="${esc(s.id)}" data-code="${esc(s.code || "")}" data-name="${esc(s.full_name)}">
           <td><b>${esc(s.full_name)}</b>${s.status === "paused" ? " <small>⏸️ موقوف</small>" : ""}${s.name_fix ? `<br><small>✏️ طلب تصحيح: ${esc(s.name_fix)} <button class="ib" data-a="fixok" title="طبّق التصحيح">✅</button></small>` : ""}</td>
           <td><span class="code" dir="ltr">${esc(s.code || "؟")}</span></td><td>${actions(s)}</td>
-          <td>${ago(s.last_seen)}</td><td>${s.devices}/${r.max_devices} ${s.devices ? '<button class="ib" data-a="reset" title="تصفير الأجهزة">♻️</button>' : ""}</td><td>${s.streak ? "🔥 " + s.streak : "—"}</td>
+          <td>${ago(s.last_seen)}</td><td>${devs(s, r.max_devices)}</td><td>${s.streak ? "🔥 " + s.streak : "—"}</td>
           <td><button class="ib" data-a="rotate" title="كود جديد">🔄</button> <button class="ib" data-a="${s.status === "paused" ? "resume" : "pause"}" title="${s.status === "paused" ? "تشغيل" : "إيقاف"}">${s.status === "paused" ? "▶️" : "⏸️"}</button> <button class="ib" data-a="delete" title="حذف كامل">🗑️</button></td></tr>`).join("") +
         "</tbody></table>" : '<p class="hint">ماكو طلاب بعد.</p>';
     }
-    async function requests() {
-      const r = await api({ action: "list_requests" });
-      if (on.signal.aborted) return;
-      $("#st-req-on").textContent = r.on ? "· مفعّل" : "· مطفي (يشتغل لما تگول «فعّل طلب الأكواد»)";
-      const rows = (r.requests || []).filter((x) => x.status === "pending");
-      $("#st-req").innerHTML = rows.length ? `<table class="adm"><tbody>` + rows.map((x) => `<tr data-req="${x.id}"><td><b>${esc(x.full_name)}</b>${x.tg_username ? ` <small dir="ltr">@${esc(x.tg_username)}</small>` : ""}${x.dup ? " <small>⚠️ مكرر</small>" : ""}</td><td>${ago(x.at)}</td>
-        <td><button class="ib" data-r="approve_request" title="وافق وأرسل الكود بالبوت">✅</button> <button class="ib" data-r="reject_request" title="رفض">❌</button></td></tr>`).join("") + "</tbody></table>" : '<p class="hint">ماكو طلبات.</p>';
-    }
-
     $("#st-make").onclick = async () => {
       const r = await api({ action: "create", names: $("#st-names").value });
       if (r.status !== 200) { $("#st-out").innerHTML = `<p class="hint">${esc(r.msg || "صار خطأ")}</p>`; return; }
@@ -73,22 +72,13 @@
       a.download = `الطلاب-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
     };
     pane.addEventListener("click", async (ev) => {
-      const rq = ev.target.closest("[data-r]");
-      if (rq) {
-        const tr = rq.closest("tr"), id = Number(tr.dataset.req), yes = rq.dataset.r === "approve_request", who = tr.querySelector("b") ? tr.querySelector("b").textContent : "";
-        // ✋ 59: موافقة/رفض طلب الكود ← تأكيد أول (الموافقة تسوي كود وتدزّه بالبوت)
-        if (!(await window.AdminAsk(rq, yes ? `توافق على «${who}»؟ ينسواله كود وينرسل إله بالبوت.` : `ترفض طلب «${who}»؟`, { yes: yes ? "نعم، وافق" : "نعم، ارفض" }))) return;
-        const r = await api({ action: rq.dataset.r, id });
-        alert(r.msg || (r.ok ? (r.full_name ? `✅ ${r.full_name}${r.sent ? " — وصله الكود بالبوت" : " — ⚠️ ما وصلته رسالة البوت، دزّه يدوي"}` : "تم") : "صار خطأ"));
-        requests(); list(); return;
-      }
       const b = ev.target.closest("[data-a]"); if (!b) return;
       const tr = b.closest("tr"), id = tr.dataset.id, code = tr.dataset.code, name = tr.dataset.name, a = b.dataset.a;
       if (a === "copy") return copy(code, b);
       if (a === "link") return copy(link(code), b);
       if (a === "rotate" && !confirm(`كود جديد لـ «${name}»؟ القديم يبطل والأجهزة تتصفّر.`)) return;
       if (a === "pause" && !confirm(`إيقاف «${name}»؟ يطلع من كل أجهزته.`)) return;
-      if (a === "reset" && !confirm(`تصفير أجهزة «${name}»؟`)) return;
+      if (a === "reset" && !confirm(`تسجّل خروج «${name}» من كل أجهزته؟ يدخل مرة ثانية بنفس الكود.`)) return;
       let body = { action: a, id };
       if (a === "fixok") body = { action: "rename", id };
       if (a === "delete") {
@@ -101,7 +91,7 @@
       if (a === "rotate") alert(`الكود الجديد: ${r.code}`);
       list();
     }, on);
-    list(); requests();
+    list();
   }
   window.AdminStudents = { mount };
 })();

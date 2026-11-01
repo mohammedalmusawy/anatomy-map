@@ -313,7 +313,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       `<b>التوقع لآخر الشهر:</b> ≈ ${fc.toFixed(2)}$ ${fc >= top ? "⚠️ يعبر السقف — المساعد يوگف بلطف لما يوصل" : fc >= cap ? "↗️ الميزانية راح ترتفع وحدها" : "✅ ضمن الميزانية"}`;
   }
   async function control() {
-    const [ann, sec, bud, gate, req] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget"), getSet("gate"), getSet("code_requests")]);
+    const [ann, sec, bud, gate] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget"), getSet("gate")]);   // 🗑️ 70: مفتاح «طلب الكود من البوت» انشال
     pane.innerHTML = `<h2>📣 شريط الإعلان</h2><textarea id="an" rows="2">${esc(ann.text)}</textarea>
       <label><input type="checkbox" id="anon" ${ann.on ? "checked" : ""}> ظاهر</label><button class="btn" id="ans">حفظ</button>
       <h2>🧩 الأقسام</h2>
@@ -322,7 +322,6 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       <h2>🎓 الموقع للطلاب بالكود</h2>
       <p class="hint">مطفي = كلشي مفتوح مثل هسه. مشغّل = المحاضرات والاختبارات ومصطلحات المحاضرات و«مساحتي» والمساعد الكامل لطلابنا بالكود؛ الأطلس والملوّنة والأجهزة والمصطلحات العامة مفتوحة للكل. (يوصل للطلاب خلال 10 دقائق.)</p>
       <label><input type="checkbox" id="gon" ${gate.on ? "checked" : ""}> 🔒 بوابة الطلاب (settings.gate.on)</label>
-      <label><input type="checkbox" id="ron" ${req.on ? "checked" : ""}> 📨 طلب الكود من البوت (settings.code_requests.on)</label>
       <h2>💵 ميزانية المساعد</h2><div id="spend" class="hint">…</div><label>شهرياً ($) <input id="bm" type="number" value="${bud.monthly_usd ?? 50}"></label>
       <label>أسئلة يومياً لكل طالب/جهاز <input id="bd" type="number" value="${bud.daily_per_device ?? 15}"></label>
       <label>تنبيه بالبوت عند (%) <input id="bp" type="number" min="10" max="100" value="${bud.alert_pct ?? 70}"></label><button class="btn" id="bs">حفظ</button>`;
@@ -348,8 +347,6 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
     };
     document.getElementById("gon").onchange = (e) => flip("gate", e.target,
       "تشغّل بوابة الطلاب؟ المحاضرات والاختبارات تصير لطلابنا بالكود بس (الأطلس والملوّنة والأجهزة تبقى مفتوحة).", "تطفّي البوابة؟ كلشي يرجع مفتوح للكل.");
-    document.getElementById("ron").onchange = (e) => flip("code_requests", e.target,
-      "تشغّل طلب الكود من البوت؟ أي أحد يگدر يطلب، والطلب يوصلك هنا بتبويب «🎓 الطلاب» وبالبوت.", "تطفّي طلب الكود من البوت؟");
     // دمج ويّا القيم الموجودة (حدود IP والحد الكلّي تبقى) — الحفظ القديم كان يمسحها
     document.getElementById("bs").onclick = async () => {
       const cur = await getSet("assistant_budget"), n = (id) => +document.getElementById(id).value;

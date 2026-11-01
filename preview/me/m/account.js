@@ -59,6 +59,8 @@
     const c = await client();
     const { data } = await c.from("students").select("id, full_name, status, name_confirmed, name_fix, streak, streak_best, last_seen").maybeSingle();
     state.student = data || null;
+    // 👋 70: الاسم الأول بالجهاز حتى «أهلاً (اسمه)» بالرئيسية يطلع من الاسم الحقيقي (الحساب ما بيه user_metadata.full_name)
+    try { if (state.student && state.student.full_name) localStorage.setItem("t:acct-name", String(state.student.full_name).trim().split(/\s+/)[0]); } catch (e) {}
     emit();
     return state.student;
   }
@@ -79,9 +81,10 @@
     if (session && !state.student) await loadStudent();
     if (session && state.student) {
       const day = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);
-      if (lsGet("t:acct-touch", "") !== day) {
+      // 📱 70: مرة باليوم للسلسلة، و(بعد ما يصير touch يفحص الجهاز) كل 30 دقيقة بالكثير حتى الجهاز اللي انطلع من «أجهزتي» يطلع فعلاً
+      if (lsGet("t:acct-touch", "") !== day || Date.now() - Number(lsGet("t:acct-touch-at", 0)) > 30 * 60e3) {
         const t = await call("redeem-code", { action: "touch", device_id: device }, true);
-        if (t.ok) { lsSet("t:acct-touch", day); state.student.streak = t.streak; state.student.streak_best = t.streak_best; }
+        if (t.ok) { lsSet("t:acct-touch", day); lsSet("t:acct-touch-at", Date.now()); state.student.streak = t.streak; state.student.streak_best = t.streak_best; }
         else if (t.status === 403 || t.status === 401) await logout();
       }
     }
@@ -92,11 +95,42 @@
   const confirmName = () => call("redeem-code", { action: "confirm_name" }, true).then((r) => { if (r.ok && state.student) state.student.name_confirmed = true; emit(); return r; });
   const fixName = (name) => call("redeem-code", { action: "fix_name", name }, true);
   const linkTelegram = () => call("redeem-code", { action: "tg_link_token" }, true);   // مطفي لحد settings.tg_link.on
+  // 📱 70: «أجهزتي» — الطالب يشوف أجهزته ويطلّع جهاز (السيرفر: صفوفه هو بس)
+  const devices = () => call("redeem-code", { action: "devices", device_id: device }, true);
+  const removeDevice = (target) => call("redeem-code", { action: "remove_device", device_id: device, target }, true);
+  const when = (t) => { if (!t) return "—"; const d = Math.floor((Date.now() - new Date(t)) / 864e5); return d <= 0 ? "اليوم" : d === 1 ? "أمس" : d === 2 ? "قبل يومين" : d <= 10 ? `قبل ${d} أيام` : `قبل ${d} يوم`; };
+  let devBusy = false;
+  async function mountDevices(el) {
+    if (!el || devBusy) return;
+    if (!state.session || !state.student) { el.hidden = true; el.innerHTML = ""; return; }
+    devBusy = true;
+    let r; try { r = await devices(); } catch (e) { r = { status: 0 }; } finally { devBusy = false; }
+    if (r.status === 403 || r.status === 401) { await logout(); el.hidden = true; return; }
+    if (!r.ok) { el.hidden = true; return; }
+    el.hidden = false;
+    el.innerHTML = `<details class="mdet devs"><summary><span>📱 أجهزتي</span><small>${r.devices.length}/${r.max_devices}</small></summary>
+      <p class="sub">كودك يشتغل على ${r.max_devices} أجهزة بالكثير. إذا جهاز مو إلك أو ما تستعمله، طلّعه.</p>
+      <ul class="devl">${r.devices.map((d) => `<li data-dev="${esc(d.id)}"${d.current ? ' data-cur="1"' : ""}><span><b>${esc(d.kind)}</b>${d.current ? " <small>(هذا الجهاز)</small>" : ""}<br><small>أول مرة: ${esc(String(d.first_seen || "").slice(0, 10))} · آخر مرة: ${esc(when(d.last_seen))}</small></span>
+        <button type="button" class="cbtn ghost" data-rm>${d.current ? "اطلع من هذا الجهاز" : "طلّع هذا الجهاز"}</button></li>`).join("")}</ul>
+      <p class="sub" role="status" aria-live="polite" data-devmsg></p></details>`;
+    el.querySelectorAll("[data-rm]").forEach((b) => b.onclick = async () => {
+      const li = b.closest("li"), cur = li.dataset.cur === "1";
+      if (!confirm(cur ? "تطلع من هذا الجهاز؟ تحتاج كودك حتى ترجع." : "تطلّع هذا الجهاز من حسابك؟ لازم الكود حتى يرجع يدخل منه.")) return;
+      b.disabled = true;
+      const x = await removeDevice(li.dataset.dev).catch(() => ({ ok: false }));
+      const m = el.querySelector("[data-devmsg]");
+      if (!x.ok) { b.disabled = false; if (m) m.textContent = x.msg || "ما صار، جرّب مرة ثانية."; return; }
+      if (cur) { await logout(); location.reload(); return; }
+      if (m) m.textContent = "✅ انطلع. أول ما ينفتح الموقع بذاك الجهاز يطلع من حسابك.";
+      li.remove();
+      const sm = el.querySelector("summary small"); if (sm) sm.textContent = `${x.devices.length}/${x.max_devices}`;
+    });
+  }
   async function logout() {
     // الخروج ما يفضّي مكان الجهاز (حتى ما ينتشر الكود بخروج/دخول). تصفير الأجهزة من الإدارة بس.
     try { const c = await client(); await c.auth.signOut({ scope: "local" }); } catch (e) {}
     state.session = null; state.student = null; state.cache = {};
-    try { localStorage.removeItem("t:acct-touch"); } catch (e) {}
+    try { localStorage.removeItem("t:acct-touch"); localStorage.removeItem("t:acct-touch-at"); localStorage.removeItem("t:acct-name"); } catch (e) {}
     emit();
   }
 
@@ -186,7 +220,7 @@
   }
 
   window.Account = {
-    state, device, ready, redeem, confirmName, fixName, logout, linkTelegram, pull, get, put,
+    state, device, ready, redeem, confirmName, fixName, logout, linkTelegram, pull, get, put, devices, removeDevice, mountDevices,
     mountLogin, mountNameCheck, on: (f) => { subs.add(f); return () => subs.delete(f); },
     token: () => (state.session ? state.session.access_token : null),   // للمساعد لما تنفتح البوابة
   };

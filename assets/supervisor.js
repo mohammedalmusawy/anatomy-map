@@ -1,7 +1,8 @@
 // 👥 لوحة المساعد (29/10/2026، الدخول والصلاحيات) — window.StaffPanel.mount(root, sb, me)
 // المساعد يدخل من /admin/ (🔢 الرقم السري بس، 29/10) ← admin.js يفتح هاللوحة بالتبويبات اللي محمد اختارها بس:
-//   📚 المحاضرات (lectures) · 🎓 الأكواد (codes) · 👥 الفريق (team ← AdminPeople) · 📣 الإعلانات (ads ← شريط الإعلان).
-// كل صلاحية تنفحص بالسيرفر (دالة supervisor + RLS staff_can)؛ هذا الملف واجهة بس. ماكو حذف ولا إعدادات ولا نشر من هنا.
+//   📚 المحاضرات (lectures) · 🎓 أكواد الطلاب (codes: يشوف الكود ويدزّه + 🔄 كود جديد).
+// 🔒 70 (مسودة): المساعد = رفع المحاضرات + توزيع الأكواد + كود جديد بس. «الفريق» و«الإعلانات» و«طلبات الأكواد» انشالن،
+//   والسيرفر يفرضها بقائمة بيضاء (supervisor + staff_can بهجرة 070). هذا الملف واجهة بس. ماكو حذف ولا إعدادات ولا إحصائيات ولا «صوتك يوصل».
 (function () {
   "use strict";
   const C = window.STUDY_CLOUD || {};
@@ -23,8 +24,7 @@
     };
     const P = me.perms || {};
     const tabs = [...(P.lectures ? [["exp", "📚 المحاضرات"], ["up", "📤 ارفع أو بلّغ"], ["mine", "🧾 طلباتي"]] : []),
-      ...(P.codes ? [["codes", "🎓 طلبات الأكواد"]] : []), ...(P.team && window.AdminPeople ? [["team", "👥 الفريق"]] : []),
-      ...(P.ads ? [["ads", "📣 الإعلانات"]] : [])];
+      ...(P.codes ? [["codes", "🎓 أكواد الطلاب"]] : [])];
     let subjects = [];
     root.innerHTML = `<div class="tm-hello"><span>أهلاً <b>${esc(me.name)}</b> · ${esc(me.title)}</span><span><span class="sd-asw">👁️ شوف الموقع كـ: <button class="btn ghost" type="button" data-as="student">طالب</button> <button class="btn ghost" type="button" data-as="visitor">زائر</button></span> <button class="btn ghost" id="sup-out" type="button">خروج</button></span></div>
       <p class="hint">كل شي ترفعه أو تبلّغ عنه يروح لمحمد للمراجعة، وما ينشر إلا بعد موافقته. وكل فعل ينكتب بالسجل.</p>
@@ -36,7 +36,7 @@
     const show = (t) => {
       root.querySelectorAll(".dtabs a").forEach((x) => x.classList.toggle("on", x.dataset.t === t));
       pane().innerHTML = '<p class="hint">لحظة…</p>';
-      ({ exp: expected, up: upload, codes, mine, team: () => window.AdminPeople.mount(pane(), sb), ads })[t]?.();
+      ({ exp: expected, up: upload, codes, mine })[t]?.();
     };
     root.querySelectorAll(".dtabs a").forEach((a) => a.onclick = (e) => { e.preventDefault(); show(a.dataset.t); });
     if (tabs.length) show(tabs.some(([k]) => k === location.hash.slice(1)) ? location.hash.slice(1) : tabs[0][0]);
@@ -85,23 +85,38 @@
       };
     }
 
+    // 🎓 70: أكواد الطلاب — يشوف الكود ويدزّه (نسخ، رابط دخول، واتساب) + 🔄 كود جديد. ولا حذف ولا إيقاف ولا إنشاء.
+    const ROOT = (window.StaffDoor && window.StaffDoor.ROOT) || new URL("../", location.href).href;
+    const link = (code) => `${ROOT}?code=${encodeURIComponent(code)}`;
+    const waText = (name, code) => `أهلاً ${String(name).split(" ")[0]}، هذا كودك لموقع دروس تقنيات الأشعة: ${code} — أو افتح الرابط مباشرة: ${link(code)} (يشتغل على 3 أجهزة بالكثير، لا تشاركه)`;
+    const copy = async (t, b) => { try { await navigator.clipboard.writeText(t); const o = b.textContent; b.textContent = "✔️"; setTimeout(() => (b.textContent = o), 1200); } catch (e) { prompt("انسخ:", t); } };
     async function codes() {
-      const r = await api({ action: "requests" });
-      if (r.status !== 200) return (pane().innerHTML = `<p class="hint">${esc(r.msg || "ما گدرنا نجيب الطلبات.")}</p>`);
-      const rows = r.requests;
-      pane().innerHTML = `<p class="hint">توافق بس على اللي اسمه يطابق القائمة الرسمية بالضبط (الكود يوصل للطالب بالبوت، وما يطلعلك). المشكوك فيه حوّله لمحمد.</p>` +
-        (rows.length ? rows.map((x) => `<div class="tm-req" data-id="${x.id}"><div><b>${esc(x.full_name)}</b> <small>${x.tg_username ? "@" + esc(x.tg_username) + " · " : ""}${esc(String(x.at).slice(0, 10))}${x.forwarded ? " · ↪️ تحوّل لمحمد" : ""}</small>
-          <span class="tm-chip ${x.match ? "ok" : "miss"}">${x.match ? "✅ يطابق القائمة" : "⚠️ " + esc(x.why || "يحتاج محمد")}</span></div>
-          <p>${x.match && !x.forwarded ? '<button class="btn" data-a="approve" type="button">✅ وافق</button> ' : ""}${x.forwarded ? "" : '<button class="btn ghost" data-a="forward" type="button">↪️ حوّل لمحمد</button>'}</p>
-          <p class="tm-msg" role="status"></p></div>`).join("") : '<p class="hint">ماكو طلبات منتظرة.</p>');
+      const r = await api({ action: "codes" });
+      if (r.status !== 200) return (pane().innerHTML = `<p class="hint">${esc(r.msg || "ما گدرنا نجيب الأكواد.")}</p>`);
+      const rows = r.students || [];
+      pane().innerHTML = `<p class="hint">دزّ لكل طالب كوده بس. «🔄 كود جديد» يبطل القديم ويطلّعه من كل أجهزته. كل فعل ينكتب بالسجل.</p>
+        <label class="tm-f"><span>دوّر على اسم</span><input id="c-q" type="search" autocomplete="off"></label>` +
+        (rows.length ? `<div id="c-list">${rows.map((x) => `<div class="tm-req" data-id="${esc(x.id)}" data-name="${esc(x.full_name)}" data-code="${esc(x.code || "")}">
+          <div><b>${esc(x.full_name)}</b> <span class="code" dir="ltr">${esc(x.code || "؟")}</span>${x.status === "paused" ? " <small>⏸️ موقوف</small>" : ""} <small>📱 ${x.devices}/${r.max_devices}</small></div>
+          <p><button class="btn ghost" data-a="copy" type="button">📋 نسخ</button> <button class="btn ghost" data-a="link" type="button">🔗 الرابط</button>
+          <a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(waText(x.full_name, x.code || ""))}">💬 واتساب</a>
+          <button class="btn ghost" data-a="rotate" type="button">🔄 كود جديد</button></p><p class="tm-msg" role="status"></p></div>`).join("")}</div>`
+          : '<p class="hint">ماكو طلاب بعد.</p>');
+      const q = pane().querySelector("#c-q");
+      if (q) q.oninput = () => { const v = q.value.trim(); pane().querySelectorAll("#c-list .tm-req").forEach((d) => { d.style.display = v && !d.dataset.name.includes(v) ? "none" : ""; }); };
       pane().onclick = async (ev) => {
         const b = ev.target.closest("button[data-a]"); if (!b) return;
-        const box = b.closest(".tm-req"), m = box.querySelector(".tm-msg"), id = Number(box.dataset.id);
+        const box = b.closest(".tm-req"), m = box.querySelector(".tm-msg"), a = b.dataset.a;
+        if (a === "copy") return copy(box.dataset.code, b);
+        if (a === "link") return copy(link(box.dataset.code), b);
+        if (a !== "rotate" || !confirm(`كود جديد لـ «${box.dataset.name}»؟ القديم يبطل ويطلع من كل أجهزته.`)) return;
         b.disabled = true;
-        const note = b.dataset.a === "forward" ? (prompt("ملاحظة لمحمد (اختياري):") || "") : "";
-        const res = await api({ action: b.dataset.a === "approve" ? "approve_request" : "forward_request", id, note });
-        msg(m, res.msg || (res.status === 200 ? "تم." : "ما صار."), res.status === 200);
-        if (res.status === 200) box.querySelectorAll("button").forEach((x) => x.remove()); else b.disabled = false;
+        const res = await api({ action: "code_rotate", id: box.dataset.id });
+        b.disabled = false;
+        if (res.status !== 200) return msg(m, res.msg || "ما صار.");
+        box.dataset.code = res.code; box.querySelector(".code").textContent = res.code;
+        const wa = box.querySelector('a[href^="https://wa.me/"]'); if (wa) wa.href = "https://wa.me/?text=" + encodeURIComponent(waText(box.dataset.name, res.code));
+        msg(m, "✅ الكود الجديد جاهز. دزّه للطالب.", true);
       };
     }
 
@@ -113,19 +128,6 @@
         : '<p class="hint">ماكو طلبات بعد.</p>';
     }
 
-    // 📣 شريط الإعلان (RLS: staff_can('ads') + المفتاح announcement بس + الشكل {text, on}؛ كل حفظ ينكتب بالسجل)
-    async function ads() {
-      const { data } = await sb.from("settings").select("value").eq("key", "announcement").maybeSingle();
-      const v = (data && data.value) || {};
-      pane().innerHTML = `<h3>📣 شريط الإعلان</h3><p class="hint">يطلع بأعلى الموقع لكل الطلاب. 300 حرف بالكثير.</p>
-        <textarea id="ad-t" rows="3" maxlength="300">${esc(v.text || "")}</textarea>
-        <label><input type="checkbox" id="ad-on" ${v.on ? "checked" : ""}> ظاهر للطلاب</label>
-        <p><button class="btn" id="ad-s" type="button">حفظ</button></p><p class="tm-msg" id="ad-m" role="status"></p>`;
-      pane().querySelector("#ad-s").onclick = async () => {
-        const { error } = await sb.from("settings").upsert({ key: "announcement", value: { text: pane().querySelector("#ad-t").value.slice(0, 300), on: pane().querySelector("#ad-on").checked } });
-        msg(pane().querySelector("#ad-m"), error ? "ما انحفظ (الصلاحية؟)" : "انحفظ ✔️", !error);
-      };
-    }
   }
   window.StaffPanel = { mount };
 })();
