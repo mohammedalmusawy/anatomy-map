@@ -159,7 +159,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       location.reload();
     };
     $("#forgot").onclick = async () => {
-      if (!isOwn()) return msg("راسل محمد الموسوي يسوّيلك «إعادة تعيين» للرقم. (محمد؟ اضغط «أنا محمد — دخول بالإيميل».)", true);
+      if (!isOwn()) return msg("راسل مشرف القسم يسوّيلك «إعادة تعيين» للرقم. (محمد؟ اضغط «أنا محمد — دخول بالإيميل».)", true);
       const email = $("#le").value.trim();
       if (!email) return msg("اكتب إيميلك أول، بعدين اضغط «نسيت الرقم؟».");
       await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });

@@ -52,6 +52,9 @@
     state.session = data.session;
     await loadStudent();
     await migrateLocal();
+    // 📱 70: touch فوراً حتى الجلسة تنربط بهالجهاز (وإذا انطلع من «أجهزتي» تنتهي جلسته نفسها)
+    try { const t = await call("redeem-code", { action: "touch", device_id: device }, true);
+      if (t.ok) { lsSet("t:acct-touch", new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10)); lsSet("t:acct-touch-at", Date.now()); } } catch (e) {}
     return { ok: true, full_name: r.full_name, name_confirmed: r.name_confirmed };
   }
 
