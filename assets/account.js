@@ -19,6 +19,7 @@
   try { device = localStorage.getItem("t:device"); if (!device) { device = crypto.randomUUID(); localStorage.setItem("t:device", device); } } catch (e) { device = crypto.randomUUID(); }
 
   const state = { on: !!(C.url && C.anon), student: null, session: null, cache: {} };
+  const BIND_MSG = "ما گدرنا نثبّت هذا الجهاز، اكتب كودك مرة ثانية";   // 📱 70 (تصليح 3)
   const subs = new Set();
   const emit = () => subs.forEach((f) => { try { f(state); } catch (e) {} });
   let sb = null;
@@ -53,8 +54,11 @@
     await loadStudent();
     await migrateLocal();
     // 📱 70: touch فوراً حتى الجلسة تنربط بهالجهاز (وإذا انطلع من «أجهزتي» تنتهي جلسته نفسها)
-    try { const t = await call("redeem-code", { action: "touch", device_id: device, bind: r.bind }, true);   // (تصليح 2) nonce الربط مرة وحدة
-      if (t.ok) { lsSet("t:acct-touch", new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10)); lsSet("t:acct-touch-at", Date.now()); } } catch (e) {}
+    let t = null;
+    try { t = await call("redeem-code", { action: "touch", device_id: device, bind: r.bind }, true); } catch (e) {}   // (تصليح 2) nonce الربط مرة وحدة
+    // (تصليح 3) الربط انرفض ← نطلع فوراً (الجلسة ما تبقى بالجهاز) ونرجع لشاشة الكود برسالة هادئة
+    if (t && (t.status === 403 || t.status === 401)) { await logout(); return { ok: false, bind_refused: true, msg: BIND_MSG }; }
+    if (t && t.ok) { lsSet("t:acct-touch", new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10)); lsSet("t:acct-touch-at", Date.now()); }
     return { ok: true, full_name: r.full_name, name_confirmed: r.name_confirmed };
   }
 
@@ -133,7 +137,7 @@
     // الخروج ما يفضّي مكان الجهاز (حتى ما ينتشر الكود بخروج/دخول). تصفير الأجهزة من الإدارة بس.
     try { const c = await client(); await c.auth.signOut({ scope: "local" }); } catch (e) {}
     state.session = null; state.student = null; state.cache = {};
-    try { localStorage.removeItem("t:acct-touch"); localStorage.removeItem("t:acct-touch-at"); localStorage.removeItem("t:acct-name"); } catch (e) {}
+    try { localStorage.removeItem("t:acct-touch"); localStorage.removeItem("t:acct-touch-at"); localStorage.removeItem("t:acct-name"); localStorage.removeItem("t:acct-session"); } catch (e) {}
     emit();
   }
 
