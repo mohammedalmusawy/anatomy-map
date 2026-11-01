@@ -143,13 +143,18 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     const close = () => { if (direct) location.href = ROOT + "lessons/"; else d.remove(); };
     d.querySelector("[data-sd-close]").onclick = close;
     d.addEventListener("click", (ev) => { if (ev.target === d && !direct) close(); });
-    d.addEventListener("keydown", (ev) => {
+    // (69) المستمع على الصفحة (مو النافذة بس) حتى الدوران يكمل لما التركيز على أزرار شريط المعاينة
+    const onKey = (ev) => {
+      if (!d.isConnected) { document.removeEventListener("keydown", onKey); return; }
+      if (!d.contains(ev.target) && !(ev.target.closest && ev.target.closest(".sd-pv"))) return;
       if (ev.key === "Escape") { ev.preventDefault(); close(); }
       if (ev.key === "Tab") {   // التركيز يدور داخل النافذة بس
-        const f = [...document.querySelectorAll(".sd-pv button"), ...d.querySelectorAll("input,button,a[href]")];   // (69) أزرار شريط المعاينة ضمن الدوران const i = f.indexOf(document.activeElement);
+        // (69) أزرار شريط المعاينة ضمن الدوران
+        const f = [...document.querySelectorAll(".sd-pv button"), ...d.querySelectorAll("input,button,a[href]")]; const i = f.indexOf(document.activeElement);
         ev.preventDefault(); f[(i < 0 ? 0 : i + (ev.shiftKey ? -1 : 1) + f.length) % f.length].focus();
       }
-    });
+    };
+    document.addEventListener("keydown", onKey);
     d.querySelector("#sd-cf").onsubmit = async (ev) => {
       ev.preventDefault();
       if (!inp.value.trim()) { m.className = "sd-msg bad"; m.textContent = "اكتب الكود أول (مثل RAD-7K4P-2QXM)."; return; }
