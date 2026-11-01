@@ -26,7 +26,7 @@
       const { data: { session } } = await sb.auth.getSession();
       const r = await fetch(`${C.url}/functions/v1/dept-stats`, { method: "POST",
         headers: { apikey: C.anon, Authorization: "Bearer " + (session ? session.access_token : ""), "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      return { status: r.status, ...(await r.json().catch(() => ({}))) };
+      return { ...(await r.json().catch(() => ({}))), status: r.status };   // 🛡️ الحالة من HTTP دائماً (body.status ما يغطّيها)
     };
     pane.innerHTML = `<h2>🏛️ رئيس القسم</h2>
       <div id="hd-admin"></div>
@@ -437,7 +437,7 @@
       try {
         const r = await fetch(`${C.url}/functions/v1/dept-stats`, { method: "POST",
           headers: { apikey: C.anon, Authorization: "Bearer " + (session ? session.access_token : ""), "Content-Type": "application/json" }, body: JSON.stringify(body) });
-        return { status: r.status, ...(await r.json().catch(() => ({}))) };
+        return { ...(await r.json().catch(() => ({}))), status: r.status };   // 🛡️ الحالة من HTTP دائماً (body.status ما يغطّيها)
       } catch (e) { return { status: 0 }; }
     };
     let me = await call({ action: "head_me" });

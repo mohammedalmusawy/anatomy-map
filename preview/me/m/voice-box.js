@@ -158,7 +158,7 @@ html[lang="en"] .vb, html[lang="en"] .vb-row { direction: ltr; text-align: left;
       if (PV && typeof PV.api === "function") return PV.api(body);
       const tok = window.Account.state.session.access_token;
       try { const r = await fetch(`${C.url}/functions/v1/dept-voice`, { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + tok, "Content-Type": "application/json" }, body: JSON.stringify(body) });
-        return { status: r.status, ...(await r.json().catch(() => ({}))) }; } catch (e) { return { status: 0 }; }
+        return { ...(await r.json().catch(() => ({}))), status: r.status }; } catch (e) { return { status: 0 }; }
     };
     let items = list(), view = "home", cur = null, fresh = new Set(), sending = false, imgBusy = false;
     let draft = { kind: "", area: "", ref: "", named: false, text: "", image: null }, stage = null;

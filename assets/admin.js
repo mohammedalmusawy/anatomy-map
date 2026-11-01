@@ -53,7 +53,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
   const fn = async (name, body, tok) => {
     try {
       const r = await fetch(`${C.url}/functions/v1/${name}`, { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + (tok || C.anon), "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      return { status: r.status, ...(await r.json().catch(() => ({}))) };
+      return { ...(await r.json().catch(() => ({}))), status: r.status };   // 🛡️ الحالة من HTTP دائماً (body.status ما يغطّيها)
     } catch (e) { return { status: 0, msg: "ماكو اتصال. تأكد من النت وجرّب مرة ثانية." }; }
   };
   const DEV = { get: () => LSx.get("adm:dev") || "", set: (t) => { if (t) LSx.set("adm:dev", t); }, del: () => LSx.del("adm:dev") };
@@ -159,7 +159,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       location.reload();
     };
     $("#forgot").onclick = async () => {
-      if (!isOwn()) return msg("راسل محمد الموسوي يسوّيلك «إعادة تعيين» للرقم. (محمد؟ اضغط «أنا محمد — دخول بالإيميل».)", true);
+      if (!isOwn()) return msg("راسل مشرف القسم يسوّيلك «إعادة تعيين» للرقم. (محمد؟ اضغط «أنا محمد — دخول بالإيميل».)", true);
       const email = $("#le").value.trim();
       if (!email) return msg("اكتب إيميلك أول، بعدين اضغط «نسيت الرقم؟».");
       await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
@@ -244,7 +244,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
 
   // ───────── المالك ─────────
   // «🙏 الشكر» القديم انشال من التبويبات (29/10): الشكر صار بجدول people ← «🙏 الفريق والشكر» (AdminPeople). الدالة thanks() تبقى بلا تبويب.
-  const tabs = { stats: "📊 الإحصائيات", reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
+  const tabs = { stats: "📋 الملخص", ...(window.AdminStats ? { insights: "📊 الإحصائيات" } : {}), reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
     ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "🔑 المساعدين" } : {}), ...(window.AdminDept ? { dept: "🏛️ رئيس القسم" } : {}),
     ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), ...(window.AdminStudents ? { students: "🎓 الطلاب" } : {}), ...(window.AdminNotify ? { notify: "🔔 التنبيهات" } : {}), security: "🔐 الأمان" };
   box.innerHTML = `<div class="tm-hello"><span><b>⚙️ لوحة الإدارة</b> · أهلاً محمد</span><span><span class="sd-asw">👁️ شوف الموقع كـ: <button class="btn ghost" type="button" data-as="student">طالب</button> <button class="btn ghost" type="button" data-as="visitor">زائر</button></span></span></div>
@@ -313,7 +313,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       `<b>التوقع لآخر الشهر:</b> ≈ ${fc.toFixed(2)}$ ${fc >= top ? "⚠️ يعبر السقف — المساعد يوگف بلطف لما يوصل" : fc >= cap ? "↗️ الميزانية راح ترتفع وحدها" : "✅ ضمن الميزانية"}`;
   }
   async function control() {
-    const [ann, sec, bud, gate, req] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget"), getSet("gate"), getSet("code_requests")]);
+    const [ann, sec, bud, gate] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget"), getSet("gate")]);   // 🗑️ 70: مفتاح «طلب الكود من البوت» انشال
     pane.innerHTML = `<h2>📣 شريط الإعلان</h2><textarea id="an" rows="2">${esc(ann.text)}</textarea>
       <label><input type="checkbox" id="anon" ${ann.on ? "checked" : ""}> ظاهر</label><button class="btn" id="ans">حفظ</button>
       <h2>🧩 الأقسام</h2>
@@ -322,7 +322,6 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       <h2>🎓 الموقع للطلاب بالكود</h2>
       <p class="hint">مطفي = كلشي مفتوح مثل هسه. مشغّل = المحاضرات والاختبارات ومصطلحات المحاضرات و«مساحتي» والمساعد الكامل لطلابنا بالكود؛ الأطلس والملوّنة والأجهزة والمصطلحات العامة مفتوحة للكل. (يوصل للطلاب خلال 10 دقائق.)</p>
       <label><input type="checkbox" id="gon" ${gate.on ? "checked" : ""}> 🔒 بوابة الطلاب (settings.gate.on)</label>
-      <label><input type="checkbox" id="ron" ${req.on ? "checked" : ""}> 📨 طلب الكود من البوت (settings.code_requests.on)</label>
       <h2>💵 ميزانية المساعد</h2><div id="spend" class="hint">…</div><label>شهرياً ($) <input id="bm" type="number" value="${bud.monthly_usd ?? 50}"></label>
       <label>أسئلة يومياً لكل طالب/جهاز <input id="bd" type="number" value="${bud.daily_per_device ?? 15}"></label>
       <label>تنبيه بالبوت عند (%) <input id="bp" type="number" min="10" max="100" value="${bud.alert_pct ?? 70}"></label><button class="btn" id="bs">حفظ</button>`;
@@ -348,8 +347,6 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
     };
     document.getElementById("gon").onchange = (e) => flip("gate", e.target,
       "تشغّل بوابة الطلاب؟ المحاضرات والاختبارات تصير لطلابنا بالكود بس (الأطلس والملوّنة والأجهزة تبقى مفتوحة).", "تطفّي البوابة؟ كلشي يرجع مفتوح للكل.");
-    document.getElementById("ron").onchange = (e) => flip("code_requests", e.target,
-      "تشغّل طلب الكود من البوت؟ أي أحد يگدر يطلب، والطلب يوصلك هنا بتبويب «🎓 الطلاب» وبالبوت.", "تطفّي طلب الكود من البوت؟");
     // دمج ويّا القيم الموجودة (حدود IP والحد الكلّي تبقى) — الحفظ القديم كان يمسحها
     document.getElementById("bs").onclick = async () => {
       const cur = await getSet("assistant_budget"), n = (id) => +document.getElementById(id).value;
@@ -528,7 +525,10 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
 
   let tabAC = null;
   const show = () => { if (tabAC) tabAC.abort(); tabAC = new AbortController(); window.AdminTab.signal = tabAC.signal;
-    const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(), team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
+    const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(),
+    insights: async () => { if (!window.AdminStats) return stats(); const { data: { session: s } } = await sb.auth.getSession(); AdminStats.mount(pane, (b) => fn("owner-stats", b, s && s.access_token)); },
+    // 📊 71: insights = طلب owner-stats بس لما يفتح التبويب
+    team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
     dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats(), notify: () => window.AdminNotify ? AdminNotify.mount(pane, sb) : stats(),
     students: () => window.AdminStudents ? AdminStudents.mount(pane, sb) : stats() }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();

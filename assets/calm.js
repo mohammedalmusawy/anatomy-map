@@ -48,8 +48,10 @@
   const role = LIVE ? liveRole() : LS.get("pv-role", "visitor"); document.body.dataset.role = role;
   $$("[data-name-only]").forEach((el) => { el.hidden = role !== "student"; });
   $$("[data-visitor-only]").forEach((el) => { el.hidden = role === "student"; });
-  if (LIVE && sess) {   // «أهلاً، <الاسم>» من الجلسة إذا موجود (وإلا «أهلاً 👋» بس)
-    const md = sess.user.user_metadata || {}, nm = String(md.full_name || md.name || "").trim().split(/\s+/)[0];
+  if (LIVE && sess) {   // «أهلاً، <الاسم>» — 70: من اسم الطالب الحقيقي (account.js يحفظ الاسم الأول بـ t:acct-name)، والجلسة احتياط
+    const md = sess.user.user_metadata || {};
+    let nm = ""; try { nm = String(localStorage.getItem("t:acct-name") || ""); } catch (e) { /* */ }
+    nm = String(nm || md.full_name || md.name || "").replace(/[<>]/g, "").trim().split(/\s+/)[0].slice(0, 40);
     if (nm) $$("[data-hello]").forEach((el) => { el.textContent = `أهلاً، ${nm} 👋`; });
   }
   // 🔗 رابط الدخول المباشر من لوحة الطلاب (…/?code=RAD-…) ← شاشة الدخول بنفس الكود
@@ -308,15 +310,7 @@
   }
 
   // ═════ v3b (مراجعتين مستقلتين 29/10) ═════
-  // 📨 «اطلب كودك»: يفتح شرح «شلون تاخذ الكود»؛ زر البوت يطلع بس إذا settings.code_requests.on (ماكو «قريباً»)
-  document.addEventListener("click", (ev) => {
-    const b = ev.target.closest("[data-reqcode]"); if (!b) return;
-    const n = b.parentElement.querySelector("[data-reqnote]"); if (!n) return;
-    n.hidden = !n.hidden; b.setAttribute("aria-expanded", !n.hidden);
-    const bot = n.querySelector("[data-bot]");
-    if (bot && !n.hidden && window.Net && window.Net.on && window.Net.settings)
-      Promise.resolve(window.Net.settings()).then((S) => { bot.hidden = !(S && S.code_requests && S.code_requests.on); }).catch(() => {});
-  });
+  // 🗑️ 70 (مسودة): زر «اطلب كودك» وزر البوت انشالوا (بداله «نسيت الكود؟ راسل مشرف القسم» بالقوالب).
 
   // 🔗 روابط تكتبها سكربتات الموقع (البحث، المساعد، أدوات الطالب) للصفحات الحية ← نسخة المعاينة (preview/map.json)
   const PRE = LIVE ? base : new URL("preview/", base).href;

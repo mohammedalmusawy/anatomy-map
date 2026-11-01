@@ -17,11 +17,12 @@
   const H = { apikey: C.anon, Authorization: "Bearer " + C.anon, "Content-Type": "application/json" };
   // 📡 net.js (29/10): كاش بمدة + الزيارات دفعة كل 30 ث + طابور بلا نت. إذا الصفحة ما حمّلته (معاينات): الطريقة القديمة.
   const N = window.Net;
-  const direct = (t, row) => fetch(`${C.url}/rest/v1/${t}`, { method: "POST", headers: { ...H, Prefer: "return=minimal" }, body: JSON.stringify(row) }).catch(() => {});
-  const ins = (t, row) => ON && (N ? N.post(t, { device: dev, ...row }) : direct(t, { device: dev, ...row }));
-  const get = (t, q, ttl) => !ON ? Promise.resolve([]) : N ? N.get(t, q, ttl)
+  const blk = (t) => !!(window.AM_BLOCK && window.AM_BLOCK(t));   // 🧪 71: وضع الاختبار ← ولا events ولا answers ولا question_stats
+  const direct = (t, row) => blk(t) ? Promise.resolve() : fetch(`${C.url}/rest/v1/${t}`, { method: "POST", headers: { ...H, Prefer: "return=minimal" }, body: JSON.stringify(row) }).catch(() => {});
+  const ins = (t, row) => ON && !blk(t) && (N ? N.post(t, { device: dev, ...row }) : direct(t, { device: dev, ...row }));
+  const get = (t, q, ttl) => !ON || blk(t) ? Promise.resolve([]) : N ? N.get(t, q, ttl)
     : fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => r.json()).catch(() => []);
-  const log = (kind, ref) => { if (!ON) return; const row = { device: dev, kind, page: rel.slice(0, 300), ref: String(ref || "").slice(0, 300) }; N ? N.log(row) : direct("events", row); };
+  const log = (kind, ref) => { if (!ON || blk("events")) return; const row = { device: dev, kind, page: rel.slice(0, 300), ref: String(ref || "").slice(0, 300) }; N ? N.log(row) : direct("events", row); };
   window.Cloud = { on: ON, dev, log, root };
   if (!ON) return;
 

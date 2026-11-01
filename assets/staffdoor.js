@@ -5,7 +5,8 @@
 //  3) البوابة: مطفية لحد settings.gate.on = true. لما تنفتح: المحاضرات والاختبارات ومصطلحات المحاضرات و«مساحتي» والامتحانات لطلابنا بالكود؛
 //     الأطلس والملوّنة والأجهزة والمصطلحات العامة مفتوحة. ⚠️ هذي بوابة بالمتصفح: تمنع التصفح العادي بس — ملفات GitHub Pages
 //     (PDF، JSON) تبقى تنفتح لأي أحد يعرف رابطها. اللي محمي فعلاً بالسيرفر: المساعد الكامل، وبيانات الطالب (RLS)، ولوحات الفريق.
-//  طلب الكود من البوت يطلع بس إذا settings.code_requests.on = true.
+//  🗑️ 70 (مسودة): «طلب الكود من البوت» انشال. النافذة: «هذي المحاضرة لطلاب القسم 🎓 اكتب كودك» + «نسيت الكود؟ راسل مشرف القسم»
+//     (رابط محادثة تليغرام من إعدادات.json ← smart.py يبدّل __SUPPORT_TG__ وقت النسخ؛ فارغ ← الزر ما يطلع).
 (function () {
   "use strict";
   if (window.StaffDoor) return;
@@ -13,7 +14,8 @@
   const ROOT = me && me.src ? me.src.replace(/assets\/staffdoor(?:\.min)?\.js(?:\?.*)?$/, "") : location.origin + "/";
   const C = window.STUDY_CLOUD || {};
   const REF = (() => { try { return new URL(C.url).hostname.split(".")[0]; } catch (e) { return "spjkntrwxfyydniklfxh"; } })();
-  const BOT = "https://t.me/mohammed_almusawy_bot?start=code";
+  const cfgLink = (v) => (/^https:\/\/t\.me\/[A-Za-z0-9_]{3,64}\/?$/.test(v) ? v : "");   // تليغرام بس (مو رقم ولا رابط ثاني)
+  const SUPPORT = cfgLink("https://t.me/mohammed_almusawy_bot");
   const LS = {
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* */ } },
@@ -110,6 +112,10 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
   // ── 3) بوابة الطلاب ──
   const rel = (() => { try { return decodeURIComponent(location.pathname).slice(decodeURIComponent(new URL(ROOT).pathname).length); } catch (e) { return ""; } })();
   const skip = inAdmin || /^(preview|tg|audio-check|telegram)\//.test(rel);
+  // 🎓 70 (قرار محمد 1/11): نطاق البوابة لما يشغّلها محمد (هسه مطفية، وما يتغير شي للناس):
+  //   مقفول على الزائر: learn/ (المحاضرات والـ PDF بصفحاتها) · quiz/ (اختبارات المحاضرات + quiz/mistakes) · terms/<محاضرة> · exams/ · me/
+  //   مفتوح: atlas/ · devices/ · contrast/ · terms/ (القاموس) واختباراتها داخل صفحاتها، وكل شي ثاني.
+  //   tg/listen (Mini App «اسمع المحاضرة») معفي مثل قبل (skip فوق). ماكو مفتاح «محاضرات بس» منفصل.
   const CLOSED = ["learn/", "quiz/", "exams/", "me/", "terms/*"];   // * = صفحة داخلها (مصطلحات محاضرة)؛ terms/ نفسها مفتوحة
   const norm = (p) => p.replace(/index\.html$/, "");
   function match(p, list) {
@@ -119,7 +125,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
   const gated = (p, g) => !match(p, g.open || ["devices/", "atlas/", "contrast/", "terms/$"]) && match(p, g.closed || CLOSED);
   const allowed = () => staffView ? vkind === "student" : !!studentSession() || !!staffSession();
 
-  let G = null, REQ = false;
+  let G = null;
   function dialog(next) {
     css();
     document.querySelectorAll(".sd-dlg").forEach((d) => d.remove());
@@ -127,16 +133,14 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     const d = document.createElement("div");
     d.className = "sd-dlg"; d.setAttribute("role", "dialog"); d.setAttribute("aria-modal", "true"); d.setAttribute("aria-labelledby", "sd-gt");
     d.innerHTML = `<div class="sd-card">
-      <h2 id="sd-gt">🔒 هذا القسم لطلاب المرحلة الثانية — جامعة العين</h2>
-      <p class="sd-sub">إذا أنت منهم، أدخل كودك مرة وحدة، وبعدها الموقع يتذكّرك ويرجّعك لنفس المكان.</p>
+      <h2 id="sd-gt">هذي المحاضرة لطلاب القسم 🎓 اكتب كودك</h2>
+      <p class="sd-sub">مرة وحدة بس، وبعدها الموقع يتذكّرك ويرجّعك لنفس المكان.</p>
       <form id="sd-cf" novalidate><label class="sd-lab" for="sd-code">الكود</label>
         <input id="sd-code" name="code" dir="ltr" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false" placeholder="RAD-XXXX-XXXX" maxlength="20">
         <button type="submit" class="sd-btn">دخول</button></form>
       <p class="sd-msg" id="sd-cm" role="status" aria-live="polite"></p>
-      ${REQ ? `<a class="sd-btn ghost" href="${BOT}" target="_blank" rel="noopener">📨 ما عندي كود — اطلبه من البوت</a>
-        <p class="sd-free">اكتب اسمك الثلاثي للبوت، ومحمد يوافق ويوصلك الكود بنفس المحادثة.</p>`
-        : `<p class="sd-free">ما عندك كود؟ اطلبه من محمد الموسوي (بالكلية أو من <a href="https://t.me/almusawy_radiology" rel="noopener">قناة التليغرام</a>).</p>`}
-      <p class="sd-free">الأطلس والفحوصات الملوّنة والأجهزة والمصطلحات العامة مفتوحة لأي أحد. والموقع مجاني لطلاب جامعة العين.</p>
+      ${SUPPORT ? `<a class="sd-btn ghost" href="${esc(SUPPORT)}" target="_blank" rel="noopener" data-sd-support>نسيت الكود؟ راسل مشرف القسم</a>` : ""}
+      <p class="sd-free">الأطلس والفحوصات الملوّنة والأجهزة والمصطلحات العامة مفتوحة لأي أحد.</p>
       <button type="button" class="sd-btn ghost" data-sd-close>${direct ? "‹ رجوع للرئيسية" : "مو هسه"}</button></div>`;
     document.body.appendChild(d);
     const inp = d.querySelector("#sd-code"), m = d.querySelector("#sd-cm"), btn = d.querySelector("#sd-cf button");
@@ -219,10 +223,10 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     if (skip || !window.Net || !window.Net.on) return;
     // آخر حالة معروفة ← نخفي المحتوى من أول لحظة (بلا ومضة)، والإعدادات الحقيقية تأكد أو تشيل
     if (LS.get("t:gate-on") === "1" && gated(rel, { open: null, closed: null }) && !allowed()) document.body.classList.add("sd-locked"), css();
-    Promise.resolve(window.Net.settings()).then((S) => { S = S || {}; REQ = !!(S.code_requests && S.code_requests.on); apply(S.gate || { on: false }); })
+    Promise.resolve(window.Net.settings()).then((S) => { S = S || {}; apply(S.gate || { on: false }); })
       .catch(() => document.body.classList.remove("sd-locked"));
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 
-  window.StaffDoor = { css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT };
+  window.StaffDoor = { css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT, gated };
 })();

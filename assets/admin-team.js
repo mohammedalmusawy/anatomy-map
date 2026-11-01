@@ -45,9 +45,9 @@
       const { data: { session } } = await sb.auth.getSession();
       const r = await fetch(`${C.url}/functions/v1/supervisor`, { method: "POST",
         headers: { apikey: C.anon, Authorization: "Bearer " + (session ? session.access_token : ""), "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      return { status: r.status, ...(await r.json().catch(() => ({}))) };
+      return { ...(await r.json().catch(() => ({}))), status: r.status };   // 🛡️ الحالة من HTTP دائماً (body.status ما يغطّيها)
     };
-    const PERM = [["can_lectures", "📚 المحاضرات"], ["can_codes", "🎓 الأكواد"], ["can_team", "👥 الفريق"], ["can_ads", "📣 الإعلانات"]];
+    const PERM = [["can_lectures", "📚 رفع المحاضرات"], ["can_codes", "🎓 توزيع أكواد الطلاب"]];   // 🔒 70: المساعد = محاضرات + أكواد بس (الفريق والإعلانات انشالن، والسيرفر يرفضهن)
     pane.innerHTML = `<h2>🔑 المساعدين والصلاحيات</h2>
       <p class="hint">كل مساعد يدخل من الباب المخفي (5 ضغطات على عنوان الموقع) بـ<b>رقمه السري بس</b> — إنت تحدده هنا، والموقع يعرفه من الرقم. يگدر يغيّره من لوحته (اختياري)، وإذا نساه: «🔑 إعادة تعيين الرقم». كل دخول توصلك عليه رسالة بالبوت. يشوف بس الصلاحيات اللي تأشّرها هنا. <b>ممنوع على كل مساعد:</b> الحذف، الإعدادات، ملاحظات الطلاب، لوحة رئيس القسم، وإضافة مساعدين. كل فعل ينكتب بالسجل تحت.</p>
       <p id="tm-on"></p>

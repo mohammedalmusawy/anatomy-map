@@ -17,7 +17,7 @@
     } catch (e) { return null; }
   };
   const N = window.Net;   // 📡 net.js: كاش بمدة (إذا الصفحة ما حمّلته: طلب مباشر مثل قبل)
-  const rest = (t, q, ttl) => !ON ? Promise.resolve([]) : N ? N.get(t, q, ttl) : fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => r.json()).catch(() => []);
+  const rest = (t, q, ttl) => !ON || (window.AM_BLOCK && AM_BLOCK(t)) ? Promise.resolve([]) : N ? N.get(t, q, ttl) : fetch(`${C.url}/rest/v1/${t}?${q}`, { headers: H }).then((r) => r.json()).catch(() => []);
   const norm = (s) => String(s).toLowerCase().replace(/[ً-ْـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه")
     .replace(/[^a-z0-9؀-ۿ]+/g, " ").trim();
   const LS = (k, d) => { try { return JSON.parse(localStorage.getItem("t:" + k)) ?? d; } catch (e) { return d; } };
