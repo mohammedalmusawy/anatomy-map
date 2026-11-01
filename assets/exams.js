@@ -14,7 +14,7 @@
   const settings = () => (N ? N.settings() : get("settings", "select=key,value").then((r) => Object.fromEntries((r || []).map((x) => [x.key, x.value])))).catch(() => ({}));
   const DISC = '<p class="rev-only">⚠️ <b>للمراجعة فقط — مو توقّع لأسئلة الامتحان</b></p>';
   const MIN_N = 10;   // أقل عدد محاولات (أول محاولة لكل جهاز) حتى سؤال يدخل «الأكثر غلط» — نفس حد daily_stats بالقاعدة
-  const SUBJ = { anatomy: "التشريح", radiography: "التصوير الشعاعي", protection: "الوقاية من الإشعاع", examinations: "الفحوصات الشعاعية", ct: "أجهزة التصوير المقطعي", equipment: "أجهزة الأشعة التقليدية" };
+  const SUBJ = { anatomy: "التشريح", radiography: "التصوير الشعاعي", protection: "الوقاية من الإشعاع", examinations: "الفحوصات الشعاعية", ct: "أجهزة التصوير المقطعي", equipment: "أجهزة الأشعة التقليدية", physics: "الفيزياء الإشعاعية", computer: "الحاسوب والذكاء الاصطناعي", baath: "جرائم حزب البعث" };
   const TYP = { theory: "نظري", practical: "عملي" }, TERM = { midterm: "مِدترم", final: "نهائي" };
   const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
   const MONTHS = ["كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول"];

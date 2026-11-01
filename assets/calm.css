@@ -25,6 +25,8 @@
   --s-anatomy: #F4E7E2; --s-anatomy-ink: #8A4A3C; --s-radiography: #E6EAF3; --s-radiography-ink: #3F5786;
   --s-protection: #E7EEE5; --s-protection-ink: #46664A; --s-examinations: #ECE7F3; --s-examinations-ink: #5D4C88;
   --s-ct: #F2EBDD; --s-ct-ink: #765C2E; --s-equipment: #E9E9EE; --s-equipment-ink: #4C5266;
+  --s-physics: #E3EEF0; --s-physics-ink: #3E6670;
+  --s-computer: #EEF0E4; --s-computer-ink: #5B6630; --s-baath: #F0E6E6; --s-baath-ink: #7A3B3B;
 }
 /* الليلي اختياري بزر 🌙 بس (الافتراضي فاتح دائماً حتى لو الموبايل ليلي — قرار محمد 29/10) */
 :root[data-theme="dark"] {
@@ -35,6 +37,8 @@
     --s-anatomy: #3A2A27; --s-anatomy-ink: #E7B9AC; --s-radiography: #262C3B; --s-radiography-ink: #AFC0E6;
     --s-protection: #26302A; --s-protection-ink: #ABC9AE; --s-examinations: #2D2838; --s-examinations-ink: #C3B5E6;
     --s-ct: #332D23; --s-ct-ink: #E0C796; --s-equipment: #2A2C33; --s-equipment-ink: #BFC3D3;
+    --s-physics: #24302F; --s-physics-ink: #A8CDD3;
+    --s-computer: #2C2F24; --s-computer-ink: #CBD3A6; --s-baath: #332626; --s-baath-ink: #E3B3B3;
 }
 html { font-size: calc(17px * var(--fs)); }
 @media (min-width: 900px) { html { font-size: calc(18px * var(--fs)); } }
@@ -81,6 +85,9 @@ body.calm { font: 400 var(--t-md)/1.8 var(--body-font); background: var(--bg); c
 .sx-examinations .si { background: var(--s-examinations); color: var(--s-examinations-ink); } .sx-examinations .pbar i { background: var(--s-examinations-ink); }
 .sx-ct .si { background: var(--s-ct); color: var(--s-ct-ink); } .sx-ct .pbar i { background: var(--s-ct-ink); }
 .sx-equipment .si { background: var(--s-equipment); color: var(--s-equipment-ink); } .sx-equipment .pbar i { background: var(--s-equipment-ink); }
+.sx-computer .si { background: var(--s-computer); color: var(--s-computer-ink); } .sx-computer .pbar i { background: var(--s-computer-ink); }
+.sx-baath .si { background: var(--s-baath); color: var(--s-baath-ink); } .sx-baath .pbar i { background: var(--s-baath-ink); }
+.sx-physics .si { background: var(--s-physics); color: var(--s-physics-ink); } .sx-physics .pbar i { background: var(--s-physics-ink); }
 
 /* تبويبات (المادة: نظري | عملي — المحاضرة: اقرأ | اسمع | …) */
 .ctabs { display: flex; gap: 4px; padding: 4px; background: color-mix(in srgb, var(--line) 45%, var(--bg)); border-radius: 999px; margin: 8px 0 16px; }
@@ -108,7 +115,7 @@ body.calm { font: 400 var(--t-md)/1.8 var(--body-font); background: var(--bg); c
 .lcard .done { color: var(--ok); font-weight: 700; }
 .lcard.sx-anatomy .num { background: var(--s-anatomy); color: var(--s-anatomy-ink); } .lcard.sx-radiography .num { background: var(--s-radiography); color: var(--s-radiography-ink); }
 .lcard.sx-protection .num { background: var(--s-protection); color: var(--s-protection-ink); } .lcard.sx-examinations .num { background: var(--s-examinations); color: var(--s-examinations-ink); }
-.lcard.sx-ct .num { background: var(--s-ct); color: var(--s-ct-ink); } .lcard.sx-equipment .num { background: var(--s-equipment); color: var(--s-equipment-ink); }
+.lcard.sx-ct .num { background: var(--s-ct); color: var(--s-ct-ink); } .lcard.sx-equipment .num { background: var(--s-equipment); color: var(--s-equipment-ink); } .lcard.sx-computer .num { background: var(--s-computer); color: var(--s-computer-ink); } .lcard.sx-baath .num { background: var(--s-baath); color: var(--s-baath-ink); } .lcard.sx-physics .num { background: var(--s-physics); color: var(--s-physics-ink); }
 .empty { color: var(--muted); text-align: center; padding: 28px 12px; border: 1px dashed var(--line); border-radius: var(--r); }
 
 /* صفحة المحاضرة: شريط تقدّم القراءة + القراءة المريحة */

@@ -11,7 +11,7 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const H = { apikey: C.anon, Authorization: "Bearer " + C.anon };
   const KEY = "t:nextexam", TTL = 15 * 60e3, WINDOW = 14;
-  const SUBJ = { anatomy: "التشريح", radiography: "التصوير الشعاعي", protection: "الوقاية من الإشعاع", examinations: "الفحوصات الشعاعية", ct: "أجهزة التصوير المقطعي", equipment: "أجهزة الأشعة التقليدية" };
+  const SUBJ = { anatomy: "التشريح", radiography: "التصوير الشعاعي", protection: "الوقاية من الإشعاع", examinations: "الفحوصات الشعاعية", ct: "أجهزة التصوير المقطعي", equipment: "أجهزة الأشعة التقليدية", physics: "الفيزياء الإشعاعية", computer: "الحاسوب والذكاء الاصطناعي", baath: "جرائم حزب البعث" };
   const TYP = { theory: "نظري", practical: "عملي" };
   const arDays = (n) => (n = Math.abs(Math.round(+n || 0))) === 1 ? "يوم" : n === 2 ? "يومين" : n >= 3 && n <= 10 ? `${n} أيام` : `${n} يوم`;   // عبارة كاملة
   const dayParts = (n) => (n = Math.abs(Math.round(+n || 0))) === 2 ? ["يومين", ""] : [String(n), n >= 3 && n <= 10 ? "أيام" : "يوم"];   // [الرقم الكبير، الوحدة] للبطاقات
