@@ -31,8 +31,20 @@
   if (LIVE) document.documentElement.dataset.live = "1";
   const alive = (x) => !!(x && x.user && (x.refresh_token || (x.expires_at && x.expires_at * 1000 > Date.now())));
   const sess = (() => { try { const x = JSON.parse(localStorage.getItem("t:acct-session") || "null"); return alive(x) && ((x.user.app_metadata || {}).role === "student") ? x : null; } catch (e) { return null; } })();
-  const pv = (() => { try { return localStorage.getItem("t:staff-view"); } catch (e) { return null; } })();   // (69) معاينة الطاقم: student/visitor ("1" = طالب)
-  const liveRole = () => { if (pv === "visitor") return "visitor"; if (sess || pv === "student" || pv === "1") return "student"; return "visitor"; };
+  // (69) معاينة الطاقم: student/visitor ("1" = طالب) — تنحسب بس إذا جلسة طاقم صالحة (نفس فحص staffSession بـ staffdoor.js)،
+  // وبرا لوحة الإدارة؛ وإلا قيمة قديمة باقية ما تغيّر شي (الموقع مثل main بالضبط للزائر والطالب).
+  const staffOk = () => {
+    let ref = "spjkntrwxfyydniklfxh"; try { ref = new URL((window.STUDY_CLOUD || {}).url).hostname.split(".")[0]; } catch (e) { /* */ }
+    const k = `sb-${ref}-auth-token`, rd = (st) => { try { return JSON.parse(st.getItem(k) || "null"); } catch (e) { return null; } };
+    let x = rd(localStorage); if (!alive(x)) x = rd(sessionStorage);
+    return alive(x) && ((x.user.app_metadata || {}).role || "") !== "student";
+  };
+  const pv = (() => {
+    if (/\/admin\/(?:index\.html)?$/.test(location.pathname)) return null;
+    let v = null; try { v = localStorage.getItem("t:staff-view"); } catch (e) { return null; }
+    return v && staffOk() ? (v === "visitor" ? "visitor" : "student") : null;
+  })();
+  const liveRole = () => { if (pv === "visitor") return "visitor"; if (sess || pv === "student") return "student"; return "visitor"; };
   const role = LIVE ? liveRole() : LS.get("pv-role", "visitor"); document.body.dataset.role = role;
   $$("[data-name-only]").forEach((el) => { el.hidden = role !== "student"; });
   $$("[data-visitor-only]").forEach((el) => { el.hidden = role === "student"; });

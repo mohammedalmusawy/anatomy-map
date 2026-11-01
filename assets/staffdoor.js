@@ -45,7 +45,9 @@
 body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
 .sd-pill{position:fixed;inset-inline-start:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:2147482000;display:inline-flex;gap:6px;align-items:center;
   min-height:44px;padding:0 16px;border-radius:999px;background:var(--ink,#222);color:var(--card,#fff);font:inherit;font-weight:700;font-size:15px;border:0;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer;text-decoration:none}
-.sd-pv{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:center;padding:4px 12px;padding-top:calc(4px + env(safe-area-inset-top));background:var(--ink,#222);color:var(--card,#fff);font:inherit;font-size:14px;line-height:1.4;position:relative;z-index:50}
+.sd-pv{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:center;padding:4px 12px;padding-top:calc(4px + env(safe-area-inset-top));background:var(--ink,#222);color:var(--card,#fff);font:inherit;font-size:14px;line-height:1.4;position:relative;z-index:2147483100}
+/* (69) الشريط بالتدفق (ما يغطي المحتوى) بس فوق خلفية نافذة الكود/البوابة حتى «ارجع» و«شوف كـ…» يبقون ينضغطون */
+body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(safe-area-inset-top))}
 .sd-pv button{min-height:44px;padding:0 12px;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}
 .sd-door{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .sd-msg.bad{color:#FF8A80}}:root[data-theme=dark] .sd-msg.bad{color:#FF8A80}`;
@@ -144,7 +146,7 @@ body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
     d.addEventListener("keydown", (ev) => {
       if (ev.key === "Escape") { ev.preventDefault(); close(); }
       if (ev.key === "Tab") {   // التركيز يدور داخل النافذة بس
-        const f = [...d.querySelectorAll("input,button,a[href]")]; const i = f.indexOf(document.activeElement);
+        const f = [...document.querySelectorAll(".sd-pv button"), ...d.querySelectorAll("input,button,a[href]")];   // (69) أزرار شريط المعاينة ضمن الدوران const i = f.indexOf(document.activeElement);
         ev.preventDefault(); f[(i < 0 ? 0 : i + (ev.shiftKey ? -1 : 1) + f.length) % f.length].focus();
       }
     });
