@@ -31,6 +31,7 @@
 #admin .st-row label{display:grid;gap:4px;font-size:var(--t-sm,.9rem);color:var(--muted)}
 #admin .st-row select,#admin .st-row input{min-height:44px;min-width:88px;padding:0 10px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit}
 #admin .st-row .btn{min-height:48px;padding:0 18px}
+#admin .st-self{display:inline-block;padding:0 8px;border:1px solid var(--accent,#8C6A3A);border-radius:999px;color:var(--accent,#8C6A3A)}
 #admin .st-stage{display:inline-block;padding:0 7px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
 #admin .st-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:8px}
 #admin .st-thumbs figure{margin:0;border:1px solid var(--line);border-radius:12px;padding:6px;background:#fff;text-align:center}
@@ -55,7 +56,7 @@
         <h3 id="st-bh">➕ أكواد جاهزة بلا أسماء</h3>
         <p class="hint">اختار المرحلة والعدد (حتى ${MAX_TOTAL})، والأسماء تنكتب بعدين: منك، أو الطالب بنفسه بأول دخول.</p>
         <div class="st-row">
-          <label>المرحلة <select id="st-stage" aria-label="المرحلة"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+          <label>المرحلة <select id="st-stage" aria-label="المرحلة"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label>
           <label>العدد <input id="st-count" type="number" inputmode="numeric" min="1" max="${MAX_TOTAL}" value="100" aria-label="العدد"></label>
           <button class="btn" id="st-bulk" type="button">سوّي الأكواد</button>
         </div>
@@ -100,7 +101,7 @@
       const rows = flt === "blank" ? allRows.filter((x) => !x.full_name) : allRows;
       $("#st-list").innerHTML = rows.length ? `<table class="adm"><thead><tr><th>الاسم الثلاثي</th><th>الكود</th><th>دزّه</th><th>آخر دخول</th><th>الأجهزة</th><th>السلسلة</th><th>إدارة</th></tr></thead><tbody>` +
         rows.map((s) => `<tr data-id="${esc(s.id)}" data-code="${esc(s.code || "")}" data-name="${esc(s.full_name || "")}">
-          <td>${s.full_name ? `<b>${esc(s.full_name)}</b>` : `<span class="hint">— بلا اسم —</span>`} <small class="st-stage" title="المرحلة">م${esc(s.stage_n || 2)}</small>${s.status === "paused" ? " <small>⏸️ موقوف</small>" : ""}${s.name_fix ? `<br><small>✏️ طلب تصحيح: ${esc(s.name_fix)} <button class="ib" data-a="fixok" title="طبّق التصحيح">✅</button></small>` : ""}</td>
+          <td>${s.full_name ? `<b>${esc(s.full_name)}</b>` : `<span class="hint">— بلا اسم —</span>`} <small class="st-stage" title="المرحلة">م${esc(s.stage_n || 2)}</small>${s.name_self ? ` <small class="st-self">يحتاج تأكيد</small> <button class="ib" data-a="approve" title="أكّد الاسم">✅</button>` : ""}${s.status === "paused" ? " <small>⏸️ موقوف</small>" : ""}${s.name_fix ? `<br><small>✏️ طلب تصحيح: ${esc(s.name_fix)} <button class="ib" data-a="fixok" title="طبّق التصحيح">✅</button></small>` : ""}</td>
           <td><span class="code" dir="ltr">${esc(s.code || "؟")}</span></td><td>${actions(s)}</td>
           <td>${ago(s.last_seen)}</td><td>${devs(s, r.max_devices)}</td><td>${s.streak ? "🔥 " + s.streak : "—"}</td>
           <td><button class="ib" data-a="setname" title="${s.full_name ? "تعديل الاسم" : "اكتب الاسم"}">✏️</button> <button class="ib" data-a="rotate" title="كود جديد">🔄</button> <button class="ib" data-a="${s.status === "paused" ? "resume" : "pause"}" title="${s.status === "paused" ? "تشغيل" : "إيقاف"}">${s.status === "paused" ? "▶️" : "⏸️"}</button> <button class="ib" data-a="delete" title="حذف كامل">🗑️</button></td></tr>`).join("") +
@@ -186,6 +187,7 @@
       if (a === "reset" && !confirm(`تسجّل خروج «${name || "كود بلا اسم"}» من كل أجهزته؟ يدخل مرة ثانية بنفس الكود.`)) return;
       let body = { action: a, id };
       if (a === "fixok") body = { action: "rename", id };
+      if (a === "approve") body = { action: "approve_name", id };
       if (a === "delete") {
         const typed = prompt(name ? `🗑️ حذف كامل لـ «${name}» وكل بياناته (ما يرجع). اكتب الاسم الثلاثي بالضبط حتى تأكد:` : "🗑️ حذف هذا الكود (بلا اسم) وكل بياناته (ما يرجع). اكتب كلمة «حذف» حتى تأكد:");
         if (typed === null) return;

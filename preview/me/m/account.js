@@ -86,6 +86,7 @@
     const { data: { session } } = await c.auth.getSession();
     state.session = session;
     if (session && !state.student) await loadStudent();
+    nameGuard();   // 73: حساب بلا اسم ← ما يكمل بأي صفحة قبل ما يكتب اسمه (حارس واحد مشترك)
     if (session && state.student) {
       const day = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);
       // 📱 70: مرة باليوم للسلسلة، و(بعد ما يصير touch يفحص الجهاز) كل 30 دقيقة بالكثير حتى الجهاز اللي انطلع من «أجهزتي» يطلع فعلاً
@@ -99,7 +100,7 @@
     return state;
   }
 
-  const confirmName = () => call("redeem-code", { action: "confirm_name" }, true).then((r) => { if (r.ok && state.student) state.student.name_confirmed = true; emit(); return r; });
+  const confirmName = () => call("redeem-code", { action: "confirm_name" }, true).then((r) => { if (r.ok && state.student) state.student.name_confirmed = true; emit(); return r; });   // 73: الفشل (409 بلا اسم) ما يغيّر شي — المتصل لازم يفحص r.ok
   const fixName = (name) => call("redeem-code", { action: "fix_name", name }, true);
   // 73: كود جملي بلا اسم — الطالب يكتب اسمه الثلاثي مرة وحدة (السيرفر ذرّي، المكرر 409)
   const setName = (name) => call("redeem-code", { action: "set_name", name }, true).then((r) => {
@@ -217,6 +218,20 @@
     btn.onclick = go;
     inp.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
   }
+  /** 73: حارس الاسم — أي صفحة فيها حساب طالب فعّال بلا اسم تطلع نافذة ما تنسد (لا زر إغلاق ولا Escape) لحد ما ينكتب الاسم؛ «خروج» بس. */
+  let guardEl = null;
+  function nameGuard() {
+    if (!state.student || state.student.full_name || guardEl || document.getElementById("acct-nameguard") || document.getElementById("st3")) return;   // st3 = صفحة الدخول (عندها خطوتها)
+    const ov = document.createElement("div"); ov.id = "acct-nameguard"; guardEl = ov;
+    ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
+    ov.style.cssText = "position:fixed;inset:0;z-index:2147483000;background:rgba(20,22,28,.72);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto";
+    const box = document.createElement("div"); box.style.cssText = "background:var(--card,#fff);color:var(--ink,#222);border-radius:18px;max-width:440px;width:100%;padding:8px 14px 14px";
+    ov.appendChild(box); document.body.appendChild(ov);
+    mountNameCheck(box, { done: () => { ov.remove(); guardEl = null; } });
+    const out = document.createElement("button"); out.type = "button"; out.className = "cbtn alt"; out.textContent = "خروج"; out.style.cssText = "min-height:44px;margin-top:8px";
+    out.onclick = async () => { await logout(); ov.remove(); guardEl = null; location.reload(); }; box.appendChild(out);
+    const f = box.querySelector("input"); if (f) f.focus();
+  }
   function mountNameCheck(el, opts = {}) {
     const n = (state.student && state.student.full_name) || "";
     if (!n) {   // 73: بلا اسم ← يكتبه بنفسه
@@ -233,7 +248,7 @@
       <div id="acct-fixbox" hidden><input id="acct-name" aria-label="اسمك الثلاثي الصحيح" value="${esc(n)}"><button type="button" class="cbtn" id="acct-send">أرسل</button></div>
       <p class="sub" id="acct-msg" role="status" aria-live="polite"></p></div>`;
     const msg = el.querySelector("#acct-msg");
-    el.querySelector("#acct-yes").onclick = async () => { await confirmName(); if (opts.done) opts.done(state); };
+    el.querySelector("#acct-yes").onclick = async () => { const r = await confirmName(); if (r && r.ok) { if (opts.done) opts.done(state); } else msg.textContent = (r && r.msg) || "صار خطأ، جرّب مرة ثانية."; };
     el.querySelector("#acct-fix").onclick = () => { el.querySelector("#acct-fixbox").hidden = false; el.querySelector("#acct-name").focus(); };
     el.querySelector("#acct-send").onclick = async () => {
       const r = await fixName(el.querySelector("#acct-name").value);

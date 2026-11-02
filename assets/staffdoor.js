@@ -195,7 +195,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
       <form id="sd-ff" hidden novalidate><label class="sd-lab" for="sd-name">اسمك الثلاثي الصحيح</label><input id="sd-name" autocomplete="name" value="${esc(n)}">
         <button type="submit" class="sd-btn">أرسل</button><p class="sd-free">يوصل تنبيه لمحمد يتأكد، وتگدر تدخل هسه.</p></form>
       <p class="sd-msg" id="sd-nm" role="status" aria-live="polite"></p>`;
-    box.querySelector("#sd-yes").onclick = async () => { await window.Account.confirmName(); go(); };
+    box.querySelector("#sd-yes").onclick = async () => { const r = await window.Account.confirmName(); if (r && r.ok) go(); else { const m = box.querySelector("#sd-nm"); m.className = "sd-msg bad"; m.textContent = (r && r.msg) || "صار خطأ، جرّب مرة ثانية."; } };
     box.querySelector("#sd-fix").onclick = (e) => { box.querySelector("#sd-ff").hidden = false; e.currentTarget.setAttribute("aria-expanded", "true"); box.querySelector("#sd-name").focus(); };
     box.querySelector("#sd-ff").onsubmit = async (e) => {
       e.preventDefault();
@@ -237,7 +237,12 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     Promise.resolve(window.Net.settings()).then((S) => { S = S || {}; apply(S.gate || { on: false }); })
       .catch(() => document.body.classList.remove("sd-locked"));
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+  // 73: حارس الاسم المشترك — طالب مسجّل دخول وما عنده اسم محفوظ (t:acct-name) ← نحمّل account.js مرة، وready() تجيب حسابه؛ إذا بلا اسم تطلع نافذة الاسم (ما تنسد)
+  // (الصفحات اللي فيها account.js أصلاً — مساحتي وغيرها — حارسها داخل Account.ready؛ هنا بس الصفحات اللي ما تحمّله، وبعد التحميل حتى ما نزاحم sync)
+  function nameWatch() { try { if (window.Account || !studentSession() || skip || LS.get("t:acct-name") || document.getElementById("st3")) return; account().then(() => window.Account && window.Account.ready()).catch(() => {}); } catch (e) {} }
+  const nameLater = () => setTimeout(nameWatch, 800);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => { start(); }); else start();
+  if (document.readyState === "complete") nameLater(); else window.addEventListener("load", nameLater);
 
   window.StaffDoor = { css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT, gated };
 })();
