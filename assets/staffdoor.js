@@ -15,7 +15,7 @@
   const C = window.STUDY_CLOUD || {};
   const REF = (() => { try { return new URL(C.url).hostname.split(".")[0]; } catch (e) { return "spjkntrwxfyydniklfxh"; } })();
   const cfgLink = (v) => (/^https:\/\/t\.me\/[A-Za-z0-9_]{3,64}\/?$/.test(v) ? v : "");   // تليغرام بس (مو رقم ولا رابط ثاني)
-  const SUPPORT = cfgLink("https://t.me/mohammed_almusawy_bot");
+  const SUPPORT = cfgLink("https://t.me/m99uhammed");
   const LS = {
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* */ } },
