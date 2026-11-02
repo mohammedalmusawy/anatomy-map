@@ -5,7 +5,7 @@
 //  3) البوابة: مطفية لحد settings.gate.on = true. لما تنفتح: المحاضرات والاختبارات ومصطلحات المحاضرات و«مساحتي» والامتحانات لطلابنا بالكود؛
 //     الأطلس والملوّنة والأجهزة والمصطلحات العامة مفتوحة. ⚠️ هذي بوابة بالمتصفح: تمنع التصفح العادي بس — ملفات GitHub Pages
 //     (PDF، JSON) تبقى تنفتح لأي أحد يعرف رابطها. اللي محمي فعلاً بالسيرفر: المساعد الكامل، وبيانات الطالب (RLS)، ولوحات الفريق.
-//  🗑️ 70 (مسودة): «طلب الكود من البوت» انشال. النافذة: «هذي المحاضرة لطلاب القسم 🎓 اكتب كودك» + «نسيت الكود؟ راسل مشرف القسم»
+//  🗑️ 70 (مسودة): «طلب الكود من البوت» انشال. النافذة: «هذي المحاضرة لطلاب القسم 🎓 اكتب كودك» + «نسيت الكود؟ راسل المشرف»
 //     (رابط محادثة تليغرام من إعدادات.json ← smart.py يبدّل __SUPPORT_TG__ وقت النسخ؛ فارغ ← الزر ما يطلع).
 (function () {
   "use strict";
@@ -139,7 +139,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
         <input id="sd-code" name="code" dir="ltr" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false" placeholder="RAD-XXXX-XXXX" maxlength="20">
         <button type="submit" class="sd-btn">دخول</button></form>
       <p class="sd-msg" id="sd-cm" role="status" aria-live="polite"></p>
-      ${SUPPORT ? `<a class="sd-btn ghost" href="${esc(SUPPORT)}" target="_blank" rel="noopener" data-sd-support>نسيت الكود؟ راسل مشرف القسم</a>` : ""}
+      ${SUPPORT ? `<a class="sd-btn ghost" href="${esc(SUPPORT)}" target="_blank" rel="noopener" data-sd-support>نسيت الكود؟ راسل المشرف</a>` : ""}
       <p class="sd-free">الأطلس والفحوصات الملوّنة والأجهزة والمصطلحات العامة مفتوحة لأي أحد.</p>
       <button type="button" class="sd-btn ghost" data-sd-close>${direct ? "‹ رجوع للرئيسية" : "مو هسه"}</button></div>`;
     document.body.appendChild(d);
