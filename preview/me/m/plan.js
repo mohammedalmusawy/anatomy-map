@@ -117,7 +117,7 @@
       const left = diff(today, exam.date);
       last = left === 0 ? today : addDays(exam.date, -1);
       if (tplKey !== "course") { const s = addDays(exam.date, -Math.min(tpl.days, Math.max(1, left))); if (diff(today, s) > 0) first = s; }
-    } else last = addDays(today, tpl.days - 1);
+    } else last = addDays(today, (o._days || tpl.days) - 1);   // _days: «من بداية الكورس» بلا امتحان يطوّل لحد ما تكفي المحاضرات
     const n = diff(first, last) + 1;
     const days = Array.from({ length: n }, (_, i) => ({ date: addDays(first, i), kind: "study", tasks: [] }));
     const lastI = n - 1;
@@ -190,18 +190,33 @@
         finish(l, day);
       }
     }
-    // الوقت ما كفى: الباقي يتوزّع على أيام الدراسة (فوق الوقت اليومي) ونگول بهدوء
+    // الوقت ما كفى: ولا يوم يعبر الوقت اليومي.
+    // «من بداية الكورس» بلا امتحان ← الخطة تطوّل أسبوعين أسبوعين لحد ما تكفي؛ غيرها ← الباقي بالفراغ اللي بقى بالأيام، واللي ما يلگه مكان ينذكر بـ unplaced
     const partial = cur && rem < estimate(cur).read ? cur : null;   // محاضرة نصها انجدول ← الباقي بس
     const left = (cur ? [cur] : []).concat(queue);
+    const span = o._days || tpl.days;
+    if ((left.length || carryQuiz) && tplKey === "course" && !exam && span < 364) return generate(Object.assign({}, o, { _days: span + 14 }));
     const studyIdx = days.map((d, i) => (d.kind === "study" ? i : -1)).filter((i) => i >= 0);
-    const tight = left.length > 0 && tplKey !== "rush";
-    if (tight && studyIdx.length) left.forEach((l, k) => {
-      const day = days[studyIdx[k % studyIdx.length]], est = estimate(l);
-      day.tasks.push(mk(day, "read", { lec: l.id, title: `اقرأ: ${l.title}`, sub: `${short(l)} · ${l === partial ? "الباقي" : "بسرعة"}`, min: l === partial ? rem : est.read, href: l.learn, auto: { read: l.id } }));
-      if (est.quiz) day.tasks.push(mk(day, "quiz", { lec: l.id, title: `اختبر: ${l.title}`, sub: short(l), min: est.quiz, href: l.quiz, auto: { quiz: l.quiz } }));
-      learned[l.id] = day.date;
+    const slack = (i) => daily - overhead - days[i].tasks.reduce((s, t) => s + (t.min || 0), 0);
+    const unplaced = [];
+    left.forEach((l) => {
+      const est = estimate(l);
+      let r = l === partial ? rem : est.read, end = -1;
+      const from = l === partial ? studyIdx.length - 1 : 0;           // الباقي بعد أجزائها، مو قبلها
+      const pieces = [];
+      for (let k = Math.max(0, from); k < studyIdx.length && r > 0; k++) {
+        const i = studyIdx[k], s = slack(i) - pieces.filter((x) => x[0] === i).reduce((a, x) => a + x[1], 0);
+        if (s < Math.min(r, MIN_PART)) continue;
+        const take = Math.min(r, s); pieces.push([i, take]); r -= take; end = k;
+      }
+      if (r > 0) { unplaced.push(l.id); return; }
+      pieces.forEach(([i, take]) => days[i].tasks.push(mk(days[i], "read", { lec: l.id, title: `اقرأ: ${l.title}`, sub: `${short(l)} · ${l === partial ? "الباقي" : "بسرعة"}`, min: take, href: l.learn, auto: { read: l.id } })));
+      const qi = studyIdx.slice(end).find((i) => slack(i) >= est.quiz);
+      if (est.quiz && qi != null) days[qi].tasks.push(mk(days[qi], "quiz", { lec: l.id, title: `اختبر: ${l.title}`, sub: short(l), min: est.quiz, href: l.quiz, auto: { quiz: l.quiz } }));
+      learned[l.id] = days[studyIdx[end]].date;
     });
-    if (carryQuiz && studyIdx.length) days[studyIdx[studyIdx.length - 1]].tasks.push(carryQuiz(days[studyIdx[studyIdx.length - 1]]));
+    if (carryQuiz) { const i = studyIdx.slice().reverse().find((j) => slack(j) >= carryQuiz.min); if (i != null) days[i].tasks.push(carryQuiz(days[i])); }
+    const tight = (left.length > 0 || !!carryQuiz) && tplKey !== "rush";
 
     // أكثر محاضرة غلط بيها (أقل نتيجة) — لآخر يوم وللمستعجل
     const scored = L.filter((l) => o.scores && o.scores[l.id] != null).sort((a, b) => o.scores[a.id] - o.scores[b.id]);
@@ -234,7 +249,7 @@
     const wk = days.filter((d) => diff(today, d.date) >= 0 && diff(today, d.date) < 7);
     const goal = { lectures: new Set(wk.flatMap((d) => d.tasks.filter((t) => t.kind === "read").map((t) => t.lec))).size, minutes: wk.reduce((s, d) => s + d.min, 0), days: wk.filter((d) => d.kind === "study" || d.kind === "recap" || d.kind === "rush").length };
     return {
-      v: 1, made: today, first, last, exam, tight, goal, days, done: {}, history: [],
+      v: 1, made: today, first, last, exam, tight, unplaced, goal, days, done: {}, history: [],
       opts: { template: tplKey, daily, subjects: o.subjects || [], done: o.done || [], restDay, slot: o.slot || "", exam, regions: o.regions || [], mistakes: o.mistakes || 0, scores: o.scores || {} },
       learned,
     };
