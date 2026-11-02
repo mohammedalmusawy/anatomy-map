@@ -834,7 +834,8 @@ body[data-role="student"] .pvtool [data-role-set="student"], body[data-role="vis
 }
 
 /* ⚡ (30/10 السرعة) السؤال الأول يترسم بـ quiz.js؛ قبلها قسم السؤال مخفي ومكانه محجوز ← ما يقفز المحتوى (CLS). الشكل بعدها نفسه */
-#play:has(#qen:empty) { visibility: hidden; }
+/* 2/11 hotfix: المواد العربية (computer، baath) ما عدها q_en ← نخفي بس إذا الإنكليزي والعربي فارغين سوا (قبل ما يترسم أول سؤال) */
+#play:has(#qen:empty):has(#qar:empty) { visibility: hidden; }
 
 /* 30/10: «ليش صح» بعد الجواب الصحيح — سطر مختصر */
 .fb.ok .why { font-weight: 500; font-size: var(--t-sm); margin-top: 4px; color: var(--ink); }

@@ -36,6 +36,7 @@
     course: { label: "من بداية الكورس", days: 56, rest: true },
   };
   const DAILY = { 30: "30د", 60: "ساعة", 120: "ساعتين" };
+  const BUDGETS = [30, 60, 90, 120];   // الأوقات اللي تقبلها generate (الأزرار من DAILY)
   const SLOTS = ["الصبح · البيت", "بعد الدوام · الكلية", "العصر · البيت", "بالليل · البيت"];
   const GAPS = [1, 3, 7];             // مراجعة متباعدة بعد يوم، 3 أيام، أسبوع
   const arDays = (n) => (n = Math.abs(Math.round(+n || 0))) === 1 ? "يوم" : n === 2 ? "يومين" : n >= 3 && n <= 10 ? `${n} أيام` : `${n} يوم`;   // عبارة كاملة
@@ -101,7 +102,7 @@
   function generate(o) {
     const tplKey = TEMPLATES[o.template] ? o.template : "week", tpl = TEMPLATES[tplKey];
     const today = o.today || dayKey();
-    const daily = DAILY[o.daily] ? +o.daily : 60;
+    const daily = BUDGETS.includes(+o.daily) ? +o.daily : 60;
     const exam = o.exam && o.exam.date && diff(today, o.exam.date) >= 0 ? o.exam : null;
     const restDay = o.restDay == null ? REST_WDAY : +o.restDay;
     const all = o.lectures || [];
@@ -166,11 +167,11 @@
         if (isStudy(j)) (reviews[j] = reviews[j] || []).unshift(...due.slice(3));
       }
       due.slice(0, 3).forEach(([id, g]) => {
-        const l = byId[id]; if (!l) return;
+        const l = byId[id]; if (!l || cap < REVIEW_MIN) return;
         day.tasks.push(mk(day, "review", { lec: id, title: `راجع: ${l.title}`, sub: `${short(l)} · +${arDays(g)} · 10 أسئلة سريعة`, min: REVIEW_MIN, href: l.quiz, auto: { quiz: l.quiz } }));
         cap -= REVIEW_MIN;
       });
-      if (carryQuiz) { day.tasks.push(carryQuiz(day)); cap -= carryQuiz.min; carryQuiz = null; }
+      if (carryQuiz && cap >= carryQuiz.min) { day.tasks.push(carryQuiz(day)); cap -= carryQuiz.min; carryQuiz = null; }
       let placed = false;
       while ((cur || queue.length) && cap > 0) {
         if (!cur) { cur = queue.shift(); rem = estimate(cur).read; }
@@ -180,7 +181,8 @@
         rem -= take; cap -= take; placed = true;
         if (rem > 0) break;
         const l = cur; cur = null;
-        if (est.listen && l.learn && (daily >= 120 || cap >= est.listen + est.quiz)) {
+        // السمع بس إذا الوقت الباقي يكفيه (ساعتين: حتى لو الاختبار يترحّل لباچر؛ أقل: لازم يكفي السمع والاختبار)
+        if (est.listen && l.learn && cap >= est.listen + (daily >= 120 ? 0 : est.quiz)) {
           day.tasks.push(mk(day, "listen", { lec: l.id, title: `اسمع: ${l.title}`, sub: short(l), min: est.listen, href: l.learn + "#listen", auto: { listen: l.id } }));
           cap -= est.listen;
         }
@@ -378,7 +380,7 @@
   }
   function renderDays(el, p, o = {}) {
     if (!p) { el.innerHTML = ""; return; }
-    const head = `<h2>${esc((TEMPLATES[p.opts && p.opts.template] || TEMPLATES.week).label)} · ${DAILY[p.opts && p.opts.daily] || ""} باليوم</h2>` +
+    const head = `<h2>${esc((TEMPLATES[p.opts && p.opts.template] || TEMPLATES.week).label)} · ${DAILY[p.opts && p.opts.daily] || (p.opts && p.opts.daily ? p.opts.daily + "د" : "")} باليوم</h2>` +
       `<p class="sub">🎯 هدف الأسبوع: ${+p.goal.lectures || 0} ${p.goal.lectures === 1 ? "محاضرة" : p.goal.lectures === 2 ? "محاضرتين" : "محاضرات"} · ${Math.round((+p.goal.minutes || 0) / 6) / 10} ساعة${p.opts.slot ? " · " + esc(p.opts.slot) : ""}</p>` +
       (p.tight ? `<p class="slim">⏳ الوقت ضيّق شوية على كل المحاضرات: زيد الوقت اليومي، أو جرّب «ما عندي وقت».</p>` : "");
     const td = o.date || dayKey();

@@ -476,3 +476,5 @@ h2, h3, .case h3 .en { font-weight: 700; }
 .tm-hello > span:last-child { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
 .tm-hello > span:last-child > .btn { width: auto; min-height: 44px; padding: 0 16px; font-size: 14px; }
 @media (max-width: 420px) { .sd-asw { border-radius: 16px; } }
+/* 72: أزرار صف الطالب (📋 🔗 💬) — هدف لمس ≥ 44px؛ 💬 رابط وكان 16×19 */
+.ib { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; text-decoration: none; }
