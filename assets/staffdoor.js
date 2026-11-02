@@ -170,7 +170,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
         if (!r.ok) { m.className = "sd-msg bad"; m.textContent = r.msg; return; }
         // بعد الدخول (29/10، «صفحتي» v2): رابط مقفول ← نفس الرابط؛ صفحة مقفولة ← نفسها؛ غيرها ← صفحتي (me/)
         const go = () => { if (next) location.href = next; else if (G && gated(rel, G)) location.reload(); else location.href = ROOT + "me/"; };
-        if (!r.name_confirmed) return nameCheck(d.querySelector(".sd-card"), r.full_name || "", go);
+        if (!r.name_confirmed || r.needs_name) return nameCheck(d.querySelector(".sd-card"), r.full_name || "", go);
         go();
       } catch (e) { btn.disabled = false; m.className = "sd-msg bad"; m.textContent = "ماكو اتصال. تأكد من النت وجرّب مرة ثانية."; }
     };
@@ -178,6 +178,17 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
   }
   // أول دخول: «هذا اسمك؟» (نفس خطوة ٢ بشاشة دخول الطلاب)
   function nameCheck(box, n, go) {
+    if (!n) {   // 73: كود جملي بلا اسم ← يكتب اسمه الثلاثي بنفسه (مرة وحدة)
+      box.innerHTML = `<h2 id="sd-gt">أهلاً بيك 👋</h2><p class="sd-sub">اكتب اسمك الثلاثي كامل (مرة وحدة بس).</p>
+        <form id="sd-nf" novalidate><label class="sd-lab" for="sd-name">اسمك الثلاثي</label><input id="sd-name" autocomplete="name" placeholder="مثال: أحمد علي حسين">
+        <button type="submit" class="sd-btn">دخول</button></form><p class="sd-msg" id="sd-nm" role="status" aria-live="polite"></p>`;
+      box.querySelector("#sd-nf").onsubmit = async (e) => {
+        e.preventDefault(); const b = e.currentTarget.querySelector("button"), m = box.querySelector("#sd-nm"); b.disabled = true;
+        const r = await window.Account.setName(box.querySelector("#sd-name").value); b.disabled = false;
+        if (r.ok) go(); else { m.className = "sd-msg bad"; m.textContent = r.msg || "صار خطأ."; }
+      };
+      box.querySelector("#sd-name").focus(); return;
+    }
     box.innerHTML = `<h2 id="sd-gt">أهلاً ${esc(n.split(" ")[0])} 👋</h2><p class="sd-sub">هذا اسمك؟ <b>${esc(n)}</b></p>
       <button type="button" class="sd-btn" id="sd-yes">إي، هذا اسمي — ادخل</button>
       <button type="button" class="sd-btn ghost" id="sd-fix" aria-expanded="false">لا، صحّح الاسم</button>

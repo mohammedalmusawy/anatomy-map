@@ -59,7 +59,7 @@
     // (تصليح 3) الربط انرفض ← نطلع فوراً (الجلسة ما تبقى بالجهاز) ونرجع لشاشة الكود برسالة هادئة
     if (t && (t.status === 403 || t.status === 401)) { await logout(); return { ok: false, bind_refused: true, msg: BIND_MSG }; }
     if (t && t.ok) { lsSet("t:acct-touch", new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10)); lsSet("t:acct-touch-at", Date.now()); }
-    return { ok: true, full_name: r.full_name, name_confirmed: r.name_confirmed };
+    return { ok: true, full_name: r.full_name, name_confirmed: r.name_confirmed, needs_name: !r.full_name };   // 73: كود جملي بلا اسم ← يكتب اسمه بأول دخول
   }
 
   async function loadStudent() {
@@ -101,6 +101,11 @@
 
   const confirmName = () => call("redeem-code", { action: "confirm_name" }, true).then((r) => { if (r.ok && state.student) state.student.name_confirmed = true; emit(); return r; });
   const fixName = (name) => call("redeem-code", { action: "fix_name", name }, true);
+  // 73: كود جملي بلا اسم — الطالب يكتب اسمه الثلاثي مرة وحدة (السيرفر ذرّي، المكرر 409)
+  const setName = (name) => call("redeem-code", { action: "set_name", name }, true).then((r) => {
+    if (r.ok && state.student) { state.student.full_name = r.full_name; state.student.name_confirmed = true; try { localStorage.setItem("t:acct-name", String(r.full_name).trim().split(/\s+/)[0]); } catch (e) {} emit(); }
+    return r;
+  });
   const linkTelegram = () => call("redeem-code", { action: "tg_link_token" }, true);   // مطفي لحد settings.tg_link.on
   // 📱 70: «أجهزتي» — الطالب يشوف أجهزته ويطلّع جهاز (السيرفر: صفوفه هو بس)
   const devices = () => call("redeem-code", { action: "devices", device_id: device }, true);
@@ -207,13 +212,21 @@
       btn.disabled = false;
       if (!r.ok) { msg.textContent = r.msg; return; }
       msg.textContent = "";
-      if (!r.name_confirmed) mountNameCheck(el, opts); else if (opts.done) opts.done(state);
+      if (!r.name_confirmed || r.needs_name) mountNameCheck(el, opts); else if (opts.done) opts.done(state);
     };
     btn.onclick = go;
     inp.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
   }
   function mountNameCheck(el, opts = {}) {
-    const n = state.student ? state.student.full_name : "";
+    const n = (state.student && state.student.full_name) || "";
+    if (!n) {   // 73: بلا اسم ← يكتبه بنفسه
+      el.innerHTML = `<div class="gate"><h1>أهلاً بيك 👋</h1><p>اكتب اسمك الثلاثي كامل (مرة وحدة بس).</p>
+        <input id="acct-name" aria-label="اسمك الثلاثي" placeholder="مثال: أحمد علي حسين" autocomplete="name"><button type="button" class="cbtn" id="acct-send">دخول</button>
+        <p class="sub" id="acct-msg" role="status" aria-live="polite"></p></div>`;
+      const m0 = el.querySelector("#acct-msg"), go0 = async () => { const r = await setName(el.querySelector("#acct-name").value); if (r.ok) { if (opts.done) opts.done(state); } else m0.textContent = r.msg || "صار خطأ."; };
+      el.querySelector("#acct-send").onclick = go0; el.querySelector("#acct-name").addEventListener("keydown", (e) => { if (e.key === "Enter") go0(); });
+      return;
+    }
     el.innerHTML = `<div class="gate"><h1>أهلاً ${esc(n.split(" ")[0])} 👋</h1>
       <p>هذا اسمك؟ <b>${esc(n)}</b></p>
       <button type="button" class="cbtn" id="acct-yes">✅ نعم</button> <button type="button" class="cbtn alt" id="acct-fix">✏️ صحّح اسمي</button>
@@ -230,7 +243,7 @@
   }
 
   window.Account = {
-    state, device, ready, redeem, confirmName, fixName, logout, linkTelegram, pull, get, put, devices, removeDevice, mountDevices,
+    state, device, ready, redeem, confirmName, fixName, setName, logout, linkTelegram, pull, get, put, devices, removeDevice, mountDevices,
     mountLogin, mountNameCheck, on: (f) => { subs.add(f); return () => subs.delete(f); },
     token: () => (state.session ? state.session.access_token : null),   // للمساعد لما تنفتح البوابة
   };
