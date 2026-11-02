@@ -380,7 +380,7 @@
   }
   function renderDays(el, p, o = {}) {
     if (!p) { el.innerHTML = ""; return; }
-    const head = `<h2>${esc((TEMPLATES[p.opts && p.opts.template] || TEMPLATES.week).label)} · ${DAILY[p.opts && p.opts.daily] || (p.opts && p.opts.daily ? p.opts.daily + "د" : "")} باليوم</h2>` +
+    const head = `<h2>${esc((TEMPLATES[p.opts && p.opts.template] || TEMPLATES.week).label)} · ${DAILY[p.opts && p.opts.daily] || (p.opts && p.opts.daily ? (+p.opts.daily || "") + "د" : "")} باليوم</h2>` +
       `<p class="sub">🎯 هدف الأسبوع: ${+p.goal.lectures || 0} ${p.goal.lectures === 1 ? "محاضرة" : p.goal.lectures === 2 ? "محاضرتين" : "محاضرات"} · ${Math.round((+p.goal.minutes || 0) / 6) / 10} ساعة${p.opts.slot ? " · " + esc(p.opts.slot) : ""}</p>` +
       (p.tight ? `<p class="slim">⏳ الوقت ضيّق شوية على كل المحاضرات: زيد الوقت اليومي، أو جرّب «ما عندي وقت».</p>` : "");
     const td = o.date || dayKey();
