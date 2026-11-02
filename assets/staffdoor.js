@@ -184,7 +184,8 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
         <button type="submit" class="sd-btn">دخول</button></form><p class="sd-msg" id="sd-nm" role="status" aria-live="polite"></p>`;
       box.querySelector("#sd-nf").onsubmit = async (e) => {
         e.preventDefault(); const b = e.currentTarget.querySelector("button"), m = box.querySelector("#sd-nm"); b.disabled = true;
-        const r = await window.Account.setName(box.querySelector("#sd-name").value); b.disabled = false;
+        const v0 = box.querySelector("#sd-name").value.trim().replace(/\s+/g, " "); if (v0.split(" ").length < 3) { b.disabled = false; m.className = "sd-msg bad"; m.textContent = "اكتب اسمك الثلاثي كامل."; return; }
+        const r = await window.Account.setName(v0); b.disabled = false;
         if (r.ok) go(); else { m.className = "sd-msg bad"; m.textContent = r.msg || "صار خطأ."; }
       };
       box.querySelector("#sd-name").focus(); return;
