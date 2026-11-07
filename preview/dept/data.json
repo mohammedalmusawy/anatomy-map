@@ -218,15 +218,15 @@
      "title_en": "X-ray Tube — Third Experiment in Practice",
      "kind": "practical",
      "num": 2,
-     "readers_week": 61
+     "readers_week": 68
     },
     {
-     "lecture_id": "equipment_t02",
-     "title_ar": "مولّدات الجهد العالي",
-     "title_en": "High Voltage Generators",
-     "kind": "theory",
-     "num": 2,
-     "readers_week": 45
+     "lecture_id": "equipment_p01",
+     "title_ar": "منظومة جهاز الأشعة السينية (التجربتان 1 و2)",
+     "title_en": "X-Ray Machine System — Experiments 1 & 2 in Practice",
+     "kind": "practical",
+     "num": 1,
+     "readers_week": 61
     }
    ]
   },
@@ -240,7 +240,15 @@
      "title_en": "Introduction",
      "kind": "theory",
      "num": 1,
-     "readers_week": 68
+     "readers_week": 61
+    },
+    {
+     "lecture_id": "physics_p03",
+     "title_ar": "محدِّدات أنبوب الأشعة السينية",
+     "title_en": "Experiment (3): Limitation of the x-ray tube (Line focus, Rotation anode tube and Heat rating)",
+     "kind": "practical",
+     "num": 3,
+     "readers_week": 61
     },
     {
      "lecture_id": "physics_t02",
@@ -248,14 +256,6 @@
      "title_en": "X-ray Tube & Generator",
      "kind": "theory",
      "num": 2,
-     "readers_week": 61
-    },
-    {
-     "lecture_id": "physics_t04",
-     "title_ar": "تسخين أنبوب الأشعة وتبريده",
-     "title_en": "X-ray Tube Heating and Cooling",
-     "kind": "theory",
-     "num": 4,
      "readers_week": 54
     }
    ]
@@ -265,12 +265,20 @@
    "subject_ar": "الحاسوب",
    "items": [
     {
+     "lecture_id": "computer_p01",
+     "title_ar": "برنامج مايكروسوفت إكسل",
+     "title_en": "Microsoft Excel 2010",
+     "kind": "practical",
+     "num": 1,
+     "readers_week": 50
+    },
+    {
      "lecture_id": "computer_t01",
      "title_ar": "مفهوم الذكاء الاصطناعي",
      "title_en": "The Concept of Artificial Intelligence",
      "kind": "theory",
      "num": 1,
-     "readers_week": 61
+     "readers_week": 45
     },
     {
      "lecture_id": "computer_t02",
@@ -278,14 +286,6 @@
      "title_en": "The Role of AI in Modern Smartphones",
      "kind": "theory",
      "num": 2,
-     "readers_week": 45
-    },
-    {
-     "lecture_id": "computer_t04",
-     "title_ar": "الذكاء الاصطناعي والمجتمع والأخلاقيات",
-     "title_en": "Artificial Intelligence, Society and Ethics",
-     "kind": "theory",
-     "num": 4,
      "readers_week": 37
     }
    ]
@@ -300,16 +300,16 @@
      "title_en": "Crimes of the Baath Regime in Iraq — Summary 1",
      "kind": "theory",
      "num": 1,
-     "readers_week": 50
+     "readers_week": 66
     }
    ]
   }
  ],
  "hard_topics": [
   {
-   "topic_en": "Principal Parts & the Operating Console",
-   "topic_ar": "الأجزاء الرئيسية ولوحة التحكم",
-   "lecture_id": "equipment_p01",
+   "topic_en": "Intensifying Screens & Screen Construction",
+   "topic_ar": "الشاشات المقوّية وتركيبها",
+   "lecture_id": "equipment_t04",
    "subject_ar": "الأجهزة",
    "error_rate": 0.56,
    "attempts": 60
