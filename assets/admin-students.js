@@ -38,6 +38,7 @@
 #admin .st-row label{display:grid;gap:4px;font-size:var(--t-sm,.9rem);color:var(--muted)}
 #admin .st-row select,#admin .st-row input{min-height:44px;min-width:88px;padding:0 10px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit}
 #admin .st-row .btn{min-height:48px;padding:0 18px}
+#admin .st-botopt{display:flex;align-items:center;gap:8px;min-height:44px}#admin .st-botopt input{width:44px;height:44px;flex:none}
 #admin .st-self{display:inline-block;padding:0 8px;border:1px solid var(--accent,#8C6A3A);border-radius:999px;color:var(--accent,#8C6A3A)}
 #admin .st-stage{display:inline-block;padding:0 7px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
 #admin .st-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:8px}
@@ -67,6 +68,8 @@
           <label>العدد <input id="st-count" type="number" inputmode="numeric" min="1" max="${MAX_TOTAL}" value="100" aria-label="العدد"></label>
           <button class="btn" id="st-bulk" type="button">سوّي الأكواد</button>
         </div>
+        <label class="st-botopt"><input id="st-forbot" type="checkbox"> 🤖 للبوت (يوزّعها تلقائياً على الطلاب)</label>
+        <p class="hint">بلا هالعلامة الأكواد تنحجز (للطباعة أو التسليم اليدوي) والبوت ما يلمسها أبداً.</p>
         <p class="hint" id="st-prog" role="status" aria-live="polite"></p>
         <div id="st-exp" hidden>
           <p><b id="st-expn"></b></p>
@@ -145,7 +148,7 @@
         const n = Math.min(PER_REQ, left);
         st(`جاري التوليد… انسوّى ${made} من ${want}`);
         let r;
-        try { r = await api({ action: "bulk_create", count: n, stage }); } catch (e) { r = { status: 0 }; }
+        try { r = await api({ action: "bulk_create", count: n, stage, bot: $("#st-forbot").checked }); } catch (e) { r = { status: 0 }; }
         if (r.status !== 200) { msg = r.status === 403 ? "هذا للمالك بس." : `وقف الطلب (${r.status || "انقطع النت"}). ممكن بعض الأكواد انسوّت — شوف القائمة.`; failed += left; break; }
         for (const c of r.created) batch.push({ n: batch.length + 1, code: c.code, stage });
         made += r.created.length; failed += r.failed || 0; left -= n;

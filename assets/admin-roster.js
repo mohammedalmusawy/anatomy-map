@@ -44,7 +44,11 @@
       <div class="rs-card"><h4>🤖 بوت الطلاب</h4>
         <p class="hint" id="rs-state">جاري التحميل…</p>
         <button class="btn" id="rs-bot" type="button" aria-pressed="false">—</button>
-        <p class="sum hint" id="rs-sum" role="status"></p></div>
+        <p class="sum hint" id="rs-sum" role="status"></p>
+        <p class="hint">البوت ياخذ بس من الأكواد اللي مو محجوزة. الأكواد اللي تسوّيها بلا علامة «للبوت» تنحجز (للطباعة)، وتگدر تحرّر أكواد مرحلة للبوت هنا:</p>
+        <div class="row"><label>المرحلة <select id="rs-ps">${[1, 2, 3, 4, 5, 6].map((n) => `<option value="${n}"${n === 2 ? " selected" : ""}>${STAGES[n]}</option>`).join("")}</select></label>
+          <button class="btn" id="rs-rel" type="button">🤖 حرّرها للبوت</button><button class="btn ghost" id="rs-res" type="button">🔒 احجزها</button></div>
+        <p class="hint" id="rs-pm" role="status"></p></div>
       <div class="rs-card"><h4>١) ارفع قائمة الطلاب</h4>
         <p class="hint">ملف Excel (.xlsx) أو CSV بأعمدة: الاسم · الرقم الجامعي · المرحلة. الملف يتقرأ على جهازك، والقائمة تنحفظ بالسيرفر الخاص بس. رفعها مرة ثانية يحدّث الموجود ويضيف الجديد.</p>
         <div class="row">
@@ -77,10 +81,10 @@
     async function head(r) {
       on = r.on === true; $("#rs-bot").textContent = on ? "⏸️ إيقاف البوت" : "▶️ تشغيل البوت"; $("#rs-bot").setAttribute("aria-pressed", on ? "true" : "false");
       $("#rs-state").textContent = on ? "🟢 شغّال: الطالب يكتب اسمه ورقمه للبوت وياخذ كوده." : "⚪ مطفي: البوت ما يرد على الطلاب لحد ما تشغّله.";
-      const st = (r.stages || []).filter((s) => s.total || s.free_codes);
+      const st = (r.stages || []).filter((s) => s.total || s.free_codes || s.reserved);
       $("#rs-sum").innerHTML = st.length ? st.map((s) => {
         const left = s.total - s.assigned, short = left > s.free_codes;
-        return `<span>المرحلة ${esc(STAGES[s.stage])}: ${s.total} بالقائمة · ${s.assigned} أخذوا كود · ${s.free_codes} كود جاهز${short ? ` <b class="warn">⚠️ ناقص ${left - s.free_codes} كود</b>` : ""}</span>`;
+        return `<span>المرحلة ${esc(STAGES[s.stage])}: ${s.total} بالقائمة · ${s.assigned} أخذوا كود · ${s.free_codes} كود للبوت${s.reserved ? ` · ${s.reserved} محجوز` : ""}${short ? ` <b class="warn">⚠️ ناقص ${left - s.free_codes} كود</b>` : ""}</span>`;
       }).join("") : "ماكو قائمة بعد.";
     }
     function item(r) {
@@ -110,6 +114,16 @@
       if (r.status !== 200) return alert(r.msg || "صار خطأ");
       load(false);
     };
+
+    // ───── حجز/تحرير أكواد مرحلة ─────
+    const pool = async (reserve) => {
+      const stage = +$("#rs-ps").value;
+      if (!reserve && !confirm(`تحرّر كل أكواد المرحلة ${STAGES[stage]} (بلا اسم ولا استعمال) للبوت؟ لا تحرّر أكواد انطبعت أو انوزّعت.`)) return;
+      const r = await api({ action: "codes_pool", stage, reserve });
+      if (r.status !== 200) return say($("#rs-pm"), r.msg || "صار خطأ");
+      say($("#rs-pm"), reserve ? `🔒 انحجز ${r.n} كود.` : `🤖 انحرر ${r.n} كود للبوت.`); auditLoaded = false; load(false);
+    };
+    $("#rs-rel").onclick = () => pool(false); $("#rs-res").onclick = () => pool(true);
 
     // ───── رفع الملف ─────
     $("#rs-file").onchange = async (ev) => {
