@@ -77,7 +77,7 @@
 </style>
 <script>try{if(localStorage.getItem("t:theme")==='"dark"')document.documentElement.dataset.theme="dark"}catch(e){}
 try{if(/[?&]lang=en/.test(location.search)||(!/[?&]lang=ar/.test(location.search)&&localStorage.getItem("t:lang")==="en")){document.documentElement.lang="en";document.documentElement.dir="ltr"}}catch(e){}try{if(!/\/preview\//.test(location.pathname)){var _d=document.documentElement;_d.dataset.live="1";if(localStorage.getItem("t:gate-on")==="1")_d.dataset.gate="on"}}catch(e){}</script>
-<meta name="theme-color" content="#4B5A8A"><link rel="apple-touch-icon" href="../assets/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="build" content="20261103155615"></head><body class="calm"><div class="wrap" role="main">
+<meta name="theme-color" content="#4B5A8A"><link rel="apple-touch-icon" href="../assets/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="build" content="20261107102701"></head><body class="calm"><div class="wrap" role="main">
 <nav class="nnav nmob" aria-label="التنقل الرئيسي"><a class="nn" data-nn="0" href="../lessons/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.2 9.6V19.5h11.6V9.6"/><path d="M10 19.5v-5h4v5"/></svg><span>الرئيسية</span></a><a class="nn" data-nn="1" href="../learn/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5h4v14.5h-4zM8.5 7h4v12.5h-4z"/><path d="m13.6 7.6 3.7-1.1 3.4 12.3-3.7 1"/></svg><span>المحاضرات</span></a><a class="nn" data-nn="2" href="../me/" data-locked><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></svg><span>صفحتي</span></a></nav><div class="cbar sticky"><a class="back" href="../lessons/"><span aria-hidden="true">‹</span><span class="bl">الرئيسية</span></a><nav class="nnav ndesk" aria-label="التنقل الرئيسي"><a class="nn" data-nn="0" href="../lessons/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.2 9.6V19.5h11.6V9.6"/><path d="M10 19.5v-5h4v5"/></svg><span>الرئيسية</span></a><a class="nn" data-nn="1" href="../learn/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5h4v14.5h-4zM8.5 7h4v12.5h-4z"/><path d="m13.6 7.6 3.7-1.1 3.4 12.3-3.7 1"/></svg><span>المحاضرات</span></a><a class="nn" data-nn="2" href="../me/" data-locked><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></svg><span>صفحتي</span></a></nav><span class="tools"><a class="tbtn" href="../search/" aria-label="البحث (ويّا 🎤)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></a><span class="disp" role="group" aria-label="العرض"><span class="lang" role="radiogroup" aria-label="اللغة" data-cur="1"><span class="thumb" aria-hidden="true"></span><button type="button" role="radio" lang="ar" aria-label="العربية" aria-checked="true" tabindex="0">ع</button><button type="button" role="radio" lang="en" aria-label="English" aria-checked="false" tabindex="-1">ENG</button></span><i class="sep" aria-hidden="true"></i><button type="button" class="tbtn" data-theme-toggle aria-label="الوضع الليلي"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg></button></span></span></div><nav class="crumbs" aria-label="أنت هنا"><a href="../lessons/">الرئيسية</a><i aria-hidden="true">›</i><span aria-current="page">دخول الطلاب</span></nav>
 <div class="gate">
 <ol class="steps" aria-label="الخطوات"><li class="on" data-st="1">١ · الكود</li><li data-st="2">٢ · تأكيد الاسم</li></ol>
@@ -97,6 +97,11 @@ try{if(/[?&]lang=en/.test(location.search)||(!/[?&]lang=ar/.test(location.search
 <div id="fixbox" hidden><label for="fixin" class="flab">اسمك الثلاثي الصحيح</label><input id="fixin" class="tin" autocomplete="name">
 <small class="sub">يوصل تنبيه لمحمد يتأكد، وتگدر تدخل هسه.</small><button type="button" class="cbtn" id="fixsend">أرسل التصحيح</button><p class="err" id="fixmsg" role="status" hidden></p></div>
 <button type="button" class="cbtn plain" id="back1">‹ رجوع للكود</button></div></section>
+<section id="st3" hidden aria-labelledby="lt3"><h2 id="lt3" class="noterm">اكتب اسمك الثلاثي</h2>
+<form id="namef" novalidate><p class="sub">مرة وحدة بس، ويوصل لمحمد حتى يتأكد منه.</p>
+<label for="nmin" class="flab">اسمك الثلاثي</label><input id="nmin" class="tin" autocomplete="name" placeholder="مثال: أحمد علي حسين">
+<p class="err" id="nmerr" role="alert" hidden></p>
+<button type="submit" class="cbtn" id="nmsend">دخول</button></form></section>
 </div>
 </div><script>
 document.addEventListener("click", (ev) => {
@@ -116,11 +121,11 @@ if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) doc
   const $ = (s) => document.getElementById(s), err = $("codeerr"), btn = document.querySelector("#codef button[type=submit]");
   const nextUrl = () => { const n = new URLSearchParams(location.search).get("next"); if (!n) return "../me/"; try { const u = new URL(n, location.href); return u.origin === location.origin ? u.href : "../me/"; } catch (e) { return "../me/"; } };   // (31/10 أمني) نفس الأصل بس، ورابط كامل (u.href) — «/\evil» و«/.//evil» كانن يطلعن برا
   const go = () => { location.href = nextUrl(); };
-  const st = (n) => { $("st1").hidden = n !== 1; $("st2").hidden = n !== 2;
-    document.querySelectorAll(".steps li").forEach((l) => l.classList.toggle("on", +l.dataset.st === n)); (n === 1 ? $("code") : $("pvlogin")).focus(); };
+  const st = (n) => { $("st1").hidden = n !== 1; $("st2").hidden = n !== 2; $("st3").hidden = n !== 3;
+    document.querySelectorAll(".steps li").forEach((l) => l.classList.toggle("on", +l.dataset.st === (n === 3 ? 2 : n))); (n === 1 ? $("code") : n === 3 ? $("nmin") : $("pvlogin")).focus(); };
   const bad = (m) => { err.textContent = m; err.hidden = false; };
   let acc = null;
-  const account = () => window.Account ? Promise.resolve() : (acc = acc || new Promise((ok, no) => { const x = document.createElement("script"); x.src = "../assets/account.min.js?v=6b5d1a79c3"; x.onload = ok; x.onerror = no; document.head.appendChild(x); }));
+  const account = () => window.Account ? Promise.resolve() : (acc = acc || new Promise((ok, no) => { const x = document.createElement("script"); x.src = "../assets/account.min.js?v=7c49012e79"; x.onload = ok; x.onerror = no; document.head.appendChild(x); }));
   async function submit(v) {
     if (!v) { bad("اكتب الكود أول (مثل RAD-7K4P)."); $("code").focus(); return; }
     err.hidden = true; btn.disabled = true; const t0 = btn.textContent; btn.textContent = "لحظة…";
@@ -128,6 +133,7 @@ if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) doc
       await account();
       const r = await window.Account.redeem(v);
       if (!r.ok) { bad(r.msg || "ما گدرنا ندخلك، جرّب مرة ثانية."); return; }
+      if (r.needs_name || !r.full_name) { st(3); return; }   // 73: كود بلا اسم ← يكتب اسمه (ما يدخل قبلها)
       if (r.name_confirmed) { go(); return; }
       $("wname").textContent = r.full_name || ""; st(2);
     } catch (e) { bad("ماكو اتصال. تأكد من النت وجرّب مرة ثانية."); }
@@ -136,7 +142,20 @@ if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) doc
   $("codef").addEventListener("submit", (ev) => { ev.preventDefault(); submit($("code").value.trim()); });
   $("back1").onclick = () => st(1);
   $("fixname").onclick = (ev) => { const b = $("fixbox"); b.hidden = !b.hidden; ev.currentTarget.setAttribute("aria-expanded", !b.hidden); if (!b.hidden) { $("fixin").value = $("wname").textContent; $("fixin").focus(); } };
-  $("pvlogin").onclick = async () => { try { await window.Account.confirmName(); } catch (e) {} go(); };
+  $("pvlogin").onclick = async () => {
+    const m = $("fixmsg"); let r = null;
+    try { r = await window.Account.confirmName(); } catch (e) {}
+    if (r && r.ok) { go(); return; }
+    m.hidden = false; m.textContent = (r && r.msg) || "صار خطأ، جرّب مرة ثانية.";   // 73: ما نكمّل إذا التأكيد انرفض
+  };
+  $("namef").addEventListener("submit", async (ev) => {
+    ev.preventDefault(); const e2 = $("nmerr"), v = $("nmin").value.trim().replace(/\s+/g, " "), b = $("nmsend"); e2.hidden = true;
+    if (v.split(" ").length < 3 || v.length < 3) { e2.textContent = "اكتب اسمك الثلاثي كامل."; e2.hidden = false; return; }
+    b.disabled = true;
+    try { const r = await window.Account.setName(v); if (r && r.ok) { go(); return; } e2.textContent = (r && r.msg) || "صار خطأ، جرّب مرة ثانية."; e2.hidden = false; }
+    catch (x) { e2.textContent = "ماكو اتصال. جرّب بعدين."; e2.hidden = false; }
+    finally { b.disabled = false; }
+  });
   $("fixsend").onclick = async () => {
     const m = $("fixmsg"), v = $("fixin").value.trim(); m.hidden = false;
     if (v.split(/\s+/).length < 3) { m.textContent = "اكتب اسمك الثلاثي."; return; }
@@ -146,4 +165,4 @@ if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) doc
   const c = new URLSearchParams(location.search).get("code");
   if (c) { $("code").value = c; history.replaceState(null, "", location.pathname + location.search.replace(/([?&])code=[^&]*&?/, "$1").replace(/[?&]$/, "") + location.hash); submit(c.trim()); }
 })();
-</script><a class="fab" href="../assistant/" aria-label="اسأل المساعد"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="11" rx="4"/><path d="M12 4v3.5M9 12.5h.01M15 12.5h.01M9.5 15.5h5"/></svg><span class="fl">اسأل المساعد</span><span class="fs" aria-hidden="true">اسأل</span></a><script src="../assets/listen.min.js?v=e91ace7626" defer></script><script src="../assets/calm.min.js?v=e7277fff7c" defer></script><script src="../assets/staffdoor.min.js?v=0357b06230" defer></script><script src="../assets/lang.min.js?v=c3b1bb77b4" defer></script><script src="../assets/cloud.min.js?v=562854865e"></script><script src="../assets/tools.min.js?v=f9bbbe06fe"></script><script src="../assets/voice.min.js?v=a36331dc76" defer></script><script src="../assets/nextexam.min.js?v=e71b31c7a6" defer></script><script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { updateViaCache: "none" });</script></body></html>
+</script><a class="fab" href="../assistant/" aria-label="اسأل المساعد"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="11" rx="4"/><path d="M12 4v3.5M9 12.5h.01M15 12.5h.01M9.5 15.5h5"/></svg><span class="fl">اسأل المساعد</span><span class="fs" aria-hidden="true">اسأل</span></a><script src="../assets/listen.min.js?v=e91ace7626" defer></script><script src="../assets/calm.min.js?v=e7277fff7c" defer></script><script src="../assets/staffdoor.min.js?v=891c6b84f4" defer></script><script src="../assets/lang.min.js?v=c3b1bb77b4" defer></script><script src="../assets/cloud.min.js?v=562854865e"></script><script src="../assets/tools.min.js?v=f9bbbe06fe"></script><script src="../assets/voice.min.js?v=a36331dc76" defer></script><script src="../assets/nextexam.min.js?v=e71b31c7a6" defer></script><script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { updateViaCache: "none" });</script></body></html>

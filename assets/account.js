@@ -59,7 +59,7 @@
     // (تصليح 3) الربط انرفض ← نطلع فوراً (الجلسة ما تبقى بالجهاز) ونرجع لشاشة الكود برسالة هادئة
     if (t && (t.status === 403 || t.status === 401)) { await logout(); return { ok: false, bind_refused: true, msg: BIND_MSG }; }
     if (t && t.ok) { lsSet("t:acct-touch", new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10)); lsSet("t:acct-touch-at", Date.now()); }
-    return { ok: true, full_name: r.full_name, name_confirmed: r.name_confirmed };
+    return { ok: true, full_name: r.full_name, name_confirmed: r.name_confirmed, needs_name: !r.full_name };   // 73: كود جملي بلا اسم ← يكتب اسمه بأول دخول
   }
 
   async function loadStudent() {
@@ -86,6 +86,7 @@
     const { data: { session } } = await c.auth.getSession();
     state.session = session;
     if (session && !state.student) await loadStudent();
+    nameGuard();   // 73: حساب بلا اسم ← ما يكمل بأي صفحة قبل ما يكتب اسمه (حارس واحد مشترك)
     if (session && state.student) {
       const day = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);
       // 📱 70: مرة باليوم للسلسلة، و(بعد ما يصير touch يفحص الجهاز) كل 30 دقيقة بالكثير حتى الجهاز اللي انطلع من «أجهزتي» يطلع فعلاً
@@ -99,8 +100,13 @@
     return state;
   }
 
-  const confirmName = () => call("redeem-code", { action: "confirm_name" }, true).then((r) => { if (r.ok && state.student) state.student.name_confirmed = true; emit(); return r; });
+  const confirmName = () => call("redeem-code", { action: "confirm_name" }, true).then((r) => { if (r.ok && state.student) state.student.name_confirmed = true; emit(); return r; });   // 73: الفشل (409 بلا اسم) ما يغيّر شي — المتصل لازم يفحص r.ok
   const fixName = (name) => call("redeem-code", { action: "fix_name", name }, true);
+  // 73: كود جملي بلا اسم — الطالب يكتب اسمه الثلاثي مرة وحدة (السيرفر ذرّي، المكرر 409)
+  const setName = (name) => call("redeem-code", { action: "set_name", name }, true).then((r) => {
+    if (r.ok && state.student) { state.student.full_name = r.full_name; state.student.name_confirmed = true; try { localStorage.setItem("t:acct-name", String(r.full_name).trim().split(/\s+/)[0]); } catch (e) {} emit(); }
+    return r;
+  });
   const linkTelegram = () => call("redeem-code", { action: "tg_link_token" }, true);   // مطفي لحد settings.tg_link.on
   // 📱 70: «أجهزتي» — الطالب يشوف أجهزته ويطلّع جهاز (السيرفر: صفوفه هو بس)
   const devices = () => call("redeem-code", { action: "devices", device_id: device }, true);
@@ -207,20 +213,65 @@
       btn.disabled = false;
       if (!r.ok) { msg.textContent = r.msg; return; }
       msg.textContent = "";
-      if (!r.name_confirmed) mountNameCheck(el, opts); else if (opts.done) opts.done(state);
+      if (!r.name_confirmed || r.needs_name) mountNameCheck(el, opts); else if (opts.done) opts.done(state);
     };
     btn.onclick = go;
     inp.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
   }
+  /** 73: حارس الاسم — أي صفحة فيها حساب طالب فعّال بلا اسم تطلع نافذة ما تنسد (لا زر إغلاق ولا Escape) لحد ما ينكتب الاسم؛ «خروج» بس.
+   *  الصفحة اللي وراها تنقفل: inert (+ aria-hidden وفخ تركيز للمتصفحات القديمة)، والتركيز لحقل الاسم، ويرجع لمكانه بعد الإغلاق. */
+  let guardEl = null;
+  function nameGuard() {
+    if (!state.student || state.student.full_name || guardEl || document.getElementById("acct-nameguard") || document.getElementById("st3")) return;   // st3 = صفحة الدخول (عندها خطوتها)
+    if (!document.getElementById("acct-ng-css")) {
+      const st = document.createElement("style"); st.id = "acct-ng-css";
+      st.textContent = `#acct-nameguard{--ng-bg:var(--card,#fff);--ng-ink:var(--ink,#222);--ng-line:var(--line,#c9ccd6);--ng-in:var(--bg,#fff);--ng-brand:var(--brand,#4B5A8A);--ng-bi:var(--brand-ink,#fff);position:fixed;inset:0;z-index:2147483000;background:rgba(20,22,28,.72);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+@media (prefers-color-scheme:dark){#acct-nameguard{--ng-bg:var(--card,#252932);--ng-ink:var(--ink,#ECE7DD);--ng-line:var(--line,#4a5060);--ng-in:var(--bg,#1D2027);--ng-brand:var(--brand,#A9B6E3);--ng-bi:var(--brand-ink,#1D2027)}}
+#acct-nameguard .ngbox{background:var(--ng-bg);color:var(--ng-ink);border-radius:18px;max-width:440px;width:100%;padding:8px 14px 14px;box-sizing:border-box;font:inherit}
+#acct-nameguard input{display:block;box-sizing:border-box;width:100%;min-height:48px;padding:0 12px;margin:8px 0;border:1px solid var(--ng-line);border-radius:12px;background:var(--ng-in);color:var(--ng-ink);font:inherit;font-size:1rem}
+#acct-nameguard button{min-height:48px;min-width:44px;padding:0 16px;margin:4px 0;border-radius:12px;border:1px solid var(--ng-brand);background:var(--ng-brand);color:var(--ng-bi);font:inherit;font-weight:700;cursor:pointer}
+#acct-nameguard button.alt{background:transparent;color:var(--ng-brand)}`;
+      document.head.appendChild(st);
+    }
+    const prev = document.activeElement, ov = document.createElement("div"); ov.id = "acct-nameguard"; guardEl = ov;
+    ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "اكتب اسمك الثلاثي");
+    const box = document.createElement("div"); box.className = "ngbox"; ov.appendChild(box);
+    const behind = [...document.body.children].filter((e) => !/^(SCRIPT|STYLE|LINK|NOSCRIPT)$/.test(e.tagName)).map((e) => [e, e.inert, e.getAttribute("aria-hidden")]);
+    behind.forEach(([e]) => { e.inert = true; e.setAttribute("aria-hidden", "true"); });
+    document.body.appendChild(ov);
+    // فخ تركيز احتياطي (متصفح بلا inert): أي تركيز برا النافذة يرجع إلها، وTab/Shift+Tab يدور داخلها
+    const foc = () => [...ov.querySelectorAll("input,button,a[href],select,textarea,[tabindex]:not([tabindex='-1'])")].filter((x) => !x.disabled && !x.hidden && x.offsetParent !== null || x === document.activeElement);
+    const onIn = (ev) => { if (!ov.contains(ev.target)) { const f = foc(); if (f[0]) f[0].focus(); } };
+    const onKey = (ev) => { if (ev.key !== "Tab") return; const f = foc(); if (!f.length) return; const i = f.indexOf(document.activeElement);
+      if (i < 0 || (ev.shiftKey && i === 0) || (!ev.shiftKey && i === f.length - 1)) { ev.preventDefault(); f[ev.shiftKey ? f.length - 1 : 0].focus(); } };
+    document.addEventListener("focusin", onIn, true); document.addEventListener("keydown", onKey, true);
+    const close = () => {
+      document.removeEventListener("focusin", onIn, true); document.removeEventListener("keydown", onKey, true);
+      behind.forEach(([e, inr, ah]) => { e.inert = !!inr; if (ah === null) e.removeAttribute("aria-hidden"); else e.setAttribute("aria-hidden", ah); });
+      ov.remove(); guardEl = null; try { if (prev && prev.focus && document.contains(prev)) prev.focus(); } catch (e) {}
+    };
+    mountNameCheck(box, { done: close });
+    const out = document.createElement("button"); out.type = "button"; out.className = "alt"; out.textContent = "خروج";
+    out.onclick = async () => { await logout(); close(); location.reload(); }; box.appendChild(out);
+    const f = box.querySelector("input"); if (f) f.focus();
+  }
   function mountNameCheck(el, opts = {}) {
-    const n = state.student ? state.student.full_name : "";
+    const n = (state.student && state.student.full_name) || "";
+    if (!n) {   // 73: بلا اسم ← يكتبه بنفسه
+      el.innerHTML = `<div class="gate"><h1>أهلاً بيك 👋</h1><p>اكتب اسمك الثلاثي كامل (مرة وحدة بس).</p>
+        <input id="acct-name" aria-label="اسمك الثلاثي" placeholder="مثال: أحمد علي حسين" autocomplete="name"><button type="button" class="cbtn" id="acct-send">دخول</button>
+        <p class="sub" id="acct-msg" role="status" aria-live="polite"></p></div>`;
+      const m0 = el.querySelector("#acct-msg"), go0 = async () => { const v0 = el.querySelector("#acct-name").value.trim().replace(/\s+/g, " "); if (v0.split(" ").length < 3) { m0.textContent = "اكتب اسمك الثلاثي كامل."; return; } const r = await setName(v0); if (r.ok) { if (opts.done) opts.done(state); } else m0.textContent = r.msg || "صار خطأ."; };
+      el.querySelector("#acct-send").onclick = go0; el.querySelector("#acct-name").addEventListener("keydown", (e) => { if (e.key === "Enter") go0(); });
+      return;
+    }
     el.innerHTML = `<div class="gate"><h1>أهلاً ${esc(n.split(" ")[0])} 👋</h1>
       <p>هذا اسمك؟ <b>${esc(n)}</b></p>
       <button type="button" class="cbtn" id="acct-yes">✅ نعم</button> <button type="button" class="cbtn alt" id="acct-fix">✏️ صحّح اسمي</button>
       <div id="acct-fixbox" hidden><input id="acct-name" aria-label="اسمك الثلاثي الصحيح" value="${esc(n)}"><button type="button" class="cbtn" id="acct-send">أرسل</button></div>
       <p class="sub" id="acct-msg" role="status" aria-live="polite"></p></div>`;
     const msg = el.querySelector("#acct-msg");
-    el.querySelector("#acct-yes").onclick = async () => { await confirmName(); if (opts.done) opts.done(state); };
+    el.querySelector("#acct-yes").onclick = async () => { const r = await confirmName(); if (r && r.ok) { if (opts.done) opts.done(state); } else msg.textContent = (r && r.msg) || "صار خطأ، جرّب مرة ثانية."; };
     el.querySelector("#acct-fix").onclick = () => { el.querySelector("#acct-fixbox").hidden = false; el.querySelector("#acct-name").focus(); };
     el.querySelector("#acct-send").onclick = async () => {
       const r = await fixName(el.querySelector("#acct-name").value);
@@ -230,7 +281,7 @@
   }
 
   window.Account = {
-    state, device, ready, redeem, confirmName, fixName, logout, linkTelegram, pull, get, put, devices, removeDevice, mountDevices,
+    state, device, ready, redeem, confirmName, fixName, setName, logout, linkTelegram, pull, get, put, devices, removeDevice, mountDevices,
     mountLogin, mountNameCheck, on: (f) => { subs.add(f); return () => subs.delete(f); },
     token: () => (state.session ? state.session.access_token : null),   // للمساعد لما تنفتح البوابة
   };
