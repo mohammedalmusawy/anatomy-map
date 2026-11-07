@@ -1,6 +1,7 @@
 // 🎓 تبويب «الطلاب» بلوحة الإدارة (29/10/2026) — جاهز ومو مربوط بـ admin.js بعد.
 // 70 (مسودة): طلبات الكود من البوت انشالت · أجهزة كل طالب (نوعها + أول وآخر ظهور) · ♻️ صار «سجّل خروج من كل الأجهزة».
 // 73 (مسودة): ➕ أكواد جملة (حتى 600) بلا أسماء + تصدير على جهازك بس (نسخ · PDF · Excel · صور PNG + ZIP).
+// 74 (مسودة): 📋 قائمة الطلاب (رفع Excel/CSV + بوت توزيع الأكواد) — الوحدة تتحمّل وقت الضغط بس (admin-roster.js + roster-parse.js).
 // الربط بعدين (بعد «وافقت»): بـ admin.js ← tabs.students = "🎓 الطلاب" ← AdminStudents.mount(pane, sb).
 // كل شي يمر بدالة students-admin (is_admin بالسيرفر). الأكواد تنعرض من التشفير، وما تنحفظ بالمتصفح.
 (function () {
@@ -22,11 +23,17 @@
     const sc = document.createElement("script"); sc.src = EXP; sc.onload = () => ok(window.CodesExport); sc.onerror = () => { expP = null; no(new Error("load")); }; document.head.appendChild(sc);
   }));
   const MAX_TOTAL = 600, PER_REQ = 100;
+  // 74: وحدة قائمة الطلاب (تنحمّل وقت الضغط بس، نفس نسخة هذا الملف ?v=)
+  const loadScript = (name) => new Promise((ok, no) => {
+    const sc = document.createElement("script"); sc.src = SRC_.replace(/admin-students(\.min)?\.js/, name); sc.onload = ok; sc.onerror = () => no(new Error("load " + name)); document.head.appendChild(sc);
+  });
+  let rosterP = null;
+  const loadRoster = () => window.AdminRoster && window.RosterParse ? Promise.resolve() : (rosterP ??= Promise.all([loadScript("roster-parse.js"), loadScript("admin-roster.js")]).catch((e) => { rosterP = null; throw e; }));
 
   const CSS_ID = "st73-css";
   if (!document.getElementById(CSS_ID)) {
     const el = document.createElement("style"); el.id = CSS_ID;
-    el.textContent = `#admin .st-bulk{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 18px}
+    el.textContent = `#admin .st-rs h3{margin:0 0 4px}#admin .st-rs{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 18px}#admin .st-bulk{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 18px}
 #admin .st-bulk h3{margin:0 0 4px}#admin .st-row{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:8px 0}
 #admin .st-row label{display:grid;gap:4px;font-size:var(--t-sm,.9rem);color:var(--muted)}
 #admin .st-row select,#admin .st-row input{min-height:44px;min-width:88px;padding:0 10px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit}
@@ -72,6 +79,12 @@
           <div id="st-imgs"></div>
         </div>
         <p class="hint">🔒 الملفات تنحفظ بجهازك بس — ما ينرفع شي للموقع ولا للقناة.</p>
+      </section>
+      <section class="st-rs" aria-labelledby="rs-h">
+        <h3 id="rs-h">📋 قائمة الطلاب</h3>
+        <p class="hint">ارفع قائمة الطلاب مرة وحدة (من Excel)، والبوت يوزّع الأكواد عليهم: الطالب يكتب اسمه ورقمه الجامعي ويستلم كوده.</p>
+        <button class="btn ghost" id="rs-open" type="button" aria-expanded="false">افتح القائمة</button>
+        <div id="rs-box" hidden></div>
       </section>
       <h3>أسماء ثلاثية</h3>
       <p class="hint">ألصق الأسماء الثلاثية (كل اسم بسطر) ← كود قصير لكل طالب. الاسم المكرر (حتى بفرق أ/ا أو ة/ه) ما ينسواله كود ثاني.</p>
@@ -162,6 +175,17 @@
       $("#st-exp").scrollIntoView({ block: "nearest" });
     };
     $("#st-filter").onchange = () => list();
+    $("#rs-open").onclick = async (ev) => {   // 74: القائمة تتحمّل هنا بس
+      const b = ev.currentTarget, box = $("#rs-box");
+      if (!box.hidden) { box.hidden = true; b.textContent = "افتح القائمة"; b.setAttribute("aria-expanded", "false"); return; }
+      if (!box.dataset.ready) {
+        b.disabled = true;
+        try { await loadRoster(); window.AdminRoster.mount(box, api, { copy: async (s) => { await navigator.clipboard.writeText(s); } }); box.dataset.ready = "1"; }
+        catch (e) { b.disabled = false; b.textContent = "ما انفتحت، جرّب مرة ثانية"; return; }
+        b.disabled = false;
+      }
+      box.hidden = false; b.textContent = "سكّر القائمة"; b.setAttribute("aria-expanded", "true");
+    };
 
     $("#st-csv").onclick = async () => {
       const r = await api({ action: "export_csv" });
