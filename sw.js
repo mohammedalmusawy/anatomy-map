@@ -11,7 +11,7 @@
 //   anatomy-img-v1     صور: من الكاش أول، حد IMG_MAX.
 //   anatomy-offline-v1 «احفظ المحاضرة بلا نت» (رسالة warm) — ما يتقلّم وحده.
 //   audio-v1           الصوت (نفس اسم sw.js الحالي حتى ما يضيع المحفوظ عند الطلاب).
-const VERSION = "20261108172046";
+const VERSION = "20261108194546";
 const P = "anatomy-";
 const SHELL = P + "shell-" + VERSION, ASSETS = P + "assets-v2", PAGES = P + "pages-v2", DATA = P + "data-v2",
   IMG = P + "img-v1", OFFLINE = P + "offline-v1", FONTS = P + "fonts-v1", AUDIO = "audio-v1";
