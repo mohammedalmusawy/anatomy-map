@@ -1,5 +1,5 @@
 // 🛰️ sw.js v2 (انطبق 29/10/2026 من sw-v2.js بعد مراجعة مستقلة؛ القديم بـ sw.js.bak-20261029-perf).
-// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261107134334 برقم البناء.
+// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261108112223 برقم البناء.
 // الهدف: أول فتح سريع، وكل صفحة دراسة انفتحت مرة تشتغل بلا نت، وأي تعديل يوصل بسرعة.
 //
 // ⚠️ كل الكاشات تبدي بـ "anatomy-" (أو dars-/audio-v1 القديمة): mohammedalmusawy.github.io أصل مشترك ويّا مواقع ثانية
@@ -11,7 +11,7 @@
 //   anatomy-img-v1     صور: من الكاش أول، حد IMG_MAX.
 //   anatomy-offline-v1 «احفظ المحاضرة بلا نت» (رسالة warm) — ما يتقلّم وحده.
 //   audio-v1           الصوت (نفس اسم sw.js الحالي حتى ما يضيع المحفوظ عند الطلاب).
-const VERSION = "20261107134334";
+const VERSION = "20261108112223";
 const P = "anatomy-";
 const SHELL = P + "shell-" + VERSION, ASSETS = P + "assets-v2", PAGES = P + "pages-v2", DATA = P + "data-v2",
   IMG = P + "img-v1", OFFLINE = P + "offline-v1", FONTS = P + "fonts-v1", AUDIO = "audio-v1";
@@ -22,7 +22,7 @@ const PAGES_MAX = 150, IMG_MAX = 1200, ASSETS_MAX = 120, NET_TIMEOUT = 2500, NAV
 const BASE = new URL(self.registration.scope).pathname;
 // الأساس: الرئيسية + ملفات الشكل والسكربت الأساسية (site.write_sw يحط قائمتها بـ ?v=<بصمة المحتوى>، فالملف اللي ما تغيّر
 // ما ينزل من جديد) + الخطوط بكاش ثابت FONTS (ما ينمسح مع كل نسخة).
-const CORE = ["assets/app.min.css?v=2cadcf80d6", "assets/cloud-config.min.js?v=9a2ec3122d", "assets/net.min.js?v=b40858af4b", "assets/cloud.min.js?v=562854865e", "assets/tools.min.js?v=f9bbbe06fe", "assets/voice.min.js?v=a36331dc76", "assets/listen.min.js?v=e91ace7626", "assets/nextexam.min.js?v=e71b31c7a6", "assets/quiz.min.js?v=e28fb792a7", "assets/slides.min.js?v=ddc847cbc9", "assets/calm.min.css?v=bcb33de83c", "assets/calm.min.js?v=e7277fff7c", "assets/lang.min.css?v=9746e9d285", "assets/lang.min.js?v=c3b1bb77b4", "assets/staffdoor.min.js?v=891c6b84f4", "lessons/", "learn/", "offline.html", "manifest.webmanifest", "assets/icon-192.png",
+const CORE = ["assets/app.min.css?v=d3d1a5430f", "assets/cloud-config.min.js?v=9a2ec3122d", "assets/net.min.js?v=b40858af4b", "assets/cloud.min.js?v=562854865e", "assets/tools.min.js?v=f9bbbe06fe", "assets/voice.min.js?v=a36331dc76", "assets/listen.min.js?v=e91ace7626", "assets/nextexam.min.js?v=e71b31c7a6", "assets/quiz.min.js?v=fb84803553", "assets/slides.min.js?v=ddc847cbc9", "assets/calm.min.css?v=4ec15944b5", "assets/calm.min.js?v=e7277fff7c", "assets/lang.min.css?v=9746e9d285", "assets/lang.min.js?v=c3b1bb77b4", "assets/staffdoor.min.js?v=891c6b84f4", "lessons/", "learn/", "offline.html", "manifest.webmanifest", "assets/icon-192.png",
   "assets/fonts/cairo-600-800.woff2?v=1", "assets/fonts/plex-arabic-400.woff2?v=1", "assets/fonts/plex-arabic-500.woff2?v=1"];
 const SECTIONS = ["lessons", "quiz", "learn", "atlas", "devices", "contrast", "terms", "search", "assistant", "exams", "study", "thanks",
   "offline.html", "دروس", "اختبار", "تعلم", "أطلس",
