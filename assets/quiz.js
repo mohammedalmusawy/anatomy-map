@@ -41,6 +41,8 @@
     $("bar").style.width = `${(pos / round.length) * 100}%`;
     $("qen").classList.add("noterm");   // 🎧 المشغّل الموحّد (29/10): مصطلحات السؤال ما تتعلّم قبل الجواب (حتى البطاقة ما تكشف الجواب)
     $("qen").textContent = q.q_en;
+    document.querySelectorAll("#play .xbadge").forEach((f) => f.remove());   // (8/11) سؤال «إضافي»: شارة صغيرة فوق السؤال
+    if (q.extra) $("qen").insertAdjacentHTML("beforebegin", '<div class="xbadge">إضافي · Extra</div>');
     $("qar").textContent = q.q_ar;
     document.querySelectorAll("#play .qimg").forEach((f) => f.remove());
     if (q.img && !q.img.after) $("opts").insertAdjacentHTML("beforebegin", qimg(q.img));
