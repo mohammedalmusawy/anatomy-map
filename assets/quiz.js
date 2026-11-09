@@ -23,6 +23,13 @@
     return a;
   };
 
+  // (9/11) مكتبة المراجعة: ?only=extra يفلتر أسئلة «إضافي» بس (إذا ماكو إضافي ← كل الأسئلة). بدونه السلوك مثل قبل.
+  const onlyExtra = /[?&]only=extra(?:&|$)/.test(location.search);
+  const pool = () => { const x = data.questions.filter((q) => q.extra); return onlyExtra && x.length ? x : data.questions; };
+  if (onlyExtra && data.questions.some((q) => q.extra)) {   // سطر واضح بوضع «إضافي بس» + رابط يرجّع كل الأسئلة (نفس الصفحة بدون الباراميتر)
+    const play = document.getElementById("play");
+    if (play) play.insertAdjacentHTML("beforebegin", `<p class="xonly-note" role="status" style="margin:0 0 12px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--accent-soft);font-size:.9rem;line-height:1.7">أسئلة إضافية بس · <a href="${esc(location.pathname)}" style="font-weight:700">اعرض الكل</a></p>`);
+  }
   let round = [], pos = 0, wrong = [], wrongInfo = [];   // wrongInfo: {q, picked} لملخص الأخطاء بالنهاية (76)
 
   function start(questions) {
@@ -128,6 +135,6 @@
 
   $("next").addEventListener("click", () => (pos < round.length - 1 ? (pos++, show()) : finish()));
   $("retry-wrong").addEventListener("click", () => start(wrong));
-  $("retry-all").addEventListener("click", () => start(data.questions));
-  if (data.questions.length) start(data.questions);
+  $("retry-all").addEventListener("click", () => start(pool()));
+  if (data.questions.length) start(pool());
 })();
