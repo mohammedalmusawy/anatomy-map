@@ -106,15 +106,15 @@
      "title_en": "Practical Lecture 3: Pelvis Radiography",
      "kind": "practical",
      "num": 3,
-     "readers_week": 59
+     "readers_week": 46
     },
     {
-     "lecture_id": "radiography_p02",
-     "title_ar": "جودة الصورة وعوامل التعرّض",
-     "title_en": "Practical Lecture 2: Image Quality, Exposure Factors, Brightness, Contrast, Resolution, Distortion and Noise",
-     "kind": "practical",
-     "num": 2,
-     "readers_week": 46
+     "lecture_id": "radiography_t03",
+     "title_ar": "تصوير الحوض",
+     "title_en": "Pelvis Radiography",
+     "kind": "theory",
+     "num": 3,
+     "readers_week": 44
     },
     {
      "lecture_id": "radiography_t02",
@@ -122,7 +122,7 @@
      "title_en": "Image Quality, Exposure Factors, Brightness, Contrast, Resolution, Distortion and Noise",
      "kind": "theory",
      "num": 2,
-     "readers_week": 44
+     "readers_week": 43
     }
    ]
   },
@@ -131,20 +131,20 @@
    "subject_ar": "الوقاية",
    "items": [
     {
-     "lecture_id": "protection_t02",
-     "title_ar": "وحدات قياس الإشعاع",
-     "title_en": "Radiation Measurement Units & International SI Units",
+     "lecture_id": "protection_t03",
+     "title_ar": "مبادئ الوقاية من الإشعاع وحدود الجرعة",
+     "title_en": "Principles of Radiological Protection & Dose Limits",
      "kind": "theory",
-     "num": 2,
+     "num": 3,
      "readers_week": 69
     },
     {
-     "lecture_id": "protection_p03",
-     "title_ar": "مبادئ الوقاية من الإشعاع",
-     "title_en": "The Principles of Radiological Protection",
-     "kind": "practical",
-     "num": 3,
-     "readers_week": 56
+     "lecture_id": "protection_t01",
+     "title_ar": "تصنيف الإشعاع المؤين ومصادره",
+     "title_en": "Classification of Ionizing Radiation, Sources of Ionizing Radiation & Comparison of Radiation Doses",
+     "kind": "theory",
+     "num": 1,
+     "readers_week": 59
     },
     {
      "lecture_id": "protection_p04",
@@ -152,7 +152,7 @@
      "title_en": "Dose Limits",
      "kind": "practical",
      "num": 4,
-     "readers_week": 52
+     "readers_week": 56
     }
    ]
   },
@@ -161,28 +161,28 @@
    "subject_ar": "الفحوصات",
    "items": [
     {
-     "lecture_id": "examinations_t02",
-     "title_ar": "طرق تصوير الجهاز الهضمي",
-     "title_en": "Methods of Imaging the GIT",
-     "kind": "theory",
-     "num": 2,
-     "readers_week": 71
-    },
-    {
      "lecture_id": "examinations_t03",
      "title_ar": "بلع ووجبة التباين",
      "title_en": "Lecture 3: Contrast Swallow/ Meal",
      "kind": "theory",
      "num": 3,
+     "readers_week": 71
+    },
+    {
+     "lecture_id": "examinations_t04",
+     "title_ar": "متابعة مرور التباين",
+     "title_en": "Lecture 4: Contrast Follow Through",
+     "kind": "theory",
+     "num": 4,
      "readers_week": 64
     },
     {
-     "lecture_id": "examinations_p01",
+     "lecture_id": "examinations_t01",
      "title_ar": "مواد التباين",
-     "title_en": "Contrast materials",
-     "kind": "practical",
+     "title_en": "Lecture 1: CONTRAST AGENTS",
+     "kind": "theory",
      "num": 1,
-     "readers_week": 46
+     "readers_week": 52
     }
    ]
   },
@@ -196,7 +196,7 @@
      "title_en": "Introduction to Computed Tomography & Limitations of Conventional Radiography",
      "kind": "practical",
      "num": 1,
-     "readers_week": 32
+     "readers_week": 28
     }
    ]
   },
@@ -205,10 +205,18 @@
    "subject_ar": "الأجهزة",
    "items": [
     {
-     "lecture_id": "equipment_t02",
-     "title_ar": "مولّدات الجهد العالي",
-     "title_en": "High Voltage Generators",
+     "lecture_id": "equipment_t03",
+     "title_ar": "أنبوب الأشعة السينية",
+     "title_en": "The X-Ray Tube",
      "kind": "theory",
+     "num": 3,
+     "readers_week": 68
+    },
+    {
+     "lecture_id": "equipment_p02",
+     "title_ar": "أنبوب الأشعة السينية (التجربة 3)",
+     "title_en": "X-ray Tube — Third Experiment in Practice",
+     "kind": "practical",
      "num": 2,
      "readers_week": 68
     },
@@ -218,14 +226,6 @@
      "title_en": "X-Ray Machine System — Experiments 1 & 2 in Practice",
      "kind": "practical",
      "num": 1,
-     "readers_week": 68
-    },
-    {
-     "lecture_id": "equipment_t04",
-     "title_ar": "الفيلم الشعاعي والشاشات المقوّية والكاسيت وتحميض الصورة الكامنة",
-     "title_en": "Film, Intensifying Screens, Cassette & Processing the Latent Image",
-     "kind": "theory",
-     "num": 4,
      "readers_week": 61
     }
    ]
@@ -235,28 +235,28 @@
    "subject_ar": "الفيزياء",
    "items": [
     {
-     "lecture_id": "physics_p02",
-     "title_ar": "أنبوب الأشعة والمحوّلة والمقوّم والمولّد",
-     "title_en": "X-ray Tube, Transformer, Rectifiers & X-ray Generator — Second Experiment in Practice",
-     "kind": "practical",
-     "num": 2,
-     "readers_week": 61
-    },
-    {
      "lecture_id": "physics_t01",
      "title_ar": "مقدمة في الإشعاع",
      "title_en": "Introduction",
      "kind": "theory",
      "num": 1,
-     "readers_week": 54
+     "readers_week": 61
     },
     {
-     "lecture_id": "physics_p01",
-     "title_ar": "مقدمة في الإشعاع وأنواعه",
-     "title_en": "Conventional Radiological Equipment Technology — First Experiment in practice: Introduction",
+     "lecture_id": "physics_p03",
+     "title_ar": "محدِّدات أنبوب الأشعة السينية",
+     "title_en": "Experiment (3): Limitation of the x-ray tube (Line focus, Rotation anode tube and Heat rating)",
      "kind": "practical",
-     "num": 1,
-     "readers_week": 52
+     "num": 3,
+     "readers_week": 61
+    },
+    {
+     "lecture_id": "physics_t02",
+     "title_ar": "أنبوب الأشعة والمولّد",
+     "title_en": "X-ray Tube & Generator",
+     "kind": "theory",
+     "num": 2,
+     "readers_week": 54
     }
    ]
   },
@@ -270,14 +270,6 @@
      "title_en": "Microsoft Excel 2010",
      "kind": "practical",
      "num": 1,
-     "readers_week": 66
-    },
-    {
-     "lecture_id": "computer_t04",
-     "title_ar": "الذكاء الاصطناعي والمجتمع والأخلاقيات",
-     "title_en": "Artificial Intelligence, Society and Ethics",
-     "kind": "theory",
-     "num": 4,
      "readers_week": 50
     },
     {
@@ -286,6 +278,14 @@
      "title_en": "The Concept of Artificial Intelligence",
      "kind": "theory",
      "num": 1,
+     "readers_week": 45
+    },
+    {
+     "lecture_id": "computer_t02",
+     "title_ar": "الذكاء الاصطناعي في الهواتف الذكية",
+     "title_en": "The Role of AI in Modern Smartphones",
+     "kind": "theory",
+     "num": 2,
      "readers_week": 37
     }
    ]
@@ -300,85 +300,85 @@
      "title_en": "Crimes of the Baath Regime in Iraq — Summary 1",
      "kind": "theory",
      "num": 1,
-     "readers_week": 32
+     "readers_week": 66
     }
    ]
   }
  ],
  "hard_topics": [
   {
-   "topic_en": "Planes of the Body",
-   "topic_ar": "مستويات الجسم",
-   "lecture_id": "radiography_t01",
-   "subject_ar": "التصوير",
+   "topic_en": "Intensifying Screens & Screen Construction",
+   "topic_ar": "الشاشات المقوّية وتركيبها",
+   "lecture_id": "equipment_t04",
+   "subject_ar": "الأجهزة",
    "error_rate": 0.56,
    "attempts": 60
   },
   {
-   "topic_en": "Suggested Questions",
-   "topic_ar": "أسئلة مقترحة",
-   "lecture_id": "computer_t01",
-   "subject_ar": "الحاسوب",
-   "error_rate": 0.56,
-   "attempts": 77
-  },
-  {
-   "topic_en": "Advantages & Disadvantages of CT",
-   "topic_ar": "مزايا المفراس وعيوبه",
-   "lecture_id": "ct_p01",
-   "subject_ar": "المفراس",
+   "topic_en": "INDICATIONS",
+   "topic_ar": "الدواعي والموانع",
+   "lecture_id": "examinations_t04",
+   "subject_ar": "الفحوصات",
    "error_rate": 0.54,
    "attempts": 71
   },
   {
-   "topic_en": "Dose Limits for Tissues and Organs",
-   "topic_ar": "حدود الجرعة للأنسجة والأعضاء",
-   "lecture_id": "protection_t04",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.49,
-   "attempts": 50
+   "topic_en": "5. Posterior oblique Pelvis–acetabulum (Judet method)",
+   "topic_ar": "5- الإسقاط المائل الخلفي للحوض – الحُقّ (طريقة جوديه)",
+   "lecture_id": "radiography_p03",
+   "subject_ar": "التصوير",
+   "error_rate": 0.47,
+   "attempts": 62
   },
   {
-   "topic_en": "Spot exposures",
-   "topic_ar": "الصور الموضعية",
-   "lecture_id": "examinations_t03",
-   "subject_ar": "الفحوصات",
+   "topic_en": "Non-ionizing Radiation",
+   "topic_ar": "الإشعاع غير المؤيِّن",
+   "lecture_id": "protection_p01",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.43,
+   "attempts": 41
+  },
+  {
+   "topic_en": "X-Ray Machine System",
+   "topic_ar": "منظومة جهاز الأشعة السينية",
+   "lecture_id": "equipment_t01",
+   "subject_ar": "الأجهزة",
    "error_rate": 0.42,
-   "attempts": 84
+   "attempts": 94
   }
  ],
  "missed_questions": [
   {
-   "q_en": "Dose limits are typically expressed in terms of:",
-   "q_ar": "يُعبَّر عن حدود الجرعة عادةً بـ:",
-   "lecture_id": "protection_t04",
+   "q_en": "The approximate dose of a chest X-ray is:",
+   "q_ar": "الجرعة التقريبية لصورة الصدر الشعاعية هي:",
+   "lecture_id": "protection_p01",
    "subject_ar": "الوقاية",
-   "error_rate": 0.65,
-   "attempts": 13
+   "error_rate": 0.64,
+   "attempts": 15
   },
   {
-   "q_en": "A disadvantage of single contrast study is:",
-   "q_ar": "من عيوب دراسة التباين المفرد:",
-   "lecture_id": "examinations_t03",
-   "subject_ar": "الفحوصات",
-   "error_rate": 0.62,
-   "attempts": 18
-  },
-  {
-   "q_en": "If the focusing cup lost its negative charge, what would happen to the electron stream travelling to the anode?",
-   "q_ar": "إذا فقد كأس التركيز شحنته السالبة، فماذا يحدث لتيار الإلكترونات المتجه نحو الأنود؟",
-   "lecture_id": "equipment_t03",
+   "q_en": "During busy hours, the hospital supply to the X-ray room drops from 220 V to about 205 V. Which device keeps the X-ray output consistent?",
+   "q_ar": "في ساعات الذروة ينخفض جهد تغذية المستشفى لغرفة الأشعة من 220 V إلى نحو 205 V. أيّ جهاز يحافظ على ثبات إنتاج الأشعة؟",
+   "lecture_id": "equipment_t01",
    "subject_ar": "الأجهزة",
    "error_rate": 0.56,
    "attempts": 39
   },
   {
-   "q_en": "",
-   "q_ar": "شبّهت المحاضرة الكمبيوتر الذكي {{AI}} بـ:",
-   "lecture_id": "computer_t01",
-   "subject_ar": "الحاسوب",
-   "error_rate": 0.51,
-   "attempts": 30
+   "q_en": "A clinical indication of the inlet projection is assessment of pelvic trauma for:",
+   "q_ar": "من دواعي إسقاط المدخل تقييم إصابات الحوض من حيث:",
+   "lecture_id": "radiography_p03",
+   "subject_ar": "التصوير",
+   "error_rate": 0.5,
+   "attempts": 51
+  },
+  {
+   "q_en": "The best position to demonstrate the ileocecal junction is:",
+   "q_ar": "أفضل وضعية لإظهار الوصل اللفائفي الأعوري:",
+   "lecture_id": "examinations_t04",
+   "subject_ar": "الفحوصات",
+   "error_rate": 0.44,
+   "attempts": 33
   }
  ],
  "exam_period": {
