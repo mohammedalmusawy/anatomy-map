@@ -101,28 +101,28 @@
    "subject_ar": "التصوير",
    "items": [
     {
-     "lecture_id": "radiography_t01",
-     "title_ar": "المصطلحات الاتجاهية ومستويات الجسم والوضعيات",
-     "title_en": "Directional Terminology, Body Planes, Main Positions & Terms Related to Movements",
-     "kind": "theory",
-     "num": 1,
-     "readers_week": 50
-    },
-    {
-     "lecture_id": "radiography_t04",
-     "title_ar": "تصوير عظم الفخذ",
-     "title_en": "Femur Radiography",
-     "kind": "theory",
-     "num": 4,
-     "readers_week": 44
-    },
-    {
-     "lecture_id": "radiography_t03",
+     "lecture_id": "radiography_p03",
      "title_ar": "تصوير الحوض",
-     "title_en": "Pelvis Radiography",
-     "kind": "theory",
+     "title_en": "Practical Lecture 3: Pelvis Radiography",
+     "kind": "practical",
      "num": 3,
-     "readers_week": 43
+     "readers_week": 59
+    },
+    {
+     "lecture_id": "radiography_p02",
+     "title_ar": "جودة الصورة وعوامل التعرّض",
+     "title_en": "Practical Lecture 2: Image Quality, Exposure Factors, Brightness, Contrast, Resolution, Distortion and Noise",
+     "kind": "practical",
+     "num": 2,
+     "readers_week": 46
+    },
+    {
+     "lecture_id": "radiography_t02",
+     "title_ar": "جودة الصورة وعوامل التعرّض",
+     "title_en": "Image Quality, Exposure Factors, Brightness, Contrast, Resolution, Distortion and Noise",
+     "kind": "theory",
+     "num": 2,
+     "readers_week": 44
     }
    ]
   },
@@ -131,20 +131,12 @@
    "subject_ar": "الوقاية",
    "items": [
     {
-     "lecture_id": "protection_t04",
-     "title_ar": "حدود الجرعة",
-     "title_en": "Dose Limits",
-     "kind": "theory",
-     "num": 4,
-     "readers_week": 69
-    },
-    {
      "lecture_id": "protection_t02",
      "title_ar": "وحدات قياس الإشعاع",
      "title_en": "Radiation Measurement Units & International SI Units",
      "kind": "theory",
      "num": 2,
-     "readers_week": 59
+     "readers_week": 69
     },
     {
      "lecture_id": "protection_p03",
@@ -152,7 +144,15 @@
      "title_en": "The Principles of Radiological Protection",
      "kind": "practical",
      "num": 3,
-     "readers_week": 49
+     "readers_week": 56
+    },
+    {
+     "lecture_id": "protection_p04",
+     "title_ar": "حدود الجرعة",
+     "title_en": "Dose Limits",
+     "kind": "practical",
+     "num": 4,
+     "readers_week": 52
     }
    ]
   },
@@ -161,20 +161,12 @@
    "subject_ar": "الفحوصات",
    "items": [
     {
-     "lecture_id": "examinations_p01",
+     "lecture_id": "examinations_t01",
      "title_ar": "مواد التباين",
-     "title_en": "Contrast materials",
-     "kind": "practical",
+     "title_en": "Lecture 1: CONTRAST AGENTS",
+     "kind": "theory",
      "num": 1,
      "readers_week": 71
-    },
-    {
-     "lecture_id": "examinations_p02",
-     "title_ar": "بلع الباريوم",
-     "title_en": "Barium swallow",
-     "kind": "practical",
-     "num": 2,
-     "readers_week": 64
     },
     {
      "lecture_id": "examinations_t02",
@@ -182,7 +174,15 @@
      "title_en": "Methods of Imaging the GIT",
      "kind": "theory",
      "num": 2,
-     "readers_week": 56
+     "readers_week": 64
+    },
+    {
+     "lecture_id": "examinations_t04",
+     "title_ar": "متابعة مرور التباين",
+     "title_en": "Lecture 4: Contrast Follow Through",
+     "kind": "theory",
+     "num": 4,
+     "readers_week": 46
     }
    ]
   },
@@ -196,7 +196,7 @@
      "title_en": "Introduction to Computed Tomography & Limitations of Conventional Radiography",
      "kind": "practical",
      "num": 1,
-     "readers_week": 30
+     "readers_week": 45
     }
    ]
   },
@@ -205,28 +205,28 @@
    "subject_ar": "الأجهزة",
    "items": [
     {
-     "lecture_id": "equipment_p02",
-     "title_ar": "أنبوب الأشعة السينية (التجربة 3)",
-     "title_en": "X-ray Tube — Third Experiment in Practice",
-     "kind": "practical",
-     "num": 2,
-     "readers_week": 68
-    },
-    {
      "lecture_id": "equipment_t01",
      "title_ar": "منظومة جهاز الأشعة السينية ولوحة التحكم",
      "title_en": "X-Ray Machine System & the Operating Console",
      "kind": "theory",
      "num": 1,
-     "readers_week": 46
+     "readers_week": 68
     },
     {
-     "lecture_id": "equipment_p01",
-     "title_ar": "منظومة جهاز الأشعة السينية (التجربتان 1 و2)",
-     "title_en": "X-Ray Machine System — Experiments 1 & 2 in Practice",
-     "kind": "practical",
-     "num": 1,
-     "readers_week": 45
+     "lecture_id": "equipment_t04",
+     "title_ar": "الفيلم الشعاعي والشاشات المقوّية والكاسيت وتحميض الصورة الكامنة",
+     "title_en": "Film, Intensifying Screens, Cassette & Processing the Latent Image",
+     "kind": "theory",
+     "num": 4,
+     "readers_week": 68
+    },
+    {
+     "lecture_id": "equipment_t03",
+     "title_ar": "أنبوب الأشعة السينية",
+     "title_en": "The X-Ray Tube",
+     "kind": "theory",
+     "num": 3,
+     "readers_week": 61
     }
    ]
   },
@@ -235,28 +235,28 @@
    "subject_ar": "الفيزياء",
    "items": [
     {
-     "lecture_id": "physics_t04",
-     "title_ar": "تسخين أنبوب الأشعة وتبريده",
-     "title_en": "X-ray Tube Heating and Cooling",
-     "kind": "theory",
-     "num": 4,
-     "readers_week": 68
-    },
-    {
-     "lecture_id": "physics_t02",
-     "title_ar": "أنبوب الأشعة والمولّد",
-     "title_en": "X-ray Tube & Generator",
-     "kind": "theory",
-     "num": 2,
-     "readers_week": 61
-    },
-    {
      "lecture_id": "physics_p01",
      "title_ar": "مقدمة في الإشعاع وأنواعه",
      "title_en": "Conventional Radiological Equipment Technology — First Experiment in practice: Introduction",
      "kind": "practical",
      "num": 1,
      "readers_week": 61
+    },
+    {
+     "lecture_id": "physics_t04",
+     "title_ar": "تسخين أنبوب الأشعة وتبريده",
+     "title_en": "X-ray Tube Heating and Cooling",
+     "kind": "theory",
+     "num": 4,
+     "readers_week": 52
+    },
+    {
+     "lecture_id": "physics_t01",
+     "title_ar": "مقدمة في الإشعاع",
+     "title_en": "Introduction",
+     "kind": "theory",
+     "num": 1,
+     "readers_week": 51
     }
    ]
   },
@@ -265,12 +265,12 @@
    "subject_ar": "الحاسوب",
    "items": [
     {
-     "lecture_id": "computer_p01",
-     "title_ar": "برنامج مايكروسوفت إكسل",
-     "title_en": "Microsoft Excel 2010",
-     "kind": "practical",
-     "num": 1,
-     "readers_week": 61
+     "lecture_id": "computer_t04",
+     "title_ar": "الذكاء الاصطناعي والمجتمع والأخلاقيات",
+     "title_en": "Artificial Intelligence, Society and Ethics",
+     "kind": "theory",
+     "num": 4,
+     "readers_week": 66
     },
     {
      "lecture_id": "computer_t02",
@@ -278,7 +278,7 @@
      "title_en": "The Role of AI in Modern Smartphones",
      "kind": "theory",
      "num": 2,
-     "readers_week": 52
+     "readers_week": 50
     },
     {
      "lecture_id": "computer_t01",
@@ -286,7 +286,7 @@
      "title_en": "The Concept of Artificial Intelligence",
      "kind": "theory",
      "num": 1,
-     "readers_week": 30
+     "readers_week": 35
     }
    ]
   },
@@ -300,85 +300,85 @@
      "title_en": "Crimes of the Baath Regime in Iraq — Summary 1",
      "kind": "theory",
      "num": 1,
-     "readers_week": 45
+     "readers_week": 70
     }
    ]
   }
  ],
  "hard_topics": [
   {
-   "topic_en": "Outlines & Basic Design",
-   "topic_ar": "العناوين والتصميم الأساسي",
-   "lecture_id": "equipment_t03",
-   "subject_ar": "الأجهزة",
+   "topic_en": "Suggested Questions",
+   "topic_ar": "أسئلة مقترحة",
+   "lecture_id": "computer_t01",
+   "subject_ar": "الحاسوب",
    "error_rate": 0.56,
-   "attempts": 75
+   "attempts": 77
   },
   {
-   "topic_en": "The Maximum Permissible Public Dose",
-   "topic_ar": "الجرعة القصوى المسموح بها لعامة الناس",
+   "topic_en": "Dose Limits for Tissues and Organs",
+   "topic_ar": "حدود الجرعة للأنسجة والأعضاء",
    "lecture_id": "protection_t04",
    "subject_ar": "الوقاية",
-   "error_rate": 0.53,
-   "attempts": 74
+   "error_rate": 0.49,
+   "attempts": 50
   },
   {
-   "topic_en": "Committed Equivalent and Effective Dose",
-   "topic_ar": "الجرعة المكافئة والفعّالة الملتزَم بها",
-   "lecture_id": "protection_p02",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.51,
-   "attempts": 42
-  },
-  {
-   "topic_en": "Contrast",
-   "topic_ar": "مادة التباين",
-   "lecture_id": "examinations_p02",
+   "topic_en": "Gases & Double Contrast",
+   "topic_ar": "الغازات والتباين المزدوج",
+   "lecture_id": "examinations_t02",
    "subject_ar": "الفحوصات",
-   "error_rate": 0.51,
-   "attempts": 65
+   "error_rate": 0.42,
+   "attempts": 84
   },
   {
-   "topic_en": "Non-ionizing Radiation & Its Sources",
-   "topic_ar": "الإشعاع غير المؤيِّن ومصادره",
-   "lecture_id": "protection_t01",
-   "subject_ar": "الوقاية",
+   "topic_en": "Effect of Waveform on Radiation Output & Image Quality",
+   "topic_ar": "تأثير شكل الموجة",
+   "lecture_id": "equipment_t02",
+   "subject_ar": "الأجهزة",
    "error_rate": 0.42,
    "attempts": 44
+  },
+  {
+   "topic_en": "General Body Positions",
+   "topic_ar": "وضعيات الجسم العامة",
+   "lecture_id": "radiography_t01",
+   "subject_ar": "التصوير",
+   "error_rate": 0.4,
+   "attempts": 43
   }
  ],
  "missed_questions": [
   {
-   "q_en": "A smaller anode angle gives:",
-   "q_ar": "زاوية الأنود الأصغر تعطي:",
-   "lecture_id": "equipment_p02",
-   "subject_ar": "الأجهزة",
-   "error_rate": 0.61,
-   "attempts": 47
+   "q_en": "In the right-hand drawing of this figure, into which parts does the plane divide the body?",
+   "q_ar": "في الرسم الأيمن من هذا الشكل، إلى أيّ جزأين يقسم المستوى الجسم؟",
+   "lecture_id": "radiography_t01",
+   "subject_ar": "التصوير",
+   "error_rate": 0.65,
+   "attempts": 52
   },
   {
-   "q_en": "In this figure, \"body surface contamination\" is listed under which type of exposure?",
-   "q_ar": "في هذا الشكل، تحت أيّ نوع من التعرّض يرد «تلوّث سطح الجسم»؟",
+   "q_en": "Dose limits are typically expressed in terms of:",
+   "q_ar": "يُعبَّر عن حدود الجرعة عادةً بـ:",
    "lecture_id": "protection_t04",
    "subject_ar": "الوقاية",
-   "error_rate": 0.6,
+   "error_rate": 0.65,
+   "attempts": 13
+  },
+  {
+   "q_en": "On the left abdominal film, the arrows show bowel walls outlined by air on both sides. What does this finding indicate?",
+   "q_ar": "في صورة البطن اليسرى، تُظهر الأسهم جدران أمعاء يحدّدها الهواء من الجهتين. على ماذا تدل هذه الموجودة؟",
+   "lecture_id": "examinations_t02",
+   "subject_ar": "الفحوصات",
+   "error_rate": 0.62,
    "attempts": 18
   },
   {
-   "q_en": "Which group of views is used in the lecture?",
-   "q_ar": "أيّ مجموعة من المناظر مستعملة في المحاضرة؟",
+   "q_en": "In the lateral view, the detector is at:",
+   "q_ar": "في المنظر الجانبي، يكون الكاشف بزاوية:",
    "lecture_id": "examinations_p02",
    "subject_ar": "الفحوصات",
-   "error_rate": 0.57,
-   "attempts": 12
-  },
-  {
-   "q_en": "In the equivalent dose equation, WR is:",
-   "q_ar": "في معادلة الجرعة المكافئة، {{WR}} هو:",
-   "lecture_id": "protection_p02",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.55,
-   "attempts": 53
+   "error_rate": 0.61,
+   "attempts": 47
   }
  ],
  "exam_period": {

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<script>try{var v=JSON.parse(localStorage.getItem("t:theme"));if(v==="dark"||v==="light")document.documentElement.dataset.theme=v}catch(e){}</script>
+<meta name="theme-color" content="#4B5A8A">
+<title>قراءة الملف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F2EA;--card:#FCFAF5;--ink:#2B2F38;--muted:#636874;--line:#E7E0D3;--brand:#4B5A8A;--brand-ink:#FCFAF5;--soft:#ECEDF4}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1D2027;--card:#252932;--ink:#ECE7DD;--muted:#A9ACB5;--line:#363B47;--brand:#A9B6E3;--brand-ink:#1D2027;--soft:#2D3346}}
+:root[data-theme="dark"]{--bg:#1D2027;--card:#252932;--ink:#ECE7DD;--muted:#A9ACB5;--line:#363B47;--brand:#A9B6E3;--brand-ink:#1D2027;--soft:#2D3346}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:500 16px/1.7 "IBM Plex Sans Arabic",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+.bar{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:8px max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));padding-top:max(8px,env(safe-area-inset-top));display:flex;align-items:center;gap:8px}
+.bar h1{flex:1;min-width:0;margin:0;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;min-width:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 15px "IBM Plex Sans Arabic",system-ui,sans-serif;text-decoration:none;cursor:pointer}
+.btn.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.btn:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+#pages{max-width:920px;margin:0 auto;padding:12px max(8px,env(safe-area-inset-right)) 80px max(8px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:10px;align-items:center}
+.pg{min-height:200px;width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;position:relative}
+.pg canvas{display:block;width:100%;height:auto}
+.st{padding:40px 16px;text-align:center;color:var(--muted)}
+.st .btn{margin:6px}
+.cnt{position:fixed;bottom:max(14px,env(safe-area-inset-bottom));inset-inline-start:14px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--muted);direction:ltr;z-index:5}
+</style></head><body>
+<div class="bar">
+  <a class="btn" id="back" href="javascript:history.back()" aria-label="رجوع">→ رجوع</a>
+  <h1 id="ttl">قراءة الملف</h1>
+  <a class="btn pri" id="dl" href="#" download>⬇ تحميل</a>
+</div>
+<div id="pages"><div class="st" id="msg">جارٍ فتح الملف…</div></div>
+<div class="cnt" id="cnt" hidden></div>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search), f=q.get("f")||"", n=(q.get("n")||"").slice(0,200), t=(q.get("t")||"").slice(0,200);
+  var $=function(i){return document.getElementById(i)};
+  // أمان: ملف PDF من نفس الموقع فقط (مسار نسبي، بلا .. ولا بروتوكول ولا //)
+  var ok=/^[^:?#\\]+\.pdf$/i.test(f)&&f.indexOf("..")<0&&f.charAt(0)!=="/"&&f.indexOf("//")<0;
+  var base=location.pathname.replace(/[^\/]*$/,"").replace(/view\/$/,"");
+  var url=ok?base+f.split("/").map(encodeURIComponent).join("/"):"";
+  $("ttl").textContent=t||n||"قراءة الملف";
+  document.title=(t||n||"قراءة الملف");
+  var dl=$("dl");
+  if(!ok){ $("msg").textContent="رابط الملف غير صالح."; dl.hidden=true; return; }
+  dl.href=url; dl.setAttribute("download",n||f.split("/").pop());
+  var back=$("back");
+  if(history.length<2){ back.setAttribute("href",base+"lessons/"); }
+  function fallback(why){
+    $("pages").innerHTML="";
+    var d=document.createElement("div"); d.className="st";
+    d.appendChild(document.createTextNode(why+" "));
+    var a=document.createElement("a"); a.className="btn pri"; a.href=url; a.target="_blank"; a.rel="noopener"; a.textContent="افتح الملف بالمتصفح";
+    d.appendChild(a); $("pages").appendChild(d);
+  }
+  var CDN="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+  function load(src,sri){return new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.integrity=sri;s.crossOrigin="anonymous";s.onload=res;s.onerror=rej;document.head.appendChild(s);setTimeout(function(){rej(new Error("timeout"))},15000);});}
+  var SRI_JS="sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e",SRI_WK="SnzOobpRMLXZ52iJvZm/C0fYw0OQemTXzTjIsdsfMcrCtCEe9qgzxTd3RSklO5x2";
+  function sha384(buf){return crypto.subtle.digest("SHA-384",buf).then(function(d){var b="";new Uint8Array(d).forEach(function(x){b+=String.fromCharCode(x)});return btoa(b)})}
+  load(CDN+"pdf.min.js",SRI_JS).then(function(){
+    return fetch(CDN+"pdf.worker.min.js").then(function(r){return r.arrayBuffer()}).then(function(buf){
+      return sha384(buf).then(function(h){
+        if(h!==SRI_WK) throw new Error("integrity");
+        pdfjsLib.GlobalWorkerOptions.workerSrc=URL.createObjectURL(new Blob([buf],{type:"text/javascript"}));
+      });
+    });
+  }).then(function(){ return pdfjsLib.getDocument({url:url,disableRange:true,disableStream:true,isEvalSupported:false}).promise; }).then(function(pdf){
+    var box=$("pages"); box.innerHTML="";
+    var N=pdf.numPages, els=[], rendered={}, dpr=Math.min(Math.max(window.devicePixelRatio||1,1.5),2);
+    return pdf.getPage(1).then(function(p1){
+      var v1=p1.getViewport({scale:1}), ratio=v1.height/v1.width;
+      for(var i=1;i<=N;i++){
+        var d=document.createElement("div"); d.className="pg"; d.dataset.n=i; d.style.aspectRatio=(1/ratio).toFixed(4);
+        d.setAttribute("aria-label","صفحة "+i); box.appendChild(d); els.push(d);
+      }
+      var cnt=$("cnt"); cnt.hidden=false; cnt.textContent="1 / "+N;
+      function render(d){
+        var i=+d.dataset.n; if(rendered[i])return; rendered[i]=1;
+        pdf.getPage(i).then(function(p){
+          var w=d.clientWidth||320, v=p.getViewport({scale:1}), sc=(w*dpr)/v.width;
+          var vp=p.getViewport({scale:sc}), c=document.createElement("canvas");
+          c.width=Math.floor(vp.width); c.height=Math.floor(vp.height);
+          d.style.aspectRatio=(v.width/v.height).toFixed(4);
+          return p.render({canvasContext:c.getContext("2d"),viewport:vp}).promise.then(function(){ if(rendered[i]===1){d.innerHTML="";d.appendChild(c);} });
+        }).catch(function(){rendered[i]=0;});
+      }
+      function drop(d){var i=+d.dataset.n; if(rendered[i]){rendered[i]=0; var c=d.querySelector("canvas"); if(c){c.width=0;c.height=0;} d.innerHTML="";}}   // تحرير الذاكرة للصفحات البعيدة (آيفون)
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting)render(e.target); else drop(e.target); });},{rootMargin:"1200px 0px"});
+      els.forEach(function(d){io.observe(d)});
+      var io2=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting)cnt.textContent=e.target.dataset.n+" / "+N; });},{rootMargin:"-45% 0px -45% 0px"});
+      els.forEach(function(d){io2.observe(d)});
+    });
+  }).catch(function(){ fallback("تعذّر عرض الملف داخل الموقع."); });
+})();
+</script>
+</body></html>

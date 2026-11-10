@@ -88,6 +88,27 @@ h1 { font-size: 26px; line-height: 1.4; margin: 10px 0 4px; }
 .fb .ans { margin-top: 6px; font-weight: 600; }
 .fb .ans .en { display: block; text-align: left; }
 .fb .why { margin-top: 8px; color: var(--ink); }
+.fb.ok .ans, .fb.ok .why { font-weight: 500; }
+.opt .mk { flex: none; align-self: center; font-weight: 700; font-size: 18px; }
+.opt.right .mk { color: var(--ok); }
+.opt.wrong .mk { color: var(--bad); }
+/* 76: ملخص أخطائك بنهاية الاختبار */
+.mistakes { text-align: right; margin: 18px 0 8px; }
+.mistakes h2 { font-size: 18px; margin: 0 0 10px; }
+.mistakes h2 small { color: var(--muted); font-weight: 500; }
+.mistakes .allok { text-align: center; color: var(--ok); font-weight: 700; margin: 8px 0; }
+.mi { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; }
+.mi .en { display: block; direction: ltr; text-align: left; }
+.mi .mq .en { font-weight: 600; line-height: 1.5; }
+.mi .mq .ar { display: block; color: var(--muted); margin-top: 2px; }
+.mi .mq .n { float: inline-start; margin-inline-end: 8px; color: var(--muted); font-weight: 700; }
+.mi .mrow { margin-top: 8px; padding: 8px 10px; border-radius: 10px; font-size: 15px; }
+.mi .mrow.bad { background: var(--bad-soft); }
+.mi .mrow.good { background: var(--ok-soft); }
+.mi .mrow b { display: block; font-size: 13px; }
+.mi .mrow.bad b { color: var(--bad); }
+.mi .mrow.good b { color: var(--ok); }
+.mi .why { margin-top: 8px; color: var(--ink); }
 .next {
   margin-top: 16px;
   width: 100%; border: 0; border-radius: 16px; padding: 16px; font: 700 18px "IBM Plex Sans Arabic", system-ui, sans-serif;
@@ -478,3 +499,6 @@ h2, h3, .case h3 .en { font-weight: 700; }
 @media (max-width: 420px) { .sd-asw { border-radius: 16px; } }
 /* 72: أزرار صف الطالب (📋 🔗 💬) — هدف لمس ≥ 44px؛ 💬 رابط وكان 16×19 */
 .ib { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; text-decoration: none; }
+
+/* (8/11) شارة سؤال «إضافي» */
+.xbadge { display: inline-block; font-size: 12px; font-weight: 600; color: var(--muted); border: 1px solid var(--line, #d9e0ee); border-radius: 999px; padding: 2px 10px; margin-bottom: 6px; direction: rtl; }
