@@ -235,12 +235,12 @@
    "subject_ar": "الفيزياء",
    "items": [
     {
-     "lecture_id": "physics_t02",
-     "title_ar": "أنبوب الأشعة والمولّد",
-     "title_en": "X-ray Tube & Generator",
-     "kind": "theory",
-     "num": 2,
-     "readers_week": 61
+     "lecture_id": "physics_p03",
+     "title_ar": "محدِّدات أنبوب الأشعة السينية",
+     "title_en": "Experiment (3): Limitation of the x-ray tube (Line focus, Rotation anode tube and Heat rating)",
+     "kind": "practical",
+     "num": 3,
+     "readers_week": 66
     },
     {
      "lecture_id": "physics_t01",
@@ -248,14 +248,14 @@
      "title_en": "Introduction",
      "kind": "theory",
      "num": 1,
-     "readers_week": 52
+     "readers_week": 61
     },
     {
-     "lecture_id": "physics_p03",
-     "title_ar": "محدِّدات أنبوب الأشعة السينية",
-     "title_en": "Experiment (3): Limitation of the x-ray tube (Line focus, Rotation anode tube and Heat rating)",
+     "lecture_id": "physics_p02",
+     "title_ar": "أنبوب الأشعة والمحوّلة والمقوّم والمولّد",
+     "title_en": "X-ray Tube, Transformer, Rectifiers & X-ray Generator — Second Experiment in Practice",
      "kind": "practical",
-     "num": 3,
+     "num": 2,
      "readers_week": 50
     }
    ]
@@ -265,20 +265,12 @@
    "subject_ar": "الحاسوب",
    "items": [
     {
-     "lecture_id": "computer_t04",
-     "title_ar": "الذكاء الاصطناعي والمجتمع والأخلاقيات",
-     "title_en": "Artificial Intelligence, Society and Ethics",
+     "lecture_id": "computer_t02",
+     "title_ar": "الذكاء الاصطناعي في الهواتف الذكية",
+     "title_en": "The Role of AI in Modern Smartphones",
      "kind": "theory",
-     "num": 4,
+     "num": 2,
      "readers_week": 70
-    },
-    {
-     "lecture_id": "computer_t01",
-     "title_ar": "مفهوم الذكاء الاصطناعي",
-     "title_en": "The Concept of Artificial Intelligence",
-     "kind": "theory",
-     "num": 1,
-     "readers_week": 66
     },
     {
      "lecture_id": "computer_p01",
@@ -286,6 +278,14 @@
      "title_en": "Microsoft Excel 2010",
      "kind": "practical",
      "num": 1,
+     "readers_week": 68
+    },
+    {
+     "lecture_id": "computer_t04",
+     "title_ar": "الذكاء الاصطناعي والمجتمع والأخلاقيات",
+     "title_en": "Artificial Intelligence, Society and Ethics",
+     "kind": "theory",
+     "num": 4,
      "readers_week": 44
     }
    ]
@@ -300,7 +300,7 @@
      "title_en": "Crimes of the Baath Regime in Iraq — Summary 1",
      "kind": "theory",
      "num": 1,
-     "readers_week": 68
+     "readers_week": 48
     }
    ]
   }
@@ -315,70 +315,70 @@
    "attempts": 77
   },
   {
-   "topic_en": "Technique",
-   "topic_ar": "تقنية حقنة الأمعاء الدقيقة",
-   "lecture_id": "examinations_t04",
-   "subject_ar": "الفحوصات",
-   "error_rate": 0.53,
-   "attempts": 74
+   "topic_en": "Metatarsal Fractures",
+   "topic_ar": "كسور عظام المشط",
+   "lecture_id": "anatomy_p04",
+   "subject_ar": "التشريح",
+   "error_rate": 0.54,
+   "attempts": 71
   },
   {
-   "topic_en": "Exposure",
-   "topic_ar": "التعرّض",
-   "lecture_id": "protection_t02",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.51,
-   "attempts": 65
-  },
-  {
-   "topic_en": "The AI Agents Revolution",
-   "topic_ar": "ثورة الوكلاء الأذكياء المستقلين",
-   "lecture_id": "computer_t02",
+   "topic_en": "Suggested Questions",
+   "topic_ar": "أسئلة مقترحة",
+   "lecture_id": "computer_t04",
    "subject_ar": "الحاسوب",
    "error_rate": 0.49,
    "attempts": 50
   },
   {
-   "topic_en": "Limitations of Conventional Radiography",
-   "topic_ar": "حدود التصوير الشعاعي التقليدي",
+   "topic_en": "Suggested Questions",
+   "topic_ar": "أسئلة مقترحة",
+   "lecture_id": "computer_t02",
+   "subject_ar": "الحاسوب",
+   "error_rate": 0.46,
+   "attempts": 32
+  },
+  {
+   "topic_en": "Advantages & Disadvantages of CT",
+   "topic_ar": "مزايا المفراس وعيوبه",
    "lecture_id": "ct_p01",
    "subject_ar": "المفراس",
-   "error_rate": 0.38,
-   "attempts": 41
+   "error_rate": 0.42,
+   "attempts": 84
   }
  ],
  "missed_questions": [
   {
    "q_en": "",
-   "q_ar": "حسب المحاضرة، انتقلت الهواتف المحمولة من أدوات اتصال تقليدية إلى:",
-   "lecture_id": "computer_t02",
+   "q_ar": "من إيجابيات الأثر المجتمعي للذكاء الاصطناعي حسب المحاضرة:",
+   "lecture_id": "computer_t04",
    "subject_ar": "الحاسوب",
    "error_rate": 0.65,
    "attempts": 13
   },
   {
-   "q_en": "According to the lecture, suspected perforation is better evaluated by:",
-   "q_ar": "بحسب المحاضرة، الاشتباه بالانثقاب يُقيَّم بصورة أفضل بـ:",
-   "lecture_id": "examinations_t04",
-   "subject_ar": "الفحوصات",
-   "error_rate": 0.59,
-   "attempts": 35
+   "q_en": "Using the meaning of «Tomo» and «Graphy», a CT image is best described as:",
+   "q_ar": "بالاعتماد على معنى «Tomo» و«Graphy»، أفضل وصف لصورة المفراس هو:",
+   "lecture_id": "ct_p01",
+   "subject_ar": "المفراس",
+   "error_rate": 0.62,
+   "attempts": 18
   },
   {
-   "q_en": "A patient swallows a radioactive substance. The physicist wants the total equivalent dose that the thyroid alone will receive over the following years. Which quantity is this?",
-   "q_ar": "ابتلع مريض مادة مشعّة. يريد الفيزيائي مجموع الجرعة المكافئة التي ستتلقاها الغدة الدرقية وحدها خلال السنوات اللاحقة. ما هذه الكمية؟",
+   "q_en": "Which quantity is expressed in Gray (Gy)?",
+   "q_ar": "أي كمية يُعبَّر عنها بالغراي (Gy)؟",
    "lecture_id": "protection_t02",
    "subject_ar": "الوقاية",
-   "error_rate": 0.58,
-   "attempts": 52
+   "error_rate": 0.57,
+   "attempts": 32
   },
   {
-   "q_en": "What are the three regions of the foot on X-ray?",
-   "q_ar": "ما مناطق القدم الثلاث في الأشعة؟",
-   "lecture_id": "anatomy_p04",
-   "subject_ar": "التشريح",
-   "error_rate": 0.52,
-   "attempts": 51
+   "q_en": "",
+   "q_ar": "حسب جدول المقارنة، آلية اللقطة في التصوير التقليدي هي:",
+   "lecture_id": "computer_t02",
+   "subject_ar": "الحاسوب",
+   "error_rate": 0.51,
+   "attempts": 53
   }
  ],
  "exam_period": {
