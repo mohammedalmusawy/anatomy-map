@@ -265,20 +265,12 @@
    "subject_ar": "الحاسوب",
    "items": [
     {
-     "lecture_id": "computer_t02",
-     "title_ar": "الذكاء الاصطناعي في الهواتف الذكية",
-     "title_en": "The Role of AI in Modern Smartphones",
+     "lecture_id": "computer_t01",
+     "title_ar": "مفهوم الذكاء الاصطناعي",
+     "title_en": "The Concept of Artificial Intelligence",
      "kind": "theory",
-     "num": 2,
-     "readers_week": 70
-    },
-    {
-     "lecture_id": "computer_p01",
-     "title_ar": "برنامج مايكروسوفت إكسل",
-     "title_en": "Microsoft Excel 2010",
-     "kind": "practical",
      "num": 1,
-     "readers_week": 68
+     "readers_week": 70
     },
     {
      "lecture_id": "computer_t04",
@@ -286,7 +278,15 @@
      "title_en": "Artificial Intelligence, Society and Ethics",
      "kind": "theory",
      "num": 4,
-     "readers_week": 44
+     "readers_week": 68
+    },
+    {
+     "lecture_id": "computer_p01",
+     "title_ar": "برنامج مايكروسوفت إكسل",
+     "title_en": "Microsoft Excel 2010",
+     "kind": "practical",
+     "num": 1,
+     "readers_week": 48
     }
    ]
   },
@@ -300,7 +300,7 @@
      "title_en": "Crimes of the Baath Regime in Iraq — Summary 1",
      "kind": "theory",
      "num": 1,
-     "readers_week": 48
+     "readers_week": 51
     }
    ]
   }
@@ -315,14 +315,6 @@
    "attempts": 77
   },
   {
-   "topic_en": "Metatarsal Fractures",
-   "topic_ar": "كسور عظام المشط",
-   "lecture_id": "anatomy_p04",
-   "subject_ar": "التشريح",
-   "error_rate": 0.54,
-   "attempts": 71
-  },
-  {
    "topic_en": "Suggested Questions",
    "topic_ar": "أسئلة مقترحة",
    "lecture_id": "computer_t04",
@@ -331,23 +323,39 @@
    "attempts": 50
   },
   {
-   "topic_en": "Suggested Questions",
-   "topic_ar": "أسئلة مقترحة",
-   "lecture_id": "computer_t02",
-   "subject_ar": "الحاسوب",
-   "error_rate": 0.46,
-   "attempts": 32
-  },
-  {
-   "topic_en": "Advantages & Disadvantages of CT",
-   "topic_ar": "مزايا المفراس وعيوبه",
-   "lecture_id": "ct_p01",
-   "subject_ar": "المفراس",
+   "topic_en": "Metatarsal Fractures",
+   "topic_ar": "كسور عظام المشط",
+   "lecture_id": "anatomy_p04",
+   "subject_ar": "التشريح",
    "error_rate": 0.42,
    "attempts": 84
+  },
+  {
+   "topic_en": "Committed Equivalent and Effective Dose",
+   "topic_ar": "الجرعة المكافئة والفعّالة الملتزَم بها",
+   "lecture_id": "protection_t02",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.42,
+   "attempts": 44
+  },
+  {
+   "topic_en": "Function Library and Hyperlinks",
+   "topic_ar": "مكتبة الدوال والربط الفائق",
+   "lecture_id": "computer_p01",
+   "subject_ar": "الحاسوب",
+   "error_rate": 0.4,
+   "attempts": 43
   }
  ],
  "missed_questions": [
+  {
+   "q_en": "",
+   "q_ar": "التحقق من صحة البيانات {{Data Validation}} يعني:",
+   "lecture_id": "computer_p01",
+   "subject_ar": "الحاسوب",
+   "error_rate": 0.65,
+   "attempts": 52
+  },
   {
    "q_en": "",
    "q_ar": "من إيجابيات الأثر المجتمعي للذكاء الاصطناعي حسب المحاضرة:",
@@ -357,28 +365,20 @@
    "attempts": 13
   },
   {
-   "q_en": "Using the meaning of «Tomo» and «Graphy», a CT image is best described as:",
-   "q_ar": "بالاعتماد على معنى «Tomo» و«Graphy»، أفضل وصف لصورة المفراس هو:",
-   "lecture_id": "ct_p01",
-   "subject_ar": "المفراس",
-   "error_rate": 0.62,
-   "attempts": 18
-  },
-  {
-   "q_en": "Which quantity is expressed in Gray (Gy)?",
-   "q_ar": "أي كمية يُعبَّر عنها بالغراي (Gy)؟",
-   "lecture_id": "protection_t02",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.57,
-   "attempts": 32
-  },
-  {
    "q_en": "",
-   "q_ar": "حسب جدول المقارنة، آلية اللقطة في التصوير التقليدي هي:",
-   "lecture_id": "computer_t02",
+   "q_ar": "الأنظمة التي تمتلك ذكاءً موازياً للذكاء البشري، ويمكنها التفكير والتعلم في أي مجال هي:",
+   "lecture_id": "computer_t01",
    "subject_ar": "الحاسوب",
-   "error_rate": 0.51,
-   "attempts": 53
+   "error_rate": 0.61,
+   "attempts": 47
+  },
+  {
+   "q_en": "Which tarsal bone is the most superior and transmits body weight to the foot?",
+   "q_ar": "أي عظم رصغي هو الأعلى وينقل وزن الجسم إلى القدم؟",
+   "lecture_id": "anatomy_p04",
+   "subject_ar": "التشريح",
+   "error_rate": 0.59,
+   "attempts": 35
   }
  ],
  "exam_period": {
