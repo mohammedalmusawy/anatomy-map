@@ -161,11 +161,11 @@
    "subject_ar": "الفحوصات",
    "items": [
     {
-     "lecture_id": "examinations_p02",
-     "title_ar": "بلع الباريوم",
-     "title_en": "Barium swallow",
+     "lecture_id": "examinations_p01",
+     "title_ar": "مواد التباين",
+     "title_en": "Contrast materials",
      "kind": "practical",
-     "num": 2,
+     "num": 1,
      "readers_week": 68
     },
     {
@@ -177,11 +177,11 @@
      "readers_week": 46
     },
     {
-     "lecture_id": "examinations_p01",
-     "title_ar": "مواد التباين",
-     "title_en": "Contrast materials",
-     "kind": "practical",
-     "num": 1,
+     "lecture_id": "examinations_t05",
+     "title_ar": "حقنة الباريوم الشرجية",
+     "title_en": "Lecture 5: BARIUM ENEMA",
+     "kind": "theory",
+     "num": 5,
      "readers_week": 45
     }
    ]
@@ -196,7 +196,7 @@
      "title_en": "Introduction to Computed Tomography & Limitations of Conventional Radiography",
      "kind": "practical",
      "num": 1,
-     "readers_week": 44
+     "readers_week": 61
     }
    ]
   },
@@ -205,27 +205,27 @@
    "subject_ar": "الأجهزة",
    "items": [
     {
-     "lecture_id": "equipment_t02",
-     "title_ar": "مولّدات الجهد العالي",
-     "title_en": "High Voltage Generators",
-     "kind": "theory",
-     "num": 2,
-     "readers_week": 68
-    },
-    {
      "lecture_id": "equipment_t01",
      "title_ar": "منظومة جهاز الأشعة السينية ولوحة التحكم",
      "title_en": "X-Ray Machine System & the Operating Console",
      "kind": "theory",
      "num": 1,
+     "readers_week": 68
+    },
+    {
+     "lecture_id": "equipment_t02",
+     "title_ar": "مولّدات الجهد العالي",
+     "title_en": "High Voltage Generators",
+     "kind": "theory",
+     "num": 2,
      "readers_week": 61
     },
     {
-     "lecture_id": "equipment_t03",
-     "title_ar": "أنبوب الأشعة السينية",
-     "title_en": "The X-Ray Tube",
-     "kind": "theory",
-     "num": 3,
+     "lecture_id": "equipment_p04",
+     "title_ar": "تركيب الفلم والشاشات المقوّية (التجربة 4)",
+     "title_en": "Construction of Film and Intensifying Screens — Fourth Experiment in Practice",
+     "kind": "practical",
+     "num": 4,
      "readers_week": 61
     }
    ]
@@ -235,20 +235,12 @@
    "subject_ar": "الفيزياء",
    "items": [
     {
-     "lecture_id": "physics_p03",
-     "title_ar": "محدِّدات أنبوب الأشعة السينية",
-     "title_en": "Experiment (3): Limitation of the x-ray tube (Line focus, Rotation anode tube and Heat rating)",
+     "lecture_id": "physics_p04",
+     "title_ar": "تسخين وتبريد أنبوب الأشعة السينية",
+     "title_en": "Experiment (4): X-ray Tube Heating and Cooling — Factors Affecting the Heat Capacity",
      "kind": "practical",
-     "num": 3,
-     "readers_week": 66
-    },
-    {
-     "lecture_id": "physics_t01",
-     "title_ar": "مقدمة في الإشعاع",
-     "title_en": "Introduction",
-     "kind": "theory",
-     "num": 1,
-     "readers_week": 61
+     "num": 4,
+     "readers_week": 70
     },
     {
      "lecture_id": "physics_p02",
@@ -256,6 +248,14 @@
      "title_en": "X-ray Tube, Transformer, Rectifiers & X-ray Generator — Second Experiment in Practice",
      "kind": "practical",
      "num": 2,
+     "readers_week": 66
+    },
+    {
+     "lecture_id": "physics_p01",
+     "title_ar": "مقدمة في الإشعاع وأنواعه",
+     "title_en": "Conventional Radiological Equipment Technology — First Experiment in practice: Introduction",
+     "kind": "practical",
+     "num": 1,
      "readers_week": 50
     }
    ]
@@ -265,19 +265,11 @@
    "subject_ar": "الحاسوب",
    "items": [
     {
-     "lecture_id": "computer_t01",
-     "title_ar": "مفهوم الذكاء الاصطناعي",
-     "title_en": "The Concept of Artificial Intelligence",
+     "lecture_id": "computer_t02",
+     "title_ar": "الذكاء الاصطناعي في الهواتف الذكية",
+     "title_en": "The Role of AI in Modern Smartphones",
      "kind": "theory",
-     "num": 1,
-     "readers_week": 70
-    },
-    {
-     "lecture_id": "computer_t04",
-     "title_ar": "الذكاء الاصطناعي والمجتمع والأخلاقيات",
-     "title_en": "Artificial Intelligence, Society and Ethics",
-     "kind": "theory",
-     "num": 4,
+     "num": 2,
      "readers_week": 68
     },
     {
@@ -286,6 +278,14 @@
      "title_en": "Microsoft Excel 2010",
      "kind": "practical",
      "num": 1,
+     "readers_week": 51
+    },
+    {
+     "lecture_id": "computer_t04",
+     "title_ar": "الذكاء الاصطناعي والمجتمع والأخلاقيات",
+     "title_en": "Artificial Intelligence, Society and Ethics",
+     "kind": "theory",
+     "num": 4,
      "readers_week": 48
     }
    ]
@@ -300,41 +300,33 @@
      "title_en": "Crimes of the Baath Regime in Iraq — Summary 1",
      "kind": "theory",
      "num": 1,
-     "readers_week": 51
+     "readers_week": 27
     }
    ]
   }
  ],
  "hard_topics": [
   {
-   "topic_en": "Intensifying Screens & Screen Construction",
-   "topic_ar": "الشاشات المقوّية وتركيبها",
-   "lecture_id": "equipment_t04",
-   "subject_ar": "الأجهزة",
-   "error_rate": 0.56,
-   "attempts": 77
+   "topic_en": "Radioactive Decay — Alpha, Beta, Gamma & Neutrons",
+   "topic_ar": "التحلّل الإشعاعي وأنواع الإشعاع المؤيِّن",
+   "lecture_id": "physics_p01",
+   "subject_ar": "الفيزياء",
+   "error_rate": 0.43,
+   "attempts": 41
   },
   {
-   "topic_en": "Suggested Questions",
-   "topic_ar": "أسئلة مقترحة",
-   "lecture_id": "computer_t04",
-   "subject_ar": "الحاسوب",
-   "error_rate": 0.49,
-   "attempts": 50
-  },
-  {
-   "topic_en": "Metatarsal Fractures",
-   "topic_ar": "كسور عظام المشط",
-   "lecture_id": "anatomy_p04",
-   "subject_ar": "التشريح",
+   "topic_en": "E. Operational Factors",
+   "topic_ar": "العوامل التشغيلية",
+   "lecture_id": "physics_p04",
+   "subject_ar": "الفيزياء",
    "error_rate": 0.42,
    "attempts": 84
   },
   {
-   "topic_en": "Committed Equivalent and Effective Dose",
-   "topic_ar": "الجرعة المكافئة والفعّالة الملتزَم بها",
-   "lecture_id": "protection_t02",
-   "subject_ar": "الوقاية",
+   "topic_en": "Effects of Psychological Crimes; Social Crimes",
+   "topic_ar": "آثار الجرائم النفسية والجرائم الاجتماعية",
+   "lecture_id": "baath_t01",
+   "subject_ar": "جرائم البعث",
    "error_rate": 0.42,
    "attempts": 44
   },
@@ -345,6 +337,14 @@
    "subject_ar": "الحاسوب",
    "error_rate": 0.4,
    "attempts": 43
+  },
+  {
+   "topic_en": "Exposure",
+   "topic_ar": "التعرّض",
+   "lecture_id": "protection_t02",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.35,
+   "attempts": 57
   }
  ],
  "missed_questions": [
@@ -357,26 +357,26 @@
    "attempts": 52
   },
   {
-   "q_en": "",
-   "q_ar": "من إيجابيات الأثر المجتمعي للذكاء الاصطناعي حسب المحاضرة:",
-   "lecture_id": "computer_t04",
-   "subject_ar": "الحاسوب",
-   "error_rate": 0.65,
-   "attempts": 13
+   "q_en": "Which is a feature of non-ionizing radiation?",
+   "q_ar": "أي مما يلي من صفات الإشعاع غير المؤيِّن؟",
+   "lecture_id": "physics_p01",
+   "subject_ar": "الفيزياء",
+   "error_rate": 0.64,
+   "attempts": 15
   },
   {
-   "q_en": "",
-   "q_ar": "الأنظمة التي تمتلك ذكاءً موازياً للذكاء البشري، ويمكنها التفكير والتعلم في أي مجال هي:",
-   "lecture_id": "computer_t01",
-   "subject_ar": "الحاسوب",
+   "q_en": "The equivalent dose is needed because:",
+   "q_ar": "نحتاج إلى الجرعة المكافئة لأن:",
+   "lecture_id": "protection_t02",
+   "subject_ar": "الوقاية",
    "error_rate": 0.61,
    "attempts": 47
   },
   {
-   "q_en": "Which tarsal bone is the most superior and transmits body weight to the foot?",
-   "q_ar": "أي عظم رصغي هو الأعلى وينقل وزن الجسم إلى القدم؟",
-   "lecture_id": "anatomy_p04",
-   "subject_ar": "التشريح",
+   "q_en": "Anodes are typically made of:",
+   "q_ar": "تُصنع الأنودات عادةً من:",
+   "lecture_id": "physics_p04",
+   "subject_ar": "الفيزياء",
    "error_rate": 0.59,
    "attempts": 35
   }
