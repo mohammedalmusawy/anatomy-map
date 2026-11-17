@@ -131,27 +131,27 @@
    "subject_ar": "الوقاية",
    "items": [
     {
+     "lecture_id": "protection_p03",
+     "title_ar": "مبادئ الوقاية من الإشعاع",
+     "title_en": "The Principles of Radiological Protection",
+     "kind": "practical",
+     "num": 3,
+     "readers_week": 71
+    },
+    {
      "lecture_id": "protection_p04",
      "title_ar": "حدود الجرعة",
      "title_en": "Dose Limits",
      "kind": "practical",
      "num": 4,
-     "readers_week": 71
-    },
-    {
-     "lecture_id": "protection_p05",
-     "title_ar": "تصنيف التعرض الإشعاعي",
-     "title_en": "Radiation protection for Classification of exposure",
-     "kind": "practical",
-     "num": 5,
      "readers_week": 64
     },
     {
-     "lecture_id": "protection_p01",
-     "title_ar": "تصنيف الإشعاع ومصادر الإشعاع المؤين",
-     "title_en": "Classification of Radiation and Identification of Ionizing Radiation Sources",
-     "kind": "practical",
-     "num": 1,
+     "lecture_id": "protection_t04",
+     "title_ar": "حدود الجرعة",
+     "title_en": "Dose Limits",
+     "kind": "theory",
+     "num": 4,
      "readers_week": 56
     }
    ]
@@ -161,28 +161,28 @@
    "subject_ar": "الفحوصات",
    "items": [
     {
-     "lecture_id": "examinations_p01",
-     "title_ar": "مواد التباين",
-     "title_en": "Contrast materials",
-     "kind": "practical",
-     "num": 1,
-     "readers_week": 68
-    },
-    {
-     "lecture_id": "examinations_t02",
-     "title_ar": "طرق تصوير الجهاز الهضمي",
-     "title_en": "Methods of Imaging the GIT",
-     "kind": "theory",
-     "num": 2,
-     "readers_week": 46
-    },
-    {
      "lecture_id": "examinations_t05",
      "title_ar": "حقنة الباريوم الشرجية",
      "title_en": "Lecture 5: BARIUM ENEMA",
      "kind": "theory",
      "num": 5,
-     "readers_week": 45
+     "readers_week": 68
+    },
+    {
+     "lecture_id": "examinations_p02",
+     "title_ar": "بلع الباريوم",
+     "title_en": "Barium swallow",
+     "kind": "practical",
+     "num": 2,
+     "readers_week": 61
+    },
+    {
+     "lecture_id": "examinations_t01",
+     "title_ar": "مواد التباين",
+     "title_en": "Lecture 1: CONTRAST AGENTS",
+     "kind": "theory",
+     "num": 1,
+     "readers_week": 46
     }
    ]
   },
@@ -196,7 +196,7 @@
      "title_en": "Introduction to Computed Tomography & Limitations of Conventional Radiography",
      "kind": "practical",
      "num": 1,
-     "readers_week": 61
+     "readers_week": 68
     }
    ]
   },
@@ -210,7 +210,15 @@
      "title_en": "X-Ray Machine System & the Operating Console",
      "kind": "theory",
      "num": 1,
-     "readers_week": 68
+     "readers_week": 61
+    },
+    {
+     "lecture_id": "equipment_p02",
+     "title_ar": "أنبوب الأشعة السينية (التجربة 3)",
+     "title_en": "X-ray Tube — Third Experiment in Practice",
+     "kind": "practical",
+     "num": 2,
+     "readers_week": 61
     },
     {
      "lecture_id": "equipment_t02",
@@ -218,15 +226,7 @@
      "title_en": "High Voltage Generators",
      "kind": "theory",
      "num": 2,
-     "readers_week": 61
-    },
-    {
-     "lecture_id": "equipment_p04",
-     "title_ar": "تركيب الفلم والشاشات المقوّية (التجربة 4)",
-     "title_en": "Construction of Film and Intensifying Screens — Fourth Experiment in Practice",
-     "kind": "practical",
-     "num": 4,
-     "readers_week": 61
+     "readers_week": 54
     }
    ]
   },
@@ -235,20 +235,12 @@
    "subject_ar": "الفيزياء",
    "items": [
     {
-     "lecture_id": "physics_p04",
-     "title_ar": "تسخين وتبريد أنبوب الأشعة السينية",
-     "title_en": "Experiment (4): X-ray Tube Heating and Cooling — Factors Affecting the Heat Capacity",
+     "lecture_id": "physics_p03",
+     "title_ar": "محدِّدات أنبوب الأشعة السينية",
+     "title_en": "Experiment (3): Limitation of the x-ray tube (Line focus, Rotation anode tube and Heat rating)",
      "kind": "practical",
-     "num": 4,
+     "num": 3,
      "readers_week": 70
-    },
-    {
-     "lecture_id": "physics_p02",
-     "title_ar": "أنبوب الأشعة والمحوّلة والمقوّم والمولّد",
-     "title_en": "X-ray Tube, Transformer, Rectifiers & X-ray Generator — Second Experiment in Practice",
-     "kind": "practical",
-     "num": 2,
-     "readers_week": 66
     },
     {
      "lecture_id": "physics_p01",
@@ -256,6 +248,14 @@
      "title_en": "Conventional Radiological Equipment Technology — First Experiment in practice: Introduction",
      "kind": "practical",
      "num": 1,
+     "readers_week": 66
+    },
+    {
+     "lecture_id": "physics_t04",
+     "title_ar": "تسخين أنبوب الأشعة وتبريده",
+     "title_en": "X-ray Tube Heating and Cooling",
+     "kind": "theory",
+     "num": 4,
      "readers_week": 50
     }
    ]
@@ -265,20 +265,12 @@
    "subject_ar": "الحاسوب",
    "items": [
     {
-     "lecture_id": "computer_t02",
-     "title_ar": "الذكاء الاصطناعي في الهواتف الذكية",
-     "title_en": "The Role of AI in Modern Smartphones",
+     "lecture_id": "computer_t01",
+     "title_ar": "مفهوم الذكاء الاصطناعي",
+     "title_en": "The Concept of Artificial Intelligence",
      "kind": "theory",
-     "num": 2,
-     "readers_week": 68
-    },
-    {
-     "lecture_id": "computer_p01",
-     "title_ar": "برنامج مايكروسوفت إكسل",
-     "title_en": "Microsoft Excel 2010",
-     "kind": "practical",
      "num": 1,
-     "readers_week": 51
+     "readers_week": 68
     },
     {
      "lecture_id": "computer_t04",
@@ -286,6 +278,14 @@
      "title_en": "Artificial Intelligence, Society and Ethics",
      "kind": "theory",
      "num": 4,
+     "readers_week": 51
+    },
+    {
+     "lecture_id": "computer_t02",
+     "title_ar": "الذكاء الاصطناعي في الهواتف الذكية",
+     "title_en": "The Role of AI in Modern Smartphones",
+     "kind": "theory",
+     "num": 2,
      "readers_week": 48
     }
    ]
@@ -300,27 +300,43 @@
      "title_en": "Crimes of the Baath Regime in Iraq — Summary 1",
      "kind": "theory",
      "num": 1,
-     "readers_week": 27
+     "readers_week": 66
     }
    ]
   }
  ],
  "hard_topics": [
   {
-   "topic_en": "Radioactive Decay — Alpha, Beta, Gamma & Neutrons",
-   "topic_ar": "التحلّل الإشعاعي وأنواع الإشعاع المؤيِّن",
-   "lecture_id": "physics_p01",
+   "topic_en": "Heat Production in X-ray Tubes",
+   "topic_ar": "إنتاج الحرارة في أنبوب الأشعة",
+   "lecture_id": "physics_t04",
    "subject_ar": "الفيزياء",
-   "error_rate": 0.43,
-   "attempts": 41
+   "error_rate": 0.56,
+   "attempts": 75
   },
   {
-   "topic_en": "E. Operational Factors",
-   "topic_ar": "العوامل التشغيلية",
-   "lecture_id": "physics_p04",
-   "subject_ar": "الفيزياء",
-   "error_rate": 0.42,
-   "attempts": 84
+   "topic_en": "Radiation Exposures",
+   "topic_ar": "التعرّض للإشعاع",
+   "lecture_id": "protection_t01",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.53,
+   "attempts": 74
+  },
+  {
+   "topic_en": "Voltage Rectification",
+   "topic_ar": "تقويم الجهد",
+   "lecture_id": "equipment_t02",
+   "subject_ar": "الأجهزة",
+   "error_rate": 0.51,
+   "attempts": 65
+  },
+  {
+   "topic_en": "X-ray Tube Components & Cathode",
+   "topic_ar": "مكوّنات أنبوب الأشعة والكاثود",
+   "lecture_id": "equipment_p02",
+   "subject_ar": "الأجهزة",
+   "error_rate": 0.51,
+   "attempts": 30
   },
   {
    "topic_en": "Effects of Psychological Crimes; Social Crimes",
@@ -329,56 +345,40 @@
    "subject_ar": "جرائم البعث",
    "error_rate": 0.42,
    "attempts": 44
-  },
-  {
-   "topic_en": "Function Library and Hyperlinks",
-   "topic_ar": "مكتبة الدوال والربط الفائق",
-   "lecture_id": "computer_p01",
-   "subject_ar": "الحاسوب",
-   "error_rate": 0.4,
-   "attempts": 43
-  },
-  {
-   "topic_en": "Exposure",
-   "topic_ar": "التعرّض",
-   "lecture_id": "protection_t02",
-   "subject_ar": "الوقاية",
-   "error_rate": 0.35,
-   "attempts": 57
   }
  ],
  "missed_questions": [
   {
-   "q_en": "",
-   "q_ar": "التحقق من صحة البيانات {{Data Validation}} يعني:",
-   "lecture_id": "computer_p01",
-   "subject_ar": "الحاسوب",
-   "error_rate": 0.65,
-   "attempts": 52
-  },
-  {
-   "q_en": "Which is a feature of non-ionizing radiation?",
-   "q_ar": "أي مما يلي من صفات الإشعاع غير المؤيِّن؟",
-   "lecture_id": "physics_p01",
+   "q_en": "In a rotating anode tube, the anode usually rotates at:",
+   "q_ar": "في أنبوب الأنود الدوّار يدور الأنود عادةً بسرعة:",
+   "lecture_id": "physics_p03",
    "subject_ar": "الفيزياء",
-   "error_rate": 0.64,
-   "attempts": 15
-  },
-  {
-   "q_en": "The equivalent dose is needed because:",
-   "q_ar": "نحتاج إلى الجرعة المكافئة لأن:",
-   "lecture_id": "protection_t02",
-   "subject_ar": "الوقاية",
    "error_rate": 0.61,
    "attempts": 47
   },
   {
-   "q_en": "Anodes are typically made of:",
-   "q_ar": "تُصنع الأنودات عادةً من:",
-   "lecture_id": "physics_p04",
-   "subject_ar": "الفيزياء",
+   "q_en": "Indirectly ionizing radiation produces ionization mainly by:",
+   "q_ar": "يُحدث الإشعاع المؤيِّن غير المباشر التأيُّن أساساً عن طريق:",
+   "lecture_id": "protection_t01",
+   "subject_ar": "الوقاية",
    "error_rate": 0.59,
    "attempts": 35
+  },
+  {
+   "q_en": "Which is a reason high-frequency generators are the most widely used?",
+   "q_ar": "أي مما يلي سبب لكون المولّدات عالية التردد الأكثر استعمالاً؟",
+   "lecture_id": "equipment_t02",
+   "subject_ar": "الأجهزة",
+   "error_rate": 0.57,
+   "attempts": 12
+  },
+  {
+   "q_en": "",
+   "q_ar": "افتعال ظواهر اجتماعية مرعبة مثل (أبو طبر، والكف الأسود) من وسائل:",
+   "lecture_id": "baath_t01",
+   "subject_ar": "جرائم البعث",
+   "error_rate": 0.51,
+   "attempts": 30
   }
  ],
  "exam_period": {

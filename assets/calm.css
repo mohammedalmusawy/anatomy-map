@@ -926,3 +926,10 @@ dialog.hd-wel::backdrop { background: rgba(43, 47, 56, .38); }
 .hd-wn small { display: block; font: 400 var(--t-xs) var(--body-font); color: var(--muted); }
 .hd-wq { margin: 12px 0 16px; line-height: 1.9; }
 .hd-box .cbtn { width: 100%; min-height: 48px; justify-content: center; }
+/* 📄 (16/11) أسئلة العام الماضي: تنبيه هادئ أول صفحة المادة + بطاقة وحدة بعد المحاضرات (preview.py past_html) */
+.pxen { display: none; }
+html[lang="en"] .pxen { display: inline; }
+.pxnote { margin: 10px 0 16px; padding: 12px 14px; background: var(--accent-soft); border: 1px solid var(--line); border-inline-start: 3px solid var(--accent); border-radius: var(--r-sm); color: var(--ink); font-size: var(--t-sm); line-height: 1.85; overflow-wrap: anywhere; }
+.pxnote .pxjump { display: inline-block; margin-top: 4px; }
+.pxcard { margin-top: 20px; }
+.pxbtns { display: flex; flex-wrap: wrap; gap: 8px; }
