@@ -445,3 +445,98 @@
   const k = /^(lessons|home)\/$/.test(rel) || rel === "" ? 0 : /^(learn|quiz)\//.test(rel) ? 1 : /^me\//.test(rel) ? 2 : -1;
   if (k >= 0) ns.forEach((a) => { if (+a.dataset.nn === k) a.setAttribute("aria-current", "page"); });
 })();
+
+// 🧭 (17/11) «اقرأني» والترحيب بالاسم — كلشي بجهاز الطالب بس (t:nick، t:ob-*)، ولا شي ينرسل للسيرفر ولا يدخل الإحصاءات.
+//   • بطاقة الزائر الجديد (#obw): مرة وحدة؛ تنسد بـ «مو هسه» أو لما يفتح «اقرأني».
+//   • سطر الترحيب (#obhi): بس إذا الطالب كتب اسمه، وأول فتح باليوم لكل نوع صفحة (الرئيسية / المحاضرة)؛ × يخفيه.
+//   • الصوت (data-voice): off افتراضياً. files = تسجيلات حقيقية بـ assets/audio/welcome/<id>.mp3، tts = صوت المتصفح؛ بضغطة بس، ولا مرة تلقائي.
+//   • نموذج الاسم بـ «اقرأني» (#obname-f): حفظ / مسح.
+(function () {
+  const K = "t:", get = (k) => { try { return localStorage.getItem(K + k); } catch (e) { return null; } };
+  const put = (k, v) => { try { if (v == null) localStorage.removeItem(K + k); else localStorage.setItem(K + k, v); } catch (e) { /* */ } };
+  const clean = (v) => String(v || "").replace(/[<>&"'`\\\/{}\[\]=]/g, "").replace(/[\u0000-\u001F​-‏‪-‮]/g, "").replace(/\s+/g, " ").trim().slice(0, 20);
+  const d0 = new Date(), day = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const today = day(d0), yest = day(new Date(d0.getTime() - 864e5));
+  // أيام الفتح (آخر 14 يوم، تواريخ بس) ← «يومين ورا بعض»
+  let days = []; try { days = JSON.parse(get("ob-days") || "[]"); if (!Array.isArray(days)) days = []; } catch (e) { days = []; }
+  if (!days.includes(today)) { days.push(today); days = days.filter((x) => /^\d{4}-\d\d-\d\d$/.test(x)).slice(-14); put("ob-days", JSON.stringify(days)); }
+  let streak = 0; for (let i = 0; i < 14; i++) { if (days.includes(day(new Date(d0.getTime() - i * 864e5)))) streak++; else break; }
+  const mk = (tag, cls, txt, lang) => { const el = document.createElement(tag); if (cls) el.className = cls; if (lang) { el.lang = lang; el.dir = "ltr"; } el.textContent = txt; return el; };
+  // النص فيه {n} مكان الاسم: الاسم بعنصر لحاله (<bdi data-noen>) حتى ما ينقلب الاتجاه ولا يتعلّم «EN soon» بوضع ENG
+  const fill = (el, txt, nm) => { txt.split("{n}").forEach((part, i) => { if (i) { const b = document.createElement("bdi"); b.dataset.noen = ""; b.textContent = nm; el.append(b); } el.append(part); }); return el; };
+  const bi = (box, ar, en, nm = "") => { box.replaceChildren(fill(mk("span", "ar", ""), ar, nm), fill(mk("span", "pxen", "", "en"), en, nm)); };
+
+  // ── بطاقة الزائر الجديد ──
+  const w = document.getElementById("obw");
+  if (w) {
+    if (!get("ob-seen")) w.hidden = false;
+    w.addEventListener("click", (ev) => { const b = ev.target.closest("[data-ob-seen]"); if (!b) return; put("ob-seen", "1"); if (b.tagName === "BUTTON") w.hidden = true; });
+  }
+  if (document.body.classList.contains("obg")) put("ob-seen", "1");   // فتح «اقرأني» بنفسه = شاف الدليل
+
+  // ── سطر الترحيب ──
+  const hi = document.getElementById("obhi"), nick = clean(get("nick"));
+  if (hi && nick) {
+    const ctx = hi.dataset.ctx === "lec" ? "lec" : "home", key = "ob-hi-" + ctx;
+    if (get(key) !== today) {
+      put(key, today);
+      const h = d0.getHours(), part = h < 12 ? 0 : h < 18 ? 1 : 2, back = days.includes(yest), n = days.length;
+      const hello = [["صباح الخير", "Good morning"], ["هلا", "Hi"], ["مساء الخير", "Good evening"]][part];
+      const M = ctx === "lec" ? [
+        ["w-lec-1", `${hello[0]} {n}، خطوة خطوة وتخلصها.`, `${hello[1]} {n}, one step at a time.`],
+        ["w-lec-2", `هلا {n}، اقرأ قسم وجرّب «اختبر نفسك».`, `Hi {n}, read a section, then test yourself.`],
+        ["w-lec-3", `أهلاً {n}، تعبك اليوم يبين بالامتحان.`, `Welcome {n}, today’s effort shows in the exam.`],
+      ] : streak >= 2 ? [
+        ["w-streak-1", `هلا {n}، أشوفك مداوم، ${streak} أيام ورا بعض. كمّل هيچ.`, `Hi {n}, ${streak} days in a row. Keep it up.`],
+        ["w-streak-2", `${hello[0]} {n}، أشوفك نشيط اليوم. كمّل دراستك.`, `${hello[1]} {n}, you’re on a roll. Keep studying.`],
+      ] : n > 1 && !back ? [
+        ["w-back-1", `هلا بيك من جديد {n}، نبدي بخطوة صغيرة؟`, `Welcome back {n}. Shall we start with one small step?`],
+      ] : [
+        ["w-day-1", `${hello[0]} {n}، ربع ساعة اليوم أحسن من ولا شي. يلا.`, `${hello[1]} {n}, fifteen minutes today beats nothing. Let’s go.`],
+        ["w-day-2", `هلا {n}، أشوفك نشيط اليوم. كمّل دراستك.`, `Hi {n}, good to see you studying today. Keep going.`],
+        ["w-day-3", `أهلاً {n}، محاضرة وحدة واختبارها، وخلصت شغلة اليوم.`, `Welcome {n}, one lecture and its quiz, and today’s job is done.`],
+      ];
+      const pick = M[(d0.getDate() + d0.getMonth()) % M.length];
+      bi(hi.querySelector(".obt"), pick[1], pick[2], nick);
+      hi.hidden = false;
+      document.querySelectorAll("[data-hello]").forEach((el) => { el.hidden = true; });   // ما يتكرر «أهلاً» مرتين
+      const v = hi.dataset.voice;
+      if (v === "files" || (v === "tts" && "speechSynthesis" in window)) {
+        const b = mk("button", "obv", "🔊"); b.type = "button"; b.setAttribute("aria-label", "اسمع الترحيب");
+        b.addEventListener("click", () => {
+          if (v === "files") {
+            const man = document.querySelector('link[rel="manifest"]'); if (!man) return;
+            new Audio(new URL(`assets/audio/welcome/${pick[0]}.mp3`, new URL(".", man.href)).href).play().catch(() => {});
+          } else { const u = new SpeechSynthesisUtterance((document.documentElement.lang === "en" ? pick[2] : pick[1]).replace("{n}", nick)); u.lang = document.documentElement.lang === "en" ? "en-US" : "ar"; speechSynthesis.cancel(); speechSynthesis.speak(u); }
+        });
+        hi.querySelector(".oba").prepend(b);
+      }
+    }
+  }
+  // ENG: الـ placeholder وaria-label للعناصر الجديدة يتبعون زر اللغة
+  const L10N = [["#obname-in", "placeholder", "مثلاً: علي", "e.g. Ali"], ["[data-obhi-x]", "aria-label", "إخفاء الترحيب", "Hide greeting"],
+    ["[data-ob-x]", "aria-label", "إخفاء", "Dismiss"], [".obhi .obv", "aria-label", "اسمع الترحيب", "Play greeting"]];
+  const l10n = () => { const en = document.documentElement.lang === "en"; L10N.forEach(([sel, at, ar, eng]) => document.querySelectorAll(sel).forEach((el) => el.setAttribute(at, en ? eng : ar))); };
+  l10n(); new MutationObserver(l10n).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+  document.addEventListener("click", (ev) => { const x = ev.target.closest("[data-obhi-x]"); if (x) { const b = x.closest(".obhi"); if (b) b.hidden = true; } });
+
+  // ── نموذج الاسم بـ «اقرأني» ──
+  const f = document.getElementById("obname-f");
+  if (f) {
+    const inp = document.getElementById("obname-in"), st = document.getElementById("obname-st");
+    inp.value = nick;
+    const say = (ar, en, nm) => { if (st) bi(st, ar, en, nm); };
+    if (nick) say("محفوظ: {n}", "Saved: {n}", nick);
+    f.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const v = clean(inp.value); inp.value = v;
+      if (!v) { say("اكتب اسم قصير أول.", "Type a short name first."); inp.focus(); return; }
+      put("nick", v); put("ob-hi-home", null); put("ob-hi-lec", null);
+      say("تمام {n}، راح نرحّب بيك باسمك. 👋", "Done {n}, we’ll greet you by name. 👋", v);
+    });
+    f.querySelector("[data-obname-clear]").addEventListener("click", () => {
+      put("nick", null); put("ob-hi-home", null); put("ob-hi-lec", null); inp.value = "";
+      say("انمسح الاسم من هذا الجهاز.", "Name removed from this device.");
+    });
+  }
+})();
