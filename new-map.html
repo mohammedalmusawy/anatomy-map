@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>تعلّم التشريح</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>/* ⚡ 17/11: سكربت تليغرام بس داخل تليغرام، وغير متزامن (كان يوقف رسم الصفحة لحد 75 ث إذا telegram.org بطيء أو محجوب) */(function(){try{var q=location.hash+location.search,s=null;try{s=sessionStorage.getItem("__telegram__initParams")}catch(e){}if(!(/tgWebApp/.test(q)||s||window.TelegramWebviewProxy||(window.external&&"notify" in window.external)))return;var t=document.createElement("script");t.src="https://telegram.org/js/telegram-web-app.js";t.async=true;t.onload=function(){window.dispatchEvent(new Event("am-tg"))};document.head.appendChild(t)}catch(e){}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -572,8 +572,10 @@ const XONLY = {};
   m.setAttribute("transform","translate(200 0) scale(-1 1)");
   m.querySelectorAll('[data-r="head"],[data-r="spine"],[data-r="chest"],[data-r="abdomen"],[data-r="pelvis"]').forEach(e=>e.remove());
   h.after(m); })();
-const tg = window.Telegram && Telegram.WebApp;
-if (tg) { tg.ready(); tg.expand(); }
+let tg = window.Telegram && Telegram.WebApp;   // ⚡ 17/11: السكربت ينحمّل غير متزامن (داخل تليغرام بس) ← tgInit لما يوصل
+function tgInit(){ tg = window.Telegram && Telegram.WebApp; if (!tg || tg.__am) return; tg.__am = 1; tg.ready(); tg.expand(); }
+tgInit();
+window.addEventListener("am-tg", () => { tgInit(); tgBack(); });
 const $ = id => document.getElementById(id);
 let cur = null, kind = "bones";
 
@@ -791,7 +793,8 @@ document.querySelectorAll("#tabs button").forEach(b=>b.addEventListener("click",
 document.querySelectorAll("#modes button").forEach(b=>b.addEventListener("click",()=>{ haptic(); lesson(cur,kind,b.dataset.m); }));
 const goBack=()=>{ if($("zoom").classList.contains("on")) return closeZoom(); show("v-map"); };
 $("back").addEventListener("click",goBack);
-if (tg) tg.BackButton.onClick(goBack);
+function tgBack(){ if (!tg || tg.__amBack) return; tg.__amBack = 1; tg.BackButton.onClick(goBack); const v = document.querySelector(".view.on"); if (v && v.id === "v-lesson") tg.BackButton.show(); }
+tgBack();
 
 let zw=200;
 function setZoom(w){ zw=Math.max(100,Math.min(500,w)); $("z-img").style.width=zw+"%"; }
