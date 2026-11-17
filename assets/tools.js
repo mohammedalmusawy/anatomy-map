@@ -190,25 +190,29 @@
   if (rv && tdata) {
     const D = JSON.parse(tdata.textContent), all = D.ours.concat(D.general, D.symptoms || []);   // + مصطلحات الأعراض (28/10)
     const GAP = [0, 1, 3, 7, 14, 30], day = Math.floor(Date.now() / 864e5);
-    const st = LS.get("srs", {});
+    let st = LS.get("srs", {});
     // (30/10) دمج المكررات: تقدّم المراجعة على الصيغة القديمة ينتقل للمدخل الأساسي (والقديم يبقى)
     let mv = false; all.forEach((t) => (t.al || []).forEach((a) => { if (st[a] && !st[t.en]) { st[t.en] = st[a]; mv = true; } })); if (mv) LS.set("srs", st);
-    const due = () => all.filter((t) => { const s = st[t.en]; return !s || s.due <= day; });
+    // ⭐ (17/11) «مصطلحاتي» من التحديد الذكي (pick.js، نفس t:srs): اللي ما بالقائمة يدخل المراجعة بمعناه من المعجم (إذا موجود)
+    const mineT = () => { const have = new Set(all.map((t) => t.en)); return Object.keys(st).filter((k) => st[k] && st[k].mine && !have.has(k)).map((k) => { const x = window.Listen && Listen.match && Listen.match(k), i = x && Listen.info(x); return { en: k, ar: i ? i[1] : "", d: "", mine: 1 }; }); };
+    const due = () => mineT().concat(all).filter((t) => { const s = st[t.en]; return !s || s.due <= day; });
     const label = () => { rv.textContent = `🔁 راجع اليوم (${Math.min(20, due().length)})`; };
     label();
+    document.addEventListener("pick:saved", () => { st = LS.get("srs", {}); label(); });   // ⭐ حفظ من نفس الصفحة
     rv.onclick = () => {
       const list = due().slice(0, 20); let i = 0;
       const box = document.getElementById("review-box"); box.classList.remove("hidden");
       const next = () => {
         if (i >= list.length) { box.innerHTML = '<p class="hint">🎉 خلصت مراجعة اليوم. ارجع باچر.</p>'; label(); return; }
         const t = list[i];
-        box.innerHTML = `<p class="qen">${esc(t.en)}</p><button class="btn alt" id="rvs">اكشف المعنى</button><div id="rva" class="hidden"><p class="qar"><b>${esc(t.ar)}</b></p><p>${esc(t.d || "")}</p>
+        box.innerHTML = `<p class="qen">${esc(t.en)}</p><button class="btn alt" id="rvs">اكشف المعنى</button><div id="rva" class="hidden">${t.ar ? `<p class="qar"><b>${esc(t.ar)}</b></p>` : ""}${t.mine ? `<p><button type="button" class="btn ghost rvsay" aria-label="اسمع اللفظ">🔊</button> <small>⭐ من مصطلحاتي</small></p>` : ""}<p>${esc(t.d || "")}</p>
           <button class="btn" data-k="1">✅ عرفته</button> <button class="btn ghost" data-k="0">❌ ما عرفته</button></div>`;
         box.querySelector("#rvs").onclick = () => box.querySelector("#rva").classList.remove("hidden");
+        const sb = box.querySelector(".rvsay"); if (sb) sb.onclick = () => window.Pick && Pick.say && Pick.say(t.en, 1, sb);
         box.querySelectorAll("[data-k]").forEach((b) => b.onclick = () => {
-          const s = st[t.en] || { box: 0 }; s.box = +b.dataset.k ? Math.min(5, s.box + 1) : 0; s.due = day + GAP[s.box]; st[t.en] = s; LS.set("srs", st);
+          const s = st[t.en] || { box: 0 }; s.box = +b.dataset.k ? Math.min(5, s.box + 1) : 0; s.due = day + GAP[s.box]; s.r = 1; st[t.en] = s; LS.set("srs", st);
           if (!+b.dataset.k) miss("term:" + t.en);
-          if (window.Cloud) Cloud.log("review", t.en);
+          if (window.Cloud && !t.mine) Cloud.log("review", t.en);   // 🔒 (17/11) كلمات «مصطلحاتي» الخاصة ما تنرسل
           i++; next();
         });
       };

@@ -7,7 +7,7 @@
 // نص الأستاذ ما يتغير: كل هذا طبقة فوقه (span حول الكلمة، بدون تغيير حرف). ما يعلّم داخل الأزرار والروابط والخيارات والحقول.
 (function () {
   if (window.Listen) return;
-  const root = new URL("../", document.currentScript.src).href;
+  const SELF = document.currentScript.src, root = new URL("../", SELF).href;
   // ₓ (52b، 30/10) الصيغ: «W_T» ← W<sub>T</sub> (و H_T,R · D_T · X_{YZ}). طبقة عرض بس: نص الأستاذ والـ JSON ما يتغيّرون،
   //    وتوقيت جمل السمع (data-s/data-e) بمكانه. ما تلمس الروابط والملفات والكود والحقول: الأساس حرف كبير (أو حرفين) وقبله فراغ/قوس.
   const FX = /(^|[^A-Za-z0-9_\/.:@#?&-])([A-ZΣΔ][a-z]?)_(?:\{([^{}]{1,10})\}|([A-Za-z0-9]{1,3}(?:,[A-Za-z0-9]{1,3})?))(?![A-Za-z0-9_\/]|\.[A-Za-z0-9])/g;
@@ -177,6 +177,7 @@
   function sayTerm(k, r, btn) {
     k = K(k);
     stop();
+    document.dispatchEvent(new Event("listen:play"));   // ✋ pick.js: صوت المتصفح يوقف (صوت واحد بنفس الوقت)
     word.pause();
     document.querySelectorAll(".say1.on,.tm.on").forEach((x) => x.classList.remove("on"));
     if (btn) btn.classList.add("on");
@@ -241,7 +242,7 @@
   main.onerror = () => { if (main.src.startsWith("data:")) return; file = null; if (cur) cur.classList.add("err"); next(); };
   main.onpause = marks;
   main.onplay = () => { marks(); if (cur && !raf) raf = requestAnimationFrame(tick); };
-  function play(list, m) { word.pause(); hidePop(); stop(); queueS = list; mode = m; next(); }
+  function play(list, m) { word.pause(); hidePop(); stop(); document.dispatchEvent(new Event("listen:play")); queueS = list; mode = m; next(); }
 
   // ── الضغط (ماوس، لمس، كيبورد) ──
   function act(t) {
@@ -320,6 +321,15 @@
   }).catch(() => {});
   window.addEventListener("hashchange", openHash);
   const slug = (t) => String(t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
-  window.Listen = { mount, mark: queue, info: (k) => LEX[K(k)], find: (en) => LEX[K(slug(en))], ready: () => ready, stop: () => { stop(); word.pause(); } };
+  // ✋ (17/11) للتحديد الذكي (pick.js): نص محدد ← مفتاح المعجم (نفس مطابقة التعليم)، وتشغيل ملفنا بنفس المشغّل
+  const match = (raw) => { raw = String(raw || "").trim(); if (!raw) return null; const k = CS.get(raw) || CI.get(norm(raw)) || (LEX[K(slug(raw))] ? K(slug(raw)) : null); return k && LEX[K(k)] ? K(k) : null; };
+  const sayK = (k, r, done) => { unlock(); sayTerm(k, r || 1, null); if (done) { const f = () => { word.removeEventListener("pause", f); word.removeEventListener("ended", f); done(); }; word.addEventListener("play", () => { word.addEventListener("pause", f); word.addEventListener("ended", f); }, { once: true }); setTimeout(() => { if (word.paused) f(); }, 8000); } };
+  window.Listen = { mount, mark: queue, info: (k) => LEX[K(k)], find: (en) => LEX[K(slug(en))], match, say: sayK, ready: () => ready, stop: () => { stop(); word.pause(); } };
+  // ✋ التحديد الذكي يتحمّل وحده بكل صفحة بيها المشغّل (بلا ?v=: الـ service worker يجيبه من الشبكة أول، وبلا نت من المحفوظ)
+  if (!window.Pick && !document.querySelector("script[data-pick]")) {
+    const ps = document.createElement("script"); ps.defer = true; ps.dataset.pick = "1";
+    ps.src = root + "assets/pick" + (/\.min\.js/.test(SELF) ? ".min" : "") + ".js";
+    document.head.appendChild(ps);
+  }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => mount()); else mount();
 })();

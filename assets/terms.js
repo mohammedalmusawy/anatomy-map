@@ -55,6 +55,40 @@
   $("#tq").addEventListener("input", (ev) => { q = ev.target.value; render(); });
   if (set !== "ours") document.querySelectorAll("#tt a").forEach((x) => x.classList.toggle("on", x.dataset.set === set));
   document.addEventListener("listen:ready", render);
+  // ⭐ (17/11) «مصطلحاتي»: اللي حفظه الطالب بالتحديد الذكي (pick.js) — بجهازه بس (t:srs، نفس مخزن «راجع اليوم»)
+  function mineBox() {
+    let st = {}; try { st = JSON.parse(localStorage.getItem("t:srs") || "{}") || {}; } catch (e) {}
+    const ks = Object.keys(st).filter((k) => st[k] && st[k].mine).sort((a, b) => st[b].mine - st[a].mine);
+    let box = document.getElementById("mine");
+    if (!ks.length) { if (box) box.hidden = true; return; }
+    if (!box) {
+      box = document.createElement("details"); box.id = "mine"; box.className = "minebox";
+      const at = $("#review-box"); (at || $("#tt")).insertAdjacentElement(at ? "afterend" : "beforebegin", box);
+      box.addEventListener("click", (ev) => {
+        const b = ev.target.closest("button[data-m]"); if (!b) return;
+        ev.preventDefault();
+        const k = b.closest("li").dataset.k;
+        if (b.dataset.m === "say") { if (window.Pick && Pick.say) Pick.say(k, 1, b); return; }
+        let s2 = {}; try { s2 = JSON.parse(localStorage.getItem("t:srs") || "{}") || {}; } catch (e) {}
+        const v = s2[k]; if (v && v.r) delete v.mine; else delete s2[k];
+        try { localStorage.setItem("t:srs", JSON.stringify(s2)); } catch (e) {}
+        document.dispatchEvent(new CustomEvent("pick:saved", { detail: { key: k, saved: false } }));
+      });
+    }
+    const open = box.open || location.hash === "#mine";
+    box.hidden = false;
+    const ar = (k) => { const x = window.Listen && Listen.match && Listen.match(k), i = x && Listen.info(x); return i ? i[1] : ""; };
+    const EN = document.documentElement.lang === "en";
+    box.innerHTML = `<summary data-noen>⭐ <b>${EN ? "My terms" : "مصطلحاتي"}</b> <small>${ks.length}</small></summary><p class="hint" data-noen>${EN ? "Select any word on any page ← ⭐ Save. They join “Review today” and stay on your device only." : "اللي حفظته بالتحديد: حدّد أي كلمة بأي صفحة ← ⭐ احفظ. تدخل «راجع اليوم» وتبقى بجهازك بس."}</p><ul>` +
+      ks.map((k) => `<li data-k="${esc(k)}"><bdi dir="ltr" class="mk">${esc(k)}</bdi>${ar(k) ? `<span class="ta">${esc(ar(k))}</span>` : ""}<span class="mb"><button type="button" data-m="say" aria-label="اسمع ${esc(k)}">🔊</button><button type="button" data-m="del" aria-label="شيل ${esc(k)} من مصطلحاتي">✕</button></span></li>`).join("") + "</ul>";
+    box.open = open;
+  }
+  document.addEventListener("pick:saved", mineBox);
+  document.addEventListener("listen:ready", mineBox);
+  addEventListener("storage", (e) => { if (e.key === "t:srs") mineBox(); });
+  new MutationObserver(() => mineBox()).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });   // ع ⇄ ENG
+  mineBox();
+  if (location.hash === "#mine") { const b = document.getElementById("mine"); if (b) requestAnimationFrame(() => b.scrollIntoView({ block: "start" })); }
   chips(); render();
   if (hit) { const a = $("#tl .term.hit"); if (a) { a.setAttribute("tabindex", "-1"); requestAnimationFrame(() => { a.scrollIntoView({ block: "center" }); a.focus({ preventScroll: true }); }); } }
 })();
