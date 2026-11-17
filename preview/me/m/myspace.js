@@ -301,8 +301,11 @@
     let i = 0;
     const unmark = () => document.querySelectorAll(".coach").forEach((x) => x.classList.remove("coach"));
     const fin = () => { LS.set(TKEY, true); unmark(); d.remove(); };
+    let kept = !!pre;
     const paint = () => {
       unmark(); const t = COACH[i] && document.querySelector(COACH[i]); if (t) t.classList.add("coach");
+      // ⚡ (77 LCP) البطاقة المرسومة بالـHTML (pre) هي نفس الخطوة 1 بالضبط: ما نعيد كتابتها بأول مرة، وإلا عنصرها (اللي انرسم بأول رسمة وهو الـLCP) ينحذف ويصير LCP عنصر جديد بعد وصول data.json (يقفز من ~0.1ث لحد وصول البيانات)
+      if (kept) { kept = false; const tt = d.querySelector("#tour-t"), sp = d.querySelector("span"); if (i === 0 && tt && sp && d.querySelector("[data-next]") && d.querySelector("[data-skip]") && tt.textContent === STEPS[0][0] && sp.textContent === STEPS[0][1]) return; }
       d.innerHTML = `<small class="sub">${i + 1} من ${STEPS.length}</small><b id="tour-t">${STEPS[i][0]}</b><span>${STEPS[i][1]}</span>
         <div class="chips-row"><button type="button" class="cbtn" data-next>${i + 1 < STEPS.length ? "التالي" : "يلا نبدأ"}</button><button type="button" class="cbtn ghost" data-skip>تخطّي</button></div>`;
     };

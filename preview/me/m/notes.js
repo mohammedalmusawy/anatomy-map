@@ -26,7 +26,7 @@
 
   const KINDS = {
     hard: { icon: "📌", label: "نقطة صعبة" }, ask: { icon: "❓", label: "سؤال للأستاذ" }, sum: { icon: "🧠", label: "ملخص" },
-    rem: { icon: "⏰", label: "تذكير" }, free: { icon: "📝", label: "ملاحظة" }, answer: { icon: "💬", label: "جواب سؤال اليوم" },
+    rem: { icon: "⏰", label: "تذكير" }, free: { icon: "📝", label: "ملاحظة" }, todo: { icon: "☑️", label: "مهمة" }, answer: { icon: "💬", label: "جواب سؤال اليوم" },
   };
   const REMIND = { tomorrow: "باچر الصبح", d3: "بعد 3 أيام", exam: "قبل الامتحان بيوم" };
 
@@ -156,7 +156,7 @@
   // البحث: المثبّتة أول، ثم الأحدث
   function search(q, list = all()) {
     const nq = norm(q);
-    return list.filter((n) => !nq || norm(n.text + " " + n.tags.join(" ") + " " + (n.links || []).map((l) => l.title).join(" ")).includes(nq))
+    return list.filter((n) => n.kind !== "todo" && (!nq || norm(n.text + " " + n.tags.join(" ") + " " + (n.links || []).map((l) => l.title).join(" ")).includes(nq)))   // ☑️ «مهامي» (myplus.js) تنخزن هنا بس ما تطلع بقائمة الملاحظات
       .sort((a, b) => (b.pin - a.pin) || (b.t - a.t));
   }
   // التذكيرات الجاية (للتنبيهات بعدين)

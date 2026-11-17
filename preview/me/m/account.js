@@ -146,7 +146,7 @@
     // الخروج ما يفضّي مكان الجهاز (حتى ما ينتشر الكود بخروج/دخول). تصفير الأجهزة من الإدارة بس.
     try { const c = await client(); await c.auth.signOut({ scope: "local" }); } catch (e) {}
     state.session = null; state.student = null; state.cache = {};
-    try { localStorage.removeItem("t:acct-touch"); localStorage.removeItem("t:acct-touch-at"); localStorage.removeItem("t:acct-name"); localStorage.removeItem("t:acct-session"); } catch (e) {}
+    try { localStorage.removeItem("t:acct-touch"); localStorage.removeItem("t:acct-touch-at"); localStorage.removeItem("t:acct-name"); localStorage.removeItem("t:acct-session"); localStorage.removeItem("t:name-secret"); localStorage.removeItem("t:name-last"); localStorage.removeItem("t:name-at"); localStorage.removeItem("t:name-first"); localStorage.removeItem("t:name-wait"); } catch (e) {}   // 75: سر «اكتب اسمك» يشيله الخروج (جهاز مشترك)
     emit();
   }
 

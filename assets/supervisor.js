@@ -5,6 +5,7 @@
 //   والسيرفر يفرضها بقائمة بيضاء (supervisor + staff_can بهجرة 070). هذا الملف واجهة بس. ماكو حذف ولا إعدادات ولا إحصائيات ولا «صوتك يوصل».
 (function () {
   "use strict";
+  const SRC_ = (document.currentScript && document.currentScript.src) || "";
   const C = window.STUDY_CLOUD || {};
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const TYPE = { theory: "نظري", practical: "عملي" };
@@ -24,7 +25,8 @@
     };
     const P = me.perms || {};
     const tabs = [...(P.lectures ? [["exp", "📚 المحاضرات"], ["up", "📤 ارفع أو بلّغ"], ["mine", "🧾 طلباتي"]] : []),
-      ...(P.codes ? [["codes", "🎓 أكواد الطلاب"]] : [])];
+      ...(P.codes ? [["codes", "🎓 أكواد الطلاب"], ["names", "🔑 طلبات الأسماء"]] : []),
+      ...(P.stats ? [["stats", "📊 الإحصائيات"]] : [])];   // 🔑 75: الحساب المدمج (إحصائيات مجمّعة k≥5) — تتحمّل وقت الضغط بس
     let subjects = [];
     root.innerHTML = `<div class="tm-hello"><span>أهلاً <b>${esc(me.name)}</b> · ${esc(me.title)}</span><span><span class="sd-asw">👁️ شوف الموقع كـ: <button class="btn ghost" type="button" data-as="student">طالب</button> <button class="btn ghost" type="button" data-as="visitor">زائر</button></span> <button class="btn ghost" id="sup-out" type="button">خروج</button></span></div>
       <p class="hint">كل شي ترفعه أو تبلّغ عنه يروح لمحمد للمراجعة، وما ينشر إلا بعد موافقته. وكل فعل ينكتب بالسجل.</p>
@@ -36,10 +38,27 @@
     const show = (t) => {
       root.querySelectorAll(".dtabs a").forEach((x) => x.classList.toggle("on", x.dataset.t === t));
       pane().innerHTML = '<p class="hint">لحظة…</p>';
-      ({ exp: expected, up: upload, codes, mine })[t]?.();
+      ({ exp: expected, up: upload, codes, mine, names, stats })[t]?.();
     };
     root.querySelectorAll(".dtabs a").forEach((a) => a.onclick = (e) => { e.preventDefault(); show(a.dataset.t); });
     if (tabs.length) show(tabs.some(([k]) => k === location.hash.slice(1)) ? location.hash.slice(1) : tabs[0][0]);
+
+    // 🔑 75: وحدة الأسماء/الإحصائيات (admin-names.js) — تنحمّل وقت الضغط بس
+    let namesP = null;
+    const loadNames = () => window.AdminNames ? Promise.resolve() : (namesP ??= new Promise((ok, no) => {
+      const sc = document.createElement("script"); sc.src = SRC_.replace(/supervisor(\.min)?\.js/, "admin-names.js"); sc.onload = ok; sc.onerror = () => { namesP = null; no(new Error("load")); }; document.head.appendChild(sc);
+    }));
+    const names = async () => {
+      try { await loadNames(); } catch (e) { return (pane().innerHTML = '<p class="hint">ما گدرت أفتح القسم. جرّب مرة ثانية.</p>'); }
+      const box = pane(); box.innerHTML = '<div id="nm-req"></div><details><summary>🕘 سجل دخول الطلاب</summary><div id="nm-log"></div></details>';
+      const ops = { list: () => api({ action: "name_requests" }), decide: (req, accept, roster, confirm) => api({ action: "name_decide", req, accept, roster, confirm }), logins: () => api({ action: "student_logins" }) };
+      window.AdminNames.requests(box.querySelector("#nm-req"), ops);
+      box.querySelector("details").addEventListener("toggle", (ev) => { if (ev.target.open) window.AdminNames.logins(box.querySelector("#nm-log"), ops); });
+    };
+    const stats = async () => {
+      try { await loadNames(); } catch (e) { return (pane().innerHTML = '<p class="hint">ما گدرت أفتح القسم. جرّب مرة ثانية.</p>'); }
+      window.AdminNames.stats(pane(), sb);
+    };
 
     async function expected() {
       const r = await api({ action: "expected" });

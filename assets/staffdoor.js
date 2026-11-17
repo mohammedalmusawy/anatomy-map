@@ -40,6 +40,7 @@
 .sd-msg{min-height:1.4em;margin:0;font-size:.95rem}.sd-msg.bad{color:#B3261E;font-weight:700}.sd-msg.ok{color:var(--muted,#666)}
 .sd-links{margin:0;font-size:.9rem;display:flex;flex-wrap:wrap;gap:4px 12px}
 .sd-link{background:none;border:0;padding:6px 0;min-height:44px;color:var(--brand,#3B4A8C);font:inherit;text-decoration:underline;cursor:pointer}
+.sd-codebox{direction:ltr;unicode-bidi:embed;text-align:center;font-family:ui-monospace,Menlo,monospace;font-size:1.5rem;font-weight:700;letter-spacing:.06em;padding:14px 10px;border:2px dashed var(--brand,#3B4A8C);border-radius:14px;user-select:all;overflow-wrap:anywhere}
 .sd-free{font-size:.85rem;color:var(--muted,#666);margin:0}
 .sd-dlg{position:fixed;inset:0;z-index:2147483000;background:rgba(20,24,34,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px;overflow:auto}
 .sd-dlg .sd-card{margin:0;width:100%;max-height:calc(100vh - 32px);overflow:auto;margin-bottom:env(safe-area-inset-bottom)}
@@ -51,22 +52,39 @@ body.sd-locked .wrap,body.sd-locked main{visibility:hidden}
 /* (69) الشريط بالتدفق (ما يغطي المحتوى) بس فوق خلفية نافذة الكود/البوابة حتى «ارجع» و«شوف كـ…» يبقون ينضغطون */
 body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(safe-area-inset-top))}
 .sd-pv button{min-height:44px;padding:0 12px;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}
-.sd-door{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .sd-msg.bad{color:#FF8A80}}:root[data-theme=dark] .sd-msg.bad{color:#FF8A80}`;
     document.head.appendChild(st);
   }
 
   // ── 1) الباب المخفي ──
+  // 🎓 (10/11/2026، فرع logo-door): الباب ينضاف للوجو الموقع (data-staffdoor) ويّا العنوان. باب واحد بس (5 ضغطات) لكل الطاقم؛
+  //   الرقم السري هو اللي يحدد منو (محمد / رئيس القسم / المساعد) والصلاحية بالسيرفر (staff-auth pin_login) — ماكو باب ثاني بـ 3 ضغطات.
+  //   pointerup بدل click: Safari الآيفون ما يوصّل click من عنصر مو قابل للضغط (عنوان/صورة) للـ document، فالباب كان ممكن ما ينفتح باللمس.
+  //   الضغطة تنحسب بس إذا: إصبع/ماوس واحد، بلا سحب (≤ 12px، يعني مو تمرير)، وبلا ضغط طويل (< 600ms)، وبالزر الأساسي.
   const LOGO = "[data-staffdoor], .hero h1, header.idn h1";
-  let taps = [];
-  const mark = () => document.querySelectorAll(LOGO).forEach((el) => el.classList.add("sd-door"));
-  document.addEventListener("click", (ev) => {
-    const el = ev.target.closest && ev.target.closest(LOGO);
-    if (!el) return;
+  let taps = [], down = null;
+  // (10/11) ستايل الباب لحاله ودائماً: قبل كان داخل css() اللي ما تنحمّل إلا ويّا النوافذ، فالضغط السريع على الموبايل يكبّر الصفحة أو يحدد النص.
+  const DOOR_CSS = ".sd-door{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}.sd-door img,img.sd-door{-webkit-user-drag:none}";
+  const mark = () => {
+    if (!document.getElementById("sd-door-css")) { const st = document.createElement("style"); st.id = "sd-door-css"; st.textContent = DOOR_CSS; document.head.appendChild(st); }
+    document.querySelectorAll(LOGO).forEach((el) => el.classList.add("sd-door"));
+  };
+  const onLogo = (ev) => ev.target && ev.target.closest && ev.target.closest(LOGO);
+  document.addEventListener("pointerdown", (ev) => {
+    down = ev.isPrimary && ev.button === 0 && onLogo(ev) ? { x: ev.clientX, y: ev.clientY, t: Date.now(), id: ev.pointerId } : null;
+  }, { passive: true });
+  document.addEventListener("pointercancel", () => { down = null; }, { passive: true });
+  document.addEventListener("pointerup", (ev) => {
+    const d = down; down = null;
+    if (!d || ev.pointerId !== d.id || !onLogo(ev)) return;
     const t = Date.now();
+    if (t - d.t > 600 || Math.hypot(ev.clientX - d.x, ev.clientY - d.y) > 12) { taps = []; return; }
     taps = taps.filter((x) => t - x < 3000); taps.push(t);
     if (taps.length >= 5) { taps = []; location.href = ROOT + "admin/"; }
-  });
+  }, { passive: true });
+  // ضغط سريع بالماوس على العنوان/اللوجو ما يحدد النص (user-select بالـ CSS يغطي اللمس، وهذا يغطي النقر المزدوج/الثلاثي)
+  document.addEventListener("mousedown", (ev) => { if (ev.detail > 1 && onLogo(ev)) ev.preventDefault(); });
 
   // ── الجلسات (للعرض بس؛ الصلاحية الحقيقية بالسيرفر) ──
   const alive = (s) => !!(s && (s.refresh_token || (s.expires_at && s.expires_at * 1000 > Date.now())) && s.user);
@@ -139,6 +157,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
         <input id="sd-code" name="code" dir="ltr" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false" placeholder="RAD-XXXX-XXXX" maxlength="20">
         <button type="submit" class="sd-btn">دخول</button></form>
       <p class="sd-msg" id="sd-cm" role="status" aria-live="polite"></p>
+      ${NA.on ? `<button type="button" class="sd-btn ghost" id="sd-namego">ما عندي كود؟ اكتب اسمي</button>` : ""}
       ${SUPPORT ? `<a class="sd-btn ghost" href="${esc(SUPPORT)}" target="_blank" rel="noopener" data-sd-support>نسيت الكود؟ راسل المشرف</a>` : ""}
       <p class="sd-free">الأطلس والفحوصات الملوّنة والأجهزة والمصطلحات العامة مفتوحة لأي أحد.</p>
       <button type="button" class="sd-btn ghost" data-sd-close>${direct ? "‹ رجوع للرئيسية" : "مو هسه"}</button></div>`;
@@ -174,7 +193,82 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
         go();
       } catch (e) { btn.disabled = false; m.className = "sd-msg bad"; m.textContent = "ماكو اتصال. تأكد من النت وجرّب مرة ثانية."; }
     };
+    const ng = d.querySelector("#sd-namego");
+    if (ng) { ng.onclick = () => nameFlow(d.querySelector(".sd-card"), () => { if (next) location.href = next; else if (G && gated(rel, G)) location.reload(); else location.href = ROOT + "me/"; }, close, direct, next); if (LS.get("t:name-wait") === "1") ng.click(); }
     setTimeout(() => inp.focus(), 30);
+  }
+  // 🔑 75: «اكتب اسمك» — مفتوحة للزائر بس لما settings.name_access.on. الكود ما يبين لمن يكتب اسماً لحاله: لازم رقمه الجامعي أو موافقة الإدارة،
+  // والكود يوصل لهالجهاز بس (سر عشوائي بالمتصفح، بالسيرفر بصمته). مطفية افتراضياً.
+  let NA = { on: false };
+  const NURL = () => ((window.STUDY_CLOUD || {}).url || "") + "/functions/v1/name-claim";
+  function nsecret() {
+    let k = LS.get("t:name-secret");
+    if (!/^[A-Za-z0-9_-]{32,64}$/.test(k || "")) {
+      const b = new Uint8Array(24); crypto.getRandomValues(b);
+      k = btoa(String.fromCharCode(...b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); LS.set("t:name-secret", k);
+    }
+    return k;
+  }
+  async function ncall(action, extra) {
+    const A = (window.STUDY_CLOUD || {}).anon || "";
+    try {
+      const r = await fetch(NURL(), { method: "POST", headers: { apikey: A, Authorization: "Bearer " + A, "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ action, secret: nsecret() }, extra || {})) });
+      const j = await r.json().catch(() => ({})); j.http = r.status; return j;
+    } catch (e) { return { status: "net", msg: "ماكو اتصال. تأكد من النت وجرّب مرة ثانية." }; }
+  }
+  function nameFlow(box, go, close, direct, next) {
+    let poll = 0, name = "", univ = false;
+    const stop = () => { clearInterval(poll); poll = 0; };
+    const draw = () => {
+      box.innerHTML = `<h2 id="sd-gt">اكتب اسمك 👋</h2><p class="sd-sub">اكتب اسمك الثلاثي مثل ما هو بقائمة القسم. إذا كان بالقائمة، الكود يوصلك هنا.</p>
+        <form id="sd-nf" novalidate><label class="sd-lab" for="sd-nn">اسمك الثلاثي</label><input id="sd-nn" autocomplete="name" maxlength="120" value="${esc(name)}">
+          <div id="sd-uw" ${univ ? "" : "hidden"}><label class="sd-lab" for="sd-un">رقمك الجامعي</label><input id="sd-un" inputmode="numeric" dir="ltr" autocomplete="off" maxlength="40"></div>
+          <button type="submit" class="sd-btn" id="sd-ngo">${univ ? "تأكيد" : "تحقّق"}</button></form>
+        <div id="sd-nx"></div><p class="sd-msg" id="sd-nm2" role="status" aria-live="polite"></p>
+        <button type="button" class="sd-btn ghost" data-sd-back>‹ رجوع للكود</button>`;
+      const m = box.querySelector("#sd-nm2"), x = box.querySelector("#sd-nx"), say = (t, bad) => { m.className = "sd-msg " + (bad ? "bad" : "ok"); m.textContent = t || ""; };
+      box.querySelector("[data-sd-back]").onclick = () => { stop(); dialogAgain(); };
+      const askBtn = () => { x.innerHTML = `<button type="button" class="sd-btn ghost" id="sd-ask">اطلب موافقة الإدارة</button>`; x.querySelector("#sd-ask").onclick = async () => {
+        const r = await ncall("ask", { name }); handle(r); }; };
+      const handle = (r) => {
+        const st = r && r.status; x.innerHTML = "";
+        if (st === "ok") { stop(); LS.del("t:name-wait"); LS.del("t:name-last"); LS.del("t:name-at"); LS.del("t:name-first"); return showCode(r.code, r.name || name); }
+        if (st === "need_proof") { univ = r.mode === "univ_or_ask"; box.querySelector("#sd-uw").hidden = !univ; box.querySelector("#sd-ngo").textContent = univ ? "تأكيد" : "تحقّق"; askBtn(); if (univ) box.querySelector("#sd-un").focus(); return say(r.msg); }
+        if (st === "queued" || st === "pending") { LS.set("t:name-wait", "1"); if (name) { LS.set("t:name-last", name); if (!LS.get("t:name-at")) LS.set("t:name-at", String(Date.now())); if (!LS.get("t:name-first")) LS.set("t:name-first", String(Date.now())); } say(r.msg || "طلبك عند الإدارة."); if (!poll) { let n = 0; poll = setInterval(async () => { if (!box.isConnected || ++n > 100) return stop(); const p = await ncall("poll"); if (p.status === "ok") handle(p); else if (p.status === "rejected") { stop(); LS.del("t:name-wait"); LS.del("t:name-last"); LS.del("t:name-at"); LS.del("t:name-first"); say(p.msg, true); } }, 9000); } return; }
+        if (st === "rejected" || st === "none") { LS.del("t:name-wait"); LS.del("t:name-last"); LS.del("t:name-at"); LS.del("t:name-first"); return say(r.msg || "ما لگينا طلب. اكتب اسمك مرة ثانية.", st === "rejected"); }
+        if (st === "taken" || st === "nomatch" || st === "locked") { askBtn(); return say(r.msg, true); }
+        say((r && r.msg) || "صار خطأ، جرّب مرة ثانية.", true);
+      };
+      box.querySelector("#sd-nf").onsubmit = async (ev) => {
+        ev.preventDefault(); name = box.querySelector("#sd-nn").value.trim().replace(/\s+/g, " ");
+        if (name.length < 3) return say("اكتب اسمك الثلاثي كامل.", true);
+        const b = box.querySelector("#sd-ngo"); b.disabled = true; say("لحظة…");
+        const r = await ncall("find", { name, univ: univ ? box.querySelector("#sd-un").value.trim() : "" }); b.disabled = false; handle(r);
+      };
+      if (LS.get("t:name-wait") === "1") ncall("poll").then((p) => { if (!box.isConnected) return; handle(p.status === "none" ? { status: "none" } : p);
+        // 75 (مراجعة خامسة): إذا ما زال ينتظر، نعيد الطلب بصمت مرة كل 6 ساعات (يدخل الطابور لو كان انرفض بالنظام بسبب حد، ويجدّد الانتهاء) بدل ما ينتظر 14 يوم بلا تغيير
+        const last = LS.get("t:name-last"), at = +LS.get("t:name-at") || 0;
+        // 75 (مراجعة سادسة): الإعادة التلقائية تتوقف بعد 14 يوم من أول طلب (انتهاء مدة الطلب) — يعيد الكتابة أو يراسل المشرف
+        const first = +LS.get("t:name-first") || 0;
+        if (first && Date.now() - first > 14 * 86400 * 1000) { LS.del("t:name-wait"); LS.del("t:name-last"); LS.del("t:name-at"); LS.del("t:name-first"); return say("انتهت مدة الطلب، أعد الكتابة أو راسل المشرف.", true); }
+        if ((p.status === "pending" || p.status === "queued") && last && Date.now() - at > 6 * 3600 * 1000) { LS.set("t:name-at", String(Date.now())); ncall("ask", { name: last }); } });
+      box.querySelector("#sd-nn").focus();
+    };
+    const dialogAgain = () => { const dd = box.closest(".sd-dlg"); if (dd) dd.remove(); dialog(next); };
+    const showCode = (code, nm) => {
+      box.innerHTML = `<h2 id="sd-gt">أهلاً ${esc(String(nm || "").split(" ")[0])} 👋</h2><p class="sd-sub">هذا كودك. احفظه (صوّر الشاشة أو انسخه) حتى تدخل فيه من أي جهاز.</p>
+        <div class="sd-codebox" id="sd-cc">${esc(code)}</div>
+        <button type="button" class="sd-btn ghost" id="sd-cp">نسخ الكود</button><button type="button" class="sd-btn" id="sd-in">ادخل</button><p class="sd-msg" id="sd-cm3" role="status" aria-live="polite"></p>`;
+      box.querySelector("#sd-cp").onclick = async (e) => { try { await navigator.clipboard.writeText(code); e.currentTarget.textContent = "✔️ اننسخ"; } catch (er) { /* */ } };
+      box.querySelector("#sd-in").onclick = async (e) => {
+        const b = e.currentTarget, m = box.querySelector("#sd-cm3"); b.disabled = true;
+        try { await account(); const r = await window.Account.redeem(code); b.disabled = false;
+          if (!r.ok) { m.className = "sd-msg bad"; m.textContent = r.msg; return; }
+          if (!r.name_confirmed || r.needs_name) return nameCheck(box, r.full_name || "", go); go();
+        } catch (er) { b.disabled = false; m.className = "sd-msg bad"; m.textContent = "ماكو اتصال. جرّب مرة ثانية."; }
+      };
+    };
+    draw();
   }
   // أول دخول: «هذا اسمك؟» (نفس خطوة ٢ بشاشة دخول الطلاب)
   function nameCheck(box, n, go) {
@@ -235,7 +329,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     if (skip || !window.Net || !window.Net.on) return;
     // آخر حالة معروفة ← نخفي المحتوى من أول لحظة (بلا ومضة)، والإعدادات الحقيقية تأكد أو تشيل
     if (LS.get("t:gate-on") === "1" && gated(rel, { open: null, closed: null }) && !allowed()) document.body.classList.add("sd-locked"), css();
-    Promise.resolve(window.Net.settings()).then((S) => { S = S || {}; apply(S.gate || { on: false }); })
+    Promise.resolve(window.Net.settings()).then((S) => { S = S || {}; NA = S.name_access && S.name_access.on === true ? { on: true } : { on: false }; apply(S.gate || { on: false }); })
       .catch(() => document.body.classList.remove("sd-locked"));
   }
   // 73: حارس الاسم المشترك — طالب مسجّل دخول وما عنده اسم محفوظ (t:acct-name) ← نحمّل account.js مرة، وready() تجيب حسابه؛ إذا بلا اسم تطلع نافذة الاسم (ما تنسد)

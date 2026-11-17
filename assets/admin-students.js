@@ -28,7 +28,7 @@
     const sc = document.createElement("script"); sc.src = SRC_.replace(/admin-students(\.min)?\.js/, name); sc.onload = ok; sc.onerror = () => no(new Error("load " + name)); document.head.appendChild(sc);
   });
   let rosterP = null;
-  const loadRoster = () => window.AdminRoster && window.RosterParse ? Promise.resolve() : (rosterP ??= Promise.all([loadScript("roster-parse.js"), loadScript("admin-roster.js")]).catch((e) => { rosterP = null; throw e; }));
+  const loadRoster = () => window.AdminRoster && window.RosterParse && window.AdminNames ? Promise.resolve() : (rosterP ??= Promise.all([loadScript("roster-parse.js"), loadScript("admin-roster.js"), loadScript("admin-names.js")]).catch((e) => { rosterP = null; throw e; }));
 
   const CSS_ID = "st73-css";
   if (!document.getElementById(CSS_ID)) {

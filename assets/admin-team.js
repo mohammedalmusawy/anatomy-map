@@ -17,20 +17,21 @@
   // 🔢 29/10 (الرقم السري): محمد يحدد الرقم من هنا (فريد بين الكل). مشتركة ويّا admin-dept.js (window.StaffPin).
   //   الرقم ما يرجع من السيرفر أبداً؛ الرسالة الجاهزة بلا الرقم (يدزه محمد برسالة ثانية).
   const pinForm = (id, label) => `<form class="tm-pin" data-pin-for="${esc(id)}" novalidate>
-      <label class="tm-f"><span>${esc(label || "الرقم السري الجديد (8 أرقام أو أكثر)")}</span><input type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12" data-pin="1"></label>
-      <label class="tm-f"><span>أعده مرة ثانية</span><input type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12" data-pin="2"></label>
-      <p class="hint">مو تسلسل (12345678) ولا رقم مكرر، ومو رقمك إنت. القديم يبطل وكل أجهزته تطلع.</p>
+      <label class="tm-f"><span>${esc(label || "كلمة السر الجديدة (10 أحرف أو أكثر، بيها حرف ورقم)")}</span><input type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64" data-pin="1"></label>
+      <label class="tm-f"><span>أعده مرة ثانية</span><input type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64" data-pin="2"></label>
+      <p class="hint">10 أحرف أو أكثر، بيها حرف ورقم، ومو كلمة سرك إنت. القديمة تبطل وكل أجهزته تطلع.</p>
       <p><button class="btn" type="submit">💾 احفظ الرقم</button> <button class="btn ghost" type="button" data-pin-x>إلغاء</button></p><p class="tm-msg" role="status" aria-live="polite"></p></form>`;
-  const digits = (s) => String(s || "").replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\D/g, "");
+  const digits = (s) => (window.AdminPw ? AdminPw.clean(s) : String(s || "").trim());   // 🔐 10/11: كلمة سر بحروف وأرقام (الاسم بقى حتى ما يتغيّر الباقي)
   const pinRead = (f) => { const a = digits(f.querySelector("[data-pin='1']").value), b = digits(f.querySelector("[data-pin='2']").value);
-    return a !== b ? { err: "الرقمين مو متطابقين." } : a.length < 8 || a.length > 12 ? { err: "الرقم السري 8–12 رقم." } : { pin: a }; };
-  const ready = (name, url) => {
+    const why = (window.AdminPw ? AdminPw.problem(a) : (a.length < 10 ? "كلمة السر 10 أحرف أو أكثر." : "")); return a !== b ? { err: "كلمتين السر مو متطابقات." } : why ? { err: why } : { pin: a }; };
+  const ready = (name, url, temp) => {   // 🔐 10/11: temp = كود مؤقت لرئيس القسم (مرة وحدة، 24 ساعة، وبعده يختار كلمة سره)
     const nm = String(name || "").split("—")[0].trim();
-    const text = `السلام عليكم ${nm}،\nحسابك بموقع دروس تقنيات الأشعة جاهز:\n١) افتح الموقع واضغط على العنوان «دروس تقنيات الأشعة» 5 مرات بسرعة${url ? ` (أو افتح: ${url})` : ""}\n` +
+    const text = temp ? `السلام عليكم ${nm}،\nحسابك بموقع دروس تقنيات الأشعة جاهز:\n١) افتح الموقع واضغط على اللوجو أو العنوان 5 مرات ورا بعض${url ? ` (أو افتح: ${url})` : ""}\n` +
+      `٢) اكتب الكود المؤقت (أدزه إلك برسالة ثانية). يشتغل مرة وحدة خلال 24 ساعة.\n٣) الموقع يطلب منك تختار كلمة سر خاصة بيك (10 أحرف أو أكثر، حرف ورقم) — محد يعرفها غيرك.\nإذا نسيتها، أدزلك كود مؤقت جديد.` : `السلام عليكم ${nm}،\nحسابك بموقع دروس تقنيات الأشعة جاهز:\n١) افتح الموقع واضغط على العنوان «دروس تقنيات الأشعة» 5 مرات بسرعة${url ? ` (أو افتح: ${url})` : ""}\n` +
       `٢) اكتب رقمك السري (أدزه إلك برسالة ثانية)\n٣) إذا الجهاز مالتك، أشّر «تذكّر هذا الجهاز 30 يوم».\nتگدر تغيّر رقمك من لوحتك (اختياري). لا تشارك رقمك ويّا أي أحد.`;
-    return `<div class="tm-once" role="status"><b>✅ انحفظ الرقم — ${esc(name || "")}</b>
-      <p><button class="btn" type="button" data-cp="${esc(text)}">📋 انسخ رسالة جاهزة (بلا الرقم)</button> <button class="btn ghost" type="button" data-once-hide>✕ خلصت</button></p>
-      <p class="hint">دز الرقم نفسه برسالة ثانية بالخاص. الرقم ما ينحفظ بأي مكان تگدر تقراه (ولا بالسجل).</p></div>`;
+    return `<div class="tm-once" role="status"><b>✅ ${temp ? "انحفظ الكود المؤقت" : "انحفظت كلمة السر"} — ${esc(name || "")}</b>
+      <p><button class="btn" type="button" data-cp="${esc(text)}">📋 انسخ رسالة جاهزة (بلا الكود)</button> <button class="btn ghost" type="button" data-once-hide>✕ خلصت</button></p>
+      <p class="hint">دز ${temp ? "الكود" : "كلمة السر"} نفسها برسالة ثانية بالخاص. ما تنحفظ بأي مكان تگدر تقراه (ولا بالسجل).</p></div>`;
   };
   window.StaffPin = { pinForm, pinRead, ready };
   if (!window.__onceHide) { window.__onceHide = 1; document.addEventListener("click", (ev) => { const b = ev.target.closest && ev.target.closest("[data-once-hide]"); if (b) b.closest(".tm-once").remove(); }); }
@@ -47,7 +48,7 @@
         headers: { apikey: C.anon, Authorization: "Bearer " + (session ? session.access_token : ""), "Content-Type": "application/json" }, body: JSON.stringify(body) });
       return { ...(await r.json().catch(() => ({}))), status: r.status };   // 🛡️ الحالة من HTTP دائماً (body.status ما يغطّيها)
     };
-    const PERM = [["can_lectures", "📚 رفع المحاضرات"], ["can_codes", "🎓 توزيع أكواد الطلاب"]];   // 🔒 70: المساعد = محاضرات + أكواد بس (الفريق والإعلانات انشالن، والسيرفر يرفضهن)
+    const PERM = [["can_lectures", "📚 رفع المحاضرات"], ["can_codes", "🎓 توزيع أكواد الطلاب + طلبات الأسماء"], ["can_stats", "📊 إحصائيات القسم (أرقام مجمّعة بلا أسماء)"]];   // 🔒 70: المساعد = محاضرات + أكواد بس (الفريق والإعلانات انشالن، والسيرفر يرفضهن)
     pane.innerHTML = `<h2>🔑 المساعدين والصلاحيات</h2>
       <p class="hint">كل مساعد يدخل من الباب المخفي (5 ضغطات على عنوان الموقع) بـ<b>رقمه السري بس</b> — إنت تحدده هنا، والموقع يعرفه من الرقم. يگدر يغيّره من لوحته (اختياري)، وإذا نساه: «🔑 إعادة تعيين الرقم». كل دخول توصلك عليه رسالة بالبوت. يشوف بس الصلاحيات اللي تأشّرها هنا. <b>ممنوع على كل مساعد:</b> الحذف، الإعدادات، ملاحظات الطلاب، لوحة رئيس القسم، وإضافة مساعدين. كل فعل ينكتب بالسجل تحت.</p>
       <p id="tm-on"></p>
@@ -56,7 +57,7 @@
         <label class="tm-f"><span>الصفة</span><input id="tm-title" value="منسّق المحاضرات" maxlength="80"></label>
         <fieldset class="tm-perms"><legend>الصلاحيات</legend>${PERM.map(([k, l]) => `<label class="sw"><input type="checkbox" data-np="${k.slice(4)}" ${k === "can_lectures" ? "checked" : ""}> ${l}</label>`).join("")}</fieldset>
         <label class="tm-f"><span>ينتهي (اختياري)</span><input id="tm-exp-new" type="date"></label>
-        <label class="tm-f"><span>الرقم السري (8 أرقام أو أكثر)</span><input id="tm-pin-new" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12"></label>
+        <label class="tm-f"><span>كلمة السر (10 أحرف أو أكثر، بيها حرف ورقم)</span><input id="tm-pin-new" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64"></label>
         <p><button class="btn" id="tm-make">➕ سوّي الحساب</button></p><div id="tm-out" aria-live="polite"></div></div>
       <h3>المساعدين</h3><div class="scroll-x" id="tm-list">…</div>
       <h3>📥 طابور مراجعة المحاضرات</h3><div class="scroll-x" id="tm-q">…</div>
@@ -131,7 +132,7 @@
     $("#tm-make").onclick = async () => {
       const perms = {}; pane.querySelectorAll("[data-np]").forEach((c) => (perms[c.dataset.np] = c.checked));
       const pin = digits($("#tm-pin-new").value);
-      if (pin && (pin.length < 8 || pin.length > 12)) return alert("الرقم السري 8–12 رقم (أو خلّيه فارغ وحدده بعدين).");
+      if (pin) { const a = pin, why = (window.AdminPw ? AdminPw.problem(a) : (a.length < 10 ? "كلمة السر 10 أحرف أو أكثر." : "")); if (why) return alert(why + " (أو خلّيها فارغة وحددها بعدين)"); }
       const r = await api({ action: "admin_create", name: $("#tm-name").value, title: $("#tm-title").value, perms, expires_at: $("#tm-exp-new").value || null, pin: pin || undefined });
       $("#tm-pin-new").value = "";
       if (r.status !== 200) return alert(r.msg || "صار خطأ (الاسم؟)");

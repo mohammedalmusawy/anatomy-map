@@ -3,7 +3,7 @@
 //   AdminDept.viewer(root, sb) ← اللي يشوفه رئيس القسم نفسه بعد الدخول (🔢 الرقم السري بس): أرقام مجمّعة بس (k ≥ 5)، بلا أسماء ولا أكواد ولا ملاحظات، وما يغيّر شي.
 // كل شي يمر بدالة dept-stats (is_admin / جلسة القسم بالسيرفر).
 // 🏛️ 53 (مسودة 30/10، «المنصب مو الشخص»): بطاقة «رئيس القسم الحالي» (الاسم، المنصب، صورة دائرية، جملة الترحيب، الكلمة + مفتاح الظهور لمحمد بس)
-//   · «🔄 تغيير رئيس القسم» (يقفل القديم بلا حذف + حساب جديد برقم مؤقت 72 ساعة) · «رؤساء القسم السابقين» (🔓 أعد فتح · 🙏 أضف للشكر)
+//   · «🔄 تغيير رئيس القسم» (يقفل القديم بلا حذف + حساب جديد برقم مؤقت 24 ساعة) · «رؤساء القسم السابقين» (🔓 أعد فتح · 🙏 أضف للشكر)
 //   · حساب رئيس القسم ما ينحذف أبداً: 🗑️ صار 🔒 قفل · لوحة الرئيس الجديدة (viewer): 4–6 أزرار كبار · AdminDept.choosePin: «اختر رقمك» بأول دخول.
 //   الأفعال الجديدة (admin_head_* · admin_change_head · admin_reopen_head · admin_thank_former · admin_lock · head_*) مسودة بالسيرفر
 //   (supabase/drafts/53-head/) — ما انرفعت. لحد ما تنرفع: البطاقات تگول «تحتاج تحديث السيرفر» وما تكسر شي.
@@ -36,7 +36,7 @@
       <div id="dp-out" aria-live="polite"></div>
       <details class="tm-new"><summary>➕ حساب ثاني (اختياري)</summary><label class="tm-f"><span>الاسم</span><input id="dp-name" value="" maxlength="120"></label>
       <label class="tm-f"><span>ينتهي (اختياري)</span><input id="dp-exp" type="date"></label>
-      <label class="tm-f"><span>الرقم السري (8 أرقام أو أكثر)</span><input id="dp-pin" type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12"></label>
+      <label class="tm-f"><span>كلمة السر (10 أحرف أو أكثر، بيها حرف ورقم)</span><input id="dp-pin" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64"></label>
       <p><button class="btn ghost" id="dp-make">➕ سوّي الحساب</button></p></details>
       <h3>الحسابات</h3><div class="scroll-x" id="dp-list">…</div>
       <h3>الأجزاء اللي تنعرض بلوحته</h3><div id="dp-secs"></div>
@@ -64,7 +64,7 @@
         r.viewers.map((v) => `<tr data-id="${esc(v.id)}" data-name="${esc(v.name)}">
           <td><b>${esc(v.name)}</b>${!v.enabled || !r.on ? `<br><button class="btn ghost" data-a="activate" type="button">✅ فعّل الحساب + حدد رقمه</button>` : ""}<div class="tm-pinbox"></div></td><td>${st(v)}</td>
           <td>${d10(v.last_login)}</td><td><input type="date" value="${esc(v.expires_at ? d10(v.expires_at) : "")}" data-a="exp" aria-label="تاريخ الانتهاء"></td>
-          <td><button class="ib" data-a="toggle" title="${v.enabled ? "إيقاف" : "تشغيل"}">${v.enabled ? "⏸️" : "▶️"}</button> <button class="ib" data-a="resetpw" title="🔑 إعادة تعيين الرقم" aria-label="إعادة تعيين الرقم">🔑</button> <button class="ib" data-a="signout" title="اطلع من كل أجهزته" aria-label="اطلع من كل أجهزته">🚪</button>
+          <td><button class="ib" data-a="toggle" title="${v.enabled ? "إيقاف" : "تشغيل"}">${v.enabled ? "⏸️" : "▶️"}</button> <button class="ib" data-a="resetpw" title="🔑 كود مؤقت جديد" aria-label="كود مؤقت جديد">🔑</button> <button class="ib" data-a="signout" title="اطلع من كل أجهزته" aria-label="اطلع من كل أجهزته">🚪</button>
           <button class="ib" data-a="log" title="سجل الدخول">🧾</button> <button class="ib" data-a="lock" title="🔒 قفل (بلا حذف)" aria-label="قفل الحساب">🔒</button></td></tr>`).join("") + "</tbody></table>"
         : '<p class="hint">ماكو حسابات بعد.</p>';
       const secs = Object.fromEntries(r.sections.map((s) => [s.key, s]));
@@ -79,10 +79,10 @@
     }
 
     $("#dp-make").onclick = async () => {
-      const pin = String($("#dp-pin").value || "").replace(/\D/g, ""); $("#dp-pin").value = "";
+      const pin = (window.AdminPw ? AdminPw.clean($("#dp-pin").value) : String($("#dp-pin").value || "").trim()); $("#dp-pin").value = "";
       const r = await api({ action: "admin_create", name: $("#dp-name").value, expires_at: $("#dp-exp").value || null, pin: pin || undefined });
       if (r.status !== 200) return alert(r.msg || "صار خطأ");
-      $("#dp-out").innerHTML = r.pin_set && SP ? SP.ready(r.name, r.login_url) : `<p class="tm-once">✅ انعمل الحساب. ${esc(r.msg || "حدد رقمه من الجدول (🔑).")}</p>`;
+      $("#dp-out").innerHTML = r.pin_set && SP ? SP.ready(r.name, r.login_url, true) : `<p class="tm-once">✅ انعمل الحساب. ${esc(r.msg || "حدد رقمه من الجدول (🔑).")}</p>`;
       load();
     };
     pane.addEventListener("change", async (ev) => {
@@ -101,7 +101,7 @@
       const r = await api({ action: act, id: f.dataset.pinFor, pin: v.pin });
       f.querySelectorAll("input").forEach((i) => (i.value = ""));
       if (r.status !== 200) { m.className = "tm-msg bad"; m.textContent = r.msg || "ما صار."; return; }
-      $("#dp-out").innerHTML = SP.ready(tr.dataset.name, r.login_url); load();
+      $("#dp-out").innerHTML = SP.ready(tr.dataset.name, r.login_url, true); load();
     }, on);
     pane.addEventListener("click", async (ev) => {
       if (ev.target.closest && ev.target.closest("[data-pin-x]")) { ev.target.closest("form").remove(); return; }
@@ -111,7 +111,7 @@
       if ((a === "resetpw" || a === "activate") && SP) {
         const bx = tr.querySelector(".tm-pinbox");
         if (bx.innerHTML) { bx.innerHTML = ""; return; }
-        bx.innerHTML = SP.pinForm(id, a === "activate" ? "رقمه السري (8 أرقام أو أكثر) — بعدها يتفعّل" : undefined);
+        bx.innerHTML = SP.pinForm(id, "كود مؤقت (10 أحرف أو أكثر، حرف ورقم) — يستعمله مرة وحدة خلال 24 ساعة ويختار كلمة سره" + (a === "activate" ? "، وبعدها يتفعّل الحساب" : ""));
         if (a === "activate") bx.querySelector("form").dataset.act = "admin_activate";
         bx.querySelector("input").focus(); return;
       }
@@ -316,8 +316,8 @@
     if (pb) pb.onclick = () => {
       const bx = box.querySelector("#hd-pinbox");
       if (bx.innerHTML) { bx.innerHTML = ""; return; }
-      bx.innerHTML = `<form class="tm-pin hd-fm" data-hd-pin novalidate><label class="hd-f"><span>الرقم الجديد (8–12 رقم)</span><input type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12" data-pin="1"></label>
-        <label class="hd-f"><span>أعده مرة ثانية</span><input type="password" inputmode="numeric" autocomplete="new-password" dir="ltr" maxlength="12" data-pin="2"></label>
+      bx.innerHTML = `<form class="tm-pin hd-fm" data-hd-pin novalidate><label class="hd-f"><span>كلمة السر الجديدة (10 أحرف أو أكثر، حرف ورقم)</span><input type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64" data-pin="1"></label>
+        <label class="hd-f"><span>أعده مرة ثانية</span><input type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64" data-pin="2"></label>
         <div class="hd-row"><button class="btn ghost" type="submit">💾 احفظ الرقم</button><span class="tm-msg" role="status"></span></div></form>`;
       const pf = bx.querySelector("form"); pf.querySelector("input").focus();
       pf.onsubmit = async (ev) => {
@@ -342,10 +342,9 @@
 
   /** 🔄 تغيير رئيس القسم: (1) البيانات + رقم مؤقت → (2) معاينة + تأكيد بكتابة الاسم → (3) جاهز (سلّم الرقم بإيدك). */
   function changeFlow(el, api, cur, done) {
-    const suggest = () => {   // L8: crypto.getRandomValues — 10 أرقام، بلا تكرار ولا تسلسل
-      const a = new Uint32Array(10); let s;
-      do { crypto.getRandomValues(a); s = Array.from(a, (x) => x % 10).join(""); if (s[0] === "0") s = "7" + s.slice(1); }
-      while (/(\d)\1{2}|0123|1234|2345|3456|4567|5678|6789|9876|8765|7654|6543|5432|4321|3210/.test(s) || new Set(s).size < 5);
+    const suggest = () => {   // L8: crypto.getRandomValues — 🔐 10/11: 12 حرف (حروف + أرقام)، بلا الحروف اللي تتلخبط (O/0، l/1/I)
+      const A = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz", D = "23456789", ALL = A + D, a = new Uint32Array(12); let s;
+      do { crypto.getRandomValues(a); s = Array.from(a, (x) => ALL[x % ALL.length]).join(""); } while (!/[0-9]/.test(s) || !/[A-Za-z]/.test(s) || new Set(s.toLowerCase()).size < 8);
       return s;
     };
     const step1 = (v = {}) => {
@@ -354,8 +353,8 @@
         <label class="hd-f"><span>اسم رئيس القسم الجديد</span><input name="name" maxlength="120" value="${esc(v.name || "")}" required></label>
         <label class="hd-f"><span>المنصب</span><input name="title" maxlength="120" value="${esc(v.title || "رئيس قسم تقنيات الأشعة")}"></label>
         <label class="hd-f"><span>يبدأ من</span><input name="from" type="date" value="${esc(v.from || new Date().toISOString().slice(0, 10))}"></label>
-        <label class="hd-f"><span>رقم مؤقت (8–12 رقم)</span><input name="pin" inputmode="numeric" dir="ltr" maxlength="12" value="${esc(v.pin || "")}" autocomplete="off">
-          <small>يشتغل <b>72 ساعة بس</b>. بأول دخول يختار رقمه الخاص، وبعدها يگدر يغيّره أي وقت.</small></label>
+        <label class="hd-f"><span>كلمة سر مؤقتة (10 أحرف أو أكثر، حرف ورقم)</span><input name="pin" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64" value="${esc(v.pin || "")}" autocomplete="off">
+          <small>يشتغل <b>24 ساعة بس</b>. يستعمله مرة وحدة، وبأول دخول يختار كلمة سره الخاصة، وبعدها يگدر يغيّره أي وقت.</small></label>
         <div class="hd-row"><button class="btn ghost" type="button" data-s>🎲 اقترح رقم</button></div>
         <label class="sw"><input type="checkbox" name="thank" ${v.thank ? "checked" : ""}> أضف ${cur.name ? `«${esc(cur.name)}»` : "الرئيس السابق"} لـ «رعاة المنصة» (صفحة الشكر)</label>
         <div class="hd-row"><button class="btn" type="submit">التالي ›</button><span class="tm-msg" role="status"></span></div></form>`;
@@ -366,7 +365,7 @@
         const x = { name: f.name.value.trim(), title: f.title.value.trim(), from: f.from.value, pin: digits(f.pin.value), thank: f.thank.checked };
         const m = f.querySelector(".tm-msg");
         if (x.name.length < 2) return (m.textContent = "اكتب الاسم.");
-        if (!/^\d{8,12}$/.test(x.pin)) return (m.textContent = "الرقم المؤقت 8–12 رقم.");
+        if ((window.AdminPw ? AdminPw.problem(x.pin) : x.pin.length < 10)) return (m.textContent = (window.AdminPw && AdminPw.problem(x.pin)) || "كلمة السر المؤقتة 10 أحرف أو أكثر.");
         step2(x);
       };
     };
@@ -376,7 +375,7 @@
         <li>🔒 حساب ${cur.name ? `«${esc(cur.name)}»` : "الرئيس الحالي"} <b>ينقفل</b> ويطلع من كل أجهزته — <b>ما ينحذف</b> شي.</li>
         <li>🗂️ ينتقل لـ «رؤساء القسم السابقين»: شهاداته وإعلاناته وتقاريره وكلمته تبقى باسمه، وصورته ترجع خاصة.</li>
         <li>➕ حساب جديد: <b>${esc(x.name)}</b> — ${esc(x.title)}، من ${esc(x.from)}.</li>
-        <li>⏳ الرقم المؤقت يشتغل 72 ساعة بس، وبأول دخول يختار رقمه.</li>
+        <li>⏳ الكود المؤقت يشتغل مرة وحدة خلال 24 ساعة، وبأول دخول يختار كلمة سره.</li>
         <li>🔒 الظهور بالموقع ينطفي لحد ما يوافق الرئيس الجديد وتفعّله إنت.</li>
         ${x.thank ? "<li>🙏 السابق ينضاف لـ «رعاة المنصة» بصفحة الشكر (يظهر بس وقت ما ظهور رئيس القسم مفعّل).</li>" : ""}
       </ul>
@@ -394,10 +393,10 @@
       };
     };
     const step3 = (x, rr) => {
-      const exp = rr.temp_expires_at || new Date(Date.now() + 72 * 3600e3).toISOString();
+      const exp = rr.temp_expires_at || new Date(Date.now() + 24 * 3600e3).toISOString();
       el.innerHTML = `<div class="hd-steps">1. البيانات ‹ 2. تأكيد ‹ <b>3. جاهز</b></div>
       <div class="tm-once" role="status"><b>✅ تبدّل رئيس القسم: ${esc(x.name)}</b>
-        <p>الرقم المؤقت ينتهي: <b>${esc(fmtL(exp))}</b> (72 ساعة). سلّمه بإيدك أو برسالة خاصة — ما ينرسل بالبوت أبداً.</p>
+        <p>الرقم المؤقت ينتهي: <b>${esc(fmtL(exp))}</b> (24 ساعة). سلّمه بإيدك أو برسالة خاصة — ما ينرسل بالبوت أبداً.</p>
         <p class="hint">الظهور بالموقع انطفى. فعّله بعد ما يوافق.</p>
         <p class="hint">🛡️ تذكير: ضيف اسم الرئيس السابق (والجديد) لملف <code>_النظام/head-names.local.txt</code> حتى فحص البناء يمنع ظهوره بالغلط وهو مطفي.</p>
         <p><button class="btn ghost" type="button" data-d>تم</button></p></div>`;
@@ -656,32 +655,32 @@
     document.head.appendChild(s);
   }
 
-  /** 🔢 «اختر رقمك» — أول دخول برقم مؤقت (72 ساعة). o = {ticket, name, expires, api?}. ماكو جلسة لحد ما يختار. */
+  /** 🔢 «اختر رقمك» — أول دخول برقم مؤقت (24 ساعة). o = {ticket, name, expires, api?}. ماكو جلسة لحد ما يختار. */
   function choosePin(root, o) {
     hdCss(); if (window.StaffDoor && StaffDoor.css) StaffDoor.css();
     const name = String(o.name || "").trim();
-    const eye = (id) => `<div class="cp-eye"><input id="${id}" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12" lang="en">
-      <button type="button" data-eye="${id}" aria-pressed="false" aria-label="إظهار الرقم">إظهار</button></div>`;
+    const eye = (id) => `<div class="cp-eye"><input id="${id}" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64" lang="en">
+      <button type="button" data-eye="${id}" aria-pressed="false" aria-label="إظهار كلمة السر">إظهار</button></div>`;
     root.innerHTML = `<div class="sd-card" id="cp">
-      <h1>اختر رقماً</h1>
-      <p class="sd-sub">أهلاً${name ? ` ${esc(name)}` : ""} 🌿 الرقم اللي استلمته مؤقت${o.expires ? ` (ينتهي ${esc(fmtD(o.expires))})` : " (72 ساعة)"}.<br>اختر رقماً خاصاً بيك — محد يعرفه غيرك.</p>
+      <h1>اختار كلمة سرك</h1>
+      <p class="sd-sub">أهلاً${name ? ` ${esc(name)}` : ""} 🌿 الكود اللي وصلك مؤقت وانستعمل هسه.<br>اختار كلمة سر خاصة بيك (عندك 10 دقائق) — محد يعرفها غيرك.</p>
       <form id="cpf" novalidate>
-        <label class="sd-lab" for="cp1">رقمك الجديد (8–12 رقماً)</label>${eye("cp1")}
+        <label class="sd-lab" for="cp1">كلمة سرك الجديدة (10 أحرف أو أكثر، حرف ورقم)</label>${eye("cp1")}
         <label class="sd-lab" for="cp2">أعده مرة ثانية</label>${eye("cp2")}
-        <p class="sd-sub" style="font-size:.85rem">مو تسلسل (12345678) ولا رقم مكرر، ومو نفس الرقم المؤقت. تگدر تغيّره بعدين أي وقت من لوحتك.</p>
-        <button class="sd-btn" type="submit">احفظ رقمي وادخل</button></form>
+        <p class="sd-sub" style="font-size:.85rem">مو نفس الكود المؤقت. تگدر تغيّرها بعدين أي وقت من لوحتك.</p>
+        <button class="sd-btn" type="submit">احفظ وادخل</button></form>
       <p class="sd-msg" id="cpm" role="status" aria-live="polite"></p></div>`;
     root.querySelectorAll("[data-eye]").forEach((b) => (b.onclick = () => {
       const i = root.querySelector("#" + b.dataset.eye), show = i.type === "password";
       i.type = show ? "text" : "password"; b.textContent = show ? "إخفاء" : "إظهار"; b.setAttribute("aria-pressed", String(show));
-      b.setAttribute("aria-label", show ? "إخفاء الرقم" : "إظهار الرقم");
+      b.setAttribute("aria-label", show ? "إخفاء كلمة السر" : "إظهار كلمة السر");
     }));
     const $ = (q) => root.querySelector(q), m = $("#cpm");
     $("#cpf").onsubmit = async (ev) => {
       ev.preventDefault();
       const a = digits($("#cp1").value), b = digits($("#cp2").value);
-      if (a !== b) return (m.textContent = "الرقمين مو متطابقين.");
-      if (!/^\d{8,12}$/.test(a)) return (m.textContent = "الرقم 8–12 رقماً.");
+      if (a !== b) return (m.textContent = "كلمتين السر مو متطابقات.");
+      if ((window.AdminPw ? AdminPw.problem(a) : a.length < 10)) return (m.textContent = (window.AdminPw && AdminPw.problem(a)) || "كلمة السر 10 أحرف أو أكثر.");
       m.textContent = "لحظة…";
       let r;
       try {
@@ -691,11 +690,11 @@
       } catch (e) { r = { status: 0 }; }
       $("#cp1").value = $("#cp2").value = "";
       if (r.status !== 200 || !r.session) return (m.textContent = r.msg || (later(r) ? "⏳ يشتغل بعد تحديث السيرفر." : "ما صار. جرّب مرة ثانية."));
-      m.textContent = "✅ انحفظ رقمك.";
+      m.textContent = "✅ انحفظت كلمة سرك.";
       if (o.onSession) return o.onSession(r.session);
     };
     $("#cp1").focus();
   }
-  const digits = (s) => String(s || "").replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\D/g, "");
+  const digits = (s) => (window.AdminPw ? AdminPw.clean(s) : String(s || "").trim());   // 🔐 10/11: كلمة سر بحروف وأرقام
   window.AdminDept = { mount, viewer, choosePin, stats };
 })();

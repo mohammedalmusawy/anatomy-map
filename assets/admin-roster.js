@@ -49,8 +49,14 @@
         <div class="row"><label>المرحلة <select id="rs-ps">${[1, 2, 3, 4, 5, 6].map((n) => `<option value="${n}"${n === 2 ? " selected" : ""}>${STAGES[n]}</option>`).join("")}</select></label>
           <button class="btn" id="rs-rel" type="button">🤖 حرّرها للبوت</button><button class="btn ghost" id="rs-res" type="button">🔒 احجزها</button></div>
         <p class="hint" id="rs-pm" role="status"></p></div>
+      <div class="rs-card"><h4>🔑 الدخول بالاسم</h4>
+        <p class="hint" id="rs-nstate">جاري التحميل…</p>
+        <button class="btn" id="rs-na" type="button" aria-pressed="false">—</button>
+        <p class="hint">الزائر يدخل الموقع بدون كود. للمحاضرات بس يكتب كوده؛ ومن ما عنده كود يكتب اسمه: اسم + رقم جامعي يعطيه كود فوراً، واسم لحاله يروح طلب ينتظر موافقتك (الكود يوصل لجهازه هو بس).</p>
+        <div id="rs-nreq"></div>
+        <details id="rs-nlog"><summary>🕘 سجل دخول الطلاب (منو ومتى)</summary><div id="rs-nlogb"></div></details></div>
       <div class="rs-card"><h4>١) ارفع قائمة الطلاب</h4>
-        <p class="hint">ملف Excel (.xlsx) أو CSV بأعمدة: الاسم · الرقم الجامعي · المرحلة. الملف يتقرأ على جهازك، والقائمة تنحفظ بالسيرفر الخاص بس. رفعها مرة ثانية يحدّث الموجود ويضيف الجديد.</p>
+        <p class="hint">ملف Excel (.xlsx) أو CSV بأعمدة: الاسم · الرقم الجامعي · المرحلة (أو عمود أسماء بس: بدون رقم جامعي يكون الكود بموافقتك). الملف يتقرأ على جهازك، والقائمة تنحفظ بالسيرفر الخاص بس. رفعها مرة ثانية يحدّث الموجود ويضيف الجديد.</p>
         <div class="row">
           <label>المرحلة (إذا العمود ناقص) <select id="rs-stage" aria-label="المرحلة الافتراضية">${[1, 2, 3, 4, 5, 6].map((n) => `<option value="${n}"${n === 2 ? " selected" : ""}>${STAGES[n]}</option>`).join("")}</select></label>
           <label>الملف <input id="rs-file" type="file" accept=".xlsx,.csv,text/csv" aria-label="ملف القائمة"></label>
@@ -78,7 +84,19 @@
     const $ = (s) => box.querySelector(s);
     const say = (el, m) => { el.textContent = m; };
 
+    async function nhead(r) {
+      const na = r.name_on === true;
+      $("#rs-nstate").textContent = na ? `🟢 شغّال بالموقع${r.pending_names ? ` — ${r.pending_names} طلب ينتظر قرارك` : ""}.` : "⚪ مطفي: الموقع ما يعرض «اكتب اسمي» لحد ما تشغّله.";
+      $("#rs-na").textContent = na ? "⏸️ إيقاف الدخول بالاسم" : "▶️ تشغيل الدخول بالاسم"; $("#rs-na").setAttribute("aria-pressed", na ? "true" : "false"); $("#rs-na").dataset.on = na ? "1" : "";
+    }
+    const nops = {
+      list: () => api({ action: "roster_name_requests" }),
+      decide: (req, accept, roster, confirm) => api({ action: "roster_name_decide", req, accept, roster, confirm }),
+      logins: () => api({ action: "roster_logins", lim: 100 }),
+    };
+    const nreload = () => { if (window.AdminNames) window.AdminNames.requests($("#rs-nreq"), nops); };
     async function head(r) {
+      nhead(r);
       on = r.on === true; $("#rs-bot").textContent = on ? "⏸️ إيقاف البوت" : "▶️ تشغيل البوت"; $("#rs-bot").setAttribute("aria-pressed", on ? "true" : "false");
       $("#rs-state").textContent = on ? "🟢 شغّال: الطالب يكتب اسمه ورقمه للبوت وياخذ كوده." : "⚪ مطفي: البوت ما يرد على الطلاب لحد ما تشغّله.";
       const st = (r.stages || []).filter((s) => s.total || s.free_codes || s.reserved);
@@ -88,10 +106,10 @@
       }).join("") : "ماكو قائمة بعد.";
     }
     function item(r) {
-      return `<li class="it" data-id="${esc(r.id)}" data-name="${esc(r.full_name)}" data-univ="${esc(r.univ_id)}">
-        <span class="nm"><b>${esc(r.full_name)}</b> <span class="code">${esc(r.univ_id)}</span></span>
+      return `<li class="it" data-id="${esc(r.id)}" data-name="${esc(r.full_name)}" data-univ="${r.univ_missing ? "" : esc(r.univ_id)}">
+        <span class="nm"><b>${esc(r.full_name)}</b> <span class="code">${r.univ_missing ? "— بلا رقم —" : esc(r.univ_id)}</span></span>
         <span class="chip">م${esc(r.stage_n)}</span>
-        <span class="chip${r.assigned ? " on" : ""}">${r.assigned ? (r.bound ? "🟢 أخذ كوده" : "🟢 له كود") : "⚪ لسا"}</span>
+        <span class="chip${r.assigned ? " on" : ""}">${r.assigned ? (r.bound ? "🟢 أخذ كوده" : r.web ? "🟢 أخذه من الموقع" : "🟢 له كود") : "⚪ لسا"}</span>
         <button class="ib" data-a="edit" title="تصحيح الاسم أو الرقم" type="button">✏️</button>
         ${r.assigned ? '<button class="ib" data-a="reissue" title="اسحب الكود وأعطيه كود جديد" type="button">🔄</button>' : ""}</li>`;
     }
@@ -107,6 +125,16 @@
       say($("#rs-cnt"), total ? `${total} طالب${total > off ? ` (معروض ${off})` : ""}` : "ماكو طلاب بهالبحث.");
       $("#rs-more").hidden = off >= total;
     }
+
+    $("#rs-na").onclick = async () => {
+      const turnOn = $("#rs-na").dataset.on !== "1";
+      if (turnOn && !confirm("تشغّل الدخول بالاسم؟ الزائر راح يشوف «ما عندي كود؟ اكتب اسمي» بنافذة الكود.")) return;
+      const r = await api({ action: "roster_name_access", on: turnOn });
+      if (r.status !== 200) return alert(r.msg || "صار خطأ");
+      load(false);
+    };
+    $("#rs-nlog").addEventListener("toggle", (ev) => { if (ev.target.open && window.AdminNames) window.AdminNames.logins($("#rs-nlogb"), nops); });
+    nreload();
 
     $("#rs-bot").onclick = async () => {
       if (!on && !confirm("تشغّل البوت للطلاب؟ كل من يكتب للبوت اسمه ورقمه الجامعي (وتطابق ويّا القائمة) ياخذ كوده.")) return;
@@ -134,7 +162,7 @@
         parsed = await window.RosterParse.parseFile(f, +$("#rs-stage").value);
       } catch (e) { $("#rs-prev").innerHTML = `<p class="warn">${esc(e && e.user ? e.message : "ما گدرت أقرا الملف. تأكد إنه xlsx أو CSV سليم.")}</p>`; return; }
       const by = {}; parsed.rows.forEach((r) => { by[r.stage] = (by[r.stage] || 0) + 1; });
-      $("#rs-prev").innerHTML = `<p><b>✅ ${parsed.rows.length} طالب جاهز</b>${Object.keys(by).length ? " — " + Object.keys(by).map((k) => `المرحلة ${esc(STAGES[k])}: ${by[k]}`).join(" · ") : ""}</p>` +
+      $("#rs-prev").innerHTML = `${parsed.namesOnly ? '<p class="hint">📋 قائمة أسماء بلا أرقام جامعية: كل واحد ياخذ كوده بموافقتك (أو بالبوت إذا أضفت رقمه لاحقاً). الأسماء المكررة تروح للموافقة اليدوية.</p>' : ""}<p><b>✅ ${parsed.rows.length} طالب جاهز</b>${Object.keys(by).length ? " — " + Object.keys(by).map((k) => `المرحلة ${esc(STAGES[k])}: ${by[k]}`).join(" · ") : ""}</p>` +
         (parsed.rows.length ? `<ul>${parsed.rows.slice(0, 5).map((r) => `<li class="it"><span class="nm">${esc(r.name)}</span><span class="code">${esc(r.univ)}</span><span class="chip">م${r.stage}</span></li>`).join("")}</ul>${parsed.rows.length > 5 ? `<p class="hint">… و${parsed.rows.length - 5} غيرهم</p>` : ""}` : "") +
         (parsed.errors.length ? `<details><summary class="warn">⚠️ ${parsed.errors.length} صف ما انقبل (ما راح ينرفع)</summary><ul>${parsed.errors.slice(0, 30).map((e) => `<li class="it">سطر ${e.line}: ${esc(e.why)}</li>`).join("")}</ul></details>` : "");
       $("#rs-up").hidden = !parsed.rows.length;
@@ -146,9 +174,9 @@
       const sum = { added: 0, updated: 0, kept: 0, bad: 0 }; let stop = "";
       for (let i = 0; i < parsed.rows.length; i += CHUNK) {
         say($("#rs-prev"), `جاري الرفع… ${Math.min(i, parsed.rows.length)} من ${parsed.rows.length}`);
-        let r; try { r = await api({ action: "roster_import", rows: parsed.rows.slice(i, i + CHUNK).map((x) => ({ name: x.name, univ: x.univ, stage: x.stage })) }); } catch (e) { r = { status: 0 }; }
+        let r; try { const part = parsed.rows.slice(i, i + CHUNK); r = await (parsed.namesOnly ? api({ action: "roster_import_names", rows: part.map((x) => ({ name: x.name, stage: x.stage })) }) : api({ action: "roster_import", rows: part.map((x) => ({ name: x.name, univ: x.univ, stage: x.stage })) })); } catch (e) { r = { status: 0 }; }
         if (r.status !== 200) { stop = r.status === 403 ? "هذا للمالك بس." : `وقف الرفع (${r.status || "انقطع النت"}). اللي انرفع قبل محفوظ — أعد رفع نفس الملف ويكمّل.`; break; }
-        sum.added += r.added; sum.updated += r.updated; sum.kept += r.kept; sum.bad += (r.bad || []).length;
+        sum.added += r.added; sum.updated += (r.updated || 0); sum.kept += r.kept; sum.bad += (r.bad || []).length;
       }
       btn.disabled = false;
       $("#rs-prev").innerHTML = `<p>${stop ? "⚠️ " + esc(stop) : "✅ انرفعت القائمة."} انضاف ${sum.added} · تحدّث ${sum.updated} · بقى (أخذ كود) ${sum.kept}${sum.bad ? ` · ما انقبل ${sum.bad}` : ""}.</p>`;
@@ -159,8 +187,8 @@
     // ───── إضافة طالب ─────
     $("#rs-add").onclick = async () => {
       const name = $("#rs-an").value.trim(), univ = $("#rs-au").value.trim(), stage = +$("#rs-as").value;
-      if (name.length < 3 || univ.length < 3) return say($("#rs-addm"), "اكتب الاسم الثلاثي والرقم الجامعي.");
-      const r = await api({ action: "roster_import", rows: [{ name, univ, stage }] });
+      if (name.length < 3 || (univ && univ.length < 3)) return say($("#rs-addm"), "اكتب الاسم الثلاثي (والرقم الجامعي إذا موجود).");
+      const r = await (univ ? api({ action: "roster_import", rows: [{ name, univ, stage }] }) : api({ action: "roster_import_names", rows: [{ name, stage }] }));
       if (r.status !== 200) return say($("#rs-addm"), r.msg || "صار خطأ");
       say($("#rs-addm"), r.added ? "✅ انضاف." : r.updated ? "✅ الرقم موجود: تحدّث الاسم والمرحلة." : r.kept ? "الطالب أخذ كوده قبل، استعمل ✏️ من القائمة للتصحيح." : "ما انقبل (تأكد من الاسم والرقم).");
       if (r.added || r.updated) { $("#rs-an").value = ""; $("#rs-au").value = ""; } load(false); auditLoaded = false;
@@ -180,7 +208,7 @@
       if (a === "edit") {
         const nn = prompt(`الاسم الثلاثي لـ «${name}»:`, name); if (nn === null) return;
         const uu = prompt("الرقم الجامعي:", li.dataset.univ); if (uu === null) return;
-        const r = await api({ action: "roster_edit", id, full_name: nn.trim() || name, univ_id: uu.trim() || li.dataset.univ });
+        const r = await api({ action: "roster_edit", id, full_name: nn.trim() || name, univ_id: (uu.trim() || li.dataset.univ) || undefined });
         if (r.status !== 200) return alert(r.msg || "صار خطأ");
         auditLoaded = false; return load(false);
       }

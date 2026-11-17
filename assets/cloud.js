@@ -46,6 +46,7 @@
   (N ? N.settings() : get("settings", "select=key,value").then((rows) => Object.fromEntries((rows || []).map((r) => [r.key, r.value])))).then((S) => {
     const sec = S.sections || {};
     window.STUDY_SETTINGS = sec;
+    try { document.dispatchEvent(new CustomEvent("study:settings", { detail: sec })); } catch (e) {}   // 🪺 77: myplus-ui.js ينتظر هذا الحدث (مو عدّاد زمني)
     const a = S.announcement || {};
     // 🏛️ 53 (مسودة): إعلان رئيس القسم (a.by = "head") عليه شارة «📢 من رئيس القسم» — بس إذا ظهور الرئيس مفعّل (settings.dept_head.on)
     const byHead = a.by === "head" && S.dept_head && S.dept_head.on === true;

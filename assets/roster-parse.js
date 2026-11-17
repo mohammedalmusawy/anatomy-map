@@ -122,32 +122,36 @@
 
   /** matrix ← صفوف جاهزة للرفع. defaultStage = مرحلة العمود الناقص (1–6 أو null). */
   function toRows(matrix, defaultStage) {
-    let hdr = -1, ci = { name: -1, univ: -1, stage: -1 };
+    let hdr = -1, ci = { name: -1, univ: -1, stage: -1 }, nameOnly = null, namesOnly = false;
     for (let r = 0; r < Math.min(matrix.length, 10); r++) {
       const c = { name: -1, univ: -1, stage: -1 };
       matrix[r].forEach((x, i) => { const n = norm(x); if (c.name < 0 && H_NAME.test(n)) c.name = i; else if (c.univ < 0 && H_UNIV.test(n)) c.univ = i; else if (c.stage < 0 && H_STAGE.test(n)) c.stage = i; });
       if (c.name >= 0 && c.univ >= 0) { hdr = r; ci = c; break; }
+      if (c.name >= 0 && !nameOnly && matrix[r].filter((x) => String(x ?? "").trim() !== "").length === 1 + (c.stage >= 0 ? 1 : 0)) nameOnly = { r, c };   // 75: عمود أسماء (+ مرحلة) بس — أي عمود ثاني ما نعرفه ← ما نخمّن (يبقى المسار القديم)
     }
+    if (hdr < 0 && nameOnly) { hdr = nameOnly.r; ci = nameOnly.c; namesOnly = true; }   // 75: قائمة أسماء بس (الكود بموافقة الإدارة)
     if (hdr < 0) {   // بلا عناوين: الترتيب اسم · رقم جامعي · مرحلة
       const w = Math.max(0, ...matrix.slice(0, 10).map((r) => r.length));
-      if (w < 2) throw fail("الملف لازم فيه عمودين على الأقل: الاسم والرقم الجامعي.");
-      ci = { name: 0, univ: 1, stage: w >= 3 ? 2 : -1 };
+      if (w < 1) throw fail("الملف فاضي.");
+      if (w < 2) { ci = { name: 0, univ: -1, stage: -1 }; namesOnly = true; }   // 75: عمود واحد = أسماء
+      else ci = { name: 0, univ: 1, stage: w >= 3 ? 2 : -1 };
     }
     const rows = [], errors = [], seen = new Map();
     for (let r = hdr + 1; r < matrix.length; r++) {
       const m = matrix[r];
       if (!m || m.every((x) => String(x ?? "").trim() === "")) continue;
-      const line = r + 1, name = clean(m[ci.name]), univ = univClean(m[ci.univ]);
+      const line = r + 1, name = clean(m[ci.name]), univ = namesOnly ? "" : univClean(m[ci.univ]);
       let stage = defaultStage;
       if (ci.stage >= 0 && String(m[ci.stage] ?? "").trim() !== "") { stage = parseStage(m[ci.stage]); if (stage === null) { errors.push({ line, why: "المرحلة غير مفهومة" }); continue; } }
       if (!stage) { errors.push({ line, why: "ماكو مرحلة (اختار المرحلة الافتراضية)" }); continue; }
       if (name.length < 3 || name.length > 120) { errors.push({ line, why: "الاسم ناقص أو طويل" }); continue; }
+      if (namesOnly) { rows.push({ name, univ: "", stage, line }); continue; }   // 75: بلا رقم جامعي
       if (!/^[A-Za-z0-9]{3,40}$/.test(univ)) { errors.push({ line, why: "الرقم الجامعي غلط (حروف إنكليزية وأرقام، 3 على الأقل)" }); continue; }
       if (seen.has(univ.toLowerCase())) { errors.push({ line, why: `الرقم الجامعي مكرر (سطر ${seen.get(univ.toLowerCase())})` }); continue; }
       seen.set(univ.toLowerCase(), line); rows.push({ name, univ, stage, line });
     }
     if (rows.length + errors.length > MAX_ROWS) throw fail(`الملف فيه أكثر من ${MAX_ROWS} صف.`);
-    return { rows, errors, header: hdr >= 0, cols: ci };
+    return { rows, errors, header: hdr >= 0, cols: ci, namesOnly };
   }
 
   async function parseFile(file, defaultStage) {

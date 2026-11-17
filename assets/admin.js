@@ -1,5 +1,5 @@
 // ⚙️ لوحة الإدارة /admin/ (27/10؛ الدخول بالرقم السري 29/10 — التصميم النهائي لمحمد). ماكو رابط إلها بالموقع (5 ضغطات على العنوان):
-//   محمد (المالك): الإيميل + رقمه السري (8 أرقام أو أكثر) عبر staff-auth. «نسيت الرقم؟» ← رابط للإيميل ← رقم جديد.
+//   محمد (المالك): الإيميل + كلمة سره (10/11: حروف وأرقام، والرقم القديم يبقى يفتح لحد ما يغيّره) عبر staff-auth. «نسيت الرقم؟» ← رابط للإيميل ← رقم جديد.
 //   رئيس القسم وتحسين (مساعد): الرقم بس — الموقع يعرف منو من الرقم ويفتح صلاحياته.
 //   «تذكّر هذا الجهاز 30 يوم» (بدونه: الجلسة تنتهي بسدّ المتصفح، وبالسيرفر بعد 12 ساعة). ماكو رمز تحقق لأحد.
 //   المساعد (role supervisor) ← StaffPanel (supervisor.js) · رئيس القسم (role dept) ← AdminDept.viewer (أرقام مجمّعة بس).
@@ -59,7 +59,14 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
   const DEV = { get: () => LSx.get("adm:dev") || "", set: (t) => { if (t) LSx.set("adm:dev", t); }, del: () => LSx.del("adm:dev") };
   const say = (el, t, ok) => { el.textContent = t || ""; el.className = "sd-msg" + (ok ? " ok" : t ? " bad" : ""); };
   const digits = (s) => String(s || "").replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/\D/g, "");
-  const pinOk = (p) => p.length >= 8 && p.length <= 12;
+  // 🔐 (10/11، فرع logo-door) كلمة سر بحروف وأرقام — نفس قواعد السيرفر (_shared/staff-pin.ts). السيرفر هو الحَكَم؛ هذي للرسائل بس.
+  //   pwClean: الأرقام العربية ← إنكليزية؛ إذا أرقام بس ← نفس تطبيع الرقم القديم (الأرقام القديمة تبقى تفتح)؛ غيرها فراغات الأطراف بس.
+  const pwClean = (s) => { const a = String(s || "").normalize("NFKC").replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+    const l = a.replace(/\s|-/g, ""); return /^[0-9]+$/.test(l) ? l : a.trim(); };
+  const pinOk = (p) => /^[0-9]{8,12}$/.test(p) || (p.length >= 10 && p.length <= 64 && /\p{L}/u.test(p) && /[0-9]/.test(p));   // شكل الدخول (القديم أو الجديد)
+  const pwNew = (p) => p.length < 10 ? "كلمة السر لازم 10 أحرف أو أكثر." : p.length > 64 ? "كلمة السر بالكثير 64 حرف."
+    : !/\p{L}/u.test(p) || !/[0-9]/.test(p) ? "كلمة السر لازم بيها حرف ورقم على الأقل." : new Set(p.toLowerCase()).size < 5 ? "كلمة السر سهلة هواية؛ نوّع الحروف." : "";
+  window.AdminPw = { clean: pwClean, ok: pinOk, problem: pwNew };
   // 30/10: حقول الرقم السري تقبل أرقام بس (الأرقام العربية تتحول لإنكليزية)
   box.addEventListener("input", (ev) => { const t = ev.target; if (t.matches && t.matches('input[type="password"][inputmode="numeric"]')) { const v = digits(t.value); if (v !== t.value) t.value = v; } });
   const tokNow = async () => { const { data: { session: s } } = await sb.auth.getSession(); return s && s.access_token; };
@@ -69,20 +76,20 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
   window.AdminSelf = {
     tools(el) {
       if (window.StaffDoor) StaffDoor.css();
-      el.innerHTML = `<details class="sd-card ad-self"><summary>🔢 رقمي السري والأجهزة</summary>
-        <form class="ad-f" novalidate><label class="sd-lab" for="as-o">رقمك الحالي</label><input id="as-o" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="current-password" dir="ltr" maxlength="12">
-          <label class="sd-lab" for="as-n">الرقم الجديد (8 أرقام أو أكثر)</label><input id="as-n" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
-          <label class="sd-lab" for="as-n2">أعده مرة ثانية</label><input id="as-n2" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
-          <button class="sd-btn" type="submit">غيّر رقمي</button></form>
-        <p class="sd-free">تغيير الرقم اختياري. إذا نسيته، محمد يسوّيلك «إعادة تعيين».</p>
+      el.innerHTML = `<details class="sd-card ad-self"><summary>🔐 كلمة سري والأجهزة</summary>
+        <form class="ad-f" novalidate><label class="sd-lab" for="as-o">كلمة سرك الحالية</label><input id="as-o" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64">
+          <label class="sd-lab" for="as-n">كلمة السر الجديدة (10 أحرف أو أكثر، بيها حرف ورقم)</label><input id="as-n" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64">
+          <label class="sd-lab" for="as-n2">أعده مرة ثانية</label><input id="as-n2" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64">
+          <button class="sd-btn" type="submit">غيّر كلمة سري</button></form>
+        <p class="sd-free">تغيير كلمة السر اختياري (رقمك القديم يبقى يشتغل لحد ما تغيّره). إذا نسيتها، محمد يسوّيلك «إعادة تعيين».</p>
         <button class="sd-btn ghost" type="button" id="as-all">🚪 اطلع من كل الأجهزة</button>
         <p class="sd-msg" id="as-m" role="status" aria-live="polite"></p></details>`;
       const $ = (q) => el.querySelector(q), m = $("#as-m");
       $("form").onsubmit = async (e) => {
         e.preventDefault();
-        const o = digits($("#as-o").value), a = digits($("#as-n").value), b = digits($("#as-n2").value);
-        if (a !== b) return say(m, "الرقمين مو متطابقين.");
-        if (!pinOk(a)) return say(m, "الرقم السري لازم 8 أرقام أو أكثر.");
+        const o = pwClean($("#as-o").value), a = pwClean($("#as-n").value), b = pwClean($("#as-n2").value);
+        if (a !== b) return say(m, "كلمتين السر مو متطابقات.");
+        if (pwNew(a)) return say(m, pwNew(a));
         say(m, "لحظة…", true);
         const r = await fn("staff-auth", { action: "change_pin", old_pin: o, pin: a }, await tokNow());
         if (r.status === 200) { el.querySelectorAll("input").forEach((i) => (i.value = "")); DEV.del(); }
@@ -118,17 +125,17 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
     const own = owner || LSx.get("adm:owner") === "1";
     box.innerHTML = `<div class="sd-card" id="lg">
       <h1 id="lt">دخول الإدارة</h1>
-      <p class="sd-sub" id="ls">${own ? "اكتب إيميلك ورقمك السري." : "اكتب رقمك السري، والموقع يعرفك ويفتحلك صلاحياتك."}</p>
+      <p class="sd-sub" id="ls">${own ? "اكتب إيميلك وكلمة سرك." : "اكتب كلمة سرك، والموقع يعرفك ويفتحلك صلاحياتك."}</p>
       <form id="lf" autocomplete="on" novalidate>
         <div id="ew" class="ad-f" ${own ? "" : "hidden"}><label class="sd-lab" for="le">الإيميل</label>
           <input id="le" type="email" name="username" autocomplete="username" dir="ltr" autocapitalize="none" spellcheck="false" maxlength="200"></div>
-        <label class="sd-lab" for="lp">الرقم السري</label>
-        <input id="lp" type="password" name="password" inputmode="numeric" pattern="[0-9]*" autocomplete="current-password" dir="ltr" maxlength="12" placeholder="••••••••">
+        <label class="sd-lab" for="lp">كلمة السر</label>
+        <input id="lp" type="password" name="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64" placeholder="••••••••">
         <label class="sd-chk"><input type="checkbox" id="lr" ${DEV.get() || LSx.get("adm:remember") === "1" ? "checked" : ""}> <span>تذكّر هذا الجهاز 30 يوم</span></label>
         <button class="sd-btn" type="submit">دخول</button></form>
       <p class="sd-msg" id="lm" role="status" aria-live="polite"></p>
-      <p class="sd-links"><button type="button" class="sd-link" id="forgot">نسيت الرقم؟</button>
-        <button type="button" class="sd-link" id="who">${own ? "دخول بالرقم بس" : "أنا محمد — دخول بالإيميل"}</button><span id="ecode"></span></p>
+      <p class="sd-links"><button type="button" class="sd-link" id="forgot">نسيت كلمة السر؟</button>
+        <button type="button" class="sd-link" id="who">${own ? "دخول بكلمة السر بس" : "أنا محمد — دخول بالإيميل"}</button><span id="ecode"></span></p>
       <p class="sd-links"><a class="sd-link" href="../">‹ الرئيسية</a></p></div>`;
     const $ = (q) => box.querySelector(q), m = $("#lm");
     const msg = (t, ok) => say(m, t, ok);
@@ -137,9 +144,9 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
     $("#who").onclick = () => { LSx.set("adm:owner", isOwn() ? "0" : "1"); loginView("", !isOwn()); };
     $("#lf").onsubmit = async (e) => {
       e.preventDefault();
-      const pin = digits($("#lp").value), email = $("#le").value.trim(), remember = $("#lr").checked;
+      const pin = pwClean($("#lp").value), email = $("#le").value.trim(), remember = $("#lr").checked;
       if (isOwn() && !email) return msg("اكتب الإيميل.");
-      if (!pinOk(pin)) return msg("الرقم السري 8 أرقام أو أكثر.");
+      if (!pinOk(pin)) return msg("كلمة السر 10 أحرف أو أكثر، بيها حرف ورقم.");
       const b = $("#lf button[type=submit]"); b.disabled = true; msg("لحظة…", true);
       if (!remember) DEV.del();
       const body = { action: isOwn() ? "owner_login" : "pin_login", pin, remember, dev: DEV.get(), ...(isOwn() ? { email } : {}) };
@@ -187,7 +194,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       e.preventDefault();
       const em = box.querySelector("#em").value.trim();
       if (!em) { say(m, "اكتب الإيميل."); box.querySelector("#em").focus(); return; }
-      const { error } = await sb.auth.signInWithOtp({ email: em, options: { shouldCreateUser: false } });
+      const { error } = await sb.auth.signInWithOtp({ email: em, options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname } });   // 🔐 10/11: الرابط (إذا القالب يرسل رابط) يرجع للوحة نفسها مو لصفحة Supabase
       if (error) return say(m, error.message);
       box.querySelector("#ef2").hidden = false; say(m, "وصلك رمز بالإيميل.", true); box.querySelector("#code").focus();
     };
@@ -201,16 +208,16 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
   // رابط «نسيت الرقم؟» من الإيميل ← رقم سري جديد (السيرفر يحطه، وكل الأجهزة تطلع)
   function pinForm(id, withOld) {
     return `<form class="ad-f" id="${id}" novalidate>
-      ${withOld ? `<label class="sd-lab" for="${id}-o">رقمك الحالي</label><input id="${id}-o" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="current-password" dir="ltr" maxlength="12">` : ""}
-      <label class="sd-lab" for="${id}-1">الرقم السري الجديد (8 أرقام أو أكثر)</label><input id="${id}-1" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
-      <label class="sd-lab" for="${id}-2">أعده مرة ثانية</label><input id="${id}-2" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="new-password" dir="ltr" maxlength="12">
-      <button class="sd-btn" type="submit">احفظ الرقم</button></form>`;
+      ${withOld ? `<label class="sd-lab" for="${id}-o">كلمة سرك الحالية</label><input id="${id}-o" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64">` : ""}
+      <label class="sd-lab" for="${id}-1">كلمة السر الجديدة (10 أحرف أو أكثر، بيها حرف ورقم)</label><input id="${id}-1" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64">
+      <label class="sd-lab" for="${id}-2">أعده مرة ثانية</label><input id="${id}-2" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr" maxlength="64">
+      <button class="sd-btn" type="submit">احفظ كلمة السر</button></form>`;
   }
   async function savePin(root, id, m) {
-    const v = (s) => digits((root.querySelector("#" + id + s) || {}).value);
+    const v = (s) => pwClean((root.querySelector("#" + id + s) || {}).value);
     const a = v("-1"), b = v("-2");
-    if (a !== b) return say(m, "الرقمين مو متطابقين.");
-    if (!pinOk(a)) return say(m, "الرقم السري لازم 8 أرقام أو أكثر.");
+    if (a !== b) return say(m, "كلمتين السر مو متطابقات.");
+    if (pwNew(a)) return say(m, pwNew(a));
     say(m, "لحظة…", true);
     const remember = LSx.get("adm:remember") === "1";
     const r = await fn("staff-auth", { action: "owner_set_pin", pin: a, old_pin: v("-o"), remember }, await tokNow());
@@ -225,7 +232,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
   }
   function recoveryView() {
     if (window.StaffDoor) StaffDoor.css();
-    box.innerHTML = `<div class="sd-card"><h1>🔢 رقم سري جديد</h1><p class="sd-sub">اختار رقم تتذكّره (8 أرقام أو أكثر)، مو تسلسل ولا رقم مكرر.</p>
+    box.innerHTML = `<div class="sd-card"><h1>🔐 كلمة سر جديدة</h1><p class="sd-sub">اختار كلمة سر تتذكّرها: 10 أحرف أو أكثر، بيها حرف ورقم.</p>
       ${pinForm("rf", false)}<p class="sd-msg" id="rm" role="status" aria-live="polite"></p></div>`;
     const m = box.querySelector("#rm");
     box.querySelector("#rf").onsubmit = (e) => { e.preventDefault(); savePin(box, "rf", m); };
@@ -248,7 +255,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
     ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "🔑 المساعدين" } : {}), ...(window.AdminDept ? { dept: "🏛️ رئيس القسم" } : {}),
     ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), ...(window.AdminStudents ? { students: "🎓 الطلاب" } : {}), ...(window.AdminNotify ? { notify: "🔔 التنبيهات" } : {}), security: "🔐 الأمان" };
   box.innerHTML = `<div class="tm-hello"><span><b>⚙️ لوحة الإدارة</b> · أهلاً محمد</span><span><span class="sd-asw">👁️ شوف الموقع كـ: <button class="btn ghost" type="button" data-as="student">طالب</button> <button class="btn ghost" type="button" data-as="visitor">زائر</button></span></span></div>
-    ${pinOn ? "" : '<div class="alert lg-warn"><b>🔢 حدد رقمك السري</b><p>من «🔐 الأمان» حط رقمك السري (8 أرقام أو أكثر)، واطلع وادخل بالإيميل + الرقم مرة وحدة — بعدها دخول رمز الإيميل يوگف وحده.</p><a class="btn" href="#security">🔐 الأمان</a></div>'}
+    ${pinOn ? "" : '<div class="alert lg-warn"><b>🔐 حدد كلمة سرك</b><p>من «🔐 الأمان» حط كلمة سرك (10 أحرف أو أكثر، بيها حرف ورقم)، واطلع وادخل بالإيميل + كلمة السر مرة وحدة — بعدها دخول رمز الإيميل يوگف وحده.</p><a class="btn" href="#security">🔐 الأمان</a></div>'}
     <nav class="dtabs">${Object.entries(tabs).map(([k, v]) => `<a href="#${k}" data-t="${k}">${v}</a>`).join("")}</nav><div id="pane"></div>
     <p class="hint"><button class="btn ghost" id="out">خروج</button></p>`;
   document.getElementById("out").onclick = async () => { await sb.auth.signOut({ scope: "local" }); location.reload(); };
@@ -508,7 +515,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       <ul class="sec-list"><li>${pinOn ? "✅ الدخول بالإيميل + الرقم السري، ودخول رمز الإيميل موقوف" : "⏳ حدد رقمك السري تحت، وادخل بيه مرة وحدة"}</li>
         <li>✅ 5 محاولات غلط ← الدخول يقفل 15 دقيقة، وتوصلك رسالة بالبوت</li><li>✅ كل دخول للوحة ← رسالة بالبوت (منو، أي جهاز، الوقت)</li></ul>
       ${tg403 ? '<p class="alert">📨 رسائل البوت ما توصلك بعد: افتح <a href="https://t.me/mohammed_almusawy_bot" target="_blank" rel="noopener">@mohammed_almusawy_bot</a> واضغط <b>Start</b> مرة وحدة.</p>' : ""}
-      <h3>🔢 رقمي السري</h3><p class="hint">${pinOn ? "اكتب رقمك الحالي والجديد. بعد الحفظ كل الأجهزة تطلع وتدخل بالجديد." : "اختار رقم تتذكّره (8 أرقام أو أكثر)، مو تسلسل ولا رقم مكرر. بعد الحفظ تطلع وتدخل بيه."} إذا نسيته: «نسيت الرقم؟» بصفحة الدخول.</p>
+      <h3>🔐 كلمة سري</h3><p class="hint">${pinOn ? "اكتب كلمة سرك الحالية (أو رقمك القديم) والجديدة. بعد الحفظ كل الأجهزة تطلع وتدخل بالجديدة." : "اختار كلمة سر تتذكّرها: 10 أحرف أو أكثر، بيها حرف ورقم. بعد الحفظ تطلع وتدخل بيها."} إذا نسيتها: «نسيت كلمة السر؟» بصفحة الدخول.</p>
       <div class="sd-card ad-in">${pinForm("pf", pinOn)}<p class="sd-msg" id="pfm" role="status" aria-live="polite"></p></div>
       <h3>الأجهزة</h3><button class="btn ghost" id="allout" type="button">🚪 اطلع من كل الأجهزة</button>
       <h3>آخر الدخولات</h3>${(logs || []).length ? `<div class="scroll-x"><table class="adm"><tr><th>الوقت (بغداد)</th><th>منو</th><th>الجهاز</th><th>البوت</th></tr>${logs.map((l) => `<tr><td>${esc(new Date(new Date(l.at).getTime() + 3 * 3600e3).toISOString().slice(0, 16).replace("T", " "))}</td><td>${esc(l.who)} <small>${esc(ROLE[l.role] || "")}</small></td><td dir="ltr">${esc(l.device || "")}${l.remember ? " · 30d" : ""}</td><td>${l.tg === "ok" ? "✅" : "—"}</td></tr>`).join("")}</table></div>` : '<p class="hint">ماكو دخول بعد.</p>'}

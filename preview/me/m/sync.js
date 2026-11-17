@@ -101,7 +101,9 @@
   // ── المحوّلات: وين ينحفظ كل نوع بالجهاز، وشلون يندمج ──
   const byId = (arr) => { const m = {}; (Array.isArray(arr) ? arr : []).forEach((x) => { if (x && x.id != null) m[String(x.id)] = x; }); return m; };
   const map = (o) => (isObj(o) ? o : {});
-  const PREFS = { last: "t:last", intent: "t:intent", exam_guess: "t:exam-guess", asked: "t:asked", tour: "t:tour", strength: "t:strength" };
+  const PREFS = { last: "t:last", intent: "t:intent", exam_guess: "t:exam-guess", asked: "t:asked", tour: "t:tour", strength: "t:strength",
+    // 🪺 «مساحتي الخاصة» (مسودة 77): كل قيمة بيها t (الأحدث يغلب لكل مفتاح). علامة المسح من السيرفر (student_wiped_at)
+    mtheme: "t:me-theme", mavatar: "t:me-avatar", mcall: "t:me-call", mlayout: "t:me-layout", mfocus: "t:me-focus", marticle: "t:me-article" };
   const KINDS = {
     notes: { cloud: "notes", lk: "t:notes", read: (S) => byId(S.get("t:notes", [])), write: (S, m) => S.set("t:notes", Object.values(m).sort((x, y) => num(x.t) - num(y.t))), ts: (v) => v && v.t, ev: "notes:change" },
     mistakes: { cloud: "mistakes", lk: "t:mistakes", read: (S) => map(S.get("t:mistakes", {})), write: (S, m) => S.set("t:mistakes", m), ts: (v) => v && v.t },
@@ -123,7 +125,7 @@
       } },
     reminders: { cloud: null, lk: "t:reminders", read: (S) => byId(S.get("t:reminders", [])), write: (S, m) => S.set("t:reminders", Object.values(m).sort((x, y) => num(x.at) - num(y.at))), ts: (v) => v && v.t, ev: "reminders:change" },
   };
-  const ALL_LOCAL = ["t:notes", "t:mistakes", "t:favs", "t:progress", "t:srs", "t:plan", "t:track", "t:track-remote", "t:reminders", "t:learn", "t:voice", "t:nick", "t:ob-days", "t:ob-hi-home", "t:ob-hi-lec", ...Object.values(PREFS)];   // 💬 58: «رسائلي» تنشال على جنب ويّا بيانات الطالب (جهاز مشترك) · 🧭 17/11: اسم الترحيب (t:nick/t:ob-*) هم ينشال على جنب — بس، ما يدخل المزامنة
+  const ALL_LOCAL = ["t:notes", "t:mistakes", "t:favs", "t:progress", "t:srs", "t:plan", "t:track", "t:track-remote", "t:reminders", "t:learn", "t:voice", "t:me-wiped-seen", "t:me-seen", "t:me-focus-run", "t:nick", "t:ob-days", "t:ob-hi-home", "t:ob-hi-lec", ...Object.values(PREFS)];   // 💬 58: «رسائلي» تنشال على جنب ويّا بيانات الطالب (جهاز مشترك) · 🧭 17/11: اسم الترحيب (t:nick/t:ob-*) هم ينشال على جنب — بس، ما يدخل المزامنة · (دمج 17/11: اتحاد مفاتيح مساحتي + الترحيب)
   // 🧠 «learn» بالسحابة يحتاج هجرة 20261030000052_learn_state.sql (مكتوبة، مو مطبّقة). لحد ما تنطبّق ← STUDY_CLOUD.learn = false ← يبقى بالجهاز بس.
   const CLOUD_LEARN = () => !!(typeof window !== "undefined" && window.STUDY_CLOUD && window.STUDY_CLOUD.learn === true);
 
@@ -153,6 +155,19 @@
       if (!same(before, out)) A.write(S, out);
       S.set(metaKey(k), nm);
       return !same(before, out);
+    }
+    // 🧹 «امسح بياناتي» (هجرة 076): السيرفر يحفظ students.wiped_at ويرجّعها student_wiped_at() (api.wiped، اختيارية). إذا أحدث من اللي شفناه
+    // (t:me-wiped-seen) ← نفرّغ بيانات الطالب بهالجهاز قبل أي رفع، حتى ما يرجّع بيانات أقدم من العلامة. ما نلمس t:sync:owner ولا الساعة.
+    async function checkWiped() {
+      if (typeof api.wiped !== "function") return false;
+      const w = num(await api.wiped());   // أي فشل (الإعدادات ما وصلت، شبكة، رد غلط) يطلع كخطأ ← ماكو رفع قبل ما نعرف حالة المسح (آمن)
+      if (!w || w <= num(S.get("t:me-wiped-seen", 0))) return false;
+      // جهاز جديد ما زامن أبداً بهالحساب (ماكو t:sync:* ولا علامة شفت) ← بياناته المحلية جديدة (زائر ينضم)، ما نمسحها؛ بس نسجّل العلامة
+      const synced = Object.keys(KINDS).concat(["plan", "track"]).some((x) => S.get("t:sync:" + x, null) != null);
+      if (!synced && !S.get("t:me-wiped-seen", 0)) { S.set("t:me-wiped-seen", w); return false; }
+      ALL_LOCAL.concat(Object.keys(KINDS).concat(["plan", "track"]).map((x) => "t:sync:" + x), ["t:plan-prev"]).forEach((x) => S.del(x));
+      S.set("t:me-wiped-seen", w);
+      return true;
     }
     async function keyed(k) {
       const A = KINDS[k];
@@ -243,8 +258,9 @@
       return { changed, again: false, partial };
     }
     async function all(only) {
-      const res = {}, list = only || ["notes", "mistakes", "favorites", "progress", "srs", "prefs", "plan", "track", "reminders"].concat(CLOUD_LEARN() ? ["learn"] : []);
+      const res = {}, list = only || ["prefs", "notes", "mistakes", "favorites", "progress", "srs", "plan", "track", "reminders"].concat(CLOUD_LEARN() ? ["learn"] : []);
       let err = null;
+      if (await checkWiped()) res.wiped = { changed: true, again: true };   // 🧹 جهاز ثاني مسح الحساب
       for (const k of list) {   // كل نوع لحاله: إذا واحد فشل (مثلاً كبير هواية) الباقي يكمّل
         try { res[k] = await (k === "plan" ? plan() : k === "track" ? track() : k === "reminders" ? reminders() : keyed(k)); }
         catch (e) { if (e instanceof TypeError || e.name === "AbortError" || e.message === "auth") throw e;
@@ -311,6 +327,8 @@
   const emit = (n, d) => { if (typeof document !== "undefined") document.dispatchEvent(new CustomEvent(n, { detail: d })); };
   const status = (st, msg = "") => { state.st = st; state.msg = msg; if (st === "ok") state.at = Date.now(); emit("sync:status", Object.assign({}, state)); };
 
+  // 🧹 هجرة 076: السيرفر (trigger) يرفض كتابة student_state إذا wiped_at أحدث من آخر علامة شافها هالجهاز. نرسلها كلما في علامة (ترويسة مخصصة تحتاج CORS: شوف حالة-البناء.md)
+  const wipeSeenHeaders = (seenMs) => (num(seenMs) > 0 ? { "x-wipe-seen": new Date(num(seenMs)).toISOString() } : {});   // كلما في علامة (حتى لو مفتاح wipe انطفى بعدين) ← وإلا الـtrigger يرفض كتابة من مسح بياناته بصمت للأبد
   function restApi(A) {
     const C = (typeof window !== "undefined" && window.STUDY_CLOUD) || {};
     const sid = () => A.state.student && A.state.student.id;
@@ -318,12 +336,26 @@
       const tok = A.token && A.token(); if (!tok || !sid()) throw new Error("auth");
       const ac = typeof AbortController === "function" ? new AbortController() : null, to = ac && setTimeout(() => ac.abort(), 20000);   // طلب معلّق ← نوقفه ونعيد بعدين
       const r = await fetch(`${C.url}/rest/v1/${path}`, { method: o.method || "GET", cache: "no-store", signal: ac ? ac.signal : undefined,
-        headers: Object.assign({ apikey: C.anon, Authorization: "Bearer " + tok, "Content-Type": "application/json" }, o.headers || {}), body: o.body ? JSON.stringify(o.body) : undefined }).finally(() => clearTimeout(to));
+        headers: Object.assign({ apikey: C.anon, Authorization: "Bearer " + tok, "Content-Type": "application/json" }, wipeSeenHeaders(LS.get("t:me-wiped-seen", 0)), o.headers || {}), body: o.body ? JSON.stringify(o.body) : undefined }).finally(() => clearTimeout(to));
       if (r.status === 401 || (r.status === 403 && !o.soft)) { const e = new Error("auth"); e.status = r.status; throw e; }
       return r;
     };
+    let wipedT0 = 0;   // أول مرة لگينا الإعدادات غايبة (مهلة 10ث)
     const rows = async (r) => { if (!r.ok && r.status !== 409) { const e = new Error("http " + r.status); e.status = r.status; throw e; } return r.status === 204 ? [] : r.json().catch(() => []); };
     return {
+      // 🧹 076: تاريخ «امسح بياناتي» (ms) أو 0 — بس إذا مساحتي شغّالة (sections.myspace_plus.on)؛ 404 (076 مو مطبّقة) ← 0
+      async wiped() {
+        const ST = typeof window !== "undefined" ? window.STUDY_SETTINGS : null;
+        if (ST === undefined) {   // الإعدادات (cloud.js) ما وصلت بعد ← ننتظر ونعيد (ماكو رفع قبلها)…
+          // …بس مو للأبد (مراجعة 10/11): cloud.js مطفي/ما حمّل، أو مرّت 10ث ← 0 (مثل قبل 076). الحماية الصلبة بالسيرفر (zz_wipe_guard يرفض الكتابة القديمة)
+          const CL = typeof window !== "undefined" ? window.Cloud : null; wipedT0 = wipedT0 || Date.now();
+          if (!CL || CL.on === false || Date.now() - wipedT0 > 10000) return 0;
+          throw new Error("settings");
+        }
+        const P = (ST && ST.myspace_plus) || {}; if (P.on !== true) return 0;   // إطفاء wipe لا يعني نتجاهل المسح السابق: الترقية 076 تحرس الكتابة دائماً (fix/wiped-flag-off 0fb4e3d)
+        const r = await call("rpc/student_wiped_at", { method: "POST", body: {}, soft: true }); if (r.status === 404) return 0;   // 076 غير مطبّقة بعد
+        if (!r.ok) throw new Error("wiped-http " + r.status);
+        const v = await r.json().catch(() => null); if (v == null) return 0; const t = Date.parse(v); return Number.isFinite(t) ? t : 0; },
       async get(key) { const j = await rows(await call(`student_state?select=value,updated_at&student_id=eq.${sid()}&key=eq.${key}`)); return j[0] || null; },
       async cas(key, value, ts) {
         if (ts) {
@@ -348,8 +380,9 @@
 
   let waiters = [];
   // جولة وحدة بنفس الوقت. اللي يطلب وإحنا شغالين ينتظر الجولة الجاية (بلا سلسلة تعيد نفسها)
+  let paused = false;
   function run(why) {
-    if (!eng) return Promise.resolve(state);
+    if (!eng || paused) return Promise.resolve(state);
     if (running) { queued = true; return new Promise((r) => waiters.push(r)); }
     running = true; status("syncing");
     return once();
@@ -363,6 +396,7 @@
       if (Object.values(res).some((x) => x.again)) queued = true;
     } catch (e) {
       const off = (typeof navigator !== "undefined" && navigator.onLine === false) || e instanceof TypeError || e.name === "AbortError";
+      if (e && e.message === "settings") { status("syncing"); schedule(3000); return state; }   // ننتظر وصول الإعدادات
       status(off ? "offline" : e.message === "auth" ? "auth" : e.message === "big" ? "big" : "error");
     } finally {
       running = false;
@@ -372,7 +406,10 @@
     }
     return state;
   }
-  const schedule = (ms = 2000) => { clearTimeout(tmr); tmr = setTimeout(run, ms); };
+  const schedule = (ms = 2000) => { clearTimeout(tmr); if (!paused) tmr = setTimeout(run, ms); };
+  // ⏸️ قبل «امسح بياناتي»: نوقف المزامنة (ننتظر الجولة الشغالة تخلص) حتى ماكو رفع بنص المسح؛ resume ترجّعها
+  async function pause() { paused = true; clearTimeout(tmr); for (let i = 0; i < 200 && running; i++) await new Promise((r) => setTimeout(r, 50)); return !running; }
+  function resume() { paused = false; schedule(500); }
 
   async function start(opts = {}) {
     if (typeof window === "undefined" || start.on) return state; start.on = true;
@@ -415,5 +452,5 @@
   }
 
   return { canon, hash, same, asDoc, mergeKeyed, mergePlan, mergeDone, asPlanDoc, mergeTrack, asTrackDoc, KINDS, engine, switchOwner, stashOut, mergeRaw,
-    start, run, state, label, status: () => Object.assign({}, state) };
+    start, run, pause, resume, isPaused: () => paused, wipeSeenHeaders, restApi, state, label, status: () => Object.assign({}, state) };
 });

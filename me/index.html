@@ -187,14 +187,37 @@ body.lx-reviewing .fab { display: none; }
 .mdet > summary:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 .mvis { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; background: var(--card); border: 1px dashed var(--line); border-radius: var(--r); padding: 10px 14px; margin: 12px 0 0; font-size: var(--t-sm); }
 .mvis p { margin: 0; flex: 1 1 220px; color: var(--muted); } .mvis .cbtn { min-height: 44px; }
+.mhi { margin: 14px 0 12px; }   /* ثابت هنا (مو بس بـ myplus-ui) حتى ما يتحرك شي لما يتحمّل */
+/* 🪺 77 (CLS) — حجز المكان والترتيب قبل ما يشتغل JS (الصنف mp-pre/mp-fl من <head>) */
+html.mp-fl .wrap { display: flex; flex-direction: column; }
+html.mp-fl .wrap > * { order: 2; }
+html.mp-fl .wrap > :is(.nmob, .cbar, .hi2, #mhi, #mcust, #syncline, #particle-top, #tour0, #mego-sec) { order: 0; }
+html.mp-fl .wrap > :is(section[aria-labelledby="h-plan"], #mtasks-sec) { order: 1; }
+/* بالصفحة الكبيرة «محاضراتي» توصل بالـHTML قبل «اليوم/مهامي» وتنرسم أول: نحجز لها فوق مكان القسمين لحد ما يوصلون (يتغيّر بـ:has، ويروح لحاله لما يوصلون) */
+html.mp-fl .wrap:not(:has(section[aria-labelledby="h-plan"])) > section[aria-labelledby="h-my"] { margin-top: calc(var(--mp-pl, 0px) + var(--mp-tk, 0px)); }
+html.mp-fl .wrap:has(section[aria-labelledby="h-plan"]):not(:has(#mtasks-sec)) > section[aria-labelledby="h-my"] { margin-top: var(--mp-tk, 0px); }
+html.mp-pre .hi2 { display: none; }
+html.mp-pre #mhi { display: block !important; min-height: var(--mp-hi); }
+html.mp-pre section[aria-labelledby="h-plan"] { min-height: var(--mp-pl); }
+html.mp-pre #mtasks-sec { display: block !important; min-height: var(--mp-tk); }
+html.mp-pre.mp-pre-art #particle-top { display: block !important; min-height: var(--mp-art); }
 .mhelp { display: flex; justify-content: center; margin: 14px 0 0; } .mhelp .cbtn { min-height: 44px; font-size: var(--t-sm); padding: 0 14px; }
-</style>
+</style><script>/* 🪺 77 (CLS): بالـ<head> قبل أول رسم. إذا آخر مرة «مساحتي الخاصة» كانت شغّالة (t:me-on) ← نحجز مكان التحية و«اليوم»/«مهامي» بارتفاعات آخر مرة (t:me-h) ونرتّب بـ CSS (flex order) حتى لو الصفحة تنرسم على دفعات بشبكة بطيئة. myplus-ui.js يشيل الحجز أو يرجّع الأصل. */
+(function(){try{var L=localStorage,on=L.getItem("t:me-on");if(on==="0"||(on!=="1"&&!false))return;var h={};try{h=JSON.parse(L.getItem("t:me-h")||"{}")||{}}catch(e){}
+for(var k in h)h[k]=Math.min(+h[k]||0,1500);   /* حد أعلى (قيمة مخرّبة ما تسوّي فراغ ضخم) */
+var r=document.documentElement,s=r.style,w=innerWidth,D=w<600?[125,256,89]:w<1100?[96,256,89]:[100,264,92];   /* ارتفاعات typical مقيسة بعروض 390/820/1366 (أول زيارة بعلم myspace_plus_default_on) */
+r.classList.add("mp-pre","mp-fl");
+s.setProperty("--mp-hi",(+h.hi>60?+h.hi:D[0])+"px");s.setProperty("--mp-tk",(+h.tk>100?+h.tk:D[1])+"px");s.setProperty("--mp-pl",(+h.pl>40?+h.pl:D[2])+"px");
+var a=null;try{a=JSON.parse(L.getItem("t:me-article")||"null")}catch(e){}
+if(a&&a.top===true&&+h.art>40){r.classList.add("mp-pre-art");s.setProperty("--mp-art",h.art+"px")}}catch(e){}})();</script>
 <script>try{if(localStorage.getItem("t:theme")==='"dark"')document.documentElement.dataset.theme="dark"}catch(e){}
 try{if(/[?&]lang=en/.test(location.search)||(!/[?&]lang=ar/.test(location.search)&&localStorage.getItem("t:lang")==="en")){document.documentElement.lang="en";document.documentElement.dir="ltr"}}catch(e){}try{if(!/\/preview\//.test(location.pathname)){var _d=document.documentElement;_d.dataset.live="1";if(localStorage.getItem("t:gate-on")==="1")_d.dataset.gate="on"}}catch(e){}</script>
-<meta name="theme-color" content="#4B5A8A"><link rel="apple-touch-icon" href="../assets/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="build" content="20261117113017"></head><body class="calm" data-gated="1"><div class="wrap" role="main">
+<meta name="theme-color" content="#4B5A8A"><link rel="apple-touch-icon" href="../assets/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="build" content="20261117142246"></head><body class="calm" data-gated="1"><div class="wrap" role="main">
 <nav class="nnav nmob" aria-label="التنقل الرئيسي"><a class="nn" data-nn="0" href="../lessons/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.2 9.6V19.5h11.6V9.6"/><path d="M10 19.5v-5h4v5"/></svg><span>الرئيسية</span></a><a class="nn" data-nn="1" href="../learn/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5h4v14.5h-4zM8.5 7h4v12.5h-4z"/><path d="m13.6 7.6 3.7-1.1 3.4 12.3-3.7 1"/></svg><span>المحاضرات</span></a><a class="nn" data-nn="2" href="./" data-locked aria-current="page"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></svg><span>صفحتي</span></a></nav><div class="cbar sticky"><a class="back" href="../lessons/"><span aria-hidden="true">‹</span><span class="bl">الرئيسية</span></a><nav class="nnav ndesk" aria-label="التنقل الرئيسي"><a class="nn" data-nn="0" href="../lessons/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.2 9.6V19.5h11.6V9.6"/><path d="M10 19.5v-5h4v5"/></svg><span>الرئيسية</span></a><a class="nn" data-nn="1" href="../learn/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5h4v14.5h-4zM8.5 7h4v12.5h-4z"/><path d="m13.6 7.6 3.7-1.1 3.4 12.3-3.7 1"/></svg><span>المحاضرات</span></a><a class="nn" data-nn="2" href="./" data-locked aria-current="page"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></svg><span>صفحتي</span></a></nav><span class="tools"><a class="tbtn" href="../search/" aria-label="البحث (ويّا 🎤)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></a><span class="disp" role="group" aria-label="العرض"><span class="lang" role="radiogroup" aria-label="اللغة" data-cur="1"><span class="thumb" aria-hidden="true"></span><button type="button" role="radio" lang="ar" aria-label="العربية" aria-checked="true" tabindex="0">ع</button><button type="button" role="radio" lang="en" aria-label="English" aria-checked="false" tabindex="-1">ENG</button></span><i class="sep" aria-hidden="true"></i><button type="button" class="tbtn" data-theme-toggle aria-label="الوضع الليلي"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg></button></span></span></div>
 <div class="hi2 me-top"><span class="av" aria-hidden="true" data-noen id="mav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></svg></span><div><h1 class="noterm"><span>أهلاً</span><span id="mname" data-noen></span> 👋</h1></div></div>
+<div class="mhi" id="mhi" hidden></div><section class="mcust" id="mcust" hidden aria-label="رتّب صفحتي"></section>
 <p class="slim syncline" id="syncline" role="status" aria-live="polite"></p>
+<div class="mpanel" id="particle-top" hidden></div>
 <section class="tourcard tour" id="tour0" data-pre aria-labelledby="tour-t"><small class="sub">1 من 3</small><b id="tour-t">👋 هاي صفحتك</b><span>كلشي هنا إلك بس: محاضراتك وخطتك وتقدّمك وملاحظاتك.</span>
         <div class="chips-row"><button type="button" class="cbtn" data-next>التالي</button><button type="button" class="cbtn ghost" data-skip>تخطّي</button></div></section>
 <script>/* ⚡ (30/10 السرعة) بطاقة الجولة مرسومة من أول لحظة (بلا قفزة بالصفحة)؛ إذا شافها قبل ← تنشال قبل الرسم. myspace.js tour() يكمّلها */
@@ -207,18 +230,22 @@ t.addEventListener("click",function(ev){if(!t.dataset.pre||!ev.target.closest("[
 <section aria-labelledby="h-plan"><div class="sec2"><h2 id="h-plan">خطة اليوم</h2><button type="button" class="more" data-goto="plan">عدّل الخطة ‹</button></div>
 <p class="plmeta" id="plmeta" hidden></p><div id="lsug"></div><div id="ptoday"></div><div id="ltoday"></div><div id="mexam"></div>
 <details class="mdet" id="d-plan"><summary><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>خطتي: سوّي أو عدّل خطتك</span></summary><div id="pbuild"></div><div id="pdays"></div></details></section>
+<section id="mtasks-sec" aria-labelledby="h-mt" hidden><div class="sec2"><h2 id="h-mt">مهامي</h2></div><div id="mtasks"></div></section>
 <section class="mtools" aria-labelledby="h-tools"><div class="sec2"><h2 id="h-tools">أدواتي</h2></div>
 <div id="myday"></div><div id="pnotify"></div><div id="pvoice" hidden></div><div id="pdevices" hidden></div>
 <div class="timer mpanel" id="ptimer" hidden><span><small id="ptlab">📚 جلسة 25 دقيقة</small><br><b id="ptclock">25:00</b></span><button type="button" class="cbtn" id="ptgo">⏱️ ابدأ جلسة</button></div>
 <div class="mpanel" id="pnotes-sec" hidden><div id="pnotes"></div></div>
+<div class="mpanel" id="particle-sec" hidden></div>
 <details class="mdet" id="d-prog"><summary><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span>تقدّمي بالتفصيل</span></summary><div id="pprog"></div><div id="pout"></div></details></section>
 <div class="mvis" id="mvis" hidden><p>📱 تقدّمك محفوظ بهالجهاز بس. عندك كود؟ ادخل حتى يبقى ويّاك بأي جهاز.</p><a class="cbtn ghost" href="../login/">🎓 أنا طالب</a></div>
 <p class="revline" role="note">للمراجعة فقط — مو توقّع لأسئلة الامتحان</p>
 <div class="mhelp"><button type="button" class="cbtn ghost" id="pvhelp" aria-label="شلون أستخدم صفحتي؟">؟ شلون أستخدمها</button></div>
-</div><a class="fab" href="../assistant/" aria-label="اسأل المساعد"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="11" rx="4"/><path d="M12 4v3.5M9 12.5h.01M15 12.5h.01M9.5 15.5h5"/></svg><span class="fl">اسأل المساعد</span><span class="fs" aria-hidden="true">اسأل</span></a><script src="../assets/listen.min.js?v=e91ace7626" defer></script><script src="../assets/cloud-config.min.js?v=9a2ec3122d"></script><script src="../assets/net.min.js?v=b40858af4b"></script><script src="m/account.js" defer></script><script src="m/voice-input.js" defer></script><script src="m/plan.js" defer></script><script src="m/track.js" defer></script><script src="m/notes.js" defer></script><script src="m/learn.js" defer></script><script src="m/myspace.js" defer></script><script src="m/sync.js" defer></script><script src="m/notify.js" defer></script><script>
+</div><a class="fab" href="../assistant/" aria-label="اسأل المساعد"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="7.5" width="15" height="11" rx="4"/><path d="M12 4v3.5M9 12.5h.01M15 12.5h.01M9.5 15.5h5"/></svg><span class="fl">اسأل المساعد</span><span class="fs" aria-hidden="true">اسأل</span></a><script src="../assets/listen.min.js?v=e91ace7626" defer></script><script src="../assets/cloud-config.min.js?v=9a2ec3122d"></script><script src="../assets/net.min.js?v=b40858af4b"></script><script src="m/account.js" defer></script><script src="m/voice-input.js" defer></script><script src="m/plan.js" defer></script><script src="m/track.js" defer></script><script src="m/notes.js" defer></script><script src="m/learn.js" defer></script><script src="m/myspace.js" defer></script><script src="m/myplus-articles.js" defer></script><script src="m/myplus.js" defer></script><script src="m/myplus-ui.js" defer></script><script src="m/sync.js" defer></script><script src="m/notify.js" defer></script><script>
 // 🧩 ربط الوحدات بالمعاينة: بيانات الموقع الحقيقية + بيانات الطالب من جهازه بس.
 document.addEventListener("DOMContentLoaded", async () => {
   const root = new URL("../", location.href).href, $ = (s) => document.querySelector(s);
+  // 🪺 77: التحية والأفاتار والمهام (ما تحتاج بيانات المحاضرات) تنرسم أول ما تتوفر الإعدادات والحساب، قبل data.json؛ update() تكمّل بعده (امتحان، مواد، فهرس الملاحظات)
+  if (window.MyPlusUI) MyPlusUI.init({ root, Notes });
   const J = (u) => fetch(u).then((r) => { if (!r.ok) throw r.status; return r.json(); });
   const esc = (x) => String(x ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const LSg = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
@@ -327,8 +354,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   ["track:change", "plan:change", "notes:change"].forEach((e) => document.addEventListener(e, () => setTimeout(paint, 0)));
   // ⏱️ 25 + 5
-  const tm = Plan.timer({ onTick: (x) => { $("#ptclock").textContent = x ? x.label : "25:00"; $("#ptlab").textContent = !x ? "📚 جلسة 25 دقيقة" : x.phase === "work" ? `📚 جلسة ${x.round} · ركّز` : "☕ استراحة 5 دقايق"; $("#ptgo").textContent = x ? "⏹️ وقّف" : "⏱️ ابدأ جلسة"; } });
-  $("#ptgo").onclick = () => (tm.running ? tm.stop() : tm.start());
+  const tm = Plan.timer({ onTick: (x) => { if (!$("#ptclock")) return; $("#ptclock").textContent = x ? x.label : "25:00"; $("#ptlab").textContent = !x ? "📚 جلسة 25 دقيقة" : x.phase === "work" ? `📚 جلسة ${x.round} · ركّز` : "☕ استراحة 5 دقايق"; $("#ptgo").textContent = x ? "⏹️ وقّف" : "⏱️ ابدأ جلسة"; } });
+  if ($("#ptgo")) $("#ptgo").onclick = () => (tm.running ? tm.stop() : tm.start());   // 🪺 77: myplus-ui.js يبدّل محتوى #ptimer بمؤقته (25/50/15/وقت ثاني) إذا مفتاح focus شغّال
   $("#pvhelp").onclick = () => MySpace.tour(true);
   // 🧪 بيانات تجريبية (المعاينة بس) حتى يبيّن الشكل
   if ($("#pvseed")) $("#pvseed").onclick = () => {
@@ -348,6 +375,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
   paint();
   MySpace.tour();
+  if (window.MyPlusUI) MyPlusUI.update({ ix, examFromCache: Plan.examFromCache, subjectName: (k) => (subjects.find(([x]) => x === k) || [0, k])[1] });
   // ☁️ الحساب: الزائر ← ولا طلب للشبكة؛ الطالب المسجّل ← دمج ويّا حسابه
   const sl = $("#syncline"), showSync = () => { sl.textContent = Sync.label(); if ($("#mvis")) sl.hidden = !MySpace.signedIn(); };   // v2: الزائر يشوف بطاقة «عندي كود» بس (بلا تكرار)
   document.addEventListener("sync:status", showSync);
@@ -362,4 +390,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (PV.has(r)) a.href = pvRoot + r + h;
   }, true);
 });
-</script><script src="../assets/calm.min.js?v=4a200cb361" defer></script><script src="../assets/staffdoor.min.js?v=891c6b84f4" defer></script><script src="../assets/lang.min.js?v=c3b1bb77b4" defer></script><script src="../assets/cloud.min.js?v=562854865e"></script><script src="../assets/tools.min.js?v=f9bbbe06fe"></script><script src="../assets/voice.min.js?v=a36331dc76" defer></script><script src="../assets/nextexam.min.js?v=e71b31c7a6" defer></script><script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { updateViaCache: "none" });</script></body></html>
+</script><script src="../assets/calm.min.js?v=4a200cb361" defer></script><script src="../assets/staffdoor.min.js?v=294538e5c1" defer></script><script src="../assets/lang.min.js?v=c3b1bb77b4" defer></script><script src="../assets/cloud.min.js?v=3352a7f276"></script><script src="../assets/tools.min.js?v=f9bbbe06fe"></script><script src="../assets/voice.min.js?v=a36331dc76" defer></script><script src="../assets/nextexam.min.js?v=e71b31c7a6" defer></script><script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("../sw.js", { updateViaCache: "none" });</script></body></html>
