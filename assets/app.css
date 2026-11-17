@@ -507,3 +507,6 @@ h2, h3, .case h3 .en { font-weight: 700; }
 
 /* (8/11) شارة سؤال «إضافي» */
 .xbadge { display: inline-block; font-size: 12px; font-weight: 600; color: var(--muted); border: 1px solid var(--line, #d9e0ee); border-radius: 999px; padding: 2px 10px; margin-bottom: 6px; direction: rtl; }
+/* ⚡ 17/11 (السرعة): بطاقات المصطلحات اللي برّا الشاشة ما تنرسم لحد ما تقرب (نفس الشكل) */
+.terms .term { content-visibility: auto; contain-intrinsic-size: auto 150px; }
+.terms[data-pending] { min-height: 150vh; }   /* قبل ما terms.js يرسم القائمة: مكانها محجوز (بلا قفزة للي تحتها) */

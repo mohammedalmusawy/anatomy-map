@@ -1,28 +1,29 @@
 // 🛰️ sw.js v2 (انطبق 29/10/2026 من sw-v2.js بعد مراجعة مستقلة؛ القديم بـ sw.js.bak-20261029-perf).
-// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261117223506 برقم البناء.
+// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261118000047 برقم البناء.
 // الهدف: أول فتح سريع، وكل صفحة دراسة انفتحت مرة تشتغل بلا نت، وأي تعديل يوصل بسرعة.
 //
 // ⚠️ كل الكاشات تبدي بـ "anatomy-" (أو dars-/audio-v1 القديمة): mohammedalmusawy.github.io أصل مشترك ويّا مواقع ثانية
 //    (نفس CacheStorage)، فما نمسح أبداً كاش ما يخصّنا.
 //   anatomy-shell-<V>  الأساس الصغير: الخطوط (روابط ثابتة ?v=1) + offline.html + الرئيسية + سهولة التعلم. يتجدد مع كل نسخة.
 //   anatomy-assets-v2  CSS/JS بالـ ?v= (من الكاش أول — الرابط يتغير إذا الملف تغيّر). ما ينمسح مع النسخ؛ يتقلّم لـ ASSETS_MAX.
-//   anatomy-pages-v2   HTML بس: «الشبكة (navigationPreload) بمهلة 1.2 ث، وإلا المحفوظ» + تحديث بالخلفية. حد PAGES_MAX.
+//   anatomy-pages-v2   HTML بس: «الشبكة (navigationPreload) بمهلة 0.4 ث، وإلا المحفوظ» + تحديث بالخلفية. حد PAGES_MAX.
 //   anatomy-data-v2    JSON: stale-while-revalidate، عدا quiz/bank.json (أجوبة) = الشبكة أول بمهلة.
 //   anatomy-img-v1     صور: من الكاش أول، حد IMG_MAX.
 //   anatomy-offline-v1 «احفظ المحاضرة بلا نت» (رسالة warm) — ما يتقلّم وحده.
 //   audio-v1           الصوت (نفس اسم sw.js الحالي حتى ما يضيع المحفوظ عند الطلاب).
-const VERSION = "20261117223506";
+const VERSION = "20261118000047";
 const P = "anatomy-";
 const SHELL = P + "shell-" + VERSION, ASSETS = P + "assets-v2", PAGES = P + "pages-v2", DATA = P + "data-v2",
   IMG = P + "img-v1", OFFLINE = P + "offline-v1", FONTS = P + "fonts-v1", AUDIO = "audio-v1";
 const KEEP = [SHELL, ASSETS, PAGES, DATA, IMG, OFFLINE, FONTS, AUDIO];
 const MINE_CACHE = (k) => k.startsWith(P) || k.startsWith("dars-");   // اللي نقدر نمسحه (audio-v1 ما ينمسح)
 // M3 (29/10): الصفحة المحفوظة تنتظر الشبكة 1.2 ث بس (3G) — bank.json يبقى 2.5 ث (الأجوبة لازم أحدث)
-const PAGES_MAX = 150, IMG_MAX = 1200, ASSETS_MAX = 120, NET_TIMEOUT = 2500, NAV_TIMEOUT = 1200;
+// ⚡ 17/11: المهلة 0.4 ث: الشبكة السريعة تلحق (أحدث نسخة)، والبطيئة ← المحفوظ فوراً والتحديث يكمل بالخلفية (الزيارة الجاية أحدث)
+const PAGES_MAX = 150, IMG_MAX = 1200, ASSETS_MAX = 120, NET_TIMEOUT = 2500, NAV_TIMEOUT = 400;
 const BASE = new URL(self.registration.scope).pathname;
 // الأساس: الرئيسية + ملفات الشكل والسكربت الأساسية (site.write_sw يحط قائمتها بـ ?v=<بصمة المحتوى>، فالملف اللي ما تغيّر
 // ما ينزل من جديد) + الخطوط بكاش ثابت FONTS (ما ينمسح مع كل نسخة).
-const CORE = ["assets/app.min.css?v=d9facffd93", "assets/cloud-config.min.js?v=9a2ec3122d", "assets/net.min.js?v=b40858af4b", "assets/cloud.min.js?v=3352a7f276", "assets/tools.min.js?v=cb7320ba9d", "assets/voice.min.js?v=282e49686e", "assets/listen.min.js?v=1b8c7c3b5e", "assets/pick.min.js?v=6e9e72fa09", "assets/nextexam.min.js?v=e71b31c7a6", "assets/quiz.min.js?v=d90b3fe92c", "assets/slides.min.js?v=ddc847cbc9", "assets/calm.min.css?v=cd2ac8a80a", "assets/calm.min.js?v=4a200cb361", "assets/lang.min.css?v=9746e9d285", "assets/lang.min.js?v=c3b1bb77b4", "assets/staffdoor.min.js?v=294538e5c1", "lessons/", "learn/", "offline.html", "manifest.webmanifest", "assets/icon-192.png",
+const CORE = ["assets/app.min.css?v=6487458c02", "assets/cloud-config.min.js?v=9a2ec3122d", "assets/net.min.js?v=b40858af4b", "assets/cloud.min.js?v=b9632e743b", "assets/tools.min.js?v=028f815d7b", "assets/voice.min.js?v=282e49686e", "assets/listen.min.js?v=1b8c7c3b5e", "assets/pick.min.js?v=6e9e72fa09", "assets/nextexam.min.js?v=e71b31c7a6", "assets/quiz.min.js?v=d90b3fe92c", "assets/slides.min.js?v=ddc847cbc9", "assets/calm.min.css?v=cd2ac8a80a", "assets/calm.min.js?v=4a200cb361", "assets/lang.min.css?v=9746e9d285", "assets/lang.min.js?v=c3b1bb77b4", "assets/staffdoor.min.js?v=294538e5c1", "lessons/", "learn/", "offline.html", "manifest.webmanifest", "assets/icon-192.png",
   "assets/fonts/cairo-600-800.woff2?v=1", "assets/fonts/plex-arabic-400.woff2?v=1", "assets/fonts/plex-arabic-500.woff2?v=1"];
 const SECTIONS = ["lessons", "quiz", "learn", "atlas", "devices", "contrast", "terms", "search", "assistant", "exams", "study", "thanks",
   "offline.html", "دروس", "اختبار", "تعلم", "أطلس",

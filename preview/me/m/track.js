@@ -136,7 +136,7 @@
       const seen = Object.keys(st.atlas[r.key] || {}).length;
       return { key: r.key, name: r.name, dev: r.dev || r.key.split("/")[0], seen: Math.min(seen, r.total), total: r.total, text: `${r.name} ${Math.min(seen, r.total)}/${r.total}` };
     });
-    const srs = Object.values(o.srs || {});
+    const srs = Object.values(o.srs || {}).filter((x) => x && !(x.mine && !x.r));   // ⭐ (17/11) محفوظ بس (pick.js) وبعده ما راجعه ← ما ينحسب «راجعته»
     const terms = { reviewed: srs.length, saved: srs.filter((x) => (x.box || 0) >= 3).length, week: 0 };
     // الاختبارات: المعدل = آخر محاولة لكل اختبار؛ التحسّن = (آخر − أول) للي عادها مرتين أو أكثر
     const by = {};

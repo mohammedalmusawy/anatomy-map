@@ -133,3 +133,5 @@ svg.body.mini .sp { display: none; }
 :root { --g-brain: #6A4C9C; --g-vascular: #B23A48; --g-organ: #8A6D3B; --g-obgyn: #C2577F; }
 @media (prefers-color-scheme: dark) { :root { --g-brain: #B9A3E3; --g-vascular: #EE8E99; --g-organ: #D8BE8A; --g-obgyn: #F0A3C0; } }
 .g-brain { --g: var(--g-brain); } .g-vascular { --g: var(--g-vascular); } .g-organ { --g: var(--g-organ); } .g-obgyn { --g: var(--g-obgyn); }
+/* ⚡ 17/11 (السرعة): الحالات بعد الأولى ما تنرسم لحد ما تقرب من الشاشة (نفس الشكل؛ المكان محجوز تقريباً وبعدها بحجمها الحقيقي) */
+article.case ~ article.case { content-visibility: auto; contain-intrinsic-size: auto 640px; }

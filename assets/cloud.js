@@ -66,17 +66,32 @@
 
   // 🚦 صعوبة السؤال (من نسب الغلط الحقيقية، أو «تقديري»)
   let stats = null;
-  if (document.getElementById("opts")) get("question_stats", "select=qkey,rate,estimated,hint_en,hint_ar,attempts", 6 * 3600e3).then((r) => {   // نفس طلب smart.js = كاش واحد
-    stats = Object.fromEntries((r || []).map((x) => [x.qkey, x]));
-  });
-  document.addEventListener("quiz:show", (ev) => {
-    const s = stats && stats[(ev.detail.q.q_en || "").slice(0, 120)], c = document.getElementById("count");
+  // ⚡ (17/11 السرعة) بس أسئلة هالاختبار (qkey=in.(…)) بدل كل جدول الموقع (112KB، وكان ينقطع عند 1000 صف من 1096).
+  //   بالـ qkey مو بعمود quiz: نفس السؤال ممكن بأكثر من اختبار، وعمود quiz بيه صيغتين (الرابط أو «المادة · النوع · مNN»).
+  //   الطلب يتقسم إذا طال الرابط؛ بلا أسئلة معروفة أو أكثر من 150 ← الطلب الكامل القديم (نفس كاش smart.js).
+  const SQ = "select=qkey,rate,estimated,hint_en,hint_ar,attempts";
+  const pq = (k) => encodeURIComponent('"' + k.replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '"');
+  function statsReq() {
+    let ks = [];
+    try { const d = JSON.parse((document.getElementById("quiz-data") || {}).textContent || "{}"); ks = [...new Set((d.questions || []).map((q) => (q.q_en || "").slice(0, 120)).filter(Boolean))].sort(); } catch (e) {}
+    if (!ks.length || ks.length > 150) return get("question_stats", SQ, 6 * 3600e3);
+    const parts = [[]]; let len = 0;
+    ks.forEach((k) => { const v = pq(k); if (len + v.length > 3500 && parts[parts.length - 1].length) { parts.push([]); len = 0; } parts[parts.length - 1].push(v); len += v.length + 1; });
+    return Promise.all(parts.map((p) => get("question_stats", SQ + "&qkey=in.(" + p.join(",") + ")", 6 * 3600e3)))
+      .then((rs) => [].concat(...rs.map((r) => (Array.isArray(r) ? r : []))));
+  }
+  let shown = null;   // السؤال المعروض هسه: إذا الإحصائيات وصلت بعده، شارة الصعوبة تنحط عليه
+  const loadStats = () => { if (document.getElementById("opts")) statsReq().then((r) => { stats = Object.fromEntries((r || []).map((x) => [x.qkey, x])); if (shown) badge(shown); }); };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", loadStats); else loadStats();   // quiz-data تحت هالسكربت بالصفحة
+  function badge(q) {
+    const s = stats && stats[(q.q_en || "").slice(0, 120)], c = document.getElementById("count");
     if (!c) return;
     c.querySelector(".diff")?.remove();
     if (!s) return;
     const [ic, w] = s.rate >= 0.5 ? ["🔴", "صعب"] : s.rate >= 0.25 ? ["🟡", "متوسط"] : ["🟢", "سهل"];
     c.insertAdjacentHTML("beforeend", ` <span class="diff">${ic} ${w}${s.estimated ? " · تقديري" : ""}</span>`);
-  });
+  }
+  document.addEventListener("quiz:show", (ev) => { shown = ev.detail.q; badge(shown); });
 
   // 🚩 بلّغ عن خطأ (بكل سؤال وحالة)
   const rep = (item) => {

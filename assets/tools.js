@@ -187,8 +187,9 @@
 
   // ── 8) 🔁 مراجعة متباعدة للمصطلحات (فكرة Anki): الصناديق 0،1،3،7،14،30 يوم ──
   const rv = document.getElementById("review-btn"), tdata = document.getElementById("terms-data");
-  if (rv && tdata) {
-    const D = JSON.parse(tdata.textContent), all = D.ours.concat(D.general, D.symptoms || []);   // + مصطلحات الأعراض (28/10)
+  // ⚡ 17/11: صفحة المصطلحات صارت تجيب بياناتها من data.json (terms.js) ← ننتظر terms:data؛ والصيغة القديمة (داخل الصفحة) مثل قبل
+  const review = (D) => {
+    const all = D.ours.concat(D.general, D.symptoms || []);   // + مصطلحات الأعراض (28/10)
     const GAP = [0, 1, 3, 7, 14, 30], day = Math.floor(Date.now() / 864e5);
     let st = LS.get("srs", {});
     // (30/10) دمج المكررات: تقدّم المراجعة على الصيغة القديمة ينتقل للمدخل الأساسي (والقديم يبقى)
@@ -218,5 +219,10 @@
       };
       next();
     };
+  };
+  if (rv && tdata) {
+    if (!tdata.dataset.src) review(JSON.parse(tdata.textContent));
+    else if (window.TERMS_DATA) review(window.TERMS_DATA);
+    else document.addEventListener("terms:data", (ev) => review(ev.detail), { once: true });
   }
 })();

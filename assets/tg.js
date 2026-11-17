@@ -3,7 +3,7 @@
 // - ألوان التليغرام (themeParams) على ألوان الموقع، وBackButton يرجّع للقائمة، والمسافات الآمنة (safe area) من متغيرات التليغرام.
 // - بلا تسجيل دخول وبلا جمع بيانات: ما ينرسل أي شي؛ بس «🐢 أبطأ» ينحفظ بالجهاز.
 (function () {
-  const tg = window.Telegram && window.Telegram.WebApp;
+  let tg = window.Telegram && window.Telegram.WebApp;   // ⚡ 17/11: سكربت تليغرام غير متزامن ← init() هسه أو لما يوصل (حدث am-tg)
   const view = document.getElementById("tgview");
   const esc = (x) => String(x || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const ALIAS = { devices: "equipment", device: "equipment" };
@@ -25,7 +25,9 @@
 
   function startId() {
     const q = new URLSearchParams(location.search);
-    let id = (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) || q.get("tgWebAppStartParam") || q.get("l") || "";
+    let hs = "";   // start_param من tgWebAppData بالـ # (يوصل قبل سكربت تليغرام)
+    try { hs = new URLSearchParams(new URLSearchParams(location.hash.slice(1)).get("tgWebAppData") || "").get("start_param") || ""; } catch (e) {}
+    let id = (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) || hs || q.get("tgWebAppStartParam") || q.get("l") || "";
     id = id.toLowerCase().replace(/-/g, "_");
     const m = id.match(/^([a-z]+)_?([tp])_?0*(\d+)$/);
     return m ? `${ALIAS[m[1]] || m[1]}_${m[2]}${String(m[3]).padStart(2, "0")}` : "";
@@ -34,6 +36,7 @@
   let LIST = [];
   const back = () => { if (window.Listen) Listen.stop(); list(); };
   function list() {
+    opened = false;
     if (tg && tg.BackButton) tg.BackButton.hide();
     const groups = {};
     LIST.forEach((l) => (groups[l.subject + " · " + l.type] = groups[l.subject + " · " + l.type] || []).push(l));
@@ -52,6 +55,7 @@
     view.innerHTML = `<p class="tgh"><small>${esc(l.subject)} · ${esc(l.type)} · م${String(l.num).padStart(2, "0")}</small></p>` +
       `<h1 class="tgt"><bdi>${esc(l.en)}</bdi></h1><p class="sub">${esc(l.ar)}</p>` + html +
       `<p class="tgf"><a href="${site}${l.page}" target="_blank" rel="noopener">📚 السلايدات والاختبار بالموقع</a></p>`;
+    opened = true;
     if (tg && tg.BackButton) tg.BackButton.show();
     if (window.Listen) Listen.mount(view.querySelector(".listen"));
     if (push) history.pushState({ id }, "", `?l=${id}`);
@@ -63,12 +67,19 @@
   });
   window.addEventListener("popstate", () => { const id = startId(); id ? open(id) : list(); });
 
-  if (tg) {
+  let opened = false;
+  function init() {
+    tg = window.Telegram && window.Telegram.WebApp;
+    if (!tg || tg.__am) return;
+    tg.__am = 1;
     tg.ready();
     theme();
     tg.onEvent && tg.onEvent("themeChanged", theme);
     tg.BackButton && tg.BackButton.onClick(back);
+    if (opened && tg.BackButton) tg.BackButton.show();
   }
+  init();
+  window.addEventListener("am-tg", init);
   fetch("lectures.json").then((r) => r.json()).then((d) => { LIST = d; const id = startId(); id ? open(id) : list(); })
     .catch(() => { view.innerHTML = `<p class="sub">ما گدرت أحمّل القائمة. تأكد من النت وجرّب مرة ثانية.</p>`; });
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js", { updateViaCache: "none" }).catch(() => {});
