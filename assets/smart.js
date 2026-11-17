@@ -63,7 +63,7 @@
       $("#sn").textContent = res.length ? `${res.length} نتيجة` : "ما لگيت شي بهالكلمات. جرّب كلمة ثانية أو بالإنكليزي.";
       $("#sr").innerHTML = res.slice(0, 40).map(([, c]) => `<a class="item sres" href="${root}${esc(c.u)}"><span><b>${esc(c.t)}</b><small>${esc(c.x.slice(0, 140))}…</small></span><span class="go">‹</span></a>`).join("");
       clearTimeout(timer);
-      if (!res.length && window.Cloud) timer = setTimeout(() => Cloud.log("search_empty", $("#sq").value), 1500);
+      if (!res.length && window.Cloud && !$("#sq").dataset.fromVoice) timer = setTimeout(() => Cloud.log("search_empty", $("#sq").value), 1500);   // 🎤 (10/11): كلام المايك العرضي ما ينرسل لحد ما تكتب أنت
     };
     $("#sq").addEventListener("input", run);
   }

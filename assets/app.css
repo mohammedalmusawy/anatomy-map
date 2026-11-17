@@ -254,8 +254,13 @@ bdi { direction: ltr; unicode-bidi: isolate; }
 .sxc small { display: block; color: var(--muted); font-size: 13px; line-height: 1.6; margin-top: 2px; }
 /* 🎤 البحث بالصوت (27/10) */
 .vbox { display: inline-flex; gap: 6px; vertical-align: middle; margin-inline-start: 6px; }
-.vbox button { border: 1px solid var(--line); background: var(--card); color: var(--brand); border-radius: 10px; min-width: 40px; height: 40px; font: 600 14px inherit; font-family: inherit; cursor: pointer; }
+.vbox button { border: 1px solid var(--line); background: var(--card); color: var(--brand); border-radius: 10px; min-width: 44px; height: 44px; font: 600 14px inherit; font-family: inherit; cursor: pointer; }
 .vbox .vmic.on { background: #E5484D; color: #fff; border-color: #E5484D; animation: vpulse 1s infinite; }
+.vbox { flex: none; }
+.vbox button { flex: none; }
+.vmsg { display: block; margin: 6px 2px 0; font-size: 13.5px; line-height: 1.7; color: var(--muted); }
+.vmsg[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) { .vbox .vmic.on { animation: none; } }
 @keyframes vpulse { 50% { opacity: .6; } }
 /* ✨ أدوات الطالب (27/10) */
 .mytools { display: grid; gap: 8px; margin: 0 0 12px; }
