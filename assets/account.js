@@ -47,6 +47,10 @@
     if (!state.on) return { ok: false, msg: "الحسابات مو مفعّلة بعد." };
     const r = await call("redeem-code", { code: String(code || "").trim(), device_id: device, ua: navigator.userAgent.slice(0, 120) });
     if (!r.token_hash) return { ok: false, msg: r.msg || "ما گدرنا ندخلك، جرّب مرة ثانية." };
+    return enter(r);
+  }
+  /** 078: نفس خطوات ما بعد الدخول لأي طريق (كود أو رقم سري): verifyOtp ← الطالب ← دمج المحلي ← touch بالـ nonce. */
+  async function enter(r) {
     const c = await client();
     const { data, error } = await c.auth.verifyOtp({ token_hash: r.token_hash, type: "magiclink" });
     if (error || !data.session) return { ok: false, msg: "ما گدرنا ندخلك، جرّب مرة ثانية." };
@@ -61,6 +65,29 @@
     if (t && t.ok) { lsSet("t:acct-touch", new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10)); lsSet("t:acct-touch-at", Date.now()); }
     return { ok: true, full_name: r.full_name, name_confirmed: r.name_confirmed, needs_name: !r.full_name };   // 73: كود جملي بلا اسم ← يكتب اسمه بأول دخول
   }
+
+  // ── 🔒 078: «مساحتي بالاسم الثلاثي + رقم سري» (pin-login). مطفي لحد settings.student_pin.on — الواجهة بـ pin-ui.js ──
+  const en = () => { try { return document.documentElement.lang === "en"; } catch (e) { return false; } };
+  const pmsg = (r, fb) => (en() ? r.msg_en || r.msg : r.msg) || (en() ? "Something went wrong. Try again." : fb || "صار خطأ، جرّب مرة ثانية.");
+  async function pinCall(action, extra, auth) {
+    if (!state.on) return { ok: false, status: 0, error: "off", msg: "الحسابات مو مفعّلة بعد." };
+    try { return await call("pin-login", Object.assign({ action, device_id: device, ua: navigator.userAgent.slice(0, 120) }, extra || {}), auth); }
+    catch (e) { return { ok: false, status: 0, error: "net", msg: "ماكو اتصال. تأكد من النت وجرّب مرة ثانية.", msg_en: "No connection. Check the internet and try again." }; }
+  }
+  /** زائر: create · login · recover ← نفس enter(). الرد {ok, ...} أو {ok:false, error, msg (حسب اللغة), minutes?}. */
+  async function pinVisitor(action, fields) {
+    const r = await pinCall(action, fields, false);
+    if (!r.token_hash) return { ok: false, error: r.error, minutes: r.minutes, status: r.status, msg: pmsg(r) };
+    const x = await enter(r);
+    return Object.assign(x, { created: r.created === true, recovered: r.recovered === true });
+  }
+  const pinCreate = (name, pin, pin2) => pinVisitor("create", { name, pin, pin2 });
+  const pinLogin = (name, pin) => pinVisitor("login", { name, pin });
+  const pinRecover = (name, code, pin, pin2) => pinVisitor("recover", { name, code, pin, pin2 });
+  const pinMine = async (action, extra) => { const r = await pinCall(action, extra, true); if (r.status === 401 && r.error === "auth") await logout(); if (!r.ok) r.msg = pmsg(r); return r; };
+  const pinInfo = () => pinMine("info");
+  const pinSet = (pin, pin2, current) => pinMine("set", { pin, pin2, current });
+  const pinClear = (current) => pinMine("clear", { current });
 
   async function loadStudent() {
     const c = await client();
@@ -128,6 +155,7 @@
       <p class="sub">كودك يشتغل على ${int0(r.max_devices)} أجهزة بالكثير. إذا جهاز مو إلك أو ما تستعمله، طلّعه.</p>
       <ul class="devl">${devList(r).map((d) => `<li data-dev="${esc(d.id)}"${d.current ? ' data-cur="1"' : ""}><span><b>${esc(d.kind)}</b>${d.current ? " <small>(هذا الجهاز)</small>" : ""}<br><small>أول مرة: ${esc(String(d.first_seen || "").slice(0, 10))} · آخر مرة: ${esc(when(d.last_seen))}</small></span>
         <button type="button" class="cbtn ghost" data-rm>${d.current ? "اطلع من هذا الجهاز" : "طلّع هذا الجهاز"}</button></li>`).join("")}</ul>
+      ${devList(r).length > 1 ? `<button type="button" class="cbtn ghost" data-out-others>${en() ? "Sign out all other devices" : "اطلع من كل الأجهزة الثانية"}</button>` : ""}
       <p class="sub" role="status" aria-live="polite" data-devmsg></p></details>`;
     el.querySelectorAll("[data-rm]").forEach((b) => b.onclick = async () => {
       const li = b.closest("li"), cur = li.dataset.cur === "1";
@@ -141,6 +169,32 @@
       li.remove();
       const sm = el.querySelector("summary small"); if (sm) sm.textContent = `${int0(devList(x).length)}/${int0(x.max_devices)}`;
     });
+    outOthersWire(el);
+    // 🔒 078: بطاقة الرقم السري تحت «أجهزتي» (بس لما settings.student_pin.on؛ الملف ينحمّل وقت الحاجة)
+    pinCard(el);
+  }
+  function pinCard(el) {
+    const N = window.Net;
+    if (!N || !N.settings) return;
+    Promise.resolve(N.settings()).then((S) => {
+      if (!(S && S.student_pin && S.student_pin.on === true) || !el.isConnected) return;
+      const go = () => window.PinUI && window.PinUI.mountSettings(el.appendChild(Object.assign(document.createElement("div"), { className: "pin-mine" })));
+      if (window.PinUI) return go();
+      const me = [...document.scripts].find((x) => /account(\.min)?\.js/.test(x.src));
+      const sc = document.createElement("script"); sc.src = me ? me.src.replace(/account(\.min)?\.js/, "pin-ui.js") : "pin-ui.js"; sc.onload = go; document.head.appendChild(sc);
+    }).catch(() => {});
+  }
+  /** 🔒 078 (منع الانتحال): «اطلع من كل الأجهزة الثانية» — نفس remove_device (ذرّي لكل جهاز)، والجهاز الحالي يبقى. */
+  function outOthersWire(el) {
+    const b = el.querySelector("[data-out-others]"); if (!b) return;
+    b.onclick = async () => {
+      if (!confirm(en() ? "Sign out all other devices? This device stays signed in." : "تطلّع كل الأجهزة الثانية من حسابك؟ هذا الجهاز يبقى داخل.")) return;
+      b.disabled = true; const m = el.querySelector("[data-devmsg]"); let n = 0, bad = 0;
+      for (const li of [...el.querySelectorAll("li[data-dev]")]) { if (li.dataset.cur === "1") continue; const x = await removeDevice(li.dataset.dev).catch(() => ({ ok: false })); if (x.ok) { n++; li.remove(); } else bad++; }
+      if (m) m.textContent = bad ? (en() ? "Some devices were not signed out. Try again." : "بعض الأجهزة ما طلعت، جرّب مرة ثانية.") : en() ? `✅ ${n} device(s) signed out. Only this device is signed in now.` : `✅ طلعت ${n} ${n === 1 ? "جهاز" : "أجهزة"}. هذا الجهاز بس داخل هسه.`;
+      b.hidden = !bad; b.disabled = false;
+      const sm = el.querySelector("summary small"); if (sm) sm.textContent = sm.textContent.replace(/^\d+/, String(el.querySelectorAll("li[data-dev]").length));
+    };
   }
   async function logout() {
     // الخروج ما يفضّي مكان الجهاز (حتى ما ينتشر الكود بخروج/دخول). تصفير الأجهزة من الإدارة بس.
@@ -281,7 +335,7 @@
   }
 
   window.Account = {
-    state, device, ready, redeem, confirmName, fixName, setName, logout, linkTelegram, pull, get, put, devices, removeDevice, mountDevices,
+    state, device, ready, redeem, enter, pinCreate, pinLogin, pinRecover, pinInfo, pinSet, pinClear, confirmName, fixName, setName, logout, linkTelegram, pull, get, put, devices, removeDevice, mountDevices,
     mountLogin, mountNameCheck, on: (f) => { subs.add(f); return () => subs.delete(f); },
     token: () => (state.session ? state.session.access_token : null),   // للمساعد لما تنفتح البوابة
   };

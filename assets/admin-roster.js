@@ -79,6 +79,7 @@
       <details class="rs-card"><summary>🔗 روابط البوت لكل مرحلة</summary>
         <p class="hint">الطالب يضغط الرابط ويفتح البوت جاهز على مرحلته.</p>
         <ul>${[1, 2, 3, 4, 5, 6].map((n) => `<li class="it"><span class="nm">المرحلة ${STAGES[n]}</span><span class="code hint">t.me/${BOT}?start=stage${n}</span><button class="ib" data-link="${n}" title="نسخ رابط المرحلة ${STAGES[n]}" type="button">📋</button></li>`).join("")}</ul></details>
+      <details class="rs-card" id="rs-pin"><summary>🔒 الأرقام السرية (عدّاد + رمز استعادة)</summary><div id="rs-pinb"><p class="hint">افتحها حتى تتحمّل.</p></div></details>
       <details class="rs-card" id="rs-audit"><summary>🧾 السجل (اسم وتاريخ، بلا أكواد)</summary><div id="rs-alog"><p class="hint">جاري التحميل…</p></div></details>
     </div>`;
     const $ = (s) => box.querySelector(s);
@@ -135,6 +136,8 @@
     };
     $("#rs-nlog").addEventListener("toggle", (ev) => { if (ev.target.open && window.AdminNames) window.AdminNames.logins($("#rs-nlogb"), nops); });
     nreload();
+    // 🔒 078: الأرقام السرية — تتحمّل وقت الفتح بس
+    $("#rs-pin").addEventListener("toggle", (ev) => { if (ev.target.open && window.AdminPins && helpers && helpers.pin) window.AdminPins.mount($("#rs-pinb"), helpers.pin); });
 
     $("#rs-bot").onclick = async () => {
       if (!on && !confirm("تشغّل البوت للطلاب؟ كل من يكتب للبوت اسمه ورقمه الجامعي (وتطابق ويّا القائمة) ياخذ كوده.")) return;

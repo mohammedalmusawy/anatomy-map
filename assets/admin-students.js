@@ -28,7 +28,7 @@
     const sc = document.createElement("script"); sc.src = SRC_.replace(/admin-students(\.min)?\.js/, name); sc.onload = ok; sc.onerror = () => no(new Error("load " + name)); document.head.appendChild(sc);
   });
   let rosterP = null;
-  const loadRoster = () => window.AdminRoster && window.RosterParse && window.AdminNames ? Promise.resolve() : (rosterP ??= Promise.all([loadScript("roster-parse.js"), loadScript("admin-roster.js"), loadScript("admin-names.js")]).catch((e) => { rosterP = null; throw e; }));
+  const loadRoster = () => window.AdminRoster && window.RosterParse && window.AdminNames ? Promise.resolve() : (rosterP ??= Promise.all([loadScript("roster-parse.js"), loadScript("admin-roster.js"), loadScript("admin-names.js"), loadScript("admin-pins.js")]).catch((e) => { rosterP = null; throw e; }));
 
   const CSS_ID = "st73-css";
   if (!document.getElementById(CSS_ID)) {
@@ -57,6 +57,15 @@
       const r = await fetch(`${C.url}/functions/v1/students-admin`, { method: "POST",
         headers: { apikey: C.anon, Authorization: "Bearer " + (session ? session.access_token : ""), "Content-Type": "application/json" }, body: JSON.stringify(body) });
       return { ...(await r.json().catch(() => ({}))), status: r.status };   // 🛡️ الحالة من HTTP دائماً (body.status ما يغطّيها)
+    };
+    // 🔒 078: «الأرقام السرية» — نفس جلسة المالك، دالة pin-login (admin_*)
+    const pinApi = async (body) => {
+      const { data: { session } } = await sb.auth.getSession();
+      try {
+        const r = await fetch(`${C.url}/functions/v1/pin-login`, { method: "POST",
+          headers: { apikey: C.anon, Authorization: "Bearer " + (session ? session.access_token : ""), "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        return { ...(await r.json().catch(() => ({}))), status: r.status };
+      } catch (e) { return { status: 0 }; }
     };
     let batch = [];   // 73: أكواد آخر دفعة، بذاكرة الصفحة بس (ولا تنحفظ بأي مكان)
     pane.innerHTML = `<h2>🎓 الطلاب</h2>
@@ -183,7 +192,7 @@
       if (!box.hidden) { box.hidden = true; b.textContent = "افتح القائمة"; b.setAttribute("aria-expanded", "false"); return; }
       if (!box.dataset.ready) {
         b.disabled = true;
-        try { await loadRoster(); window.AdminRoster.mount(box, api, { copy: async (s) => { await navigator.clipboard.writeText(s); } }); box.dataset.ready = "1"; }
+        try { await loadRoster(); window.AdminRoster.mount(box, api, { copy: async (s) => { await navigator.clipboard.writeText(s); }, pin: pinApi }); box.dataset.ready = "1"; }
         catch (e) { b.disabled = false; b.textContent = "ما انفتحت، جرّب مرة ثانية"; return; }
         b.disabled = false;
       }

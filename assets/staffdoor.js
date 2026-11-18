@@ -157,6 +157,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
         <input id="sd-code" name="code" dir="ltr" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false" placeholder="RAD-XXXX-XXXX" maxlength="20">
         <button type="submit" class="sd-btn">دخول</button></form>
       <p class="sd-msg" id="sd-cm" role="status" aria-live="polite"></p>
+      ${PIN.on ? `<button type="button" class="sd-btn ghost" id="sd-pingo">🔒 ادخل باسمك ورقمك السري</button>` : ""}
       ${NA.on ? `<button type="button" class="sd-btn ghost" id="sd-namego">ما عندي كود؟ اكتب اسمي</button>` : ""}
       ${SUPPORT ? `<a class="sd-btn ghost" href="${esc(SUPPORT)}" target="_blank" rel="noopener" data-sd-support>نسيت الكود؟ راسل المشرف</a>` : ""}
       <p class="sd-free">الأطلس والفحوصات الملوّنة والأجهزة والمصطلحات العامة مفتوحة لأي أحد.</p>
@@ -193,13 +194,22 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
         go();
       } catch (e) { btn.disabled = false; m.className = "sd-msg bad"; m.textContent = "ماكو اتصال. تأكد من النت وجرّب مرة ثانية."; }
     };
+    const pg = d.querySelector("#sd-pingo");   // 🔒 078: الاسم الثلاثي + رقم سري (pin-ui.js ينحمّل وقت الضغط بس)
+    if (pg) pg.onclick = async () => {
+      pg.disabled = true;
+      try { await account(); await pinui(); } catch (e) { pg.disabled = false; m.className = "sd-msg bad"; m.textContent = "ماكو اتصال. تأكد من النت وجرّب مرة ثانية."; return; }
+      const done = () => { if (next) location.href = next; else if (G && gated(rel, G)) location.reload(); else location.href = ROOT + "me/"; };
+      window.PinUI.mountGate(d.querySelector(".sd-card"), { done, back: () => { d.remove(); dialog(next); } });
+    };
     const ng = d.querySelector("#sd-namego");
     if (ng) { ng.onclick = () => nameFlow(d.querySelector(".sd-card"), () => { if (next) location.href = next; else if (G && gated(rel, G)) location.reload(); else location.href = ROOT + "me/"; }, close, direct, next); if (LS.get("t:name-wait") === "1") ng.click(); }
     setTimeout(() => inp.focus(), 30);
   }
   // 🔑 75: «اكتب اسمك» — مفتوحة للزائر بس لما settings.name_access.on. الكود ما يبين لمن يكتب اسماً لحاله: لازم رقمه الجامعي أو موافقة الإدارة،
   // والكود يوصل لهالجهاز بس (سر عشوائي بالمتصفح، بالسيرفر بصمته). مطفية افتراضياً.
-  let NA = { on: false };
+  let NA = { on: false }, PIN = { on: false };   // 🔒 078: settings.student_pin.on (مطفي افتراضياً)
+  let pinP = null;
+  const pinui = () => window.PinUI ? Promise.resolve() : (pinP ??= new Promise((ok, no) => { const s = document.createElement("script"); s.src = ROOT + "assets/pin-ui.js"; s.onload = ok; s.onerror = () => { pinP = null; no(new Error("load")); }; document.head.appendChild(s); }));
   const NURL = () => ((window.STUDY_CLOUD || {}).url || "") + "/functions/v1/name-claim";
   function nsecret() {
     let k = LS.get("t:name-secret");
@@ -329,7 +339,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     if (skip || !window.Net || !window.Net.on) return;
     // آخر حالة معروفة ← نخفي المحتوى من أول لحظة (بلا ومضة)، والإعدادات الحقيقية تأكد أو تشيل
     if (LS.get("t:gate-on") === "1" && gated(rel, { open: null, closed: null }) && !allowed()) document.body.classList.add("sd-locked"), css();
-    Promise.resolve(window.Net.settings()).then((S) => { S = S || {}; NA = S.name_access && S.name_access.on === true ? { on: true } : { on: false }; apply(S.gate || { on: false }); })
+    Promise.resolve(window.Net.settings()).then((S) => { S = S || {}; NA = S.name_access && S.name_access.on === true ? { on: true } : { on: false }; PIN = S.student_pin && S.student_pin.on === true ? { on: true } : { on: false }; apply(S.gate || { on: false }); })
       .catch(() => document.body.classList.remove("sd-locked"));
   }
   // 73: حارس الاسم المشترك — طالب مسجّل دخول وما عنده اسم محفوظ (t:acct-name) ← نحمّل account.js مرة، وready() تجيب حسابه؛ إذا بلا اسم تطلع نافذة الاسم (ما تنسد)

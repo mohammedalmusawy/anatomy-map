@@ -86,6 +86,9 @@
 .minebox .mb button{min-width:44px;min-height:44px;border:0;border-radius:10px;background:none;color:inherit;font-size:17px;cursor:pointer}
 .minebox .mb button:hover,.minebox .mb button:focus-visible,.minebox .mb button.on{background:var(--brand-soft,#eef)}
 .minebox .hint{margin:0 0 8px;color:var(--muted,#666);font-size:14px}
+.minebox .mx{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.minebox .mx button{min-height:44px;padding:0 14px;border:1px solid var(--line,#ddd);border-radius:12px;background:none;color:inherit;font:inherit;font-weight:600;cursor:pointer}
+.minebox .mx button:hover,.minebox .mx button:focus-visible{background:var(--brand-soft,#eef)}
 @keyframes pkup{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion: reduce){.pkm.sheet{animation:none}}`;
     document.head.appendChild(css);
@@ -220,5 +223,13 @@
     window.Pick.say = (tx, rate, btn) => { text = ""; lexKey = window.Listen && Listen.match ? Listen.match(tx) : null; if (lexKey) text = tx; say(tx, rate || 1, btn); };
     window.Pick.toast = toast;
   }
-  return { clean, info, save, unsave, mine, today, boot, SKEY };
+  // 📋 (18/11) نص «مصطلحاتي» للنسخ أو التنزيل: سطر لكل مصطلح «المصطلح — المعنى» (المعنى إذا بالقاموس)
+  function listText(keys, meaning, en, now = Date.now()) {
+    const d = new Date(now), day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const ks = (keys || []).filter((k) => typeof k === "string" && k && !BADK.test(k));
+    const bidi = (s) => s.replace(/[‪-‮⁦-⁩]/g, "");   // محارف اتجاه مخفية ما تقلب ترتيب السطر بالملف
+    const lines = ks.map((k) => { const m = meaning ? bidi(String(meaning(k) || "")).replace(/\s+/g, " ").trim() : ""; return m ? `${bidi(k)} — ${m}` : bidi(k); });
+    return { name: (en ? "my-terms-" : "مصطلحاتي-") + day + ".txt", text: `${en ? "⭐ My terms" : "⭐ مصطلحاتي"} (${ks.length}) · ${day}\n\n${lines.join("\n")}\n` };
+  }
+  return { clean, info, save, unsave, mine, today, boot, listText, SKEY };
 });

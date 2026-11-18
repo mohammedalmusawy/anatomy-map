@@ -98,6 +98,7 @@
       box.addEventListener("click", (ev) => {
         const b = ev.target.closest("button[data-m]"); if (!b) return;
         ev.preventDefault();
+        if (b.dataset.m === "copy" || b.dataset.m === "dl") { mineOut(b.dataset.m, b); return; }
         const k = b.closest("li").dataset.k;
         if (b.dataset.m === "say") { if (window.Pick && Pick.say) Pick.say(k, 1, b); return; }
         let s2 = {}; try { s2 = JSON.parse(localStorage.getItem("t:srs") || "{}") || {}; } catch (e) {}
@@ -110,9 +111,32 @@
     box.hidden = false;
     const ar = (k) => { const x = window.Listen && Listen.match && Listen.match(k), i = x && Listen.info(x); return i ? i[1] : ""; };
     const EN = document.documentElement.lang === "en";
-    box.innerHTML = `<summary data-noen>⭐ <b>${EN ? "My terms" : "مصطلحاتي"}</b> <small>${ks.length}</small></summary><p class="hint" data-noen>${EN ? "Select any word on any page ← ⭐ Save. They join “Review today” and stay on your device only." : "اللي حفظته بالتحديد: حدّد أي كلمة بأي صفحة ← ⭐ احفظ. تدخل «راجع اليوم» وتبقى بجهازك بس."}</p><ul>` +
-      ks.map((k) => `<li data-k="${esc(k)}"><bdi dir="ltr" class="mk">${esc(k)}</bdi>${ar(k) ? `<span class="ta">${esc(ar(k))}</span>` : ""}<span class="mb"><button type="button" data-m="say" aria-label="اسمع ${esc(k)}">🔊</button><button type="button" data-m="del" aria-label="شيل ${esc(k)} من مصطلحاتي">✕</button></span></li>`).join("") + "</ul>";
+    box.innerHTML = `<summary data-noen>⭐ <b>${EN ? "My terms" : "مصطلحاتي"}</b> <small>${ks.length}</small></summary><p class="hint" data-noen>${EN ? "Select any word on any page ← ⭐ Save. They join “Review today” and stay on your device only." : "اللي حفظته بالتحديد: حدّد أي كلمة بأي صفحة ← ⭐ احفظ. تدخل «راجع اليوم» وتبقى بجهازك بس."}</p>` +
+      `<div class="mx" data-noen><button type="button" data-m="copy">📋 ${EN ? "Copy all" : "انسخ الكل"}</button><button type="button" data-m="dl">⬇️ ${EN ? "Download (.txt)" : "نزّلها (txt)"}</button></div><ul>` +
+      ks.map((k) => `<li data-k="${esc(k)}"><bdi dir="ltr" class="mk">${esc(k)}</bdi>${ar(k) ? `<span class="ta">${esc(ar(k))}</span>` : ""}<span class="mb"><button type="button" data-m="say" aria-label="${EN ? "Listen: " : "اسمع "}${esc(k)}">🔊</button><button type="button" data-m="del" aria-label="${EN ? "Remove from my terms: " : "شيل من مصطلحاتي: "}${esc(k)}">✕</button></span></li>`).join("") + "</ul>";
     box.open = open;
+  }
+  // 📋⬇️ (18/11) نسخ «مصطلحاتي» كلها أو تنزيلها ملف نص — كله بالجهاز، ولا شي يطلع للنت
+  function mineOut(how, btn) {
+    const P = window.Pick; if (!P || !P.listText) return;
+    let st = {}; try { st = JSON.parse(localStorage.getItem("t:srs") || "{}") || {}; } catch (e) {}
+    const ks = Object.keys(st).filter((k) => st[k] && st[k].mine).sort((a, b) => st[b].mine - st[a].mine);
+    const EN = document.documentElement.lang === "en";
+    const mean = (k) => { const x = window.Listen && Listen.match && Listen.match(k), i = x && Listen.info(x); return i ? i[1] : ""; };
+    const out = P.listText(ks, mean, EN);
+    const flash = (ok) => { if (!btn || !ok) return; const old = btn.textContent; btn.textContent = how === "dl" ? (EN ? "✅ Downloaded" : "✅ تنزّلت") : (EN ? "✅ Copied" : "✅ انسخت"); setTimeout(() => { if (btn.isConnected) btn.textContent = old; }, 1800); };   // الزر نفسه يأكّد (أوضح من التوست وحده)
+    const say = (ok) => flash(ok) || P.toast && P.toast(ok ? (how === "dl" ? (EN ? "⬇️ Downloaded: " : "⬇️ تنزّلت: ") + out.name : (EN ? "📋 Copied " : "📋 انسخت ") + ks.length + (EN ? " terms" : " مصطلح")) : (EN ? "Couldn't do it here. Try another browser." : "ما گدرت هنا. جرّب متصفح ثاني."));
+    if (how === "dl") {
+      try {
+        const url = URL.createObjectURL(new Blob(["﻿" + out.text], { type: "text/plain;charset=utf-8" }));
+        const a = document.createElement("a"); a.href = url; a.download = out.name; a.hidden = true; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 4000); say(true);
+      } catch (e) { say(false); }
+      return;
+    }
+    const legacy = () => { try { const ta = document.createElement("textarea"); ta.value = out.text; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0"; document.body.appendChild(ta); ta.select(); const ok = document.execCommand("copy"); ta.remove(); if (btn) btn.focus(); return ok; } catch (e) { return false; } };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(out.text).then(() => say(true), () => say(legacy()));
+    else say(legacy());
   }
   document.addEventListener("pick:saved", mineBox);
   document.addEventListener("listen:ready", mineBox);
