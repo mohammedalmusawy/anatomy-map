@@ -37,6 +37,7 @@
   const fxGo = () => { fxIn(document.body); new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((x) => { if (x.nodeType === 1 && x.classList.contains("fx")) return; fxIn(x); }))).observe(document.body, { childList: true, subtree: true }); };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fxGo); else fxGo();
   const esc = (x) => String(x || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const pa = (x) => esc(x).replace(/&lt;(\/?)u&gt;/g, "<$1u>");   // (18/11) اللفظ العربي: نسمح بـ <u> (المقطع المشدّد) بس
   const main = new Audio(), word = new Audio();
   let LEX = {}, ready = null;
   let slow = false;
@@ -46,7 +47,8 @@
   // الملف ينزل كامل مرة وحدة (يمر بالـ service worker ← ينحفظ)، وبعدين يشتغل من الذاكرة (بلا مشاكل range بالآيفون)
   const blobs = new Map();
   const load = (u) => {
-    if (!blobs.has(u)) blobs.set(u, fetch(u).then((r) => { if (!r.ok) throw r.status; return r.blob(); }).then((b) => URL.createObjectURL(b)));
+    if (!blobs.has(u)) blobs.set(u, fetch(u).then((r) => { if (!r.ok) throw r.status; return r.blob(); }).then((b) => URL.createObjectURL(b))
+      .catch((e) => { blobs.delete(u); throw e; }));   // (18/11) فشل التنزيل (404 أو بلا نت لحظة) ما ينحفظ ← الضغطة الجاية تعيد المحاولة
     return blobs.get(u);
   };
   // الآيفون: أول ضغطة «تفتح» عنصرين الصوت حتى يشتغل الملف بعد ما ينزل
@@ -56,11 +58,14 @@
 
   // ── أ) المصطلحات ──
   // «Alpha (α) / Beta (β)» = «alpha beta»؛ «Directly / Indirectly» و«X-ray» و«Subtalar (talocalcaneal) joint» تنطابق بنفس الطريقة
-  const norm = (s) => s.toLowerCase().replace(/\([^a-zà-ÿ)]*\)/g, " ").replace(/[\s\u2010-\u2015\/()-]+/g, " ").trim();
+  // (18/11) الإملاء البريطاني والأمريكي نفس المصطلح: oedema = edema، haemorrhage = hemorrhage، caecum = cecum، diarrhoea = diarrhea
+  const fold = (s) => s.replace(/ae/g, "e").replace(/oe/g, "e");
+  const norm = (s) => fold(s.toLowerCase()).replace(/\([^a-zà-ÿ)]*\)/g, " ").replace(/[\s\u2010-\u2015\/()-]+/g, " ").trim();
   const GAP = /^[\s\u2010-\u2015\/()\u0370-\u03ff-]{1,8}$/;
   const CI = new Map(), CS = new Map(), AL = {};   // AL (30/10، دمج المكررات): slug قديم/بديل ← slug المدخل الأساسي
   const K = (k) => (LEX && LEX[k] ? k : AL[k] || k);   // CI: حساس لا (كلمات)، CS: حساس للحروف (مختصرات مثل CT وkVp وmA)
   let MAXW = 1;
+  const ABBR = (p) => /[A-Z]/.test(p.slice(1)) || /^[A-Z]{2,}$/.test(p) || (/\d/.test(p) && /[A-Za-z]/.test(p));
   function index(lex) {
     LEX = lex;
     const put = (form, k) => {
@@ -72,19 +77,31 @@
       else if (n.replace(/ /g, "").length >= 3 && !CI.has(n)) CI.set(n, k);
       if (w > MAXW) MAXW = Math.min(w, 10);
     };
-    for (const k in lex) {
-      const en = lex[k][0];
-      put(en, k);
-      const bare = en.replace(/\s*\([^)]*\)/g, "").trim();
-      if (bare !== en) put(bare, k);
-      (en.match(/\(([A-Za-z0-9]{2,8})\)/g) || []).forEach((p) => put(p.slice(1, -1), k));
-    }
+    // (18/11) الأولوية: الاسم الكامل لكل المداخل أول ← بعدين الاسم بلا قوس ← بعدين المختصر اللي بالقوس.
+    //    وبالقوس نأخذ المختصر بس (CT، Gy، mSv، 99mTc) مو كلمة عادية: «Lung cancer (mass)» ما يخلّي كل «mass» = سرطان الرئة،
+    //    ولا «Epicondyles (femur)» يخلّي «femur» = اللقيمات، ولا «Lesser (true) pelvis» يخلّي «true» = الحوض.
+    const ks = Object.keys(lex);
+    ks.forEach((k) => put(lex[k][0], k));
+    ks.forEach((k) => { const en = lex[k][0], bare = en.replace(/\s*\([^)]*\)/g, "").replace(/\s+/g, " ").trim(); if (bare !== en) put(bare, k); });
+    const ini = (en) => en.replace(/\([^)]*\)/g, " ").split(/[\s\/-]+/).filter(Boolean).map((w) => w[0]).join("").toLowerCase();   // «Revolutions per minute (rpm)» ← rpm
+    ks.forEach((k) => (lex[k][0].match(/\(([A-Za-z0-9]{2,8})\)/g) || []).map((p) => p.slice(1, -1)).filter((p) => ABBR(p) || (p.length >= 2 && p.toLowerCase() === ini(lex[k][0]))).forEach((p) => put(p, k)));
     for (const k in lex) (Array.isArray(lex[k][4]) ? lex[k][4] : []).forEach((a) => {   // الصيغ البديلة: نفس البطاقة والصوت
       put(a, k);
       const b = a.replace(/\s*\([^)]*\)/g, "").replace(/\s*—.*$/, "").trim();
       if (b !== a) put(b, k);
       const s = slug(a); if (!lex[s]) AL[s] = k;
     });
+  }
+  // (18/11) الجمع والملكية: «X-rays» و«fractures» و«patient's» ← نفس مدخل المفرد (إذا المفرد بالمعجم؛ الكلمة الأخيرة بس)
+  function stem(raw, n) {
+    if (!/(['’]s?|s)$/i.test(raw) || CI.has(norm(raw))) return null;
+    const outs = [raw.replace(/['’]s?$/, ""), raw.replace(/s$/i, ""), raw.replace(/es$/i, "")];
+    for (const base of outs) {
+      if (base === raw || base.replace(/[^A-Za-z]/g, "").length < 3) continue;
+      const k = (n === 1 && /[A-Z]/.test(base.slice(1)) && CS.get(base)) || CI.get(norm(base));
+      if (k) return k;
+    }
+    return null;
   }
   const SKIP = "script,style,noscript,textarea,input,select,option,button,a,code,pre,svg,label,.tm,.tpop,.noterm,[contenteditable],.lctl";
   const TOK = /[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9'’]*/g;
@@ -102,7 +119,7 @@
         let ok = true;
         for (let j = i; j < i + n - 1; j++) if (!GAP.test(t.slice(toks[j][1], toks[j + 1][0]))) { ok = false; break; }
         if (!ok) continue;
-        const raw = t.slice(a, b), k = (n === 1 && CS.get(raw)) || CI.get(norm(raw));
+        const raw = t.slice(a, b), k = (n === 1 && CS.get(raw)) || CI.get(norm(raw)) || stem(raw, n);
         if (k) { const e2 = (raw.split("(").length > raw.split(")").length && t[b] === ")") ? b + 1 : b; hits.push([a, e2, k]); i += n - 1; break; }
       }
     }
@@ -122,7 +139,7 @@
   function pron(el) {   // اسم الحالة بالأطلس: اللفظ تحته (مثل قبل)
     const k = el.querySelector(".tm") && el.textContent.trim() === el.querySelector(".tm").textContent.trim() ? el.querySelector(".tm").dataset.k : null;
     if (!k || el.nextElementSibling?.classList.contains("pron")) return;
-    el.insertAdjacentHTML("afterend", `<span class="pron"><span class="pa">${LEX[k][2]}</span> <bdi class="pi">${esc(LEX[k][3])}</bdi></span>`);
+    el.insertAdjacentHTML("afterend", `<span class="pron"><span class="pa">${pa(LEX[k][2])}</span> <bdi class="pi">${esc(LEX[k][3])}</bdi></span>`);
   }
   let marking = false;
   function mark(el) {
@@ -133,9 +150,16 @@
     });
     const list = [];
     while (w.nextNode()) list.push(w.currentNode);
-    list.forEach(markText);
-    (el.querySelectorAll ? el.querySelectorAll("article.case h3 .en") : []).forEach(pron);
     marking = false;
+    // (18/11) دفعات ≤ ~12ms (صفحة محاضرة طويلة بتلفون ضعيف كانت ~110ms مرة وحدة ← تقطيع بالنزول)
+    let i = 0;
+    const step = (dl) => {
+      const t0 = performance.now();
+      while (i < list.length && (performance.now() - t0 < 12 || (dl && dl.timeRemaining && dl.timeRemaining() > 2))) { const n = list[i++]; if (n.isConnected) markText(n); }
+      if (i < list.length) idle(step);
+      else (el.querySelectorAll ? el.querySelectorAll("article.case h3 .en") : []).forEach(pron);
+    };
+    step();
   }
   // تعليم على دفعات بوقت الفراغ (ما يثقّل الصفحة) + أي محتوى يجي بعدين (المساعد، البحث، الاختبار، قائمة المصطلحات)
   const idle = window.requestIdleCallback || ((f) => setTimeout(f, 30));
@@ -154,9 +178,10 @@
   function showPop(el) {
     const kk = K(el.dataset.k), d = LEX[kk]; if (!d) return;
     if (!pop.isConnected) document.body.appendChild(pop);
-    pop.innerHTML = `<b dir="ltr">${esc(d[0])}</b><span class="ar">${esc(d[1])}</span><span class="pr">${d[2]} <bdi dir="ltr">${esc(d[3])}</bdi></span>` +
-      `<span class="pb"><button type="button" class="say1" data-k="${kk}" aria-label="اسمع لفظ ${esc(d[0])}">🔊</button>` +
-      `<button type="button" class="say1 slow" data-k="${kk}" data-r="0.75" aria-label="لفظ بطيء ${esc(d[0])}">🐢</button></span>`;
+    pop.setAttribute("aria-label", d[0]);
+    pop.innerHTML = `<b dir="ltr">${esc(d[0])}</b><span class="ar">${esc(d[1])}</span><span class="pr">${pa(d[2])} <bdi dir="ltr">${esc(d[3])}</bdi></span>` +
+      `<span class="pb"><button type="button" class="say1" data-k="${esc(kk)}" aria-label="اسمع لفظ ${esc(d[0])}">🔊</button>` +
+      `<button type="button" class="say1 slow" data-k="${esc(kk)}" data-r="0.75" aria-label="لفظ بطيء ${esc(d[0])}">🐢</button></span>`;
     // الموبايل (29/10، ملاحظة محمد): ورقة صغيرة بأسفل الشاشة، ما تغطي العنوان ولا الأزرار؛ والكلمة تبقى ظاهرة فوقها
     const sheet = SHEET.matches;
     pop.classList.toggle("sheet", sheet);
@@ -174,6 +199,7 @@
     pop.style.left = Math.max(8, Math.min(r.left + window.scrollX, W - pop.offsetWidth - 8 + window.scrollX)) + "px";
   }
   function hidePop() { pop.hidden = true; popFor = null; }
+  let tap = 0;
   function sayTerm(k, r, btn) {
     k = K(k);
     stop();
@@ -181,13 +207,16 @@
     word.pause();
     document.querySelectorAll(".say1.on,.tm.on").forEach((x) => x.classList.remove("on"));
     if (btn) btn.classList.add("on");
-    load(root + "assets/audio/terms/" + k + ".mp3").then((b) => {
+    const me = ++tap;   // (18/11) ضغطتين ورا بعض: الأخيرة بس تشتغل (الأولى إذا تأخّر تنزيلها ما تطلع بعدها)
+    const v = LEX[k] && LEX[k][5];   // (18/11) نسخة الملف: صوت انصلح ← يوصل للطالب حتى لو المحفوظ عنده قديم
+    load(root + "assets/audio/terms/" + k + ".mp3" + (v ? "?v=" + v : "")).then((b) => {
+      if (me !== tap) return;
       word.src = b;
       word.playbackRate = word.defaultPlaybackRate = r || 1;
       word.play().catch(() => {});
-    }).catch(() => { if (btn) btn.classList.remove("on"); });
+    }).catch(() => { if (me !== tap) return; if (btn) btn.classList.remove("on"); document.dispatchEvent(new CustomEvent("listen:fail", { detail: { key: k } })); });
   }
-  word.onended = word.onpause = () => document.querySelectorAll(".say1.on,.tm.on").forEach((x) => x.classList.remove("on"));
+  word.onended = word.onpause = () => !String(word.src).startsWith("data:") && document.querySelectorAll(".say1.on,.tm.on").forEach((x) => x.classList.remove("on"));
 
   // ── ب) و ج) الجمل والأقسام (داخل .listen) ──
   let queueS = [], cur = null, mode = null, raf = 0, box = null;
@@ -275,7 +304,7 @@
     if (!pop.contains(ev.target)) hidePop();
   }, true);
   document.addEventListener("keydown", (ev) => {
-    if (ev.key === "Escape") { hidePop(); return; }
+    if (ev.key === "Escape") { if (!pop.hidden) hidePop(); if (!word.paused) word.pause(); return; }   // (18/11) Escape يوقف صوت المصطلح (حتى من قائمة التحديد)
     if ((ev.key === "Enter" || ev.key === " ") && ev.target instanceof Element && ev.target.matches(".ls, .tm")) { ev.preventDefault(); unlock(); act(ev.target); }
   });
   if (window.matchMedia("(hover: hover)").matches) {
@@ -285,7 +314,8 @@
       if (tm && !pop.contains(ev.relatedTarget)) setTimeout(() => { if (!pop.matches(":hover") && !(tm.matches(":hover"))) hidePop(); }, 300);
     });
   }
-  window.addEventListener("resize", hidePop);
+  let lastW = innerWidth;   // (18/11) الموبايل: شريط العنوان يختفي وقت النزول ← resize بالطول بس؛ البطاقة ما تنسد إلا إذا العرض تغيّر
+  window.addEventListener("resize", () => { if (innerWidth !== lastW) { lastW = innerWidth; hidePop(); } });
 
   // رابط من الـ PDF (#s3) يفتح نفس القسم
   function openHash() {
@@ -322,7 +352,7 @@
   window.addEventListener("hashchange", openHash);
   const slug = (t) => String(t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
   // ✋ (17/11) للتحديد الذكي (pick.js): نص محدد ← مفتاح المعجم (نفس مطابقة التعليم)، وتشغيل ملفنا بنفس المشغّل
-  const match = (raw) => { raw = String(raw || "").trim(); if (!raw) return null; const k = CS.get(raw) || CI.get(norm(raw)) || (LEX[K(slug(raw))] ? K(slug(raw)) : null); return k && LEX[K(k)] ? K(k) : null; };
+  const match = (raw) => { raw = String(raw || "").trim(); if (!raw) return null; const k = CS.get(raw) || CI.get(norm(raw)) || (LEX[K(slug(raw))] ? K(slug(raw)) : null) || stem(raw, raw.split(/\s+/).length); return k && LEX[K(k)] ? K(k) : null; };
   const sayK = (k, r, done) => { unlock(); sayTerm(k, r || 1, null); if (done) { const f = () => { word.removeEventListener("pause", f); word.removeEventListener("ended", f); done(); }; word.addEventListener("play", () => { word.addEventListener("pause", f); word.addEventListener("ended", f); }, { once: true }); setTimeout(() => { if (word.paused) f(); }, 8000); } };
   window.Listen = { mount, mark: queue, info: (k) => LEX[K(k)], find: (en) => LEX[K(slug(en))], match, say: sayK, ready: () => ready, stop: () => { stop(); word.pause(); } };
   // ✋ التحديد الذكي يتحمّل وحده بكل صفحة بيها المشغّل (بلا ?v=: الـ service worker يجيبه من الشبكة أول، وبلا نت من المحفوظ)

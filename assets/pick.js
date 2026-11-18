@@ -204,6 +204,7 @@
     }
     // listen.js يشغّل شي ← صوت المتصفح يوقف (صوت واحد بنفس الوقت)
     document.addEventListener("listen:play", () => { if (SS) try { SS.cancel(); } catch (e) {} clr(); });
+    document.addEventListener("listen:fail", () => { clr(); toast(L("ما گدرت أشغّل الصوت. تأكد من النت وجرّب مرة ثانية.", "Couldn't play the sound. Check your connection and try again.")); });   // (18/11) ملفنا ما نزل ← الزر ما يبقى مضوّي
 
     // ── الحفظ ──
     function toggleSave() {
