@@ -5,6 +5,8 @@
 // · الحفظ: نفس مخزن «🔁 راجع اليوم» (localStorage «t:srs»، بجهاز الطالب بس، ويتزامن ويّا حسابه إذا مسجّل مثل قبل).
 //   المحفوظ يدخل المراجعة ويطلع بقائمة «⭐ مصطلحاتي» بصفحة المصطلحات (terms.js). ما ينرسل شي لأي مكان.
 // · نص الأستاذ ما يتغير: القائمة طبقة فوق الصفحة. ما تطلع داخل الأزرار وخيارات الاختبار والحقول والروابط والقوائم.
+// 🖍️ (18/11) «ظلّل»: يلوّن النص المحدد بـ 4 ألوان هادئة (mark.hl) كطبقة بصرية محلية فوق الصفحة (نص الأستاذ ما يتغير)؛ يتحفظ بـ localStorage «t:hl» بجهاز الطالب بس
+//   (اقتباس نصي W3C TextQuoteSelector: exact + prefix/suffix داخل أقرب حاوية بمعرّف)، ويرجع بعد التحديث؛ وقائمة «🖍️ تظليلاتي» بصفحة المصطلحات.
 // · يتحمّل وحده من listen.js (كل صفحة بيها المشغّل)، بلا أي أيقونة جديدة. الدوال الصافية تشتغل بـ node (tests/pick.test.js).
 (function (root, factory) {
   const P = factory();
@@ -71,7 +73,7 @@
 .pkm button.on{background:var(--brand-soft,#eef);color:var(--brand,#446)}
 .pkm .pk-slow{min-width:44px;padding:0 6px}
 .pkm i{width:1px;align-self:stretch;margin:8px 0;background:var(--line,#ddd)}
-.pkm.sheet{position:fixed;top:auto!important;left:max(12px,env(safe-area-inset-left))!important;right:max(12px,env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));justify-content:space-around;border-radius:16px;padding:6px;animation:pkup .16s ease-out}
+.pkm.sheet{flex-wrap:wrap;position:fixed;top:auto!important;left:max(12px,env(safe-area-inset-left))!important;right:max(12px,env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));justify-content:space-around;border-radius:16px;padding:6px;animation:pkup .16s ease-out}
 .pkm.sheet button{flex:1 1 auto}
 .pkt{position:fixed;z-index:71;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));max-width:calc(100vw - 32px);box-sizing:border-box;padding:10px 14px;border-radius:12px;background:var(--ink,#222);color:var(--card,#fff);font:600 15px/1.4 inherit;box-shadow:0 8px 24px rgba(0,0,0,.2);text-align:center}
 .pkt a{color:inherit;text-decoration:underline;margin-inline-start:8px;display:inline-block;min-height:24px}
@@ -89,6 +91,25 @@
 .minebox .mx{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
 .minebox .mx button{min-height:44px;padding:0 14px;border:1px solid var(--line,#ddd);border-radius:12px;background:none;color:inherit;font:inherit;font-weight:600;cursor:pointer}
 .minebox .mx button:hover,.minebox .mx button:focus-visible{background:var(--brand-soft,#eef)}
+mark.hl{border-radius:3px;padding:0 1px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+mark.hl .tm{color:inherit}
+mark.hl.hl-y,mark.hl.hl-g,mark.hl.hl-b,mark.hl.hl-p{color:#1E2433}.hld.hl-y{background:#F5C518}.hld.hl-g{background:#4CAF6E}.hld.hl-b{background:#4A90D9}.hld.hl-p{background:#E873A5}mark.hl.hl-y{background:#FFE58F}mark.hl.hl-g{background:#BFEBC9}mark.hl.hl-b{background:#BCDBF9}mark.hl.hl-p{background:#F8CFE0}
+@media (prefers-color-scheme: dark){:root:not([data-theme=light]) body:not(.calm) mark.hl{color:#F3F4F6}:root:not([data-theme=light]) body:not(.calm) mark.hl.hl-y{background:#5C4A0E}:root:not([data-theme=light]) body:not(.calm) mark.hl.hl-g{background:#1E5236}:root:not([data-theme=light]) body:not(.calm) mark.hl.hl-b{background:#1F4470}:root:not([data-theme=light]) body:not(.calm) mark.hl.hl-p{background:#6B2A4A}}
+:root[data-theme=dark] mark.hl{color:#F3F4F6}:root[data-theme=dark] mark.hl.hl-y{background:#5C4A0E}:root[data-theme=dark] mark.hl.hl-g{background:#1E5236}:root[data-theme=dark] mark.hl.hl-b{background:#1F4470}:root[data-theme=dark] mark.hl.hl-p{background:#6B2A4A}
+mark.hl.flash{outline:3px solid var(--brand,#446);outline-offset:2px;animation:hlf 1.8s ease-out}
+.pkm .pk-sw{min-width:44px;padding:0}
+.pkm .pk-sw .sw{display:block;width:26px;height:26px;border-radius:50%;border:2px solid var(--line,#ddd);box-sizing:border-box}
+.pkm .pk-sw[aria-pressed=true] .sw{border:3px solid var(--ink,#222)}
+.sw-y{background:#F5C518}.sw-g{background:#4CAF6E}.sw-b{background:#4A90D9}.sw-p{background:#E873A5}
+.hlbox .hf{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.hlbox .hf button{min-height:44px;min-width:44px;padding:0 14px;border:1px solid var(--line,#ddd);border-radius:12px;background:none;color:inherit;font:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.hlbox .hf button[aria-pressed=true]{background:var(--brand-soft,#eef);border-color:var(--brand,#446)}
+.hlbox .hld{width:14px;height:14px;border-radius:50%;flex:none;border:1px solid var(--line,#ddd)}
+.hlbox h4{margin:10px 0 2px;font-size:15px}.hlbox h4 a{color:var(--brand,#446)}
+.hlbox li{flex-wrap:nowrap;gap:10px}.hlbox .hlt{flex:1 1 auto;min-width:0;color:inherit;text-decoration:none;overflow-wrap:anywhere;padding:8px 0;line-height:1.5}
+.hlbox .hlt:hover,.hlbox .hlt:focus-visible{text-decoration:underline}
+@keyframes hlf{0%{outline-color:transparent}20%{outline-color:var(--brand,#446)}100%{outline-color:var(--brand,#446)}}
+@media (prefers-reduced-motion: reduce){mark.hl.flash{animation:none}}
 @keyframes pkup{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion: reduce){.pkm.sheet{animation:none}}`;
     document.head.appendChild(css);
@@ -98,15 +119,28 @@
     const t = document.createElement("div");
     t.className = "pkt noterm"; t.hidden = true; t.setAttribute("role", "status"); t.setAttribute("aria-live", "polite"); t.setAttribute("data-noen", "");
     let text = "", nfo = null, lexKey = null, pressing = false, toastT = 0, hideT = 0, dismissed = "";
+    let selRange = null, view = "main", hlId = null, hlOnly = false;   // 🖍️ المدى المحدد، شاشة القائمة (main/color)، تظليل موجود، قائمة فتحتها ضغطة على تظليل
 
     function render() {
       const st = LS.get(), saved = !!(st[saveKey()] && st[saveKey()].mine);
       m.setAttribute("aria-label", L("خيارات النص المحدد", "Selected text options"));
       m.dir = en() ? "ltr" : "rtl"; m.style.direction = m.dir;
       let h = "";
+      if (view === "color") {
+        const cur = hlId && (hlGet(hlId) || {}).c;
+        h = HC.map((c) => `<button type="button" class="pk-sw" data-a="hlc" data-c="${c}" aria-pressed="${cur === c}" aria-label="${HN(c)}" title="${HN(c)}"><span class="sw sw-${c}"></span></button>`).join("");
+        if (hlId) h += `<i aria-hidden="true"></i><button type="button" class="pk-hlrm" data-a="hlrm" aria-label="${L("شيل التظليل", "Remove highlight")}">✕ <span>${L("شيل التظليل", "Remove")}</span></button>`;
+        if (!hlOnly) h += `<i aria-hidden="true"></i><button type="button" class="pk-back" data-a="hlback" aria-label="${L("رجوع", "Back")}">↩</button>`;
+        m.setAttribute("aria-label", L("اختر لون التظليل", "Pick a highlight colour"));
+        const fa0 = m.contains(document.activeElement) && document.activeElement.dataset.a;
+        m.innerHTML = h;
+        if (fa0) { const b = m.querySelector(`button[data-a="${fa0}"]`); if (b) b.focus(); }
+        return;
+      }
       if (nfo.canSay) h += `<button type="button" class="pk-say" data-a="say" aria-label="${L("اسمع اللفظ", "Listen")}">🔊 <span>${L("اسمع", "Listen")}</span></button>` +
         `<button type="button" class="pk-slow" data-a="slow" aria-label="${L("لفظ أبطأ", "Slower")}" title="${L("أبطأ", "Slower")}">🐢</button><i aria-hidden="true"></i>`;
       if (nfo.canSave) h += `<button type="button" class="pk-save${saved ? " on" : ""}" data-a="save" aria-pressed="${saved}" aria-label="${saved ? L("محفوظ بمصطلحاتي — اضغط للإلغاء", "Saved — tap to remove") : L("احفظ بمصطلحاتي", "Save to my terms")}">${saved ? "⭐" : "☆"} <span>${saved ? L("محفوظ", "Saved") : L("احفظ", "Save")}</span></button><i aria-hidden="true"></i>`;
+      if (selRange) h += `<button type="button" class="pk-hl${hlId ? " on" : ""}" data-a="hl" aria-label="${L("ظلّل النص", "Highlight")}">🖍️ <span>${L("ظلّل", "Highlight")}</span></button><i aria-hidden="true"></i>`;
       h += `<button type="button" class="pk-find" data-a="find" aria-label="${L("ابحث بالموقع", "Search the site")}">🔍 <span>${L("ابحث", "Search")}</span></button>`;
       const fa = m.contains(document.activeElement) && document.activeElement.dataset.a;   // الفوكس يبقى على نفس الزر بعد إعادة الرسم (كيبورد)
       m.innerHTML = h;
@@ -127,19 +161,21 @@
       m.style.top = top + scrollY + "px";
       m.style.left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, W - w - 8)) + scrollX + "px";
     }
-    function hide() { m.hidden = true; text = ""; }
+    function hide() { m.hidden = true; text = ""; view = "main"; hlOnly = false; }
     function bad(n) { const el = n && (n.nodeType === 1 ? n : n.parentElement); return !el || !!el.closest(EXCL); }
 
     function check() {
       clearTimeout(hideT);
       const sel = getSelection && getSelection();
-      if (!sel || sel.isCollapsed || !sel.rangeCount) { dismissed = ""; if (!pressing) hideT = setTimeout(() => { if (!pressing) hide(); }, 200); return; }
+      if (!sel || sel.isCollapsed || !sel.rangeCount) { dismissed = ""; if (!pressing && !hlOnly) hideT = setTimeout(() => { if (!pressing && !hlOnly) hide(); }, 200); return; }
       const range = sel.getRangeAt(0);
       if (bad(sel.anchorNode) || bad(sel.focusNode) || (range.commonAncestorContainer.nodeType === 1 && range.commonAncestorContainer.closest && range.commonAncestorContainer.closest(EXCL))) { hide(); return; }
       const tx = clean(sel.toString());
       if (!tx || !(LAT.test(tx) || ARB.test(tx))) { hide(); return; }
+      selRange = range.cloneRange(); const hid = hlIdOf(range);   // 🖍️ المدى نخزنه (بالموبايل التحديد ينمسح أول ما نضغط الزر)
       if (tx === dismissed) return;   // سدّها بـ Escape ← ما ترجع لنفس التحديد
-      if (tx === text && !m.hidden) { place(range); return; }
+      if (tx === text && !m.hidden && !hlOnly) { if (hid !== hlId) { hlId = hid; if (view === "color") render(); } place(range); return; }
+      hlOnly = false; view = "main"; hlId = hid;
       text = tx; nfo = info(tx);
       lexKey = window.Listen && Listen.match ? Listen.match(tx) : null;
       if (nfo.arabic && !nfo.latin && !arVoice()) nfo.canSay = false;
@@ -150,7 +186,7 @@
     ["mouseup", "keyup", "touchend"].forEach((e) => document.addEventListener(e, (ev) => { if (!m.contains(ev.target)) { clearTimeout(deb); deb = setTimeout(check, 30); } }, true));
 
     // ضغطة على القائمة ما تمسح التحديد (الكمبيوتر)، وبالموبايل نتذكّر النص حتى لو التحديد انمسح
-    document.addEventListener("pointerdown", (ev) => { if (!m.contains(ev.target)) dismissed = ""; }, true);   // تحديد جديد (حتى لنفس النص) بعد Escape ← القائمة ترجع
+    document.addEventListener("pointerdown", (ev) => { if (!m.contains(ev.target)) { dismissed = ""; if (hlOnly) hide(); } }, true);   // تحديد جديد (حتى لنفس النص) بعد Escape ← القائمة ترجع
     m.addEventListener("pointerdown", (ev) => { pressing = true; if (ev.pointerType === "mouse") ev.preventDefault(); });
     m.addEventListener("mousedown", (ev) => ev.preventDefault());
     addEventListener("pointerup", () => setTimeout(() => { pressing = false; }, 400), true);
@@ -161,6 +197,9 @@
       const a = b.dataset.a;
       if (a === "say" || a === "slow") say(text, a === "slow" ? 0.75 : 1, b);
       else if (a === "save") toggleSave();
+      else if (a === "hl" || a === "hlback") { view = a === "hl" ? "color" : "main"; render(); if (a === "hl") { const f = m.querySelector(".pk-sw"); if (f) f.focus(); } }
+      else if (a === "hlc") applyColor(b.dataset.c);
+      else if (a === "hlrm") { const id = hlId; hide(); hlRemove(id); getSelection().removeAllRanges(); toast(L("انشال التظليل", "Highlight removed")); }
       else if (a === "find") { const q = text.slice(0, 120); hide(); location.href = base + "search/?q=" + encodeURIComponent(q); }
     });
     document.addEventListener("keydown", (ev) => {
@@ -174,6 +213,188 @@
     // ع ⇄ ENG والقائمة مفتوحة ← نصوصها تتبدّل فوراً
     new MutationObserver(() => { if (!m.hidden && nfo) render(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
     addEventListener("resize", () => { if (!m.hidden && !SHEET.matches) hide(); });
+
+    // ── 🖍️ التظليل ──
+    const HK = "t:hl", HMAX = 2000, HC = ["y", "g", "b", "p"], HNAR = { y: "أصفر", g: "أخضر", b: "أزرق", p: "وردي" }, HNEN = { y: "Yellow", g: "Green", b: "Blue", p: "Pink" };
+    const HN = (c) => (en() ? HNEN : HNAR)[c];
+    const NOWRAP = EXCL + ",script,style,noscript,svg";
+    const TSKIP = "script,style,noscript,.pkm,.pkt,.tpop";
+    const baseP = (() => { try { return new URL(base).pathname; } catch (e) { return "/"; } })();
+    const REL = (() => { let p = location.pathname; p = p.startsWith(baseP) ? p.slice(baseP.length) : p.replace(/^\//, ""); return p.replace(/index\.html$/, ""); })();
+    const validHl = (x) => x && typeof x === "object" && /^[a-z0-9]{4,16}$/.test(x.id || "") && HC.includes(x.c) && typeof x.ex === "string" && x.ex && typeof x.p === "string";
+    function hlRead() { try { const v = JSON.parse(localStorage.getItem(HK) || "null"); return v && Array.isArray(v.items) ? v.items.filter(validHl) : []; } catch (e) { return []; } }
+    function hlWrite(items) { try { localStorage.setItem(HK, JSON.stringify({ v: 1, items: items.slice(-HMAX) })); } catch (e) {} document.dispatchEvent(new CustomEvent("hl:changed")); }
+    const hlGet = (id) => hlRead().find((x) => x.id === id);
+    const fallbackRoot = () => document.querySelector("main, .wrap") || document.body;
+    const tnodes = (root) => {
+      const out = [], w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.parentElement && n.parentElement.closest(TSKIP) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+      while (w.nextNode()) out.push(w.currentNode);
+      return out;
+    };
+    const markOf = (n) => { const el = n && (n.nodeType === 1 ? n : n.parentElement); return el && el.closest ? el.closest("mark.hl") : null; };
+    function hlIdOf(range) { const a = markOf(range.startContainer), b = markOf(range.endContainer); return a && b && a.dataset.hl === b.dataset.hl ? a.dataset.hl : null; }
+    function scopeOf(range) {
+      let el = range.commonAncestorContainer; el = el.nodeType === 1 ? el : el.parentElement;
+      for (; el && el !== document.body && el !== document.documentElement; el = el.parentElement) if (el.id && !/^(tpop|pkm|pkt)/.test(el.id) && document.getElementById(el.id) === el) return el;
+      return fallbackRoot();
+    }
+    const newId = () => "h" + Date.now().toString(36).slice(-6) + Math.random().toString(36).slice(2, 6);
+    // مدى ← إزاحات الحروف داخل حاوية (نص كل العُقد بالترتيب)
+    function offsetsOf(root, range) {
+      const nodes = tnodes(root); let cum = 0, s = -1, e = -1, full = "";
+      for (const n of nodes) {
+        const len = n.nodeValue.length;
+        if (range.intersectsNode(n)) {
+          const a = n === range.startContainer ? range.startOffset : 0, b = n === range.endContainer ? range.endOffset : len;
+          if (b > a) { if (s < 0) s = cum + a; e = cum + b; }
+        }
+        full += n.nodeValue; cum += len;
+      }
+      return s < 0 ? null : { s, e, full };
+    }
+    function wrapOffsets(root, s, e, c, id) {
+      let cum = 0, count = 0;
+      for (const node of tnodes(root)) {
+        const len = node.nodeValue.length, a = Math.max(s, cum) - cum, b = Math.min(e, cum + len) - cum; cum += len;
+        if (b <= a || !/\S/.test(node.nodeValue.slice(a, b))) continue;
+        const par = node.parentElement; if (!par || par.closest(NOWRAP) || par.closest("mark.hl")) continue;
+        let n = node; if (b < len) n.splitText(b); if (a > 0) n = n.splitText(a);
+        const mk = document.createElement("mark"); mk.className = "hl hl-" + c; mk.dataset.hl = id;
+        n.parentNode.insertBefore(mk, n); mk.appendChild(n); count++;
+      }
+      return count;
+    }
+    const cl = (a, b) => { let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++; return i; };
+    function locate(root, it, cache) {
+      let full = cache && cache.get(root);
+      if (full == null) { full = tnodes(root).map((n) => n.nodeValue).join(""); if (cache) cache.set(root, full); }   // التظليل ما يغيّر النص ← نص الحاوية ينقرا مرة وحدة بالجولة
+      let best = -1, sc = -1, i = -1;
+      while ((i = full.indexOf(it.ex, i + 1)) >= 0) {
+        const pre = full.slice(Math.max(0, i - 32), i), suf = full.slice(i + it.ex.length, i + it.ex.length + 32);
+        const v = cl([...(it.pre || "")].reverse().join(""), [...pre].reverse().join("")) + cl(it.suf || "", suf);
+        if (v > sc) { sc = v; best = i; }
+      }
+      return best < 0 ? null : { s: best, e: best + it.ex.length };
+    }
+    function hlCreate(range, c) {
+      const root = scopeOf(range), o = offsetsOf(root, range); if (!o) return false;
+      let { s, e } = o; const full = o.full;
+      while (s < e && /\s/.test(full[s])) s++; while (e > s && /\s/.test(full[e - 1])) e--;
+      if (e - s < 2 || e - s > 2000) return false;
+      const id = newId(), n = wrapOffsets(root, s, e, c, id); if (!n) return false;
+      const items = hlRead();
+      items.push({ id, p: REL, t: (document.title || "").slice(0, 120), c, sc: root.id || "", ex: full.slice(s, e), pre: full.slice(Math.max(0, s - 32), s), suf: full.slice(e, e + 32), at: Date.now() });
+      hlWrite(items); return true;
+    }
+    const marksOf = (id) => [...document.querySelectorAll(`mark.hl[data-hl="${id}"]`)];
+    function hlRemove(id) {
+      if (!id) return;
+      marksOf(id).forEach((mk) => { const par = mk.parentNode; while (mk.firstChild) par.insertBefore(mk.firstChild, mk); par.removeChild(mk); par.normalize(); });
+      hlWrite(hlRead().filter((x) => x.id !== id));
+    }
+    function hlRecolor(id, c) { marksOf(id).forEach((mk) => { mk.className = "hl hl-" + c; }); hlWrite(hlRead().map((x) => (x.id === id ? Object.assign({}, x, { c }) : x))); }
+    function applyColor(c) {
+      if (!HC.includes(c)) return;
+      let ok = true;
+      if (hlId) hlRecolor(hlId, c); else ok = !!selRange && hlCreate(selRange, c);
+      hide(); try { getSelection().removeAllRanges(); } catch (e) {}
+      toast(ok ? (hlId ? L("🖍️ تغيّر اللون", "🖍️ Colour changed") : L("🖍️ انظلّل، وتلگاه بـ «تظليلاتي»", "🖍️ Highlighted")) : L("ما گدرت أظلّل هنا.", "Couldn't highlight here."), ok && !/\/terms\/?$/.test(location.pathname) ? [L("افتحها", "Open"), base + "terms/#hlbox"] : null);
+    }
+    let hlDone = false;
+    let hlRun = 0;
+    function hlRestore() {
+      const items = hlRead().filter((x) => x.p === REL), run = ++hlRun, cache = new Map();
+      let k = 0;
+      const step = () => {   // (18/11، المراجعة) بدفعات ~12ms حتى الصفحة الطويلة ما تتجمّد إذا الطالب عنده تظليلات كثيرة
+        if (run !== hlRun) return;
+        const t0 = performance.now();
+        for (; k < items.length && performance.now() - t0 < 12; k++) {
+          const it = items[k];
+          if (document.querySelector(`mark.hl[data-hl="${it.id}"]`)) continue;
+          try {
+            let root = (it.sc && document.getElementById(it.sc)) || fallbackRoot(), r = locate(root, it, cache);
+            if (!r && root !== fallbackRoot()) { root = fallbackRoot(); r = locate(root, it, cache); }   // الحاوية اختفت ← نبحث بالصفحة كلها
+            if (r) wrapOffsets(root, r.s, r.e, it.c, it.id);
+          } catch (e) {}
+        }
+        if (k < items.length) setTimeout(step, 0); else hlScroll();
+      };
+      step();
+    }
+    function hlScroll() {
+      const h = /^#hl=([a-z0-9]{4,16})$/.exec(location.hash); if (!h || hlDone) return;
+      const ms = marksOf(h[1]); if (!ms.length) return;
+      hlDone = true; const mk = ms[0];
+      for (let d = mk.closest("details"); d; d = d.parentElement && d.parentElement.closest("details")) d.open = true;
+      requestAnimationFrame(() => {
+        mk.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        ms.forEach((x) => x.classList.add("flash")); setTimeout(() => ms.forEach((x) => x.classList.remove("flash")), 2200);
+        try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+      });
+    }
+    // ضغطة على تظليل موجود (بلا تحديد) ← قائمة الألوان + «شيل التظليل»
+    document.addEventListener("click", (ev) => {
+      if (m.contains(ev.target) || !(ev.target instanceof Element)) return;
+      const mk = ev.target.closest("mark.hl"), sel = getSelection();
+      if (!mk || (sel && !sel.isCollapsed) || ev.target.closest(".tm,a,button,input,label,summary")) return;
+      const r = document.createRange(); r.selectNodeContents(mk);
+      selRange = r; hlId = mk.dataset.hl; hlOnly = true; view = "color"; text = clean(mk.textContent) || "·"; nfo = info(text); lexKey = null;
+      render(); place(r);
+    });
+    [0, 700].forEach((ms) => setTimeout(hlRestore, ms));
+    if (document.readyState !== "complete") addEventListener("load", () => setTimeout(hlRestore, 300));
+    document.addEventListener("listen:ready", hlRestore);
+    new MutationObserver(() => hlRestore()).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+    addEventListener("hashchange", () => { hlDone = false; hlRestore(); });
+    window.Pick.HL = { read: hlRead, remove: hlRemove, REL };
+    hlBox();
+
+    // ── 🖍️ «تظليلاتي» بصفحة المصطلحات (جنب «⭐ مصطلحاتي») ──
+    function hlBox() {
+      const tt = document.getElementById("tt"); if (!tt) return;
+      let flt = "all";
+      const box = document.createElement("details"); box.id = "hlbox"; box.className = "minebox hlbox";
+      const draw = () => {
+        const EN = en(), all = hlRead().sort((a, b) => b.at - a.at), items = flt === "all" ? all : all.filter((x) => x.c === flt), open = box.open || location.hash === "#hlbox";
+        const esc = (z) => String(z).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+        let h = `<summary data-noen>🖍️ <b>${EN ? "My highlights" : "تظليلاتي"}</b> <small>${all.length}</small></summary>`;
+        if (!all.length) h += `<p class="hint" data-noen>${EN ? "Select any important sentence and tap 🖍️" : "حدّد أي جملة مهمة واضغط 🖍️"}</p>`;
+        else {
+          h += `<p class="hint" data-noen>${EN ? "Stays on your device only." : "تبقى بجهازك بس، ولا تنرسل لأي مكان."}</p><div class="hf" data-noen role="group" aria-label="${EN ? "Filter by colour" : "فلتر حسب اللون"}"><button type="button" data-f="all" aria-pressed="${flt === "all"}">${EN ? "All" : "الكل"}</button>` +
+            HC.map((c) => `<button type="button" data-f="${c}" aria-pressed="${flt === c}" aria-label="${HN(c)}" title="${HN(c)}"><span class="hld hl-${c}"></span></button>`).join("") + `</div>` +
+            `<div class="mx" data-noen><button type="button" data-h="copy">📋 ${EN ? "Copy all" : "انسخ الكل"}</button><button type="button" data-h="dl">⬇️ ${EN ? "Download (.txt)" : "نزّلها (txt)"}</button></div>`;
+          const groups = []; items.forEach((x) => { let g = groups.find((y) => y.p === x.p); if (!g) groups.push((g = { p: x.p, t: x.t, items: [] })); g.items.push(x); });
+          h += groups.map((g) => `<h4><a href="${esc(base + g.p)}">${esc(g.t || g.p || "—")}</a></h4><ul>` + g.items.map((x) => `<li data-id="${x.id}"><span class="hld hl-${x.c}" aria-hidden="true"></span><a class="hlt" dir="auto" href="${esc(base + x.p)}#hl=${x.id}">${esc(x.ex.replace(/\s+/g, " ").slice(0, 220))}</a><span class="mb"><button type="button" data-h="del" aria-label="${EN ? "Remove highlight: " : "شيل التظليل: "}${esc(x.ex.replace(/\s+/g, " ").slice(0, 40))}">✕</button></span></li>`).join("") + "</ul>").join("");
+          if (!items.length) h += `<p class="hint" data-noen>${EN ? "No highlights in this colour." : "ماكو تظليل بهاللون."}</p>`;
+        }
+        box.innerHTML = h; box.open = open;
+      };
+      const place2 = () => { const mine = document.getElementById("mine"), at = document.getElementById("review-box"); (mine ? mine : at || tt).insertAdjacentElement(mine || at ? "afterend" : "beforebegin", box); };
+      place2(); draw();
+      box.addEventListener("click", (ev) => {
+        const f = ev.target.closest("button[data-f]"), b = ev.target.closest("button[data-h]");
+        if (f) { ev.preventDefault(); flt = f.dataset.f; draw(); const nb = box.querySelector(`button[data-f="${flt}"]`); if (nb) nb.focus(); return; }
+        if (!b) return; ev.preventDefault();
+        if (b.dataset.h === "del") { const id = b.closest("li").dataset.id; hlWrite(hlRead().filter((x) => x.id !== id)); return; }
+        const out = hlListText(hlRead().sort((a, z) => z.at - a.at).filter((x) => flt === "all" || x.c === flt), en(), (c) => HN(c));
+        outFile(b.dataset.h, b, out);
+      });
+      document.addEventListener("hl:changed", draw); document.addEventListener("pick:saved", place2); document.addEventListener("listen:ready", place2);
+      addEventListener("storage", (e) => { if (e.key === HK) draw(); });
+      new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+      if (location.hash === "#hlbox") requestAnimationFrame(() => box.scrollIntoView({ block: "start" }));
+    }
+    function outFile(how, btn, out) {
+      const EN = en();
+      const flash = (ok) => { if (!btn || !ok) return; const old = btn.textContent; btn.textContent = how === "dl" ? (EN ? "✅ Downloaded" : "✅ تنزّلت") : (EN ? "✅ Copied" : "✅ انسخت"); setTimeout(() => { if (btn.isConnected) btn.textContent = old; }, 1800); };
+      const say = (ok) => { flash(ok); toast(ok ? (how === "dl" ? (EN ? "⬇️ Downloaded: " : "⬇️ تنزّلت: ") + out.name : (EN ? "📋 Copied " : "📋 انسخت ") + out.n) : (EN ? "Couldn't do it here. Try another browser." : "ما گدرت هنا. جرّب متصفح ثاني.")); };
+      if (how === "dl") {
+        try { const url = URL.createObjectURL(new Blob(["﻿" + out.text], { type: "text/plain;charset=utf-8" })); const a = document.createElement("a"); a.href = url; a.download = out.name; a.hidden = true; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); say(true); } catch (e) { say(false); }
+        return;
+      }
+      const legacy = () => { try { const ta = document.createElement("textarea"); ta.value = out.text; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0"; document.body.appendChild(ta); ta.select(); const ok = document.execCommand("copy"); ta.remove(); if (btn) btn.focus(); return ok; } catch (e) { return false; } };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(out.text).then(() => say(true), () => say(legacy())); else say(legacy());
+    }
 
     // ── اللفظ ──
     const SS = window.speechSynthesis;
@@ -232,5 +453,14 @@
     const lines = ks.map((k) => { const m = meaning ? bidi(String(meaning(k) || "")).replace(/\s+/g, " ").trim() : ""; return m ? `${bidi(k)} — ${m}` : bidi(k); });
     return { name: (en ? "my-terms-" : "مصطلحاتي-") + day + ".txt", text: `${en ? "⭐ My terms" : "⭐ مصطلحاتي"} (${ks.length}) · ${day}\n\n${lines.join("\n")}\n` };
   }
-  return { clean, info, save, unsave, mine, today, boot, listText, SKEY };
+  // 📋 نص «تظليلاتي»: مجمّع حسب الصفحة، سطر لكل تظليل «• النص»
+  function hlListText(items, en, cname, now = Date.now()) {
+    const d = new Date(now), day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const bidi = (s) => String(s || "").replace(/[‪-‮⁦-⁩]/g, "").replace(/\s+/g, " ").trim();
+    const g = [], seen = {};
+    (items || []).forEach((x) => { if (!x || !x.ex) return; const k = x.p; if (!(k in seen)) { seen[k] = { t: bidi(x.t) || k, l: [] }; g.push(seen[k]); } seen[k].l.push(`• ${bidi(x.ex)}${cname ? ` (${cname(x.c)})` : ""}`); });
+    const n = g.reduce((a, z) => a + z.l.length, 0);
+    return { n, name: (en ? "my-highlights-" : "تظليلاتي-") + day + ".txt", text: `${en ? "🖍️ My highlights" : "🖍️ تظليلاتي"} (${n}) · ${day}\n\n${g.map((z) => `# ${z.t}\n${z.l.join("\n")}`).join("\n\n")}\n` };
+  }
+  return { clean, info, save, unsave, mine, today, boot, listText, hlListText, SKEY };
 });
