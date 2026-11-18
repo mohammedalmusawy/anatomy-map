@@ -50,7 +50,7 @@ display:grid;gap:10px;min-width:0;max-width:100%;box-sizing:border-box;color:var
   function mountGate(box, o = {}) {
     css();
     const k = ++uid, tabs = [["save", T("احفظ مساحتك", "Save my space")], ["in", T("ادخل", "Sign in")], ["lost", T("نسيت الرقم؟", "Forgot PIN?")]];
-    let tab = "in";
+    let tab = o.tab === "save" || o.tab === "lost" ? o.tab : "in";   // 18/11: صفحة الدخول تفتح «احفظ مساحتك» لأول مرة
     const draw = () => {
       box.innerHTML = `<div class="pinx" data-noen><h2 id="sd-gt">${T("🔒 مساحتك برقم سري", "🔒 Your space with a PIN")}</h2>
         <div class="px-tabs" role="tablist">${tabs.map(([id, t]) => `<button type="button" role="tab" id="px${k}-t-${id}" aria-selected="${tab === id}" aria-controls="px${k}-p">${esc(t)}</button>`).join("")}</div>
