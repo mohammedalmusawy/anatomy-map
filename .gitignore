@@ -19,3 +19,12 @@ draft/
 
 # 🛡️ 53: قائمة أسماء رؤساء القسم للفحص — محلية بس
 head-names.local.txt
+
+# 📦 (18/11، خطة مساحة الموقع م1) preview/ منطقة تحضير: صفحاتها تحويلات، وصورها نسخ مطابقة لـ learn/ ← ما تنرفع (تبقى باللابتوب)
+preview/learn/**/*.jpg
+preview/learn/**/*.jpeg
+preview/learn/**/*.png
+preview/learn/**/*.webp
+preview/learn/**/*.pdf
+preview/learn/**/*.mp3
+preview/shots/
