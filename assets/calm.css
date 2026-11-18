@@ -149,6 +149,14 @@ body.calm { font: 400 var(--t-md)/1.8 var(--body-font); background: var(--bg); c
 .slidesw img { width: 100%; height: auto; border-radius: var(--r-sm); border: 1px solid var(--line); background: #fff; }
 /* 76: شريط الترجمة المطوي تحت كل سلايد (للمحاضرات اللي إلها سلايدات.json) */
 .slidesw .sl { margin: 0; display: grid; gap: 6px; }
+/* (18/11) بلا صور سلايدات: زر ملف المحاضرة فوق الترجمة */
+.slpdf { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 12px 14px; }
+.slpdf small { color: var(--muted); font-size: var(--t-xs); }
+.slidesw { grid-template-columns: minmax(0, 1fr); }   /* العناوين الطويلة ما توسّع الصفحة (بلا تمرير أفقي) */
+.sltr, .sltr summary { min-width: 0; }
+.sltr summary .sln { flex: none; min-width: 1.9em; height: 1.9em; display: inline-grid; place-items: center; border-radius: 999px; background: var(--accent-soft, var(--line)); color: var(--brand); font-size: var(--t-xs); }
+.sltr summary .slt1 { flex: 1; min-width: 0; margin-inline: 10px; color: var(--ink); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sltr summary .sll { flex: none; color: var(--muted); font-weight: 500; font-size: var(--t-xs); }
 .sltr { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-sm); }
 .sltr summary { min-height: 44px; display: flex; align-items: center; padding: 0 14px; cursor: pointer; color: var(--brand); font-weight: 600; font-size: var(--t-sm); }
 .sltr summary:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
