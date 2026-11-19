@@ -144,15 +144,16 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
   const allowed = () => staffView ? vkind === "student" : !!studentSession() || !!staffSession();
 
   let G = null;
-  function dialog(next) {
+  function dialog(next, o) {
+    o = o || {};
     css();
     document.querySelectorAll(".sd-dlg").forEach((d) => d.remove());
     const direct = !next;
     const d = document.createElement("div");
     d.className = "sd-dlg"; d.setAttribute("role", "dialog"); d.setAttribute("aria-modal", "true"); d.setAttribute("aria-labelledby", "sd-gt");
     d.innerHTML = `<div class="sd-card">
-      <h2 id="sd-gt">هذي المحاضرة لطلاب القسم 🎓 اكتب كودك</h2>
-      <p class="sd-sub">مرة وحدة بس، وبعدها الموقع يتذكّرك ويرجّعك لنفس المكان.</p>
+      <h2 id="sd-gt">${o.title || "هذي المحاضرة لطلاب القسم 🎓 اكتب كودك"}</h2>
+      <p class="sd-sub">${o.sub || "مرة وحدة بس، وبعدها الموقع يتذكّرك ويرجّعك لنفس المكان."}</p>
       <form id="sd-cf" novalidate><label class="sd-lab" for="sd-code">الكود</label>
         <input id="sd-code" name="code" dir="ltr" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false" placeholder="RAD-XXXX-XXXX" maxlength="20">
         <button type="submit" class="sd-btn">دخول</button></form>
@@ -199,7 +200,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
       pg.disabled = true;
       try { await account(); await pinui(); } catch (e) { pg.disabled = false; m.className = "sd-msg bad"; m.textContent = "ماكو اتصال. تأكد من النت وجرّب مرة ثانية."; return; }
       const done = () => { if (next) location.href = next; else if (G && gated(rel, G)) location.reload(); else location.href = ROOT + "me/"; };
-      window.PinUI.mountGate(d.querySelector(".sd-card"), { done, back: () => { d.remove(); dialog(next); } });
+      window.PinUI.mountGate(d.querySelector(".sd-card"), { done, back: () => { d.remove(); dialog(next, o); } });
     };
     const ng = d.querySelector("#sd-namego");
     if (ng) { ng.onclick = () => nameFlow(d.querySelector(".sd-card"), () => { if (next) location.href = next; else if (G && gated(rel, G)) location.reload(); else location.href = ROOT + "me/"; }, close, direct, next); if (LS.get("t:name-wait") === "1") ng.click(); }
@@ -349,5 +350,13 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => { start(); }); else start();
   if (document.readyState === "complete") nameLater(); else window.addEventListener("load", nameLater);
 
-  window.StaffDoor = { css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT, gated };
+  // 🔒 (19/11، طلب محمد) «سجّل دخولك حتى تصير الميزة خاصة بيك» (pick.js: 🖍️ ظلّل، ⭐ احفظ): نفس نافذة الدخول على نفس الصفحة،
+  //   وإذا الدخول بالاسم الثلاثي + الرقم السري مفعّل (settings.student_pin.on) تنفتح عليه رأساً. بعد الدخول ← نفس الصفحة (next).
+  function askLogin(next) {
+    if (studentSession() || document.querySelector(".sd-dlg")) return;
+    css();
+    dialog(next || location.href.split("#")[0], PIN.on ? { title: "🔒 سجّل دخولك حتى تصير خاصة بيك", sub: "باسمك الثلاثي ورقمك السري، وكل اللي تحفظه يبقى بحسابك وتلگاه بأي جهاز." } : { title: "🔒 سجّل دخولك حتى تصير خاصة بيك", sub: "وكل اللي تحفظه يبقى بحسابك وتلگاه بأي جهاز." });
+    const pg = document.querySelector(".sd-dlg #sd-pingo"); if (pg) pg.click();
+  }
+  window.StaffDoor = { css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT, gated, askLogin, pinOn: () => PIN.on === true };
 })();

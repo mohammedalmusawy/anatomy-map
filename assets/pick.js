@@ -77,6 +77,10 @@
 .pkm.sheet button{flex:1 1 auto}
 .pkt{position:fixed;z-index:71;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));max-width:calc(100vw - 32px);box-sizing:border-box;padding:10px 14px;border-radius:12px;background:var(--ink,#222);color:var(--card,#fff);font:600 15px/1.4 inherit;box-shadow:0 8px 24px rgba(0,0,0,.2);text-align:center}
 .pkt a{color:inherit;text-decoration:underline;margin-inline-start:8px;display:inline-block;min-height:24px}
+.pkng{position:fixed;z-index:72;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));width:min(420px,calc(100vw - 32px));box-sizing:border-box;padding:14px 16px;border-radius:16px;background:var(--card,#fff);color:var(--ink,#1E2433);border:1px solid var(--line,rgba(0,0,0,.12));box-shadow:0 10px 30px rgba(0,0,0,.18);font:15px/1.6 inherit}
+.pkng[hidden]{display:none}.pkng b{display:block;font-size:16px;margin-bottom:2px}.pkng p{margin:0 0 10px;font-size:14.5px;opacity:.9}
+.pkng div{display:flex;gap:8px;flex-wrap:wrap}.pkng button{min-height:44px;padding:0 16px;border-radius:12px;font:inherit;font-weight:700;cursor:pointer;border:1px solid var(--brand,#2F5BEA);background:var(--brand,#2F5BEA);color:#fff}
+.pkng button.gh{background:transparent;color:var(--ink,#1E2433);border-color:var(--line,rgba(0,0,0,.2))}
 .minebox{margin:10px 0 14px;border:1px solid var(--line,#ddd);border-radius:14px;background:var(--card,#fff);padding:0 12px}
 .minebox summary{min-height:48px;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700}
 .minebox summary small{color:var(--muted,#666);font-weight:600}
@@ -298,6 +302,7 @@ mark.hl.flash{outline:3px solid var(--brand,#446);outline-offset:2px;animation:h
       let ok = true;
       if (hlId) hlRecolor(hlId, c); else ok = !!selRange && hlCreate(selRange, c);
       hide(); try { getSelection().removeAllRanges(); } catch (e) {}
+      if (ok && !hlId) nudge("hl");
       toast(ok ? (hlId ? L("🖍️ تغيّر اللون", "🖍️ Colour changed") : L("🖍️ انظلّل، وتلگاه بـ «تظليلاتي»", "🖍️ Highlighted")) : L("ما گدرت أظلّل هنا.", "Couldn't highlight here."), ok && !/\/terms\/?$/.test(location.pathname) ? [L("افتحها", "Open"), base + "terms/#hlbox"] : null);
     }
     let hlDone = false;
@@ -379,7 +384,7 @@ mark.hl.flash{outline:3px solid var(--brand,#446);outline-offset:2px;animation:h
         const out = hlListText(hlRead().sort((a, z) => z.at - a.at).filter((x) => flt === "all" || x.c === flt), en(), (c) => HN(c));
         outFile(b.dataset.h, b, out);
       });
-      document.addEventListener("hl:changed", draw); document.addEventListener("pick:saved", place2); document.addEventListener("listen:ready", place2);
+      document.addEventListener("hl:changed", draw); document.addEventListener("sync:applied", draw);   // (مراجع مستقل) التظليلات اللي تجي من الحساب تطلع بالقائمة document.addEventListener("pick:saved", place2); document.addEventListener("listen:ready", place2);
       addEventListener("storage", (e) => { if (e.key === HK) draw(); });
       new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
       if (location.hash === "#hlbox") requestAnimationFrame(() => box.scrollIntoView({ block: "start" }));
@@ -434,8 +439,60 @@ mark.hl.flash{outline:3px solid var(--brand,#446);outline-offset:2px;animation:h
       document.dispatchEvent(new CustomEvent("pick:saved", { detail: { key: k, saved: !was } }));
       render();
       const onTerms = /\/terms\/?$/.test(location.pathname);
+      if (!was) nudge("save");
       toast(was ? L("انشال من مصطلحاتي", "Removed from my terms") : L("⭐ انحفظ بمصطلحاتي، ويطلعلك بـ «راجع اليوم»", "⭐ Saved to my terms"), was || onTerms ? null : [L("افتحها", "Open"), base + "terms/#mine"]);
     }
+    // 🔒 (19/11، طلب محمد) الميزات الخاصة بالطالب (🖍️ ظلّل، ⭐ احفظ بمصطلحاتي): زائر ما مسجّل دخول ← بعد ما يستعملها (الشي ينحفظ بجهازه أول، ما يضيع)
+    //   بطاقة هادئة «سجّل دخولك حتى تصير خاصة بيك» ← نافذة الدخول بالاسم الثلاثي والرقم السري (staffdoor.js) على نفس الصفحة، وبعدها ترجع لنفس المكان.
+    //   مو نافذة تسد الصفحة: أول مرة، وبعدها كل 7 أيام، 3 مرات بالأكثر. «مو هسه» يكمّل بالجهاز بس. ماكو شي بوضع الاختبارات (AM_TEST) إلا إذا am_test_nudge=1.
+    const NK = "t:nudge-login", ng = document.createElement("div");
+    ng.className = "pkng"; ng.hidden = true; ng.setAttribute("role", "region"); ng.setAttribute("aria-labelledby", "pkng-t"); ng.setAttribute("aria-live", "polite");
+    const loggedIn = () => { const D = window.StaffDoor; try { return !!(D && (D.studentSession() || D.staffSession())); } catch (e) { return false; } };
+    function nudge(kind) {
+      try {
+        const D = window.StaffDoor;   // (مراجع مستقل) الدخول بالاسم الثلاثي + الرقم السري لازم مفعّل (settings.student_pin.on)، وإلا ما نوعد بيه
+        if (loggedIn() || !D || typeof D.askLogin !== "function" || typeof D.pinOn !== "function" || !D.pinOn() || !(window.STUDY_CLOUD && window.STUDY_CLOUD.url) || document.querySelector(".sd-dlg")) return;
+        if (window.AM_TEST && localStorage.getItem("am_test_nudge") !== "1") return;
+        if (kind === "hl" && window.STUDY_CLOUD.hl !== true) return;   // التظليلات تنحفظ بالحساب بس بعد هجرة 079 (STUDY_CLOUD.hl) — قبلها ما نوعد بشي ما يصير
+        const st = JSON.parse(localStorage.getItem(NK) || "{}") || {}, n = Number(st.n) || 0;
+        if (st.off || n >= 3 || (st.at && Date.now() - Number(st.at) < 7 * 864e5)) return;
+      } catch (e) { return; }
+      // (مراجع مستقل) تطلع بعد ما تختفي رسالة «انظلّل/انحفظ + افتحها» حتى ما تغطيها، وبس إذا ماكو قائمة أو نافذة مفتوحة وقتها
+      clearTimeout(ngT); ngT = setTimeout(() => show(kind, 0), 3700);
+    }
+    let ngT = 0;
+    function show(kind, tries) {
+      try {
+        if (loggedIn() || document.querySelector(".sd-dlg")) return;
+        if (!m.hidden || document.querySelector(".sd-dlg")) { if (tries < 60) ngT = setTimeout(() => show(kind, tries + 1), 1000); return; }   // القائمة مفتوحة (مثلاً بعد ⭐ احفظ) ← ننتظر تنسد
+        const st = JSON.parse(localStorage.getItem(NK) || "{}") || {}, n = Number(st.n) || 0;
+        if (st.off || n >= 3 || (st.at && Date.now() - Number(st.at) < 7 * 864e5)) return;
+        localStorage.setItem(NK, JSON.stringify({ n: n + 1, at: Date.now() }));
+      } catch (e) { return; }
+      const what = kind === "hl" ? L("تظليلاتك", "your highlights") : L("مصطلحاتك", "your saved terms");
+      ng.innerHTML = `<b id="pkng-t">${L("🔒 خلّي ", "🔒 Keep ")}${what}${L(" خاصة بيك", " yours")}</b><p>${L("سجّل دخولك باسمك الثلاثي ورقمك السري، وتنحفظ بحسابك وتلگاها بأي جهاز. هسه محفوظة بهالجهاز بس.", "Sign in with your full name and PIN to keep them in your account on any device. For now they're on this device only.")}</p><div><button type="button" data-ng="go">${L("سجّل دخولك", "Sign in")}</button><button type="button" class="gh" data-ng="no">${L("مو هسه", "Not now")}</button></div>`;
+      if (!ng.isConnected) document.body.appendChild(ng);
+      ng.hidden = false;
+    }
+    ng.addEventListener("click", (ev) => {
+      const b = ev.target.closest && ev.target.closest("[data-ng]"); if (!b) return;
+      ng.hidden = true;
+      if (b.dataset.ng === "go") try { window.StaffDoor.askLogin(location.href.split("#")[0]); } catch (e) {}
+    });
+    document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && !ng.hidden) ng.hidden = true; });
+    // 🔄 (19/11) التظليلات تجي من الحساب (sync.js) ← الصفحة تتحدّث: اللي انشال يرجع نص عادي، واللون اللي تغيّر يتبدّل، والجديد يتظلّل
+    document.addEventListener("sync:applied", (ev) => {
+      const k = (ev.detail && ev.detail.kinds) || []; if (!k.includes("hl") && !k.includes("all")) return;
+      try {
+        const have = new Map(hlRead().map((x) => [x.id, x]));
+        document.querySelectorAll("mark.hl[data-hl]").forEach((mk) => {
+          const it = have.get(mk.dataset.hl);
+          if (!it || it.p !== REL) { const par = mk.parentNode; while (mk.firstChild) par.insertBefore(mk.firstChild, mk); par.removeChild(mk); par.normalize(); }
+          else if (!mk.classList.contains("hl-" + it.c)) mk.className = "hl hl-" + it.c;
+        });
+        hlRestore();
+      } catch (e) {}
+    });
     function toast(msg, link) {
       if (!t.isConnected) document.body.appendChild(t);
       t.textContent = msg;

@@ -1,6 +1,354 @@
-(function(D,I){const S=I();typeof module=="object"&&module.exports?module.exports=S:D.Track=S})(typeof self<"u"?self:this,function(){const D="t:track",I=()=>{try{return typeof localStorage<"u"}catch{return!1}},S={get(e,t){if(!I())return t;try{const s=localStorage.getItem(e);return s?JSON.parse(s):t}catch{return t}},set(e,t){if(I())try{localStorage.setItem(e,JSON.stringify(t))}catch{}}},q=e=>String(e??"").replace(/[&<>"]/g,t=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[t]),K=e=>String(e).padStart(2,"0"),v=(e=new Date)=>`${e.getFullYear()}-${K(e.getMonth()+1)}-${K(e.getDate())}`,R=e=>{const[t,s,o]=String(e).split("-").map(Number);return new Date(t,s-1,o)},L=(e,t)=>{const s=R(e);return s.setDate(s.getDate()+t),v(s)},ee=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],te=120,T=300,U=["xray","ct","mri","ultrasound"],B=["📗 كتاب","🏫 محاضرة الكلية","🏥 مستشفى/تدريب","🩻 صور أشعة","✏️ غيره"],se=e=>(e=Math.abs(Math.round(+e||0)))===1?"يوم":e===2?"يومين":e>=3&&e<=10?`${e} أيام`:`${e} يوم`,F=e=>(e=Math.abs(Math.round(+e||0)))===2?["يومين",""]:[String(e),e>=3&&e<=10?"أيام":"يوم"],H=(e,t="محاضرة",s="محاضرتين",o="محاضرات")=>e===1?`${t} وحدة`:e===2?s:e>=3&&e<=10?`${e} ${o}`:`${e} ${t}`,G=()=>({v:1,days:{},lec:{},atlas:{},quiz:[],fixed:0,outside:[]}),O=(e,t=v())=>e.days[t]=e.days[t]||{s:0,lec:{},terms:0,cases:[],quizzes:[],mistakes:0};function J(e,t=v()){const s=L(t,-te);for(const o in e.days)o<s&&delete e.days[o];return e.quiz.length>T&&(e.quiz=e.quiz.slice(-T)),e.outside.length>T&&(e.outside=e.outside.slice(-T)),e}const j={open(e,t,s,o,i=v()){const c=e.lec[t]=e.lec[t]||{open:{},heard:{},tot:{},nsec:0};o&&(c.nsec=Math.max(c.nsec||0,o)),c.open[s]||(c.open[s]=i)},heard(e,t,s,o,i){const c=e.lec[t]=e.lec[t]||{open:{},heard:{},tot:{},nsec:0};i&&(c.tot[s]=i);const m=c.heard[s]=c.heard[s]||[];m.includes(o)||m.push(o)},time(e,t,s,o=v()){const i=O(e,o);i.s+=t,s&&(i.lec[s]=(i.lec[s]||0)+t)},quiz(e,t,s,o,i=Date.now()){const c=o?Math.round(s/o*100):0;e.quiz.push({u:t,p:c,t:i});const m=O(e,v(new Date(i)));m.quizzes.includes(t)||m.quizzes.push(t),/^quiz\/mistakes\//.test(t)&&(m.mistakes+=1)},caseSeen(e,t,s,o=v()){const i=e.atlas[t]=e.atlas[t]||{};i[s]||(i[s]=o);const c=O(e,o),m=t+"#"+s;c.cases.includes(m)||c.cases.push(m)},term(e,t=v()){O(e,t).terms+=1},fixed(e,t=v()){e.fixed+=1,O(e,t).mistakes+=1},outside(e,t,s=Date.now()){const o=Math.max(1,Math.min(600,Math.round(+t.min||0))),i={id:s.toString(36),t:s,d:v(new Date(s)),type:String(t.type||"✏️ غيره").slice(0,40),topic:String(t.topic||"").slice(0,120),subject:t.subject||null,min:o};return e.outside.push(i),i}};function V(e,t=v(),s={}){const o=e.days[t]||{lec:{},terms:0,cases:[],quizzes:[],mistakes:0},i=new Set(o.quizzes||[]);for(const u in s)s[u]&&s[u].t&&v(new Date(s[u].t))===t&&i.add(u);const c={},m={};for(const u in e.lec){const n=P(e.lec[u]);c[u]=n.open,m[u]=n.heard}return{quizzes:[...i],read:c,listen:m,terms:o.terms||0,cases:(o.cases||[]).length,mistakes:o.mistakes||0,min:Math.round((o.s||0)/60)}}function P(e){if(!e)return{open:0,heard:0,hasAudio:!1};const t=e.nsec?Math.min(1,Object.keys(e.open||{}).length/e.nsec):0;let s=0,o=0;for(const i in e.tot||{})o+=e.tot[i],s+=Math.min(e.tot[i],((e.heard||{})[i]||[]).length);return{open:t,heard:o?s/o:0,hasAudio:o>0}}function ne(e){const t=new Set;for(const s in e.days){const o=e.days[s];((o.s||0)>=300||(o.quizzes||[]).length||(o.terms||0)>=5)&&t.add(s)}return e.outside.forEach(s=>t.add(s.d)),t}function Q(e,t=v(),s=new Set){const o=ne(e);let i=o.has(t)?t:L(t,-1),c=0;for(let m=0;m<366;m++,i=L(i,-1))if(o.has(i))c++;else if(!s.has(i))break;return c}function ae(e,t={}){const s=t.today||v(),o=t.progress||{},i=t.catalog||[],c=i.map(a=>{const h=P(e.lec[a.id]),y=e.quiz.filter(w=>w.u===a.quiz),k=o[a.quiz]||y.length?1:0,b=Math.max(o[a.quiz]&&+o[a.quiz].best||0,...y.map(w=>+w.p||0)),g=h.hasAudio||+a.minutes>0,p=Math.round((g?.4*h.open+.3*h.heard+.3*k:.5*h.open+.5*k)*100);return{id:a.id,subject:a.subject,title:a.title,open:h.open,heard:h.heard,quiz:!!k,best:k?b:null,pct:p,done:p>=80,type:a.type,num:a.num,learn:a.learn,quizUrl:a.quiz}}),m=[];new Map(i.map(a=>[a.subject,a.subject_ar])).forEach((a,h)=>{const y=c.filter(p=>p.subject===h),k=y.filter(p=>p.done).length,b=y.length-k,g=e.outside.filter(p=>p.subject===h).reduce((p,w)=>p+w.min,0);m.push({subject:h,name:a,total:y.length,done:k,left:b,outMin:g,pct:y.length?Math.round(y.reduce((p,w)=>p+w.pct,0)/y.length):0,text:b?`باقي لك ${H(b)} بـ ${a}`:`خلصت ${a} 👏`})});const u=(t.atlas||[]).map(a=>{const h=Object.keys(e.atlas[a.key]||{}).length;return{key:a.key,name:a.name,dev:a.dev||a.key.split("/")[0],seen:Math.min(h,a.total),total:a.total,text:`${a.name} ${Math.min(h,a.total)}/${a.total}`}}),n=Object.values(t.srs||{}).filter(a=>a&&!(a.mine&&!a.r)),d={reviewed:n.length,saved:n.filter(a=>(a.box||0)>=3).length,week:0},r={};e.quiz.forEach(a=>{(r[a.u]=r[a.u]||[]).push(a.p)});for(const a in o)!r[a]&&o[a]&&o[a].last!=null&&(r[a]=[o[a].last]);const M=Object.values(r).map(a=>a[a.length-1]),E=Object.values(r).filter(a=>a.length>=2),l={count:M.length,avg:M.length?Math.round(M.reduce((a,h)=>a+h,0)/M.length):null,up:E.length?Math.round(E.reduce((a,h)=>a+(h[h.length-1]-h[0]),0)/E.length):null},f=Array.from({length:7},(a,h)=>{const y=L(s,h-6),k=e.days[y]||{},b=e.outside.filter(g=>g.d===y).reduce((g,p)=>g+p.min,0);return d.week+=k.terms||0,{date:y,label:ee[R(y).getDay()],min:Math.round((k.s||0)/60)+b,today:y===s}}),$=f.reduce((a,h)=>a+h.min,0);return{lectures:c,subjects:m,atlas:u,terms:d,quiz:l,fixed:e.fixed||0,week:f,weekMin:$,streak:Q(e,s,t.rest||new Set),outside:e.outside.slice(-20).reverse(),outsideMin:e.outside.reduce((a,h)=>a+h.min,0)}}const Y=e=>e>=60?`${Math.floor(e/60)} س${e%60?` ${e%60} د`:""}`:`${e} د`;function ie(e,t,s={}){const o=(n,d,r)=>`<div class="br"><span>${q(n)}</span><span class="pct">${q(d)}</span><span class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${r}" aria-label="${q(n)}"><i style="width:${r}%"></i></span></div>`,i=Math.max(30,...t.week.map(n=>n.min)),c={xray:"🩻 الأشعة السينية",ct:"🌀 المفراس",mri:"🧲 الرنين",ultrasound:"🔊 السونار"},m={};t.atlas.forEach(n=>{(m[n.dev]=m[n.dev]||[]).push(n)});const u=t.streak?F(t.streak):["—","أيام"];e.innerHTML=`<div class="stat3"><div><b>🔥 ${u[0]}</b><small>${u[1]?u[1]+" ورا بعض":"ورا بعض"}</small></div><div><b>${t.quiz.avg==null?"—":t.quiz.avg+"%"}</b><small>معدل الاختبارات${t.quiz.up?` · ${t.quiz.up>0?"↑":"↓"} ${Math.abs(t.quiz.up)}%`:""}</small></div><div><b>${t.fixed}</b><small>غلط تصلّح</small></div></div><h2>المحاضرات</h2><div class="bars">${t.subjects.map(n=>o(n.name,`${n.done}/${n.total} · ${n.left?`باقي ${n.left}`:"✓"}`,n.pct)).join("")}</div><details class="sheet lecs"><summary>📚 كل محاضرة بالتفصيل (📖 فتحت · 🎧 سمعت · 📝 اختبرت)</summary>`+t.subjects.map(n=>{const d=t.lectures.filter(r=>r.subject===n.subject);return d.length?`<h3 class="lsub">${q(n.name)}</h3><ul class="lrows">${d.map(r=>`<li><a href="${q((s.root||"")+(r.learn||""))}"><b>${r.type==="practical"?"عملي":"نظري"} م${r.num} · ${q(r.title)}</b></a><span class="lm"><span title="فتحت">📖 ${Math.round(r.open*100)}%</span><span title="سمعت">🎧 ${Math.round(r.heard*100)}%</span><span title="اختبرت">📝 ${r.quiz?r.best+"%":"—"}</span></span></li>`).join("")}</ul>`:""}).join("")+`</details><p class="sub">${q(t.subjects.filter(n=>n.left).map(n=>n.text).slice(0,2).join(" · ")||"خلصت كل المحاضرات 👏")}. النسبة من الأقسام اللي فتحتها وسمعتها واختبرتها.</p>`+Object.keys(m).sort((n,d)=>U.indexOf(n)-U.indexOf(d)).map(n=>{const d=m[n].filter(l=>l.total),r=d.filter(l=>l.seen),M=d.reduce((l,f)=>l+f.total,0),E=d.reduce((l,f)=>l+f.seen,0);return`<h2>${q(c[n]||n)} <small class="sub">${E}/${M}</small></h2>`+(r.length?`<div class="bars">${r.map(l=>o(l.name,`${l.seen}/${l.total}`,Math.round(l.seen/l.total*100))).join("")}</div>`+(d.length>r.length?`<p class="sub">${d.length-r.length} منطقة بعدك ما فتحتها.</p>`:""):'<p class="sub">بعدك ما شفت حالات هنا.</p>')}).join("")+`<div class="stat3"><div><b>${t.terms.saved}</b><small>مصطلح محفوظ</small></div><div><b>${t.terms.reviewed}</b><small>مصطلح راجعته</small></div><div><b>${t.quiz.count}</b><small>اختبار خلصته</small></div></div><h2>وقت الدراسة هالأسبوع · ${Y(t.weekMin)}</h2><div class="wk" role="img" aria-label="وقت الدراسة آخر 7 أيام: ${q(t.week.map(n=>`${n.label} ${n.min} دقيقة`).join("، "))}">${t.week.map(n=>`<i style="height:${Math.max(n.min?4:0,Math.round(n.min/i*100))}%"${n.today?' class="today"':""}></i>`).join("")}</div><div class="wkl" aria-hidden="true">${t.week.map(n=>`<span>${n.label}</span>`).join("")}</div>`}function oe(e,t={}){const s={type:"",subject:null,min:0},o=(i,c,m)=>`<button type="button" class="chip2" data-k="${i}" data-v="${q(c)}" aria-pressed="false">${q(m)}</button>`;e.innerHTML=`<details class="sheet"><summary>➕ درست برّه الموقع</summary>
-      <p class="sub" id="ob-t">شنو؟</p><div class="chips-row" role="group" aria-labelledby="ob-t">${B.map(i=>o("type",i,i)).join("")}</div>
-      <p class="sub" id="ob-s">المادة (اختياري)</p><div class="chips-row" role="group" aria-labelledby="ob-s">${(t.subjects||[]).map(([i,c])=>o("subject",i,c)).join("")}</div>
+// 📈 تقدّمي — تتبّع خفيف (29/10/2026 — نايم: ما ينحمّل بأي صفحة حيّة لحد «وافقت»؛ بس /preview/me/).
+// يسجّل بس اللي يفيد الطالب نفسه، بجهازه (localStorage «t:track»)، وما ينرسل لأي مكان:
+//  · الأقسام اللي فتحها (ظهرت قدامه 3 ثواني، أو فتح القسم) · الجمل اللي سمعها (يراقب .ls.on من listen.js بدون أي تعديل عليه)
+//  · الاختبارات اللي خلصها (حدث quiz:finish الموجود) · الحالات اللي شافها بالأطلس (ظهرت ثانيتين ونص)
+//  · مراجعات المصطلحات (أزرار «عرفته/ما عرفته») · الغلط اللي تصلّح · الوقت الحقيقي: بس والصفحة ظاهرة وهو متفاعل خلال آخر 60 ثانية (أو يسمع)
+//  · «➕ درست برّه الموقع» (النوع، الموضوع، الدقائق) ينحسب ويّا تقدّمه.
+// المجاميع (Track.summarize) دوال صافية تشتغل بـ node للاختبارات (tests/track.test.js). Track.export()/import() جاهزة للمزامنة بعدين.
+(function (root, factory) {
+  const T = factory();
+  if (typeof module === "object" && module.exports) module.exports = T; else root.Track = T;
+})(typeof self !== "undefined" ? self : this, function () {
+  const KEY = "t:track";
+  const hasLS = () => { try { return typeof localStorage !== "undefined"; } catch (e) { return false; } };
+  const LS = {
+    get(k, d) { if (!hasLS()) return d; try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { if (!hasLS()) return; try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  };
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const pad = (n) => String(n).padStart(2, "0");
+  const dayKey = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const parse = (k) => { const [y, m, d] = String(k).split("-").map(Number); return new Date(y, m - 1, d); };
+  const addDays = (k, n) => { const d = parse(k); d.setDate(d.getDate() + n); return dayKey(d); };
+  const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+  const KEEP_DAYS = 120, KEEP_LOG = 300;
+  const DEV_ORDER = ["xray", "ct", "mri", "ultrasound"];
+  const OUT_TYPES = ["📗 كتاب", "🏫 محاضرة الكلية", "🏥 مستشفى/تدريب", "🩻 صور أشعة", "✏️ غيره"];
+  const arDays = (n) => (n = Math.abs(Math.round(+n || 0))) === 1 ? "يوم" : n === 2 ? "يومين" : n >= 3 && n <= 10 ? `${n} أيام` : `${n} يوم`;   // عبارة كاملة
+  const dayParts = (n) => (n = Math.abs(Math.round(+n || 0))) === 2 ? ["يومين", ""] : [String(n), n >= 3 && n <= 10 ? "أيام" : "يوم"];   // [الرقم الكبير، الوحدة] للبطاقات
+
+  // «محاضرة وحدة / محاضرتين / 3 محاضرات / 11 محاضرة»
+  const arCount = (n, one = "محاضرة", two = "محاضرتين", many = "محاضرات") =>
+    n === 1 ? `${one} وحدة` : n === 2 ? two : n >= 3 && n <= 10 ? `${n} ${many}` : `${n} ${one}`;
+
+  const empty = () => ({ v: 1, days: {}, lec: {}, atlas: {}, quiz: [], fixed: 0, outside: [] });
+  const day = (st, d = dayKey()) => (st.days[d] = st.days[d] || { s: 0, lec: {}, terms: 0, cases: [], quizzes: [], mistakes: 0 });
+  // نقلّم القديم حتى التخزين يبقى صغير
+  function prune(st, today = dayKey()) {
+    const cut = addDays(today, -KEEP_DAYS);
+    for (const d in st.days) if (d < cut) delete st.days[d];
+    if (st.quiz.length > KEEP_LOG) st.quiz = st.quiz.slice(-KEEP_LOG);
+    if (st.outside.length > KEEP_LOG) st.outside = st.outside.slice(-KEEP_LOG);
+    return st;
+  }
+
+  // ── التسجيل (دوال صافية على st، حتى تنفحص بـ node) ──
+  const rec = {
+    open(st, id, sec, nsec, d = dayKey()) {
+      const L = (st.lec[id] = st.lec[id] || { open: {}, heard: {}, tot: {}, nsec: 0 });
+      if (nsec) L.nsec = Math.max(L.nsec || 0, nsec);
+      if (!L.open[sec]) L.open[sec] = d;
+    },
+    heard(st, id, sec, idx, total) {
+      const L = (st.lec[id] = st.lec[id] || { open: {}, heard: {}, tot: {}, nsec: 0 });
+      if (total) L.tot[sec] = total;
+      const h = (L.heard[sec] = L.heard[sec] || []);
+      if (!h.includes(idx)) h.push(idx);
+    },
+    time(st, secs, id, d = dayKey()) { const D = day(st, d); D.s += secs; if (id) D.lec[id] = (D.lec[id] || 0) + secs; },
+    quiz(st, url, ok, n, t = Date.now()) {
+      const pct = n ? Math.round((ok / n) * 100) : 0;
+      st.quiz.push({ u: url, p: pct, t });
+      const D = day(st, dayKey(new Date(t)));
+      if (!D.quizzes.includes(url)) D.quizzes.push(url);
+      if (/^quiz\/mistakes\//.test(url)) D.mistakes += 1;
+    },
+    caseSeen(st, region, slug, d = dayKey()) {
+      const A = (st.atlas[region] = st.atlas[region] || {});
+      if (!A[slug]) A[slug] = d;
+      const D = day(st, d), k = region + "#" + slug;
+      if (!D.cases.includes(k)) D.cases.push(k);
+    },
+    term(st, d = dayKey()) { day(st, d).terms += 1; },
+    fixed(st, d = dayKey()) { st.fixed += 1; day(st, d).mistakes += 1; },
+    outside(st, x, t = Date.now()) {
+      const min = Math.max(1, Math.min(600, Math.round(+x.min || 0)));
+      const e = { id: t.toString(36), t, d: dayKey(new Date(t)), type: String(x.type || "✏️ غيره").slice(0, 40), topic: String(x.topic || "").slice(0, 120), subject: x.subject || null, min };
+      st.outside.push(e);
+      return e;
+    },
+  };
+
+  // ── حقائق يوم واحد (لـ ✅ التلقائي بالخطة) ──
+  function facts(st, d = dayKey(), progress = {}) {
+    const D = st.days[d] || { lec: {}, terms: 0, cases: [], quizzes: [], mistakes: 0 };
+    const quizzes = new Set(D.quizzes || []);
+    for (const u in progress) if (progress[u] && progress[u].t && dayKey(new Date(progress[u].t)) === d) quizzes.add(u);   // من tools.js (t:progress)
+    const read = {}, listen = {};
+    for (const id in st.lec) { const r = ratios(st.lec[id]); read[id] = r.open; listen[id] = r.heard; }
+    return { quizzes: [...quizzes], read, listen, terms: D.terms || 0, cases: (D.cases || []).length, mistakes: D.mistakes || 0, min: Math.round((D.s || 0) / 60) };
+  }
+  function ratios(L) {
+    if (!L) return { open: 0, heard: 0, hasAudio: false };
+    const open = L.nsec ? Math.min(1, Object.keys(L.open || {}).length / L.nsec) : 0;
+    let h = 0, tot = 0;
+    for (const s in L.tot || {}) { tot += L.tot[s]; h += Math.min(L.tot[s], ((L.heard || {})[s] || []).length); }
+    return { open, heard: tot ? h / tot : 0, hasAudio: tot > 0 };
+  }
+
+  // ── 🔥 السلسلة: أيام نشطة ورا بعض (5 دقايق أو اختبار أو دراسة برّه). يوم الراحة بالخطة ما يكسرها. اليوم لسه ما خلص ← نبدأ من أمس ──
+  function activeDays(st) {
+    const a = new Set();
+    for (const d in st.days) { const D = st.days[d]; if ((D.s || 0) >= 300 || (D.quizzes || []).length || (D.terms || 0) >= 5) a.add(d); }
+    st.outside.forEach((x) => a.add(x.d));
+    return a;
+  }
+  function streak(st, today = dayKey(), rest = new Set()) {
+    const a = activeDays(st);
+    let d = a.has(today) ? today : addDays(today, -1), n = 0;
+    for (let i = 0; i < 366; i++, d = addDays(d, -1)) {
+      if (a.has(d)) n++;
+      else if (!rest.has(d)) break;
+    }
+    return n;
+  }
+
+  // ── المجاميع لـ «📈 تقدّمي» ──
+  // o = { catalog (Plan.catalog), atlas:[{key:"xray/chest", name, total}], progress (t:progress), srs (t:srs), today, rest:Set }
+  function summarize(st, o = {}) {
+    const today = o.today || dayKey(), progress = o.progress || {}, cat = o.catalog || [];
+    const lectures = cat.map((l) => {
+      const r = ratios(st.lec[l.id]), tq = st.quiz.filter((x) => x.u === l.quiz), q = progress[l.quiz] || tq.length ? 1 : 0;
+      const best = Math.max(progress[l.quiz] ? +progress[l.quiz].best || 0 : 0, ...tq.map((x) => +x.p || 0));
+      const audio = r.hasAudio || +l.minutes > 0;
+      const pct = Math.round((audio ? 0.4 * r.open + 0.3 * r.heard + 0.3 * q : 0.5 * r.open + 0.5 * q) * 100);
+      return { id: l.id, subject: l.subject, title: l.title, open: r.open, heard: r.heard, quiz: !!q, best: q ? best : null, pct, done: pct >= 80, type: l.type, num: l.num, learn: l.learn, quizUrl: l.quiz };
+    });
+    const subjects = [];
+    new Map(cat.map((l) => [l.subject, l.subject_ar])).forEach((name, s) => {
+      const ls = lectures.filter((x) => x.subject === s), done = ls.filter((x) => x.done).length, left = ls.length - done;
+      const outMin = st.outside.filter((x) => x.subject === s).reduce((a, x) => a + x.min, 0);
+      subjects.push({ subject: s, name, total: ls.length, done, left, outMin,
+        pct: ls.length ? Math.round(ls.reduce((a, x) => a + x.pct, 0) / ls.length) : 0,
+        text: left ? `باقي لك ${arCount(left)} بـ ${name}` : `خلصت ${name} 👏` });
+    });
+    const atlas = (o.atlas || []).map((r) => {
+      const seen = Object.keys(st.atlas[r.key] || {}).length;
+      return { key: r.key, name: r.name, dev: r.dev || r.key.split("/")[0], seen: Math.min(seen, r.total), total: r.total, text: `${r.name} ${Math.min(seen, r.total)}/${r.total}` };
+    });
+    const srs = Object.values(o.srs || {}).filter((x) => x && !(x.mine && !x.r));   // ⭐ (17/11) محفوظ بس (pick.js) وبعده ما راجعه ← ما ينحسب «راجعته»
+    const terms = { reviewed: srs.length, saved: srs.filter((x) => (x.box || 0) >= 3).length, week: 0 };
+    // الاختبارات: المعدل = آخر محاولة لكل اختبار؛ التحسّن = (آخر − أول) للي عادها مرتين أو أكثر
+    const by = {};
+    st.quiz.forEach((x) => { (by[x.u] = by[x.u] || []).push(x.p); });
+    for (const u in progress) if (!by[u] && progress[u] && progress[u].last != null) by[u] = [progress[u].last];
+    const lastP = Object.values(by).map((a) => a[a.length - 1]);
+    const twice = Object.values(by).filter((a) => a.length >= 2);
+    const quiz = { count: lastP.length, avg: lastP.length ? Math.round(lastP.reduce((a, b) => a + b, 0) / lastP.length) : null,
+      up: twice.length ? Math.round(twice.reduce((a, x) => a + (x[x.length - 1] - x[0]), 0) / twice.length) : null };
+    // الأسبوع: آخر 7 أيام (اليوم آخرها) — وقت الموقع + اللي درسه برّه
+    const week = Array.from({ length: 7 }, (_, i) => {
+      const d = addDays(today, i - 6), D = st.days[d] || {};
+      const out = st.outside.filter((x) => x.d === d).reduce((a, x) => a + x.min, 0);
+      terms.week += D.terms || 0;
+      return { date: d, label: DAYS[parse(d).getDay()], min: Math.round((D.s || 0) / 60) + out, today: d === today };
+    });
+    const weekMin = week.reduce((a, x) => a + x.min, 0);
+    return { lectures, subjects, atlas, terms, quiz, fixed: st.fixed || 0, week, weekMin, streak: streak(st, today, o.rest || new Set()),
+      outside: st.outside.slice(-20).reverse(), outsideMin: st.outside.reduce((a, x) => a + x.min, 0) };
+  }
+  const hm = (m) => (m >= 60 ? `${Math.floor(m / 60)} س${m % 60 ? ` ${m % 60} د` : ""}` : `${m} د`);
+
+  // ── العرض (نفس كلاسات المعاينة: .bars .br .pbar .stat3 .wk .wkl) ──
+  function renderProgress(el, S, o = {}) {
+    const bar = (lab, right, pct) => `<div class="br"><span>${esc(lab)}</span><span class="pct">${esc(right)}</span><span class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="${esc(lab)}"><i style="width:${pct}%"></i></span></div>`;
+    const mx = Math.max(30, ...S.week.map((x) => x.min));
+    const devName = { xray: "🩻 الأشعة السينية", ct: "🌀 المفراس", mri: "🧲 الرنين", ultrasound: "🔊 السونار" };
+    const groups = {};
+    S.atlas.forEach((a) => { (groups[a.dev] = groups[a.dev] || []).push(a); });
+    const sp = S.streak ? dayParts(S.streak) : ["—", "أيام"];   // «يومين» بدل «2 أيام» (52b)؛ صفر ← «—» مو «0 يوم» (52c)
+    el.innerHTML = `<div class="stat3"><div><b>🔥 ${sp[0]}</b><small>${sp[1] ? sp[1] + " ورا بعض" : "ورا بعض"}</small></div>` +
+      `<div><b>${S.quiz.avg == null ? "—" : S.quiz.avg + "%"}</b><small>معدل الاختبارات${S.quiz.up ? ` · ${S.quiz.up > 0 ? "↑" : "↓"} ${Math.abs(S.quiz.up)}%` : ""}</small></div>` +
+      `<div><b>${S.fixed}</b><small>غلط تصلّح</small></div></div>` +
+      `<h2>المحاضرات</h2><div class="bars">${S.subjects.map((s) => bar(s.name, `${s.done}/${s.total} · ${s.left ? `باقي ${s.left}` : "✓"}`, s.pct)).join("")}</div>` +
+      // كل محاضرة: 📖 فتحت · 🎧 سمعت · 📝 اختبرت (تنفتح بضغطة، حتى الصفحة تبقى قصيرة)
+      `<details class="sheet lecs"><summary>📚 كل محاضرة بالتفصيل (📖 فتحت · 🎧 سمعت · 📝 اختبرت)</summary>` +
+      S.subjects.map((s) => { const ls = S.lectures.filter((x) => x.subject === s.subject); if (!ls.length) return "";
+        return `<h3 class="lsub">${esc(s.name)}</h3><ul class="lrows">${ls.map((x) => `<li><a href="${esc((o.root || "") + (x.learn || ""))}"><b>${x.type === "practical" ? "عملي" : "نظري"} م${x.num} · ${esc(x.title)}</b></a>` +
+          `<span class="lm"><span title="فتحت">📖 ${Math.round(x.open * 100)}%</span><span title="سمعت">🎧 ${Math.round(x.heard * 100)}%</span><span title="اختبرت">📝 ${x.quiz ? x.best + "%" : "—"}</span></span></li>`).join("")}</ul>`; }).join("") + `</details>` +
+      `<p class="sub">${esc(S.subjects.filter((s) => s.left).map((s) => s.text).slice(0, 2).join(" · ") || "خلصت كل المحاضرات 👏")}. النسبة من الأقسام اللي فتحتها وسمعتها واختبرتها.</p>` +
+      // الأطلس: الأشعة أول، وبكل جهاز المناطق اللي شاف بيها حالات بس (الباقي سطر واحد) حتى الصفحة ما تطول
+      Object.keys(groups).sort((x, y) => DEV_ORDER.indexOf(x) - DEV_ORDER.indexOf(y)).map((dv) => {
+        const rs = groups[dv].filter((r) => r.total), seen = rs.filter((r) => r.seen), tot = rs.reduce((a, r) => a + r.total, 0), got = rs.reduce((a, r) => a + r.seen, 0);
+        return `<h2>${esc(devName[dv] || dv)} <small class="sub">${got}/${tot}</small></h2>` + (seen.length
+          ? `<div class="bars">${seen.map((r) => bar(r.name, `${r.seen}/${r.total}`, Math.round((r.seen / r.total) * 100))).join("")}</div>` + (rs.length > seen.length ? `<p class="sub">${rs.length - seen.length} منطقة بعدك ما فتحتها.</p>` : "")
+          : `<p class="sub">بعدك ما شفت حالات هنا.</p>`);
+      }).join("") +
+      `<div class="stat3"><div><b>${S.terms.saved}</b><small>مصطلح محفوظ</small></div><div><b>${S.terms.reviewed}</b><small>مصطلح راجعته</small></div><div><b>${S.quiz.count}</b><small>اختبار خلصته</small></div></div>` +
+      `<h2>وقت الدراسة هالأسبوع · ${hm(S.weekMin)}</h2>` +
+      `<div class="wk" role="img" aria-label="وقت الدراسة آخر 7 أيام: ${esc(S.week.map((x) => `${x.label} ${x.min} دقيقة`).join("، "))}">${S.week.map((x) => `<i style="height:${Math.max(x.min ? 4 : 0, Math.round((x.min / mx) * 100))}%"${x.today ? ' class="today"' : ""}></i>`).join("")}</div>` +
+      `<div class="wkl" aria-hidden="true">${S.week.map((x) => `<span>${x.label}</span>`).join("")}</div>`;
+  }
+  // ➕ درست برّه الموقع: o = { subjects:[[key,name]], onAdd(entry) }
+  function renderOutside(el, o = {}) {
+    const sel = { type: "", subject: null, min: 0 };
+    const chip = (k, v, l) => `<button type="button" class="chip2" data-k="${k}" data-v="${esc(v)}" aria-pressed="false">${esc(l)}</button>`;
+    el.innerHTML = `<details class="sheet"><summary>➕ درست برّه الموقع</summary>
+      <p class="sub" id="ob-t">شنو؟</p><div class="chips-row" role="group" aria-labelledby="ob-t">${OUT_TYPES.map((t) => chip("type", t, t)).join("")}</div>
+      <p class="sub" id="ob-s">المادة (اختياري)</p><div class="chips-row" role="group" aria-labelledby="ob-s">${(o.subjects || []).map(([k, n]) => chip("subject", k, n)).join("")}</div>
       <div class="row-in"><input data-voice data-ob-topic maxlength="120" placeholder="الموضوع (اختياري)" aria-label="الموضوع"></div>
-      <p class="sub" id="ob-m">كم دقيقة؟</p><div class="chips-row" role="group" aria-labelledby="ob-m">${[[15,"15د"],[30,"30د"],[60,"ساعة"],[120,"ساعتين"]].map(([i,c])=>o("min",i,c)).join("")}</div>
-      <button type="button" class="cbtn" data-ob-add>احسبها بتقدّمي</button><p class="sub" data-ob-msg aria-live="polite"></p></details>`,e.addEventListener("click",i=>{const c=i.target.closest(".chip2[data-k]");if(c){const n=c.dataset.k,d=n==="min"?+c.dataset.v:c.dataset.v;s[n]=s[n]===d&&n!=="min"?n==="subject"?null:"":d,c.parentElement.querySelectorAll(".chip2").forEach(r=>r.setAttribute("aria-pressed",String(n==="min"?+r.dataset.v:r.dataset.v)===String(s[n])));return}if(!i.target.closest("[data-ob-add]"))return;const m=e.querySelector("[data-ob-msg]");if(!s.min){m.textContent="اختار كم دقيقة درست.";return}const u=X({type:s.type||"✏️ غيره",subject:s.subject,topic:e.querySelector("[data-ob-topic]").value.trim(),min:s.min});m.textContent=`✓ انحسبت ${Y(u.min)}. عاشت إيدك!`,e.querySelector("[data-ob-topic]").value="",t.onAdd&&t.onAdd(u)})}const x=e=>{const t=G();if(!e||e.v!==1)return t;for(const s of["days","lec","atlas"])e[s]&&typeof e[s]=="object"&&!Array.isArray(e[s])&&(t[s]=e[s]);for(const s of["quiz","outside"])Array.isArray(e[s])&&(t[s]=e[s].filter(o=>o&&typeof o=="object"));return t.fixed=+e.fixed||0,t},_=()=>x(S.get(D,null)),z=e=>{const t=_();return e(t),S.set(D,J(t)),t};function W(e,t=[]){const s=JSON.parse(JSON.stringify(x(e))),o=(i,c)=>i?c?i<c?i:c:i:c;return t.map(x).forEach(i=>{for(const u in i.lec){const n=s.lec[u]=s.lec[u]||{open:{},heard:{},tot:{},nsec:0},d=i.lec[u]||{};n.open=n.open||{},n.heard=n.heard||{},n.tot=n.tot||{},n.nsec=Math.max(+n.nsec||0,+d.nsec||0);for(const r in d.open||{})n.open[r]=o(n.open[r],d.open[r]);for(const r in d.tot||{})n.tot[r]=Math.max(+n.tot[r]||0,+d.tot[r]||0);for(const r in d.heard||{})n.heard[r]=[...new Set((n.heard[r]||[]).concat(d.heard[r]||[]))]}for(const u in i.atlas){const n=s.atlas[u]=s.atlas[u]||{};for(const d in i.atlas[u])n[d]=o(n[d],i.atlas[u][d])}for(const u in i.days){const n=O(s,u),d=i.days[u]||{};n.lec=n.lec||{},n.s=(+n.s||0)+(+d.s||0),n.terms=+n.terms||0,n.mistakes=+n.mistakes||0,n.terms+=+d.terms||0,n.mistakes+=+d.mistakes||0;for(const r in d.lec||{})n.lec[r]=(n.lec[r]||0)+(+d.lec[r]||0);n.cases=[...new Set((n.cases||[]).concat(d.cases||[]))],n.quizzes=[...new Set((n.quizzes||[]).concat(d.quizzes||[]))]}const c=new Set(s.quiz.map(u=>u.u+"@"+u.t));i.quiz.forEach(u=>{c.has(u.u+"@"+u.t)||s.quiz.push(u)});const m=new Set(s.outside.map(u=>u.id+"@"+u.t));i.outside.forEach(u=>{m.has(u.id+"@"+u.t)||s.outside.push(u)}),s.fixed+=i.fixed}),s.quiz.sort((i,c)=>i.t-c.t),s.outside.sort((i,c)=>i.t-c.t),s}const ce=()=>{const e=S.get("t:track-remote",null);return e&&typeof e=="object"?Object.values(e):[]},N=()=>{const e=ce();return e.length?W(_(),e):_()},re=()=>{},X=e=>{let t;return z(s=>{t=j.outside(s,e)}),A(),t},A=()=>{typeof document<"u"&&document.dispatchEvent(new CustomEvent("track:change"))};function C(e={}){if(typeof document>"u"||C.on)return;C.on=!0;const t=document.querySelector('link[rel="manifest"]'),s=t?new URL(".",t.href).href:location.origin+"/",o=location.href.split(/[?#]/)[0].replace(s,"").replace(/index\.html$/,"").replace(/^preview\//,""),i=o.match(/^learn\/([^/]+)\/(theory|practical)\/(\d+)\/$/);let c=i?`${i[1]}/${i[2]}/${i[3]}`:null;if(!c&&document.body.dataset.lecture)try{const l=JSON.parse(document.body.dataset.lecture).url.match(/learn\/([^/]+)\/(theory|practical)\/(\d+)\//);l&&(c=`${l[1]}/${l[2]}/${l[3]}`)}catch{}const m=o.match(/^devices\/([^/]+)\/cases\/([^/]+)\/$/)||o.match(/^atlas\/([^/]+)\/([^/]+)\/$/),u=m?`${m[1]}/${m[2]}`:null;let n=Date.now();const d=()=>{n=Date.now()};["pointerdown","keydown","scroll","touchstart","wheel"].forEach(l=>addEventListener(l,d,{passive:!0,capture:!0}));let r=0;if(addEventListener("mousemove",()=>{const l=Date.now();l-r>5e3&&(r=l,d())},{passive:!0}),setInterval(()=>{const l=!!document.querySelector(".listen .ls.on");document.visibilityState!=="visible"||Date.now()-n>6e4&&!l||z(f=>j.time(f,5,c))},5e3),c){const l=[...document.querySelectorAll(".lsec[id], section[id^='r-s']")],f=b=>b.id.replace(/^r-/,""),$=new Set(l.map(f)).size;z(b=>document.querySelectorAll(".listen .lsec[id]").forEach(g=>{const p=g.querySelectorAll(".ls").length;if(p){const w=b.lec[c]=b.lec[c]||{open:{},heard:{},tot:{},nsec:0};w.tot[f(g)]=p}}));const a=new Map,h=new Set,y=b=>{a.has(b)||a.set(b,setTimeout(()=>{a.delete(b),document.visibilityState==="visible"?(z(g=>j.open(g,c,f(b),$,v())),A()):h.add(b)},3e3))};if("IntersectionObserver"in window){const b=new IntersectionObserver(g=>g.forEach(p=>{p.isIntersecting?y(p.target):(a.has(p.target)&&(clearTimeout(a.get(p.target)),a.delete(p.target)),h.delete(p.target))}),{rootMargin:"-30% 0px -30% 0px",threshold:0});l.forEach(g=>b.observe(g)),document.addEventListener("visibilitychange",()=>{document.visibilityState==="visible"&&(h.forEach(y),h.clear())})}document.addEventListener("toggle",b=>{const g=b.target;g.open&&g.matches&&g.matches(".lsec[id]")&&z(p=>j.open(p,c,f(g),$))},!0);const k=document.querySelector(".listen");k&&"MutationObserver"in window&&new MutationObserver(b=>b.forEach(g=>{const p=g.target;if(!p.classList||!p.classList.contains("ls")||!p.classList.contains("on"))return;const w=p.closest(".lsec");if(!w)return;const Z=[...w.querySelectorAll(".ls")];z(le=>j.heard(le,c,f(w),Z.indexOf(p),Z.length)),d()})).observe(k,{subtree:!0,attributes:!0,attributeFilter:["class"]})}if(u&&"IntersectionObserver"in window){const l=new Map,f=new IntersectionObserver($=>$.forEach(a=>{a.isIntersecting&&a.intersectionRatio>=.5?l.has(a.target)||l.set(a.target,setTimeout(()=>{z(h=>j.caseSeen(h,u,a.target.id.replace(/^c-/,""))),A()},2500)):l.has(a.target)&&(clearTimeout(l.get(a.target)),l.delete(a.target))}),{threshold:[0,.5]});document.querySelectorAll("article.case[id]").forEach($=>f.observe($))}const M=()=>{try{return new Set(Object.keys(JSON.parse(localStorage.getItem("t:mistakes")||"{}")))}catch{return new Set}};let E=M();document.addEventListener("quiz:answer",l=>{const f=l.detail&&l.detail.q,$=f&&(f.q_en||"").slice(0,120);setTimeout(()=>{const a=M();l.detail.ok&&$&&E.has($)&&!a.has($)&&(z(h=>j.fixed(h)),A()),E=a},0)}),document.addEventListener("quiz:finish",l=>{const f=l.detail||{},$=/^quiz\/(mistakes\/|[^/]+\/[^/]+\/\d+\/)$/.test(o)?o:null;$&&f.n&&(z(a=>j.quiz(a,$,f.ok,f.n)),A())}),document.addEventListener("click",l=>{l.target.closest&&l.target.closest("#review-box [data-k]")&&z(f=>j.term(f))},!0),e.debug&&(window.__track=N)}return{KEY:D,OUT_TYPES:B,dayKey:v,addDays:L,arCount:H,arDays:se,dayParts:F,empty:G,rec:j,prune:J,facts:V,ratios:P,streak:Q,summarize:ae,hm:Y,renderProgress:ie,renderOutside:oe,start:C,load:_,add:X,combine:W,state:N,mutate:z,save:re,facts_today:e=>V(N(),v(),e),export:()=>({track:N()}),import:e=>e&&e.track&&e.track.v===1?(S.set(D,J(x(e.track))),A(),!0):!1}});
+      <p class="sub" id="ob-m">كم دقيقة؟</p><div class="chips-row" role="group" aria-labelledby="ob-m">${[[15, "15د"], [30, "30د"], [60, "ساعة"], [120, "ساعتين"]].map(([m, l]) => chip("min", m, l)).join("")}</div>
+      <button type="button" class="cbtn" data-ob-add>احسبها بتقدّمي</button><p class="sub" data-ob-msg aria-live="polite"></p></details>`;
+    el.addEventListener("click", (ev) => {
+      const c = ev.target.closest(".chip2[data-k]");
+      if (c) {
+        const k = c.dataset.k, v = k === "min" ? +c.dataset.v : c.dataset.v;
+        sel[k] = sel[k] === v && k !== "min" ? (k === "subject" ? null : "") : v;
+        c.parentElement.querySelectorAll(".chip2").forEach((x) => x.setAttribute("aria-pressed", String(k === "min" ? +x.dataset.v : x.dataset.v) === String(sel[k])));
+        return;
+      }
+      if (!ev.target.closest("[data-ob-add]")) return;
+      const msg = el.querySelector("[data-ob-msg]");
+      if (!sel.min) { msg.textContent = "اختار كم دقيقة درست."; return; }
+      const e = add({ type: sel.type || "✏️ غيره", subject: sel.subject, topic: el.querySelector("[data-ob-topic]").value.trim(), min: sel.min });
+      msg.textContent = `✓ انحسبت ${hm(e.min)}. عاشت إيدك!`;
+      el.querySelector("[data-ob-topic]").value = "";
+      if (o.onAdd) o.onAdd(e);
+    });
+  }
+
+  // ── التخزين + الواجهة العامة ──
+  // نتأكد من شكل كل مفتاح (بيانات ناقصة أو مستوردة ما تكسر المجاميع)
+  const shape = (s) => {
+    const e = empty(); if (!s || s.v !== 1) return e;
+    for (const k of ["days", "lec", "atlas"]) if (s[k] && typeof s[k] === "object" && !Array.isArray(s[k])) e[k] = s[k];
+    for (const k of ["quiz", "outside"]) if (Array.isArray(s[k])) e[k] = s[k].filter((x) => x && typeof x === "object");
+    e.fixed = +s.fixed || 0; return e;
+  };
+  const load = () => shape(LS.get(KEY, null));
+  // كل تسجيل يقرا التخزين من جديد ويكتب فوراً، حتى تبويبين مفتوحين (محاضرة + مساحتي) ما يمسح واحد شغل الثاني
+  const mutate = (f) => { const s = load(); f(s); LS.set(KEY, prune(s)); return s; };
+  // ☁️ الأجهزة الثانية (sync.js يكتبها بـ t:track-remote): العرض يجمعها ويّا هالجهاز. التسجيل (mutate) على هالجهاز بس.
+  function combine(own, others = []) {
+    const out = JSON.parse(JSON.stringify(shape(own)));
+    const minD = (a, b) => (!a ? b : !b ? a : a < b ? a : b);
+    others.map(shape).forEach((o) => {
+      for (const id in o.lec) {
+        const A = (out.lec[id] = out.lec[id] || { open: {}, heard: {}, tot: {}, nsec: 0 }), B = o.lec[id] || {};
+        A.open = A.open || {}; A.heard = A.heard || {}; A.tot = A.tot || {};
+        A.nsec = Math.max(+A.nsec || 0, +B.nsec || 0);
+        for (const k in B.open || {}) A.open[k] = minD(A.open[k], B.open[k]);
+        for (const k in B.tot || {}) A.tot[k] = Math.max(+A.tot[k] || 0, +B.tot[k] || 0);
+        for (const k in B.heard || {}) A.heard[k] = [...new Set((A.heard[k] || []).concat(B.heard[k] || []))];
+      }
+      for (const r in o.atlas) { const A = (out.atlas[r] = out.atlas[r] || {}); for (const c in o.atlas[r]) A[c] = minD(A[c], o.atlas[r][c]); }
+      for (const d in o.days) {
+        const A = day(out, d), B = o.days[d] || {};
+        A.lec = A.lec || {}; A.s = (+A.s || 0) + (+B.s || 0); A.terms = +A.terms || 0; A.mistakes = +A.mistakes || 0; A.terms += +B.terms || 0; A.mistakes += +B.mistakes || 0;
+        for (const k in B.lec || {}) A.lec[k] = (A.lec[k] || 0) + (+B.lec[k] || 0);
+        A.cases = [...new Set((A.cases || []).concat(B.cases || []))]; A.quizzes = [...new Set((A.quizzes || []).concat(B.quizzes || []))];
+      }
+      const qk = new Set(out.quiz.map((x) => x.u + "@" + x.t)); o.quiz.forEach((x) => { if (!qk.has(x.u + "@" + x.t)) out.quiz.push(x); });
+      const ok = new Set(out.outside.map((x) => x.id + "@" + x.t)); o.outside.forEach((x) => { if (!ok.has(x.id + "@" + x.t)) out.outside.push(x); });
+      out.fixed += o.fixed;
+    });
+    out.quiz.sort((a, b) => a.t - b.t); out.outside.sort((a, b) => a.t - b.t);
+    return out;
+  }
+  const remote = () => { const r = LS.get("t:track-remote", null); return r && typeof r === "object" ? Object.values(r) : []; };
+  const st = () => { const o = remote(); return o.length ? combine(load(), o) : load(); };
+  const flush = () => {};   // ما يحتاج (كل تسجيل ينكتب فوراً) — يبقى للتوافق
+  const add = (x) => { let e; mutate((s) => { e = rec.outside(s, x); }); emit(); return e; };
+  const emit = () => { if (typeof document !== "undefined") document.dispatchEvent(new CustomEvent("track:change")); };
+
+  // ── المراقبة بالمتصفح (تشتغل بس إذا الصفحة طلبتها: Track.start()) ──
+  function start(opts = {}) {
+    if (typeof document === "undefined" || start.on) return; start.on = true;
+    const man = document.querySelector('link[rel="manifest"]');
+    const base = man ? new URL(".", man.href).href : location.origin + "/";
+    const rel = location.href.split(/[?#]/)[0].replace(base, "").replace(/index\.html$/, "").replace(/^preview\//, "");
+    const lm = rel.match(/^learn\/([^/]+)\/(theory|practical)\/(\d+)\/$/);
+    let lecId = lm ? `${lm[1]}/${lm[2]}/${lm[3]}` : null;
+    if (!lecId && document.body.dataset.lecture) try { const m = JSON.parse(document.body.dataset.lecture).url.match(/learn\/([^/]+)\/(theory|practical)\/(\d+)\//); if (m) lecId = `${m[1]}/${m[2]}/${m[3]}`; } catch (e) {}
+    const am = rel.match(/^devices\/([^/]+)\/cases\/([^/]+)\/$/) || rel.match(/^atlas\/([^/]+)\/([^/]+)\/$/);   // الرابط القديم والإنكليزي الجديد
+    const region = am ? `${am[1]}/${am[2]}` : null;
+
+    // ⏱️ الوقت الحقيقي: كل 5 ثواني، بس إذا الصفحة ظاهرة وآخر تفاعل خلال 60 ثانية (أو صوت المحاضرة شغّال)
+    let lastAct = Date.now();
+    const act = () => { lastAct = Date.now(); };
+    ["pointerdown", "keydown", "scroll", "touchstart", "wheel"].forEach((e) => addEventListener(e, act, { passive: true, capture: true }));
+    let mm = 0; addEventListener("mousemove", () => { const n = Date.now(); if (n - mm > 5000) { mm = n; act(); } }, { passive: true });
+    setInterval(() => {
+      const listening = !!document.querySelector(".listen .ls.on");
+      if (document.visibilityState !== "visible" || (Date.now() - lastAct > 60e3 && !listening)) return;
+      mutate((s) => rec.time(s, 5, lecId));
+    }, 5000);
+
+    // 📖 الأقسام: تنعد إذا قطعت الشريط النصّي من الشاشة 3 ثواني (يشتغل حتى للقسم الأطول من الشاشة) أو انفتحت
+    if (lecId) {
+      const secs = [...document.querySelectorAll(".lsec[id], section[id^='r-s']")];
+      const key = (el) => el.id.replace(/^r-/, "");
+      const nsec = new Set(secs.map(key)).size;
+      // كل جمل السمع من البداية، حتى نسبة السمع تنحسب من المحاضرة كلها مو بس الأقسام اللي بدا بيها
+      mutate((s) => document.querySelectorAll(".listen .lsec[id]").forEach((x) => {
+        const n = x.querySelectorAll(".ls").length;
+        if (n) { const L = (s.lec[lecId] = s.lec[lecId] || { open: {}, heard: {}, tot: {}, nsec: 0 }); L.tot[key(x)] = n; }
+      }));
+      const timers = new Map(), waiting = new Set();
+      const arm = (el) => { if (!timers.has(el)) timers.set(el, setTimeout(() => {
+        timers.delete(el);
+        if (document.visibilityState === "visible") { mutate((s) => rec.open(s, lecId, key(el), nsec, dayKey())); emit(); } else waiting.add(el);
+      }, 3000)); };
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((es) => es.forEach((e) => {
+          if (e.isIntersecting) arm(e.target);
+          else { if (timers.has(e.target)) { clearTimeout(timers.get(e.target)); timers.delete(e.target); } waiting.delete(e.target); }
+        }), { rootMargin: "-30% 0px -30% 0px", threshold: 0 });
+        secs.forEach((s) => io.observe(s));
+        document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { waiting.forEach(arm); waiting.clear(); } });
+      }
+      document.addEventListener("toggle", (ev) => { const d = ev.target; if (d.open && d.matches && d.matches(".lsec[id]")) { mutate((s) => rec.open(s, lecId, key(d), nsec)); } }, true);
+      // 🎧 السمع: listen.js يحط .on على الجملة اللي تنقرا — نراقب الكلاس بس (ما نلمس listen.js)
+      const box = document.querySelector(".listen");
+      if (box && "MutationObserver" in window) new MutationObserver((ms) => ms.forEach((m) => {
+        const el = m.target;
+        if (!el.classList || !el.classList.contains("ls") || !el.classList.contains("on")) return;
+        const sec = el.closest(".lsec"); if (!sec) return;
+        const all = [...sec.querySelectorAll(".ls")];
+        mutate((s) => rec.heard(s, lecId, key(sec), all.indexOf(el), all.length)); act();
+      })).observe(box, { subtree: true, attributes: true, attributeFilter: ["class"] });
+    }
+
+    // 🩻 الأطلس: حالة تنعد إذا ظهرت ثانيتين ونص
+    if (region && "IntersectionObserver" in window) {
+      const tm = new Map();
+      const io = new IntersectionObserver((es) => es.forEach((e) => {
+        if (e.isIntersecting && e.intersectionRatio >= 0.5) { if (!tm.has(e.target)) tm.set(e.target, setTimeout(() => { mutate((s) => rec.caseSeen(s, region, e.target.id.replace(/^c-/, ""))); emit(); }, 2500)); }
+        else if (tm.has(e.target)) { clearTimeout(tm.get(e.target)); tm.delete(e.target); }
+      }), { threshold: [0, 0.5] });
+      document.querySelectorAll("article.case[id]").forEach((a) => io.observe(a));
+    }
+
+    // 📝 الاختبارات + 📕 الغلط اللي تصلّح (tools.js يشيل السؤال بعد صح مرتين — نقارن قبل/بعد)
+    const mk = () => { try { return new Set(Object.keys(JSON.parse(localStorage.getItem("t:mistakes") || "{}"))); } catch (e) { return new Set(); } };
+    let known = mk();
+    document.addEventListener("quiz:answer", (ev) => {
+      const q = ev.detail && ev.detail.q, k = q && (q.q_en || "").slice(0, 120);
+      setTimeout(() => { const now = mk(); if (ev.detail.ok && k && known.has(k) && !now.has(k)) { mutate((s) => rec.fixed(s)); emit(); } known = now; }, 0);
+    });
+    document.addEventListener("quiz:finish", (ev) => {
+      const d = ev.detail || {}; const u = /^quiz\/(mistakes\/|[^/]+\/[^/]+\/\d+\/)$/.test(rel) ? rel : null;
+      if (u && d.n) { mutate((s) => rec.quiz(s, u, d.ok, d.n)); emit(); }
+    });
+    // 🔁 مراجعة المصطلحات (أزرار tools.js «عرفته / ما عرفته»)
+    document.addEventListener("click", (ev) => { if (ev.target.closest && ev.target.closest("#review-box [data-k]")) { mutate((s) => rec.term(s)); } }, true);
+    if (opts.debug) window.__track = st;
+  }
+
+  return { KEY, OUT_TYPES, dayKey, addDays, arCount, arDays, dayParts, empty, rec, prune, facts, ratios, streak, summarize, hm,
+    renderProgress, renderOutside, start, load, add, combine,
+    state: st, mutate, save: flush,
+    facts_today: (progress) => facts(st(), dayKey(), progress),
+    export: () => ({ track: st() }),
+    import: (d) => { if (d && d.track && d.track.v === 1) { LS.set(KEY, prune(shape(d.track))); emit(); return true; } return false; } };
+});

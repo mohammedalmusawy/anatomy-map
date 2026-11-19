@@ -1,1 +1,85 @@
-(function(){if(window.VoiceInput)return;const f=window.SpeechRecognition||window.webkitSpeechRecognition,b="voiceLang";let n="ar-IQ";try{n=localStorage.getItem(b)||"ar-IQ"}catch{}const g=()=>n.startsWith("ar")?"ع":"EN",p={"not-allowed":"اسمح للمايك من إعدادات المتصفح (القفل 🔒 جنب الرابط)، وبعدها اضغط 🎤 من جديد.","service-not-allowed":"المتصفح ما يسمح بتحويل الكلام لنص هنا. اكتب يدوياً.","audio-capture":"ما لگيت مايك بجهازك.","no-speech":"ما سمعت شي، اضغط 🎤 وجرّب مرة ثانية.",network:"تحويل الكلام لنص يحتاج إنترنت. اكتب يدوياً هسه.","language-not-supported":"هاللغة مو مدعومة بمتصفحك، بدّل بين «ع / EN»."},w=new WeakSet;let c=null,v=null;const s=()=>{if(c)try{c.stop()}catch{}};function m(e){if(!f||!e||w.has(e)||e.type==="search"||e.readOnly||e.disabled)return;w.add(e);const a=document.createElement("span");a.className="vbox",a.innerHTML=`<button type="button" class="vlang" aria-label="لغة الكلام: ${n.startsWith("ar")?"عربي":"إنكليزي"}">${g()}</button><button type="button" class="vmic" aria-pressed="false" aria-label="اكتب بصوتك">🎤</button><span class="vmsg" role="status" aria-live="polite"></span>`,e.insertAdjacentElement("afterend",a);const l=e.closest("form");l&&l.addEventListener("submit",s);const i=a.querySelector(".vmic"),h=a.querySelector(".vmsg");(e.closest(".row-in")||a).insertAdjacentElement("afterend",h);const u=r=>{h.textContent=r,h.hidden=!r};u(""),a.querySelector(".vlang").addEventListener("click",()=>{n=n.startsWith("ar")?"en-US":"ar-IQ";try{localStorage.setItem(b,n)}catch{}s(),document.querySelectorAll(".vlang").forEach(r=>{r.textContent=g(),r.setAttribute("aria-label",`لغة الكلام: ${n.startsWith("ar")?"عربي":"إنكليزي"}`)})}),i.addEventListener("click",()=>{if(c){const o=v===i;if(s(),o)return}if(window.__voiceStop&&window.__voiceStop(),u(""),navigator.onLine===!1){u(p.network);return}const r=e.value.trim()?e.value.replace(/\s+$/,"")+" ":"",t=new f;if(t.lang=n,t.interimResults=!0,t.maxAlternatives=1,t.continuous=e.tagName==="TEXTAREA","processLocally"in t)try{t.processLocally=!0}catch{}let L=!1;try{L=localStorage.getItem("t:voice-told")==="1"}catch{}if(!L){u("🎤 المتصفح يحوّل كلامك لنص بخدمته (ممكن Google أو Apple). إحنا ما نسجّل الصوت ولا نحفظه.");try{localStorage.setItem("t:voice-told","1")}catch{}}c=t,v=i;const I=o=>{i.classList.toggle("on",o),i.setAttribute("aria-pressed",o)};I(!0),t.onresult=o=>{c===t&&(e.value=r+Array.from(o.results).map(d=>d[0].transcript).join(" ").trim(),e.dispatchEvent(new Event("input",{bubbles:!0})))};const y=()=>{I(!1),c===t&&(c=null,v=null)};t.onerror=o=>{const d=o&&o.error;d&&d!=="aborted"&&u(p[d]||"ما اشتغل المايك هسه. اكتب يدوياً."),y()},t.onend=y;try{t.start(),e.focus()}catch{y()}})}const E="input[data-voice], textarea[data-voice]",S=e=>{e.matches&&e.matches(E)&&m(e),e.querySelectorAll&&e.querySelectorAll(E).forEach(m)};function q(e=document){e.querySelectorAll('textarea, input:not([type]), input[type="text"]').forEach(a=>{a.closest("[data-novoice]")||m(a)})}if(window.VoiceInput={supported:!!f,attach:m,attachAll:q,stop:s},!f)return;const A=()=>{S(document),new MutationObserver(e=>e.forEach(a=>a.addedNodes.forEach(l=>{l.nodeType===1&&S(l)}))).observe(document.body,{childList:!0,subtree:!0})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",A):A(),document.addEventListener("visibilitychange",()=>{document.hidden&&s()})})();
+// 🎤 الكتابة بالصوت لأي حقل (29/10/2026 — نايم: ما ينحمّل بأي صفحة حيّة لحد «وافقت»؛ بس /preview/me/).
+// نفس فكرة voice.js (مايك البحث) بس لأي input/textarea عليه data-voice، و«ع / EN» للغة الكلام (نفس الاختيار المحفوظ «voiceLang»).
+// voice.js يبقى مثل ما هو لمربعات البحث (type=search)؛ هذا ما يلمسها حتى ما يطلع مايكين.
+// Web Speech API من المتصفح نفسه: إحنا ما نسجّل الصوت ولا نحفظه ولا نرسله لسيرفرنا (المتصفح نفسه ممكن يحوّله بخدمته)، بس النص يتكتب بالحقل.
+// ⚠️ بس انتبه: كروم وسفاري ممكن يحوّلون الكلام لنص بخدمتهم (Google/Apple) — إذا المتصفح يدعم التحويل على الجهاز (processLocally) نستعمله،
+// ولو لا، أول ضغطة تطلع جملة واضحة تگول هالشي. المتصفح ما يدعم الميزة ← الزر ما يطلع أصلاً.
+// VoiceInput.attach(el) لحقل واحد · VoiceInput.attachAll(scope) (اختياري) لكل حقول النص · data-voice ينربط وحده (حتى اللي ينضاف بعدين).
+(function () {
+  if (window.VoiceInput) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const KEY = "voiceLang";
+  let lang = "ar-IQ";
+  try { lang = localStorage.getItem(KEY) || "ar-IQ"; } catch (e) {}
+  const label = () => (lang.startsWith("ar") ? "ع" : "EN");
+  const ERR = {
+    "not-allowed": "اسمح للمايك من إعدادات المتصفح (القفل 🔒 جنب الرابط)، وبعدها اضغط 🎤 من جديد.",
+    "service-not-allowed": "المتصفح ما يسمح بتحويل الكلام لنص هنا. اكتب يدوياً.",
+    "audio-capture": "ما لگيت مايك بجهازك.",
+    "no-speech": "ما سمعت شي، اضغط 🎤 وجرّب مرة ثانية.",
+    "network": "تحويل الكلام لنص يحتاج إنترنت. اكتب يدوياً هسه.",
+    "language-not-supported": "هاللغة مو مدعومة بمتصفحك، بدّل بين «ع / EN».",
+  };
+  const done = new WeakSet();
+  let rec = null, curMic = null;
+
+  const stop = () => { if (rec) try { rec.stop(); } catch (e) {} };
+  function attach(inp) {
+    if (!SR || !inp || done.has(inp) || inp.type === "search" || inp.readOnly || inp.disabled) return;
+    done.add(inp);
+    const box = document.createElement("span");
+    box.className = "vbox";
+    box.innerHTML = `<button type="button" class="vlang" aria-label="لغة الكلام: ${lang.startsWith("ar") ? "عربي" : "إنكليزي"}">${label()}</button>` +
+      `<button type="button" class="vmic" aria-pressed="false" aria-label="اكتب بصوتك">🎤</button><span class="vmsg" role="status" aria-live="polite"></span>`;
+    inp.insertAdjacentElement("afterend", box);
+    const form = inp.closest("form"); if (form) form.addEventListener("submit", stop);   // الإرسال بضغطة منك بس
+    const mic = box.querySelector(".vmic"), msg = box.querySelector(".vmsg");
+    (inp.closest(".row-in") || box).insertAdjacentElement("afterend", msg);   // الرسالة سطر لحالها تحت الحقل
+    const say = (t) => { msg.textContent = t; msg.hidden = !t; }; say("");
+    box.querySelector(".vlang").addEventListener("click", () => {
+      lang = lang.startsWith("ar") ? "en-US" : "ar-IQ";
+      try { localStorage.setItem(KEY, lang); } catch (e) {}
+      stop();
+      document.querySelectorAll(".vlang").forEach((b) => { b.textContent = label(); b.setAttribute("aria-label", `لغة الكلام: ${lang.startsWith("ar") ? "عربي" : "إنكليزي"}`); });
+    });
+    mic.addEventListener("click", () => {
+      if (rec) { const same = curMic === mic; stop(); if (same) return; }
+      if (window.__voiceStop) window.__voiceStop();   // مايك البحث يوقف أول
+      // نضيف للنص الموجود (ما نمسحه): الحقل الطويل بسطر جديد/مسافة، والقصير يتبدّل
+      say("");
+      if (navigator.onLine === false) { say(ERR.network); return; }   // بلا نت: ما نبدأ أصلاً
+      const base = inp.value.trim() ? inp.value.replace(/\s+$/, "") + " " : "";
+      const r = new SR();
+      r.lang = lang; r.interimResults = true; r.maxAlternatives = 1; r.continuous = inp.tagName === "TEXTAREA";
+      const local = "processLocally" in r;
+      if (local) try { r.processLocally = true; } catch (e) {}
+      let told = false; try { told = localStorage.getItem("t:voice-told") === "1"; } catch (e) {}
+      if (!told) { say("🎤 المتصفح يحوّل كلامك لنص بخدمته (ممكن Google أو Apple). إحنا ما نسجّل الصوت ولا نحفظه."); try { localStorage.setItem("t:voice-told", "1"); } catch (e) {} }
+      rec = r; curMic = mic;
+      const on = (v) => { mic.classList.toggle("on", v); mic.setAttribute("aria-pressed", v); };   // label ثابت، الحالة بـ aria-pressed
+      on(true);
+      r.onresult = (ev) => {
+        if (rec !== r) return;
+        inp.value = base + Array.from(ev.results).map((x) => x[0].transcript).join(" ").trim();
+        inp.dispatchEvent(new Event("input", { bubbles: true }));
+      };
+      const end = () => { on(false); if (rec === r) { rec = null; curMic = null; } };
+      r.onerror = (ev) => { const c = ev && ev.error; if (c && c !== "aborted") say(ERR[c] || "ما اشتغل المايك هسه. اكتب يدوياً."); end(); };
+      r.onend = end;
+      try { r.start(); inp.focus(); } catch (e) { end(); }
+    });
+  }
+  const sel = 'input[data-voice], textarea[data-voice]';
+  const scan = (root) => { if (root.matches && root.matches(sel)) attach(root); if (root.querySelectorAll) root.querySelectorAll(sel).forEach(attach); };
+  function attachAll(scope = document) {   // اختياري: كل حقول النص (غير البحث وكلمات السر والأرقام) إلا اللي عليها data-novoice
+    scope.querySelectorAll('textarea, input:not([type]), input[type="text"]').forEach((x) => { if (!x.closest("[data-novoice]")) attach(x); });
+  }
+  window.VoiceInput = { supported: !!SR, attach, attachAll, stop };
+  if (!SR) return;
+  const boot = () => {
+    scan(document);
+    new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => { if (n.nodeType === 1) scan(n); }))).observe(document.body, { childList: true, subtree: true });
+  };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+  document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); });
+})();

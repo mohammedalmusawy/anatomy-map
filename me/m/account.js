@@ -1,22 +1,342 @@
-(function(){"use strict";const f=window.STUDY_CLOUD||{},H=t=>`${f.url}/functions/v1/${t}`,J="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js",G=["progress","mistakes","favorites","notes","plan","outside_log","prefs"],Y={progress:"t:progress",mistakes:"t:mistakes",favorites:"t:favs"},g=t=>String(t??"").replace(/[&<>"']/g,e=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[e]),k=(t,e)=>{try{const n=localStorage.getItem(t);return n?JSON.parse(n):e}catch{return e}},S=(t,e)=>{try{localStorage.setItem(t,JSON.stringify(e))}catch{}};let u;try{u=localStorage.getItem("t:device"),u||(u=crypto.randomUUID(),localStorage.setItem("t:device",u))}catch{u=crypto.randomUUID()}const a={on:!!(f.url&&f.anon),student:null,session:null,cache:{}},F="ما گدرنا نثبّت هذا الجهاز، اكتب كودك مرة ثانية",E=new Set,y=()=>E.forEach(t=>{try{t(a)}catch{}});let _=null;function V(){return window.supabase?Promise.resolve():new Promise((t,e)=>{const n=document.createElement("script");n.src=J,n.onload=t,n.onerror=e,document.head.appendChild(n)})}async function h(){return _||(await V(),_=window.supabase.createClient(f.url,f.anon,{auth:{persistSession:!0,autoRefreshToken:!0,storageKey:"t:acct-session",detectSessionInUrl:!1}}),_.auth.onAuthStateChange((t,e)=>{a.session=e,e||(a.student=null,a.cache={}),y()}),_)}async function l(t,e,n){const c=n&&a.session?a.session.access_token:f.anon,s=await fetch(H(t),{method:"POST",headers:{apikey:f.anon,Authorization:"Bearer "+c,"Content-Type":"application/json"},body:JSON.stringify(e)});return{...await s.json().catch(()=>({})),status:s.status}}async function I(t){if(!a.on)return{ok:!1,msg:"الحسابات مو مفعّلة بعد."};const e=await l("redeem-code",{code:String(t||"").trim(),device_id:u,ua:navigator.userAgent.slice(0,120)});return e.token_hash?$(e):{ok:!1,msg:e.msg||"ما گدرنا ندخلك، جرّب مرة ثانية."}}async function $(t){const e=await h(),{data:n,error:c}=await e.auth.verifyOtp({token_hash:t.token_hash,type:"magiclink"});if(c||!n.session)return{ok:!1,msg:"ما گدرنا ندخلك، جرّب مرة ثانية."};a.session=n.session,await P(),await lt();let s=null;try{s=await l("redeem-code",{action:"touch",device_id:u,bind:t.bind},!0)}catch{}return s&&(s.status===403||s.status===401)?(await p(),{ok:!1,bind_refused:!0,msg:F}):(s&&s.ok&&(S("t:acct-touch",new Date(Date.now()+3*36e5).toISOString().slice(0,10)),S("t:acct-touch-at",Date.now())),{ok:!0,full_name:t.full_name,name_confirmed:t.name_confirmed,needs_name:!t.full_name})}const v=()=>{try{return document.documentElement.lang==="en"}catch{return!1}},N=(t,e)=>v()&&t.msg_en||t.msg||(v()?"Something went wrong. Try again.":e||"صار خطأ، جرّب مرة ثانية.");async function O(t,e,n){if(!a.on)return{ok:!1,status:0,error:"off",msg:"الحسابات مو مفعّلة بعد."};try{return await l("pin-login",Object.assign({action:t,device_id:u,ua:navigator.userAgent.slice(0,120)},e||{}),n)}catch{return{ok:!1,status:0,error:"net",msg:"ماكو اتصال. تأكد من النت وجرّب مرة ثانية.",msg_en:"No connection. Check the internet and try again."}}}async function q(t,e){const n=await O(t,e,!1);if(!n.token_hash)return{ok:!1,error:n.error,minutes:n.minutes,status:n.status,msg:N(n)};const c=await $(n);return Object.assign(c,{created:n.created===!0,recovered:n.recovered===!0})}const W=(t,e,n)=>q("create",{name:t,pin:e,pin2:n}),Q=(t,e)=>q("login",{name:t,pin:e}),Z=(t,e,n,c)=>q("recover",{name:t,code:e,pin:n,pin2:c}),A=async(t,e)=>{const n=await O(t,e,!0);return n.status===401&&n.error==="auth"&&await p(),n.ok||(n.msg=N(n)),n},tt=()=>A("info"),et=(t,e,n)=>A("set",{pin:t,pin2:e,current:n}),nt=t=>A("clear",{current:t});async function P(){const t=await h(),{data:e}=await t.from("students").select("id, full_name, status, name_confirmed, name_fix, streak, streak_best, last_seen").maybeSingle();a.student=e||null;try{a.student&&a.student.full_name&&localStorage.setItem("t:acct-name",String(a.student.full_name).trim().split(/\s+/)[0])}catch{}return y(),a.student}async function at(){if(!a.on)return a;const t=new URL(location.href),e=t.searchParams.get("code");if(e){t.searchParams.delete("code"),history.replaceState(null,"",t.pathname+(t.search||"")+t.hash);const s=await I(e);a.lastRedeem=s}const n=await h(),{data:{session:c}}=await n.auth.getSession();if(a.session=c,c&&!a.student&&await P(),ft(),c&&a.student){const s=new Date(Date.now()+108e5).toISOString().slice(0,10);if(k("t:acct-touch","")!==s||Date.now()-Number(k("t:acct-touch-at",0))>30*6e4){const o=await l("redeem-code",{action:"touch",device_id:u},!0);o.ok?(S("t:acct-touch",s),S("t:acct-touch-at",Date.now()),a.student.streak=o.streak,a.student.streak_best=o.streak_best):(o.status===403||o.status===401)&&await p()}}return y(),a}const U=()=>l("redeem-code",{action:"confirm_name"},!0).then(t=>(t.ok&&a.student&&(a.student.name_confirmed=!0),y(),t)),B=t=>l("redeem-code",{action:"fix_name",name:t},!0),M=t=>l("redeem-code",{action:"set_name",name:t},!0).then(e=>{if(e.ok&&a.student){a.student.full_name=e.full_name,a.student.name_confirmed=!0;try{localStorage.setItem("t:acct-name",String(e.full_name).trim().split(/\s+/)[0])}catch{}y()}return e}),st=()=>l("redeem-code",{action:"tg_link_token"},!0),X=()=>l("redeem-code",{action:"devices",device_id:u},!0),D=t=>l("redeem-code",{action:"remove_device",device_id:u,target:t},!0),ct=t=>{if(!t)return"—";const e=Math.floor((Date.now()-new Date(t))/864e5);return e<=0?"اليوم":e===1?"أمس":e===2?"قبل يومين":e<=10?`قبل ${e} أيام`:`قبل ${e} يوم`},x=t=>typeof t=="number"&&isFinite(t)?Math.trunc(t):typeof t=="string"&&/^\d{1,4}$/.test(t)?+t:0,C=t=>t&&Array.isArray(t.devices)?t.devices.filter(e=>e&&typeof e=="object"):[];let j=!1;async function ot(t){if(!t||j)return;if(!a.session||!a.student){t.hidden=!0,t.innerHTML="";return}j=!0;let e;try{e=await X()}catch{e={status:0}}finally{j=!1}if(e.status===403||e.status===401){await p(),t.hidden=!0;return}if(!e.ok){t.hidden=!0;return}t.hidden=!1,t.innerHTML=`<details class="mdet devs"><summary><span>📱 أجهزتي</span><small>${x(C(e).length)}/${x(e.max_devices)}</small></summary>
-      <p class="sub">كودك يشتغل على ${x(e.max_devices)} أجهزة بالكثير. إذا جهاز مو إلك أو ما تستعمله، طلّعه.</p>
-      <ul class="devl">${C(e).map(n=>`<li data-dev="${g(n.id)}"${n.current?' data-cur="1"':""}><span><b>${g(n.kind)}</b>${n.current?" <small>(هذا الجهاز)</small>":""}<br><small>أول مرة: ${g(String(n.first_seen||"").slice(0,10))} · آخر مرة: ${g(ct(n.last_seen))}</small></span>
-        <button type="button" class="cbtn ghost" data-rm>${n.current?"اطلع من هذا الجهاز":"طلّع هذا الجهاز"}</button></li>`).join("")}</ul>
-      ${C(e).length>1?`<button type="button" class="cbtn ghost" data-out-others>${v()?"Sign out all other devices":"اطلع من كل الأجهزة الثانية"}</button>`:""}
-      <p class="sub" role="status" aria-live="polite" data-devmsg></p></details>`,t.querySelectorAll("[data-rm]").forEach(n=>n.onclick=async()=>{const c=n.closest("li"),s=c.dataset.cur==="1";if(!confirm(s?"تطلع من هذا الجهاز؟ تحتاج كودك حتى ترجع.":"تطلّع هذا الجهاز من حسابك؟ لازم الكود حتى يرجع يدخل منه."))return;n.disabled=!0;const o=await D(c.dataset.dev).catch(()=>({ok:!1})),i=t.querySelector("[data-devmsg]");if(!o.ok){n.disabled=!1,i&&(i.textContent=o.msg||"ما صار، جرّب مرة ثانية.");return}if(s){await p(),location.reload();return}i&&(i.textContent="✅ انطلع. أول ما ينفتح الموقع بذاك الجهاز يطلع من حسابك."),c.remove();const d=t.querySelector("summary small");d&&(d.textContent=`${x(C(o).length)}/${x(o.max_devices)}`)}),it(t),rt(t)}function rt(t){const e=window.Net;!e||!e.settings||Promise.resolve(e.settings()).then(n=>{if(!(n&&n.student_pin&&n.student_pin.on===!0)||!t.isConnected)return;const c=()=>window.PinUI&&window.PinUI.mountSettings(t.appendChild(Object.assign(document.createElement("div"),{className:"pin-mine"})));if(window.PinUI)return c();const s=[...document.scripts].find(i=>/account(\.min)?\.js/.test(i.src)),o=document.createElement("script");o.src=s?s.src.replace(/account(\.min)?\.js/,"pin-ui.js"):"pin-ui.js",o.onload=c,document.head.appendChild(o)}).catch(()=>{})}function it(t){const e=t.querySelector("[data-out-others]");e&&(e.onclick=async()=>{if(!confirm(v()?"Sign out all other devices? This device stays signed in.":"تطلّع كل الأجهزة الثانية من حسابك؟ هذا الجهاز يبقى داخل."))return;e.disabled=!0;const n=t.querySelector("[data-devmsg]");let c=0,s=0;for(const i of[...t.querySelectorAll("li[data-dev]")]){if(i.dataset.cur==="1")continue;(await D(i.dataset.dev).catch(()=>({ok:!1}))).ok?(c++,i.remove()):s++}n&&(n.textContent=s?v()?"Some devices were not signed out. Try again.":"بعض الأجهزة ما طلعت، جرّب مرة ثانية.":v()?`✅ ${c} device(s) signed out. Only this device is signed in now.`:`✅ طلعت ${c} ${c===1?"جهاز":"أجهزة"}. هذا الجهاز بس داخل هسه.`),e.hidden=!s,e.disabled=!1;const o=t.querySelector("summary small");o&&(o.textContent=o.textContent.replace(/^\d+/,String(t.querySelectorAll("li[data-dev]").length)))})}async function p(){try{await(await h()).auth.signOut({scope:"local"})}catch{}a.session=null,a.student=null,a.cache={};try{localStorage.removeItem("t:acct-touch"),localStorage.removeItem("t:acct-touch-at"),localStorage.removeItem("t:acct-name"),localStorage.removeItem("t:acct-session"),localStorage.removeItem("t:name-secret"),localStorage.removeItem("t:name-last"),localStorage.removeItem("t:name-at"),localStorage.removeItem("t:name-first"),localStorage.removeItem("t:name-wait")}catch{}y()}async function K(){if(!a.student)return a.cache;const t=await h(),{data:e}=await t.from("student_state").select("key, value, updated_at");return(e||[]).forEach(n=>{a.cache[n.key]=n.value}),a.cache}const ut=t=>a.cache[t],R={};function dt(t,e){if(!G.includes(t))throw new Error("unknown key "+t);return a.cache[t]=e,a.student?(clearTimeout(R[t]),new Promise(n=>{R[t]=setTimeout(async()=>{const c=await h(),{error:s}=await c.from("student_state").upsert({student_id:a.student.id,key:t,value:e});n(!s)},1500)})):Promise.resolve(!1)}async function lt(){if(!a.student||window.Sync)return;const t=k("t:sync:owner",null);if(t&&t!==a.student.id)return;const e="t:acct-migrated:"+a.student.id;if(k(e,!1))return;await K();const n=await h();for(const[c,s]of Object.entries(Y)){const o=k(s,null);if(!o||typeof o!="object"||!Object.keys(o).length)continue;const i=a.cache[c]&&typeof a.cache[c]=="object"?a.cache[c]:{},d={...o,...i},{error:b}=await n.from("student_state").upsert({student_id:a.student.id,key:c,value:d});if(!b)a.cache[c]=d;else return}S(e,!0)}function mt(t,e={}){t.innerHTML=`<div class="gate"><h1>🎓 دخول طلاب المرحلة الثانية</h1>
+// 🎓 حساب الطالب (29/10/2026) — جاهز ومو مربوط بأي صفحة بعد (ينتظر «وافقت» + «فعّل البوابة»).
+// الدخول: كود (أو رابط ?code=…) ← دالة redeem-code ← verifyOtp({token_hash, type:"magiclink"}) ← جلسة Supabase تنحفظ بالمتصفح.
+// بعدها: «أهلاً <الاسم>، هذا اسمك؟» ✅ / ✏️ · نفس معرّف الجهاز مال cloud.js (t:device) · خروج.
+// window.Account = { state, ready, redeem, confirmName, fixName, logout, get, put, pull, linkTelegram, mountLogin, mountNameCheck, on }
+// الأمان بالسيرفر (RLS + الدوال): الطالب يقرا/يكتب صفوفه بس، الكود 3 أجهزة، حد التخمين. هذا الملف واجهة بس.
+(function () {
+  "use strict";
+  const C = window.STUDY_CLOUD || {};
+  const FN = (f) => `${C.url}/functions/v1/${f}`;
+  const SB_JS = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
+  const KEYS = ["progress", "mistakes", "favorites", "notes", "plan", "outside_log", "prefs"];
+  const LOCAL = { progress: "t:progress", mistakes: "t:mistakes", favorites: "t:favs" };   // ينتقلن للحساب أول دخول
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+
+  // نفس معرّف الجهاز اللي يستعمله cloud.js
+  let device;
+  try { device = localStorage.getItem("t:device"); if (!device) { device = crypto.randomUUID(); localStorage.setItem("t:device", device); } } catch (e) { device = crypto.randomUUID(); }
+
+  const state = { on: !!(C.url && C.anon), student: null, session: null, cache: {} };
+  const BIND_MSG = "ما گدرنا نثبّت هذا الجهاز، اكتب كودك مرة ثانية";   // 📱 70 (تصليح 3)
+  const subs = new Set();
+  const emit = () => subs.forEach((f) => { try { f(state); } catch (e) {} });
+  let sb = null;
+
+  function loadSb() {
+    if (window.supabase) return Promise.resolve();
+    return new Promise((ok, no) => { const s = document.createElement("script"); s.src = SB_JS; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+  }
+  async function client() {
+    if (sb) return sb;
+    await loadSb();
+    sb = window.supabase.createClient(C.url, C.anon, { auth: { persistSession: true, autoRefreshToken: true, storageKey: "t:acct-session", detectSessionInUrl: false } });
+    sb.auth.onAuthStateChange((_e, s) => { state.session = s; if (!s) { state.student = null; state.cache = {}; } emit(); });
+    return sb;
+  }
+  async function call(f, body, auth) {
+    const tok = auth && state.session ? state.session.access_token : C.anon;
+    const r = await fetch(FN(f), { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + tok, "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    return { ...j, status: r.status };   // 🛡️ الحالة من HTTP دائماً
+  }
+
+  /** يدخل بالكود. يرجع {ok, full_name, name_confirmed} أو {ok:false, msg}. */
+  async function redeem(code) {
+    if (!state.on) return { ok: false, msg: "الحسابات مو مفعّلة بعد." };
+    const r = await call("redeem-code", { code: String(code || "").trim(), device_id: device, ua: navigator.userAgent.slice(0, 120) });
+    if (!r.token_hash) return { ok: false, msg: r.msg || "ما گدرنا ندخلك، جرّب مرة ثانية." };
+    return enter(r);
+  }
+  /** 078: نفس خطوات ما بعد الدخول لأي طريق (كود أو رقم سري): verifyOtp ← الطالب ← دمج المحلي ← touch بالـ nonce. */
+  async function enter(r) {
+    const c = await client();
+    const { data, error } = await c.auth.verifyOtp({ token_hash: r.token_hash, type: "magiclink" });
+    if (error || !data.session) return { ok: false, msg: "ما گدرنا ندخلك، جرّب مرة ثانية." };
+    state.session = data.session;
+    await loadStudent();
+    await migrateLocal();
+    // 📱 70: touch فوراً حتى الجلسة تنربط بهالجهاز (وإذا انطلع من «أجهزتي» تنتهي جلسته نفسها)
+    let t = null;
+    try { t = await call("redeem-code", { action: "touch", device_id: device, bind: r.bind }, true); } catch (e) {}   // (تصليح 2) nonce الربط مرة وحدة
+    // (تصليح 3) الربط انرفض ← نطلع فوراً (الجلسة ما تبقى بالجهاز) ونرجع لشاشة الكود برسالة هادئة
+    if (t && (t.status === 403 || t.status === 401)) { await logout(); return { ok: false, bind_refused: true, msg: BIND_MSG }; }
+    if (t && t.ok) { lsSet("t:acct-touch", new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10)); lsSet("t:acct-touch-at", Date.now()); }
+    return { ok: true, full_name: r.full_name, name_confirmed: r.name_confirmed, needs_name: !r.full_name };   // 73: كود جملي بلا اسم ← يكتب اسمه بأول دخول
+  }
+
+  // ── 🔒 078: «مساحتي بالاسم الثلاثي + رقم سري» (pin-login). مطفي لحد settings.student_pin.on — الواجهة بـ pin-ui.js ──
+  const en = () => { try { return document.documentElement.lang === "en"; } catch (e) { return false; } };
+  const pmsg = (r, fb) => (en() ? r.msg_en || r.msg : r.msg) || (en() ? "Something went wrong. Try again." : fb || "صار خطأ، جرّب مرة ثانية.");
+  async function pinCall(action, extra, auth) {
+    if (!state.on) return { ok: false, status: 0, error: "off", msg: "الحسابات مو مفعّلة بعد." };
+    try { return await call("pin-login", Object.assign({ action, device_id: device, ua: navigator.userAgent.slice(0, 120) }, extra || {}), auth); }
+    catch (e) { return { ok: false, status: 0, error: "net", msg: "ماكو اتصال. تأكد من النت وجرّب مرة ثانية.", msg_en: "No connection. Check the internet and try again." }; }
+  }
+  /** زائر: create · login · recover ← نفس enter(). الرد {ok, ...} أو {ok:false, error, msg (حسب اللغة), minutes?}. */
+  async function pinVisitor(action, fields) {
+    const r = await pinCall(action, fields, false);
+    if (!r.token_hash) return { ok: false, error: r.error, minutes: r.minutes, status: r.status, msg: pmsg(r) };
+    const x = await enter(r);
+    return Object.assign(x, { created: r.created === true, recovered: r.recovered === true });
+  }
+  const pinCreate = (name, pin, pin2) => pinVisitor("create", { name, pin, pin2 });
+  const pinLogin = (name, pin) => pinVisitor("login", { name, pin });
+  const pinRecover = (name, code, pin, pin2) => pinVisitor("recover", { name, code, pin, pin2 });
+  const pinMine = async (action, extra) => { const r = await pinCall(action, extra, true); if (r.status === 401 && r.error === "auth") await logout(); if (!r.ok) r.msg = pmsg(r); return r; };
+  const pinInfo = () => pinMine("info");
+  const pinSet = (pin, pin2, current) => pinMine("set", { pin, pin2, current });
+  const pinClear = (current) => pinMine("clear", { current });
+
+  async function loadStudent() {
+    const c = await client();
+    const { data } = await c.from("students").select("id, full_name, status, name_confirmed, name_fix, streak, streak_best, last_seen").maybeSingle();
+    state.student = data || null;
+    // 👋 70: الاسم الأول بالجهاز حتى «أهلاً (اسمه)» بالرئيسية يطلع من الاسم الحقيقي (الحساب ما بيه user_metadata.full_name)
+    try { if (state.student && state.student.full_name) localStorage.setItem("t:acct-name", String(state.student.full_name).trim().split(/\s+/)[0]); } catch (e) {}
+    emit();
+    return state.student;
+  }
+
+  /** يرجع الجلسة المحفوظة (إذا موجودة) + يحدّث آخر ظهور والسلسلة مرة باليوم. */
+  async function ready() {
+    if (!state.on) return state;
+    const url = new URL(location.href), code = url.searchParams.get("code");
+    if (code) {   // رابط ?code=… ← يدخل وحده، وبعدها يشيل الكود من الرابط والتاريخ
+      url.searchParams.delete("code");
+      history.replaceState(null, "", url.pathname + (url.search || "") + url.hash);
+      const r = await redeem(code);
+      state.lastRedeem = r;
+    }
+    const c = await client();
+    const { data: { session } } = await c.auth.getSession();
+    state.session = session;
+    if (session && !state.student) await loadStudent();
+    nameGuard();   // 73: حساب بلا اسم ← ما يكمل بأي صفحة قبل ما يكتب اسمه (حارس واحد مشترك)
+    if (session && state.student) {
+      const day = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);
+      // 📱 70: مرة باليوم للسلسلة، و(بعد ما يصير touch يفحص الجهاز) كل 30 دقيقة بالكثير حتى الجهاز اللي انطلع من «أجهزتي» يطلع فعلاً
+      if (lsGet("t:acct-touch", "") !== day || Date.now() - Number(lsGet("t:acct-touch-at", 0)) > 30 * 60e3) {
+        const t = await call("redeem-code", { action: "touch", device_id: device }, true);
+        if (t.ok) { lsSet("t:acct-touch", day); lsSet("t:acct-touch-at", Date.now()); state.student.streak = t.streak; state.student.streak_best = t.streak_best; }
+        else if (t.status === 403 || t.status === 401) await logout();
+      }
+    }
+    emit();
+    return state;
+  }
+
+  const confirmName = () => call("redeem-code", { action: "confirm_name" }, true).then((r) => { if (r.ok && state.student) state.student.name_confirmed = true; emit(); return r; });   // 73: الفشل (409 بلا اسم) ما يغيّر شي — المتصل لازم يفحص r.ok
+  const fixName = (name) => call("redeem-code", { action: "fix_name", name }, true);
+  // 73: كود جملي بلا اسم — الطالب يكتب اسمه الثلاثي مرة وحدة (السيرفر ذرّي، المكرر 409)
+  const setName = (name) => call("redeem-code", { action: "set_name", name }, true).then((r) => {
+    if (r.ok && state.student) { state.student.full_name = r.full_name; state.student.name_confirmed = true; try { localStorage.setItem("t:acct-name", String(r.full_name).trim().split(/\s+/)[0]); } catch (e) {} emit(); }
+    return r;
+  });
+  const linkTelegram = () => call("redeem-code", { action: "tg_link_token" }, true);   // مطفي لحد settings.tg_link.on
+  // 📱 70: «أجهزتي» — الطالب يشوف أجهزته ويطلّع جهاز (السيرفر: صفوفه هو بس)
+  const devices = () => call("redeem-code", { action: "devices", device_id: device }, true);
+  const removeDevice = (target) => call("redeem-code", { action: "remove_device", device_id: device, target }, true);
+  const when = (t) => { if (!t) return "—"; const d = Math.floor((Date.now() - new Date(t)) / 864e5); return d <= 0 ? "اليوم" : d === 1 ? "أمس" : d === 2 ? "قبل يومين" : d <= 10 ? `قبل ${d} أيام` : `قبل ${d} يوم`; };
+  // 🛡️ (فاحص 71 ج2) رقم آمن قبل innerHTML: بس رقم حقيقي، وأي شي ثاني (نص، كائن) ← 0
+  const int0 = (v) => (typeof v === "number" && isFinite(v) ? Math.trunc(v) : typeof v === "string" && /^\d{1,4}$/.test(v) ? +v : 0);
+  const devList = (x) => (x && Array.isArray(x.devices) ? x.devices.filter((d) => d && typeof d === "object") : []);
+  let devBusy = false;
+  async function mountDevices(el) {
+    if (!el || devBusy) return;
+    if (!state.session || !state.student) { el.hidden = true; el.innerHTML = ""; return; }
+    devBusy = true;
+    let r; try { r = await devices(); } catch (e) { r = { status: 0 }; } finally { devBusy = false; }
+    if (r.status === 403 || r.status === 401) { await logout(); el.hidden = true; return; }
+    if (!r.ok) { el.hidden = true; return; }
+    el.hidden = false;
+    el.innerHTML = `<details class="mdet devs"><summary><span>📱 أجهزتي</span><small>${int0(devList(r).length)}/${int0(r.max_devices)}</small></summary>
+      <p class="sub">كودك يشتغل على ${int0(r.max_devices)} أجهزة بالكثير. إذا جهاز مو إلك أو ما تستعمله، طلّعه.</p>
+      <ul class="devl">${devList(r).map((d) => `<li data-dev="${esc(d.id)}"${d.current ? ' data-cur="1"' : ""}><span><b>${esc(d.kind)}</b>${d.current ? " <small>(هذا الجهاز)</small>" : ""}<br><small>أول مرة: ${esc(String(d.first_seen || "").slice(0, 10))} · آخر مرة: ${esc(when(d.last_seen))}</small></span>
+        <button type="button" class="cbtn ghost" data-rm>${d.current ? "اطلع من هذا الجهاز" : "طلّع هذا الجهاز"}</button></li>`).join("")}</ul>
+      ${devList(r).length > 1 ? `<button type="button" class="cbtn ghost" data-out-others>${en() ? "Sign out all other devices" : "اطلع من كل الأجهزة الثانية"}</button>` : ""}
+      <p class="sub" role="status" aria-live="polite" data-devmsg></p></details>`;
+    el.querySelectorAll("[data-rm]").forEach((b) => b.onclick = async () => {
+      const li = b.closest("li"), cur = li.dataset.cur === "1";
+      if (!confirm(cur ? "تطلع من هذا الجهاز؟ تحتاج كودك حتى ترجع." : "تطلّع هذا الجهاز من حسابك؟ لازم الكود حتى يرجع يدخل منه.")) return;
+      b.disabled = true;
+      const x = await removeDevice(li.dataset.dev).catch(() => ({ ok: false }));
+      const m = el.querySelector("[data-devmsg]");
+      if (!x.ok) { b.disabled = false; if (m) m.textContent = x.msg || "ما صار، جرّب مرة ثانية."; return; }
+      if (cur) { await logout(); location.reload(); return; }
+      if (m) m.textContent = "✅ انطلع. أول ما ينفتح الموقع بذاك الجهاز يطلع من حسابك.";
+      li.remove();
+      const sm = el.querySelector("summary small"); if (sm) sm.textContent = `${int0(devList(x).length)}/${int0(x.max_devices)}`;
+    });
+    outOthersWire(el);
+    // 🔒 078: بطاقة الرقم السري تحت «أجهزتي» (بس لما settings.student_pin.on؛ الملف ينحمّل وقت الحاجة)
+    pinCard(el);
+  }
+  function pinCard(el) {
+    const N = window.Net;
+    if (!N || !N.settings) return;
+    Promise.resolve(N.settings()).then((S) => {
+      if (!(S && S.student_pin && S.student_pin.on === true) || !el.isConnected) return;
+      const go = () => window.PinUI && window.PinUI.mountSettings(el.appendChild(Object.assign(document.createElement("div"), { className: "pin-mine" })));
+      if (window.PinUI) return go();
+      const me = [...document.scripts].find((x) => /account(\.min)?\.js/.test(x.src));
+      const sc = document.createElement("script"); sc.src = me ? me.src.replace(/account(\.min)?\.js/, "pin-ui.js") : "pin-ui.js"; sc.onload = go; document.head.appendChild(sc);
+    }).catch(() => {});
+  }
+  /** 🔒 078 (منع الانتحال): «اطلع من كل الأجهزة الثانية» — نفس remove_device (ذرّي لكل جهاز)، والجهاز الحالي يبقى. */
+  function outOthersWire(el) {
+    const b = el.querySelector("[data-out-others]"); if (!b) return;
+    b.onclick = async () => {
+      if (!confirm(en() ? "Sign out all other devices? This device stays signed in." : "تطلّع كل الأجهزة الثانية من حسابك؟ هذا الجهاز يبقى داخل.")) return;
+      b.disabled = true; const m = el.querySelector("[data-devmsg]"); let n = 0, bad = 0;
+      for (const li of [...el.querySelectorAll("li[data-dev]")]) { if (li.dataset.cur === "1") continue; const x = await removeDevice(li.dataset.dev).catch(() => ({ ok: false })); if (x.ok) { n++; li.remove(); } else bad++; }
+      if (m) m.textContent = bad ? (en() ? "Some devices were not signed out. Try again." : "بعض الأجهزة ما طلعت، جرّب مرة ثانية.") : en() ? `✅ ${n} device(s) signed out. Only this device is signed in now.` : `✅ طلعت ${n} ${n === 1 ? "جهاز" : "أجهزة"}. هذا الجهاز بس داخل هسه.`;
+      b.hidden = !bad; b.disabled = false;
+      const sm = el.querySelector("summary small"); if (sm) sm.textContent = sm.textContent.replace(/^\d+/, String(el.querySelectorAll("li[data-dev]").length));
+    };
+  }
+  async function logout() {
+    // الخروج ما يفضّي مكان الجهاز (حتى ما ينتشر الكود بخروج/دخول). تصفير الأجهزة من الإدارة بس.
+    try { const c = await client(); await c.auth.signOut({ scope: "local" }); } catch (e) {}
+    state.session = null; state.student = null; state.cache = {};
+    try { localStorage.removeItem("t:acct-touch"); localStorage.removeItem("t:acct-touch-at"); localStorage.removeItem("t:acct-name"); localStorage.removeItem("t:acct-session"); localStorage.removeItem("t:name-secret"); localStorage.removeItem("t:name-last"); localStorage.removeItem("t:name-at"); localStorage.removeItem("t:name-first"); localStorage.removeItem("t:name-wait"); } catch (e) {}   // 75: سر «اكتب اسمك» يشيله الخروج (جهاز مشترك)
+    emit();
+  }
+
+  // ── المزامنة: student_state (صف لكل مفتاح) ──
+  async function pull() {
+    if (!state.student) return state.cache;
+    const c = await client();
+    const { data } = await c.from("student_state").select("key, value, updated_at");
+    (data || []).forEach((r) => { state.cache[r.key] = r.value; });
+    return state.cache;
+  }
+  const get = (key) => state.cache[key];
+  const timers = {};
+  /** يحفظ (بعد 1.5 ثانية من آخر تعديل، حتى ما تكثر الطلبات). */
+  function put(key, value) {
+    if (!KEYS.includes(key)) throw new Error("unknown key " + key);
+    state.cache[key] = value;
+    if (!state.student) return Promise.resolve(false);
+    clearTimeout(timers[key]);
+    return new Promise((ok) => {
+      timers[key] = setTimeout(async () => {
+        const c = await client();
+        const { error } = await c.from("student_state").upsert({ student_id: state.student.id, key, value });
+        ok(!error);
+      }, 1500);
+    });
+  }
+
+  // ── أول دخول: t:progress / t:mistakes / t:favs ← الحساب (دمج: اللي بالحساب يبقى، والمحلي يكمّل الناقص) ──
+  async function migrateLocal() {
+    if (!state.student) return;
+    // 🔄 مساحتي (29/10): إذا sync.js محمّل هو اللي يدمج بيانات الجهاز (أحدث وبلا ضياع)؛ وإذا بيانات الجهاز لطالب ثاني ما ننقلها لحساب هذا
+    if (window.Sync) return;
+    const owner = lsGet("t:sync:owner", null);
+    if (owner && owner !== state.student.id) return;
+    const flag = "t:acct-migrated:" + state.student.id;
+    if (lsGet(flag, false)) return;
+    await pull();
+    const c = await client();
+    for (const [key, lk] of Object.entries(LOCAL)) {
+      const local = lsGet(lk, null);
+      if (!local || typeof local !== "object" || !Object.keys(local).length) continue;
+      const remote = state.cache[key] && typeof state.cache[key] === "object" ? state.cache[key] : {};
+      const merged = { ...local, ...remote };
+      const { error } = await c.from("student_state").upsert({ student_id: state.student.id, key, value: merged });
+      if (!error) state.cache[key] = merged;
+      else return;   // نعيد المحاولة الدخول الجاي
+    }
+    lsSet(flag, true);
+  }
+
+  // ── واجهة صغيرة (مثل المعاينة /preview/login/) ──
+  function mountLogin(el, opts = {}) {
+    el.innerHTML = `<div class="gate"><h1>🎓 دخول طلاب المرحلة الثانية</h1>
       <p class="sub">أدخل الكود اللي وصلك من محمد الموسوي. مرة وحدة بس، وبعدها الموقع يتذكّرك ويرجعك لنفس المكان.</p>
       <input id="acct-code" aria-label="الكود" placeholder="RAD-XXXX-XXXX" dir="ltr" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false">
       <button type="button" class="cbtn" id="acct-go">دخول</button>
       <p class="sub" id="acct-msg" role="status" aria-live="polite"></p>
-      <p class="sub">أو افتح الرابط اللي وصلك (بيه الكود جاهز). الكود يشتغل على 3 أجهزة بالكثير.</p></div>`;const n=t.querySelector("#acct-code"),c=t.querySelector("#acct-go"),s=t.querySelector("#acct-msg"),o=async()=>{c.disabled=!0,s.textContent="…";const i=await I(n.value);if(c.disabled=!1,!i.ok){s.textContent=i.msg;return}s.textContent="",!i.name_confirmed||i.needs_name?T(t,e):e.done&&e.done(a)};c.onclick=o,n.addEventListener("keydown",i=>{i.key==="Enter"&&o()})}let L=null;function ft(){if(!a.student||a.student.full_name||L||document.getElementById("acct-nameguard")||document.getElementById("st3"))return;if(!document.getElementById("acct-ng-css")){const r=document.createElement("style");r.id="acct-ng-css",r.textContent=`#acct-nameguard{--ng-bg:var(--card,#fff);--ng-ink:var(--ink,#222);--ng-line:var(--line,#c9ccd6);--ng-in:var(--bg,#fff);--ng-brand:var(--brand,#4B5A8A);--ng-bi:var(--brand-ink,#fff);position:fixed;inset:0;z-index:2147483000;background:rgba(20,22,28,.72);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+      <p class="sub">أو افتح الرابط اللي وصلك (بيه الكود جاهز). الكود يشتغل على 3 أجهزة بالكثير.</p></div>`;
+    const inp = el.querySelector("#acct-code"), btn = el.querySelector("#acct-go"), msg = el.querySelector("#acct-msg");
+    const go = async () => {
+      btn.disabled = true; msg.textContent = "…";
+      const r = await redeem(inp.value);
+      btn.disabled = false;
+      if (!r.ok) { msg.textContent = r.msg; return; }
+      msg.textContent = "";
+      if (!r.name_confirmed || r.needs_name) mountNameCheck(el, opts); else if (opts.done) opts.done(state);
+    };
+    btn.onclick = go;
+    inp.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+  }
+  /** 73: حارس الاسم — أي صفحة فيها حساب طالب فعّال بلا اسم تطلع نافذة ما تنسد (لا زر إغلاق ولا Escape) لحد ما ينكتب الاسم؛ «خروج» بس.
+   *  الصفحة اللي وراها تنقفل: inert (+ aria-hidden وفخ تركيز للمتصفحات القديمة)، والتركيز لحقل الاسم، ويرجع لمكانه بعد الإغلاق. */
+  let guardEl = null;
+  function nameGuard() {
+    if (!state.student || state.student.full_name || guardEl || document.getElementById("acct-nameguard") || document.getElementById("st3")) return;   // st3 = صفحة الدخول (عندها خطوتها)
+    if (!document.getElementById("acct-ng-css")) {
+      const st = document.createElement("style"); st.id = "acct-ng-css";
+      st.textContent = `#acct-nameguard{--ng-bg:var(--card,#fff);--ng-ink:var(--ink,#222);--ng-line:var(--line,#c9ccd6);--ng-in:var(--bg,#fff);--ng-brand:var(--brand,#4B5A8A);--ng-bi:var(--brand-ink,#fff);position:fixed;inset:0;z-index:2147483000;background:rgba(20,22,28,.72);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
 @media (prefers-color-scheme:dark){#acct-nameguard{--ng-bg:var(--card,#252932);--ng-ink:var(--ink,#ECE7DD);--ng-line:var(--line,#4a5060);--ng-in:var(--bg,#1D2027);--ng-brand:var(--brand,#A9B6E3);--ng-bi:var(--brand-ink,#1D2027)}}
 #acct-nameguard .ngbox{background:var(--ng-bg);color:var(--ng-ink);border-radius:18px;max-width:440px;width:100%;padding:8px 14px 14px;box-sizing:border-box;font:inherit}
 #acct-nameguard input{display:block;box-sizing:border-box;width:100%;min-height:48px;padding:0 12px;margin:8px 0;border:1px solid var(--ng-line);border-radius:12px;background:var(--ng-in);color:var(--ng-ink);font:inherit;font-size:1rem}
 #acct-nameguard button{min-height:48px;min-width:44px;padding:0 16px;margin:4px 0;border-radius:12px;border:1px solid var(--ng-brand);background:var(--ng-brand);color:var(--ng-bi);font:inherit;font-weight:700;cursor:pointer}
-#acct-nameguard button.alt{background:transparent;color:var(--ng-brand)}`,document.head.appendChild(r)}const t=document.activeElement,e=document.createElement("div");e.id="acct-nameguard",L=e,e.setAttribute("role","dialog"),e.setAttribute("aria-modal","true"),e.setAttribute("aria-label","اكتب اسمك الثلاثي");const n=document.createElement("div");n.className="ngbox",e.appendChild(n);const c=[...document.body.children].filter(r=>!/^(SCRIPT|STYLE|LINK|NOSCRIPT)$/.test(r.tagName)).map(r=>[r,r.inert,r.getAttribute("aria-hidden")]);c.forEach(([r])=>{r.inert=!0,r.setAttribute("aria-hidden","true")}),document.body.appendChild(e);const s=()=>[...e.querySelectorAll("input,button,a[href],select,textarea,[tabindex]:not([tabindex='-1'])")].filter(r=>!r.disabled&&!r.hidden&&r.offsetParent!==null||r===document.activeElement),o=r=>{if(!e.contains(r.target)){const m=s();m[0]&&m[0].focus()}},i=r=>{if(r.key!=="Tab")return;const m=s();if(!m.length)return;const w=m.indexOf(document.activeElement);(w<0||r.shiftKey&&w===0||!r.shiftKey&&w===m.length-1)&&(r.preventDefault(),m[r.shiftKey?m.length-1:0].focus())};document.addEventListener("focusin",o,!0),document.addEventListener("keydown",i,!0);const d=()=>{document.removeEventListener("focusin",o,!0),document.removeEventListener("keydown",i,!0),c.forEach(([r,m,w])=>{r.inert=!!m,w===null?r.removeAttribute("aria-hidden"):r.setAttribute("aria-hidden",w)}),e.remove(),L=null;try{t&&t.focus&&document.contains(t)&&t.focus()}catch{}};T(n,{done:d});const b=document.createElement("button");b.type="button",b.className="alt",b.textContent="خروج",b.onclick=async()=>{await p(),d(),location.reload()},n.appendChild(b);const z=n.querySelector("input");z&&z.focus()}function T(t,e={}){const n=a.student&&a.student.full_name||"";if(!n){t.innerHTML=`<div class="gate"><h1>أهلاً بيك 👋</h1><p>اكتب اسمك الثلاثي كامل (مرة وحدة بس).</p>
+#acct-nameguard button.alt{background:transparent;color:var(--ng-brand)}`;
+      document.head.appendChild(st);
+    }
+    const prev = document.activeElement, ov = document.createElement("div"); ov.id = "acct-nameguard"; guardEl = ov;
+    ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "اكتب اسمك الثلاثي");
+    const box = document.createElement("div"); box.className = "ngbox"; ov.appendChild(box);
+    const behind = [...document.body.children].filter((e) => !/^(SCRIPT|STYLE|LINK|NOSCRIPT)$/.test(e.tagName)).map((e) => [e, e.inert, e.getAttribute("aria-hidden")]);
+    behind.forEach(([e]) => { e.inert = true; e.setAttribute("aria-hidden", "true"); });
+    document.body.appendChild(ov);
+    // فخ تركيز احتياطي (متصفح بلا inert): أي تركيز برا النافذة يرجع إلها، وTab/Shift+Tab يدور داخلها
+    const foc = () => [...ov.querySelectorAll("input,button,a[href],select,textarea,[tabindex]:not([tabindex='-1'])")].filter((x) => !x.disabled && !x.hidden && x.offsetParent !== null || x === document.activeElement);
+    const onIn = (ev) => { if (!ov.contains(ev.target)) { const f = foc(); if (f[0]) f[0].focus(); } };
+    const onKey = (ev) => { if (ev.key !== "Tab") return; const f = foc(); if (!f.length) return; const i = f.indexOf(document.activeElement);
+      if (i < 0 || (ev.shiftKey && i === 0) || (!ev.shiftKey && i === f.length - 1)) { ev.preventDefault(); f[ev.shiftKey ? f.length - 1 : 0].focus(); } };
+    document.addEventListener("focusin", onIn, true); document.addEventListener("keydown", onKey, true);
+    const close = () => {
+      document.removeEventListener("focusin", onIn, true); document.removeEventListener("keydown", onKey, true);
+      behind.forEach(([e, inr, ah]) => { e.inert = !!inr; if (ah === null) e.removeAttribute("aria-hidden"); else e.setAttribute("aria-hidden", ah); });
+      ov.remove(); guardEl = null; try { if (prev && prev.focus && document.contains(prev)) prev.focus(); } catch (e) {}
+    };
+    mountNameCheck(box, { done: close });
+    const out = document.createElement("button"); out.type = "button"; out.className = "alt"; out.textContent = "خروج";
+    out.onclick = async () => { await logout(); close(); location.reload(); }; box.appendChild(out);
+    const f = box.querySelector("input"); if (f) f.focus();
+  }
+  function mountNameCheck(el, opts = {}) {
+    const n = (state.student && state.student.full_name) || "";
+    if (!n) {   // 73: بلا اسم ← يكتبه بنفسه
+      el.innerHTML = `<div class="gate"><h1>أهلاً بيك 👋</h1><p>اكتب اسمك الثلاثي كامل (مرة وحدة بس).</p>
         <input id="acct-name" aria-label="اسمك الثلاثي" placeholder="مثال: أحمد علي حسين" autocomplete="name"><button type="button" class="cbtn" id="acct-send">دخول</button>
-        <p class="sub" id="acct-msg" role="status" aria-live="polite"></p></div>`;const s=t.querySelector("#acct-msg"),o=async()=>{const i=t.querySelector("#acct-name").value.trim().replace(/\s+/g," ");if(i.split(" ").length<3){s.textContent="اكتب اسمك الثلاثي كامل.";return}const d=await M(i);d.ok?e.done&&e.done(a):s.textContent=d.msg||"صار خطأ."};t.querySelector("#acct-send").onclick=o,t.querySelector("#acct-name").addEventListener("keydown",i=>{i.key==="Enter"&&o()});return}t.innerHTML=`<div class="gate"><h1>أهلاً ${g(n.split(" ")[0])} 👋</h1>
-      <p>هذا اسمك؟ <b>${g(n)}</b></p>
+        <p class="sub" id="acct-msg" role="status" aria-live="polite"></p></div>`;
+      const m0 = el.querySelector("#acct-msg"), go0 = async () => { const v0 = el.querySelector("#acct-name").value.trim().replace(/\s+/g, " "); if (v0.split(" ").length < 3) { m0.textContent = "اكتب اسمك الثلاثي كامل."; return; } const r = await setName(v0); if (r.ok) { if (opts.done) opts.done(state); } else m0.textContent = r.msg || "صار خطأ."; };
+      el.querySelector("#acct-send").onclick = go0; el.querySelector("#acct-name").addEventListener("keydown", (e) => { if (e.key === "Enter") go0(); });
+      return;
+    }
+    el.innerHTML = `<div class="gate"><h1>أهلاً ${esc(n.split(" ")[0])} 👋</h1>
+      <p>هذا اسمك؟ <b>${esc(n)}</b></p>
       <button type="button" class="cbtn" id="acct-yes">✅ نعم</button> <button type="button" class="cbtn alt" id="acct-fix">✏️ صحّح اسمي</button>
-      <div id="acct-fixbox" hidden><input id="acct-name" aria-label="اسمك الثلاثي الصحيح" value="${g(n)}"><button type="button" class="cbtn" id="acct-send">أرسل</button></div>
-      <p class="sub" id="acct-msg" role="status" aria-live="polite"></p></div>`;const c=t.querySelector("#acct-msg");t.querySelector("#acct-yes").onclick=async()=>{const s=await U();s&&s.ok?e.done&&e.done(a):c.textContent=s&&s.msg||"صار خطأ، جرّب مرة ثانية."},t.querySelector("#acct-fix").onclick=()=>{t.querySelector("#acct-fixbox").hidden=!1,t.querySelector("#acct-name").focus()},t.querySelector("#acct-send").onclick=async()=>{const s=await B(t.querySelector("#acct-name").value);c.textContent=s.msg||(s.ok?"وصل طلبك.":"صار خطأ."),s.ok&&e.done&&setTimeout(()=>e.done(a),1200)}}window.Account={state:a,device:u,ready:at,redeem:I,enter:$,pinCreate:W,pinLogin:Q,pinRecover:Z,pinInfo:tt,pinSet:et,pinClear:nt,confirmName:U,fixName:B,setName:M,logout:p,linkTelegram:st,pull:K,get:ut,put:dt,devices:X,removeDevice:D,mountDevices:ot,mountLogin:mt,mountNameCheck:T,on:t=>(E.add(t),()=>E.delete(t)),token:()=>a.session?a.session.access_token:null}})();
+      <div id="acct-fixbox" hidden><input id="acct-name" aria-label="اسمك الثلاثي الصحيح" value="${esc(n)}"><button type="button" class="cbtn" id="acct-send">أرسل</button></div>
+      <p class="sub" id="acct-msg" role="status" aria-live="polite"></p></div>`;
+    const msg = el.querySelector("#acct-msg");
+    el.querySelector("#acct-yes").onclick = async () => { const r = await confirmName(); if (r && r.ok) { if (opts.done) opts.done(state); } else msg.textContent = (r && r.msg) || "صار خطأ، جرّب مرة ثانية."; };
+    el.querySelector("#acct-fix").onclick = () => { el.querySelector("#acct-fixbox").hidden = false; el.querySelector("#acct-name").focus(); };
+    el.querySelector("#acct-send").onclick = async () => {
+      const r = await fixName(el.querySelector("#acct-name").value);
+      msg.textContent = r.msg || (r.ok ? "وصل طلبك." : "صار خطأ.");
+      if (r.ok && opts.done) setTimeout(() => opts.done(state), 1200);
+    };
+  }
+
+  window.Account = {
+    state, device, ready, redeem, enter, pinCreate, pinLogin, pinRecover, pinInfo, pinSet, pinClear, confirmName, fixName, setName, logout, linkTelegram, pull, get, put, devices, removeDevice, mountDevices,
+    mountLogin, mountNameCheck, on: (f) => { subs.add(f); return () => subs.delete(f); },
+    token: () => (state.session ? state.session.access_token : null),   // للمساعد لما تنفتح البوابة
+  };
+})();

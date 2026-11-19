@@ -123,11 +123,16 @@
         if (!isObj(x) || !isObj(y)) return isObj(x) ? x : y;
         return num(y.t) > num(x.t) ? y : num(x.t) > num(y.t) ? x : (hash(x) >= hash(y) ? x : y);
       } },
+    // 🖍️ (19/11) تظليلات الطالب (pick.js، t:hl = {v:1, items:[…]}): عنصر لكل تظليل بمعرّفه، الأحدث (at) يغلب. للطالب نفسه بس (RLS 076). يحتاج هجرة 079 + STUDY_CLOUD.hl.
+    hl: { cloud: "hl", lk: "t:hl", read: (S) => { const v = S.get("t:hl", null); return byId(v && Array.isArray(v.items) ? v.items : []); },
+      write: (S, m) => S.set("t:hl", { v: 1, items: Object.values(m).filter((x) => isObj(x)).sort((x, y) => num(x.at) - num(y.at)).slice(-2000) }), ts: (v) => v && v.at },
     reminders: { cloud: null, lk: "t:reminders", read: (S) => byId(S.get("t:reminders", [])), write: (S, m) => S.set("t:reminders", Object.values(m).sort((x, y) => num(x.at) - num(y.at))), ts: (v) => v && v.t, ev: "reminders:change" },
   };
-  const ALL_LOCAL = ["t:notes", "t:mistakes", "t:favs", "t:progress", "t:srs", "t:plan", "t:track", "t:track-remote", "t:reminders", "t:learn", "t:voice", "t:me-wiped-seen", "t:me-seen", "t:me-focus-run", "t:nick", "t:ob-days", "t:ob-hi-home", "t:ob-hi-lec", ...Object.values(PREFS)];   // 💬 58: «رسائلي» تنشال على جنب ويّا بيانات الطالب (جهاز مشترك) · 🧭 17/11: اسم الترحيب (t:nick/t:ob-*) هم ينشال على جنب — بس، ما يدخل المزامنة · (دمج 17/11: اتحاد مفاتيح مساحتي + الترحيب)
+  const ALL_LOCAL = ["t:hl", "t:notes", "t:mistakes", "t:favs", "t:progress", "t:srs", "t:plan", "t:track", "t:track-remote", "t:reminders", "t:learn", "t:voice", "t:me-wiped-seen", "t:me-seen", "t:me-focus-run", "t:nick", "t:ob-days", "t:ob-hi-home", "t:ob-hi-lec", ...Object.values(PREFS)];   // 💬 58: «رسائلي» تنشال على جنب ويّا بيانات الطالب (جهاز مشترك) · 🧭 17/11: اسم الترحيب (t:nick/t:ob-*) هم ينشال على جنب — بس، ما يدخل المزامنة · (دمج 17/11: اتحاد مفاتيح مساحتي + الترحيب)
   // 🧠 «learn» بالسحابة يحتاج هجرة 20261030000052_learn_state.sql (مكتوبة، مو مطبّقة). لحد ما تنطبّق ← STUDY_CLOUD.learn = false ← يبقى بالجهاز بس.
   const CLOUD_LEARN = () => !!(typeof window !== "undefined" && window.STUDY_CLOUD && window.STUDY_CLOUD.learn === true);
+  // 🖍️ «hl» بالسحابة يحتاج هجرة 20261119000079_hl_state.sql. لحد ما تنطبّق ← STUDY_CLOUD.hl = false ← التظليلات بالجهاز بس.
+  const CLOUD_HL = () => !!(typeof window !== "undefined" && window.STUDY_CLOUD && window.STUDY_CLOUD.hl === true);
 
   // ── المحرّك: S = تخزين ({get,set,del})، api = السحابة، device، now() ──
   // api: { get(key) → {value, updated_at}|null, cas(key, value, updated_at|null) → bool, rem: {list, insert, update, remove} }
@@ -258,13 +263,13 @@
       return { changed, again: false, partial };
     }
     async function all(only) {
-      const res = {}, list = only || ["prefs", "notes", "mistakes", "favorites", "progress", "srs", "plan", "track", "reminders"].concat(CLOUD_LEARN() ? ["learn"] : []);
+      const res = {}, list = only || ["prefs", "notes", "mistakes", "favorites", "progress", "srs", "plan", "track", "reminders"].concat(CLOUD_LEARN() ? ["learn"] : [], CLOUD_HL() ? ["hl"] : []);
       let err = null;
       if (await checkWiped()) res.wiped = { changed: true, again: true };   // 🧹 جهاز ثاني مسح الحساب
       for (const k of list) {   // كل نوع لحاله: إذا واحد فشل (مثلاً كبير هواية) الباقي يكمّل
         try { res[k] = await (k === "plan" ? plan() : k === "track" ? track() : k === "reminders" ? reminders() : keyed(k)); }
         catch (e) { if (e instanceof TypeError || e.name === "AbortError" || e.message === "auth") throw e;
-          if (k === "learn") { res[k] = { changed: false, again: false, partial: true, err: "learn" }; continue; }   // 🧠 الهجرة ما انطبّقت بعد (رفض المفتاح) ← حالة «جزئية» هادئة، مو «ملاحظاتك كثيرة»
+          if (k === "learn" || k === "hl") { res[k] = { changed: false, again: false, partial: true, err: k }; continue; }   // 🧠 الهجرة ما انطبّقت بعد (رفض المفتاح) ← حالة «جزئية» هادئة، مو «ملاحظاتك كثيرة»
           err = err || e; res[k] = { changed: false, again: false, partial: true, err: e.message }; }
       }
       if (err && Object.values(res).every((x) => x.err)) throw err;
@@ -281,6 +286,7 @@
     try {
       const x = JSON.parse(a), y = JSON.parse(b);
       if (Array.isArray(x) && Array.isArray(y)) { const m = byId(x); y.forEach((v) => { if (v && v.id != null) m[String(v.id)] = v; }); return JSON.stringify(Object.values(m)); }
+      if (k === "t:hl" && isObj(x) && isObj(y)) { const m = byId(x.items); (Array.isArray(y.items) ? y.items : []).forEach((v) => { if (v && v.id != null) m[String(v.id)] = v; }); return JSON.stringify({ v: 1, items: Object.values(m).sort((p, q) => num(p.at) - num(q.at)).slice(-2000) }); }   // 🖍️ (19/11) التظليلات تنجمع بمعرّفها
       if (k === "t:learn" && isObj(x) && isObj(y)) { const o = Object.assign({}, x); for (const id in y) o[id] = id in o ? KINDS.learn.combine(o[id], y[id]) : y[id]; return JSON.stringify(o); }   // أوقات الغلط تنجمع
       if (isObj(x) && isObj(y)) return JSON.stringify(Object.assign({}, x, y));
     } catch (e) {}
@@ -432,8 +438,8 @@
     if (sw === "switched" || sw === "restored") emit("sync:applied", { kinds: ["all"] });
     state.mode = "cloud";
     eng = engine({ S: LS, api: restApi(A), device: LS.get("t:device", null) || LSraw.get("t:device") || "dev" });
-    ["notes:change", "plan:change", "track:change", "reminders:change", "quiz:finish", "learn:change", "learn:saved"].forEach((n) => document.addEventListener(n, () => schedule(2000)));
-    addEventListener("storage", (e) => { if (e.key && /^t:(notes|plan|track|reminders|mistakes|favs|progress|srs|last|learn)$/.test(e.key)) schedule(2000); });
+    ["notes:change", "plan:change", "track:change", "reminders:change", "quiz:finish", "learn:change", "learn:saved", "hl:changed", "pick:saved"].forEach((n) => document.addEventListener(n, () => schedule(2000)));
+    addEventListener("storage", (e) => { if (e.key && /^t:(notes|plan|track|reminders|mistakes|favs|progress|srs|last|learn|hl)$/.test(e.key)) schedule(2000); });
     addEventListener("online", () => schedule(300));
     document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") schedule(500); });
     setInterval(() => { if (document.visibilityState === "visible") run(); }, 60e3);
