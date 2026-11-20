@@ -1,24 +1,4 @@
-// 🔒 078 (مسودة 17/11/2026): واجهة «مساحتي بالاسم الثلاثي + رقم سري» — واجهة بس، الحماية كلها بالسيرفر (pin-login + القاعدة).
-// window.PinUI = { mountGate(box, {done, back}), mountSettings(el) }
-//   mountGate: نافذة الدخول (staffdoor) ← 3 تبويبات: «احفظ مساحتك» · «ادخل» · «نسيت الرقم؟» (رمز استعادة من الإدارة بالواتساب).
-//   mountSettings: «صفحتي» ← تحت «أجهزتي»: احفظ مساحتك برقم (إذا ماكو) · غيّر رقمي / امسح رقمي (داخل details).
-// ينحمّل بس لما settings.student_pin.on. عربي + ENG (حسب lang وقت الرسم)، أزرار ≥ 44px، aria-live، بلا تمرير أفقي.
-// الرقم ما ينحفظ بالمتصفح أبداً (ولا localStorage): الحقول type=password + autocomplete حتى مدير كلمات السر يشتغل، واللصق مسموح.
-(function () {
-  "use strict";
-  if (window.PinUI) return;
-  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const EN = () => { try { return document.documentElement.lang === "en"; } catch (e) { return false; } };
-  const T = (ar, en) => (EN() ? en : ar);
-  const A = () => window.Account;
-  const clean = (v) => String(v || "").replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[\s-]/g, "");
-  const triple = (n) => n.trim().split(/\s+/).filter(Boolean).length >= 3;
-  let uid = 0;
-
-  function css() {
-    if (document.getElementById("pinx-css")) return;
-    const st = document.createElement("style"); st.id = "pinx-css";
-    st.textContent = `.pinx{--px-card:var(--card,#fff);--px-ink:var(--ink,#1d1f24);--px-mut:var(--muted,#5a5f6b);--px-line:var(--line,#c4c8d2);--px-bg:var(--bg,#fff);--px-brand:var(--brand,#3F4E80);--px-bi:var(--brand-ink,#fff);--px-bad:var(--bad,#A1261B);--px-ok:var(--ok,#1F6B3A);
+(function(){"use strict";if(window.PinUI)return;const C=t=>String(t??"").replace(/[&<>"']/g,a=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[a]),D=()=>{try{return document.documentElement.lang==="en"}catch{return!1}},e=(t,a)=>D()?a:t,l=()=>window.Account,p=t=>String(t||"").replace(/[٠-٩]/g,a=>"٠١٢٣٤٥٦٧٨٩".indexOf(a)).replace(/[۰-۹]/g,a=>"۰۱۲۳۴۵۶۷۸۹".indexOf(a)).replace(/[\s-]/g,""),T=t=>t.trim().split(/\s+/).filter(Boolean).length>=3;let k=0;function N(){if(document.getElementById("pinx-css"))return;const t=document.createElement("style");t.id="pinx-css",t.textContent=`.pinx{--px-card:var(--card,#fff);--px-ink:var(--ink,#1d1f24);--px-mut:var(--muted,#5a5f6b);--px-line:var(--line,#c4c8d2);--px-bg:var(--bg,#fff);--px-brand:var(--brand,#3F4E80);--px-bi:var(--brand-ink,#fff);--px-bad:var(--bad,#A1261B);--px-ok:var(--ok,#1F6B3A);
 display:grid;gap:10px;min-width:0;max-width:100%;box-sizing:border-box;color:var(--px-ink);font:inherit}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .pinx{--px-card:var(--card,#252932);--px-ink:var(--ink,#ECE7DD);--px-mut:var(--muted,#B9BDC8);--px-line:var(--line,#4a5060);--px-bg:var(--bg,#1D2027);--px-brand:var(--brand,#A9B6E3);--px-bi:var(--brand-ink,#1D2027);--px-bad:var(--bad,#FFB4A9);--px-ok:var(--ok,#8FD6A5)}}
 :root[data-theme=dark] .pinx{--px-card:var(--card,#252932);--px-ink:var(--ink,#ECE7DD);--px-mut:var(--muted,#B9BDC8);--px-line:var(--line,#4a5060);--px-bg:var(--bg,#1D2027);--px-brand:var(--brand,#A9B6E3);--px-bi:var(--brand-ink,#1D2027);--px-bad:var(--bad,#FFB4A9);--px-ok:var(--ok,#8FD6A5)}
@@ -34,112 +14,19 @@ display:grid;gap:10px;min-width:0;max-width:100%;box-sizing:border-box;color:var
 .pinx .px-sub{color:var(--px-mut);font-size:.95rem}.pinx .px-msg{min-height:1.4em;font-weight:600}.pinx .px-msg.bad{color:var(--px-bad)}.pinx .px-msg.ok{color:var(--px-ok)}
 .pinx details{border:1px solid var(--px-line);border-radius:12px;padding:0 12px}.pinx summary{min-height:48px;display:flex;align-items:center;cursor:pointer;font-weight:700}
 .pinx details[open]{padding-bottom:12px}.pinx details>div{display:grid;gap:10px}
-.pinx .px-card{background:var(--px-card);border:1px solid var(--px-line);border-radius:14px;padding:12px 14px;display:grid;gap:10px}`;
-    document.head.appendChild(st);
-  }
-  const pw = (id, label, ac) => `<label for="${id}">${label}</label><div class="px-pw"><input id="${id}" data-pin type="password" inputmode="numeric" pattern="[0-9٠-٩]*" maxlength="16" autocomplete="${ac}" dir="ltr" spellcheck="false"><button type="button" class="ghost" data-eye="${id}" aria-pressed="false" aria-label="${T("إظهار الرقم", "Show PIN")}">👁</button></div>`;
-  const nameField = (id, ac) => `<label for="${id}">${T("اسمك الثلاثي", "Your full (three-part) name")}</label><input id="${id}" autocomplete="${ac}" maxlength="120" placeholder="${T("مثال: أحمد علي حسين", "e.g. Ahmed Ali Hussein")}">`;
-  function eyes(root) {
-    root.querySelectorAll("[data-eye]").forEach((b) => b.onclick = () => { const i = root.querySelector("#" + b.dataset.eye); const show = i.type === "password"; i.type = show ? "text" : "password"; b.setAttribute("aria-pressed", String(show)); });
-  }
-  const sayer = (m) => (t, bad) => { m.className = "px-msg " + (bad ? "bad" : "ok"); m.textContent = t || ""; };
-  const forgot = () => `<p class="px-sub">${T("نسيت رقمك السري؟ راسلنا ونعطيك رقم جديد.", "Forgot your PIN? Message us and we will give you a new one.")}</p>`;
-  const waitMsg = (r) => r.minutes ? T(` (حوالي ${r.minutes} دقيقة)`, ` (about ${r.minutes} min)`) : "";
-
-  /** نافذة الدخول. o.done(state) بعد الدخول، o.back() رجوع للكود. */
-  function mountGate(box, o = {}) {
-    css();
-    const k = ++uid, tabs = [["save", T("احفظ مساحتك", "Save my space")], ["in", T("ادخل", "Sign in")], ["lost", T("نسيت الرقم؟", "Forgot PIN?")]];
-    let tab = o.tab === "save" || o.tab === "lost" ? o.tab : "in";   // 18/11: صفحة الدخول تفتح «احفظ مساحتك» لأول مرة
-    const draw = () => {
-      box.innerHTML = `<div class="pinx" data-noen><h2 id="sd-gt">${T("🔒 مساحتك برقم سري", "🔒 Your space with a PIN")}</h2>
-        <div class="px-tabs" role="tablist">${tabs.map(([id, t]) => `<button type="button" role="tab" id="px${k}-t-${id}" aria-selected="${tab === id}" aria-controls="px${k}-p">${esc(t)}</button>`).join("")}</div>
-        <form id="px${k}-p" role="tabpanel" novalidate class="pinx">${body()}</form>
-        <p class="px-msg" id="px${k}-m" role="status" aria-live="polite"></p>
-        ${o.back ? `<button type="button" class="ghost" id="px${k}-back">${T("‹ رجوع", "‹ Back")}</button>` : ""}</div>`;
-      tabs.forEach(([id]) => box.querySelector(`#px${k}-t-${id}`).onclick = () => { tab = id; draw(); box.querySelector(`#px${k}-t-${id}`).focus(); });
-      if (o.back) box.querySelector(`#px${k}-back`).onclick = () => o.back();
-      eyes(box);
-      const f = box.querySelector(`#px${k}-p`), say = sayer(box.querySelector(`#px${k}-m`));
-      f.onsubmit = async (ev) => {
-        ev.preventDefault();
-        const v = (n) => (f.querySelector(`#px${k}-${n}`) || {}).value || "";
-        const name = v("n").trim().replace(/\s+/g, " "), p1 = clean(v("p1")), p2 = clean(v("p2"));
-        if (!triple(name)) return say(T("اكتب اسمك الثلاثي كامل.", "Write your full (three-part) name."), true);
-        if (!/^\d{8,12}$/.test(p1)) return say(T("الرقم السري 8 إلى 12 رقم.", "The PIN is 8 to 12 digits."), true);
-        if (tab !== "in" && p1 !== p2) return say(T("الرقمين مو متطابقين.", "The two PINs do not match."), true);
-        if (tab === "lost" && !v("c").trim()) return say(T("اكتب رمز الاستعادة اللي وصلك من الإدارة.", "Enter the recovery code from the admins."), true);
-        const b = f.querySelector("button[type=submit]"); b.disabled = true; say(T("لحظة…", "One moment…"));
-        let r;
-        try { r = tab === "save" ? await A().pinCreate(name, p1, p2) : tab === "in" ? await A().pinLogin(name, p1) : await A().pinRecover(name, v("c"), p1, p2); }
-        catch (e) { r = { ok: false, msg: T("ماكو اتصال. جرّب مرة ثانية.", "No connection. Try again.") }; }
-        b.disabled = false;
-        f.querySelectorAll("input[data-pin]").forEach((i) => { i.value = ""; i.type = "password"; });   // الرقم ما يبقى بالصفحة (حتى لو انضغط 👁)
-        f.querySelectorAll("[data-eye]").forEach((x) => x.setAttribute("aria-pressed", "false"));
-        if (!r.ok) return say((r.msg || "") + (r.error === "wait" ? waitMsg(r) : ""), true);
-        say(r.recovered ? T("✅ تغيّر رقمك، وطلعت كل الأجهزة الثانية.", "✅ PIN changed; all other devices were signed out.") : r.created ? T("✅ انحفظت مساحتك.", "✅ Your space is saved.") : T("✅ أهلاً بيك.", "✅ Welcome back."));
-        if (o.done) setTimeout(() => o.done(A().state), 600);
-      };
-      const first = f.querySelector("input"); if (first) first.focus();
-    };
-    const body = () => {
-      if (tab === "save") return `<p class="px-sub">${T("اختار رقم سري (8 أرقام أو أكثر) حتى ترجع لمساحتك (تقدّمك وأخطاءك وملاحظاتك) من أي جهاز. بلا أكواد.", "Choose a PIN (8+ digits) to get back to your space (progress, mistakes, notes) from any device. No codes.")}</p>
-        ${nameField(`px${k}-n`, "username")}${pw(`px${k}-p1`, T("رقمك السري", "Your PIN"), "new-password")}${pw(`px${k}-p2`, T("اكتب الرقم مرة ثانية", "Type the PIN again"), "new-password")}
-        <button type="submit">${T("احفظ مساحتي", "Save my space")}</button><p class="px-sub">${T("لا تنطيه لأحد: يفتح ملاحظاتك الخاصة.", "Do not share it: it opens your private notes.")}</p>${forgot()}`;
-      if (tab === "in") return `${nameField(`px${k}-n`, "username")}${pw(`px${k}-p1`, T("رقمك السري", "Your PIN"), "current-password")}<button type="submit">${T("ادخل", "Sign in")}</button>${forgot()}`;
-      return `<p class="px-sub">${T("تواصل ويّا الإدارة بالواتساب، تنطيك «رمز استعادة» باسمك يشتغل 24 ساعة ومرة وحدة. اكتبه هنا ويّا رقم جديد. كل الأجهزة الثانية تطلع.", "Message the admins on WhatsApp; they give you a one-time recovery code for your name, valid 24 hours. Enter it with a new PIN. All other devices are signed out.")}</p>
-        ${nameField(`px${k}-n`, "username")}<label for="px${k}-c">${T("رمز الاستعادة", "Recovery code")}</label><input id="px${k}-c" dir="ltr" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false" maxlength="16" placeholder="XXXXX-XXXXX">
-        ${pw(`px${k}-p1`, T("رقمك السري الجديد", "New PIN"), "new-password")}${pw(`px${k}-p2`, T("اكتب الرقم مرة ثانية", "Type the PIN again"), "new-password")}
-        <button type="submit">${T("غيّر الرقم وادخل", "Change PIN and sign in")}</button>`;
-    };
-    draw();
-  }
-
-  /** «صفحتي»: حالة الرقم + الحفظ/التغيير/المسح. */
-  async function mountSettings(el) {
-    css();
-    if (!A() || !A().state.session) { el.hidden = true; return; }
-    const k = ++uid;
-    el.innerHTML = `<div class="pinx" data-noen><p class="px-sub" role="status">${T("لحظة…", "One moment…")}</p></div>`;
-    const i = await A().pinInfo();
-    if (!i.ok) { el.hidden = true; return; }
-    el.hidden = false;
-    const card = (inner) => { el.innerHTML = `<div class="pinx" data-noen><div class="px-card">${inner}<p class="px-msg" id="px${k}-m" role="status" aria-live="polite"></p></div></div>`; eyes(el); return sayer(el.querySelector(`#px${k}-m`)); };
-    if (!i.has) {
-      if (!i.can) {
-        card(`<h3>${T("🔒 احفظ مساحتك برقم سري", "🔒 Save your space with a PIN")}</h3><p class="px-sub">${i.why === "ambiguous" ? T("اسمك مكرر بقائمة القسم؛ الإدارة لازم تثبّته أول.", "Your name appears more than once in the list; the admins must confirm it first.") : T("اسمك مو مربوط بقائمة القسم. راسل الإدارة.", "Your name is not linked to the department list. Contact the admins.")}</p>`);
-        return;
-      }
-      const say = card(`<h3>${T("🔒 احفظ مساحتك برقم سري", "🔒 Save your space with a PIN")}</h3><p class="px-sub">${T("حتى ترجعلها من أي جهاز باسمك الثلاثي ورقمك.", "So you can return from any device with your full name and PIN.")}</p>
-        <form id="px${k}-f" class="pinx" novalidate>${pw(`px${k}-p1`, T("رقمك السري (8 أرقام أو أكثر)", "Your PIN (8+ digits)"), "new-password")}${pw(`px${k}-p2`, T("اكتب الرقم مرة ثانية", "Type the PIN again"), "new-password")}
-        <button type="submit">${T("احفظ", "Save")}</button><p class="px-sub">${T("لا تنطيه لأحد: يفتح ملاحظاتك الخاصة.", "Do not share it: it opens your private notes.")}</p></form>`);
-      wire(el.querySelector(`#px${k}-f`), say, (f) => A().pinSet(clean(f.p1), clean(f.p2)), T("✅ انحفظ رقمك. هسه تگدر تدخل من أي جهاز.", "✅ PIN saved. You can now sign in from any device."), true);
-      return;
-    }
-    const say = card(`<h3>${i.disabled ? T("⚠️ رقمك السري منطفي (محاولات غلط كثيرة). راسل الإدارة لرمز استعادة.", "⚠️ Your PIN is disabled (too many wrong attempts). Ask the admins for a recovery code.") : T("🔒 مساحتك محفوظة برقم سري ✅", "🔒 Your space is saved with a PIN ✅")}</h3>
-      <details><summary>${T("غيّر رقمي السري", "Change my PIN")}</summary><div><form id="px${k}-c" class="pinx" novalidate>${pw(`px${k}-cur`, T("رقمك الحالي", "Current PIN"), "current-password")}${pw(`px${k}-p1`, T("الرقم الجديد", "New PIN"), "new-password")}${pw(`px${k}-p2`, T("الجديد مرة ثانية", "New PIN again"), "new-password")}
-        <button type="submit">${T("غيّر (وطلّع الأجهزة الثانية)", "Change (signs out other devices)")}</button></form></div></details>
-      <details><summary>${T("امسح رقمي السري", "Remove my PIN")}</summary><div><form id="px${k}-x" class="pinx" novalidate><p class="px-sub">${T("بعدها ما تگدر تدخل بالاسم والرقم من جهاز جديد. بياناتك تبقى.", "You will no longer be able to sign in by name and PIN on a new device. Your data stays.")}</p>
-        ${pw(`px${k}-cur2`, T("رقمك الحالي", "Current PIN"), "current-password")}<button type="submit" class="ghost">${T("امسح الرقم", "Remove PIN")}</button></form></div></details>`);
-    wire(el.querySelector(`#px${k}-c`), say, (f) => A().pinSet(clean(f.p1), clean(f.p2), clean(f.cur)), T("✅ تغيّر رقمك، وطلعت الأجهزة الثانية.", "✅ PIN changed; other devices were signed out."), true);
-    wire(el.querySelector(`#px${k}-x`), say, (f) => A().pinClear(clean(f.cur2)), T("✅ انمسح رقمك السري.", "✅ PIN removed."), false, () => mountSettings(el));
-  }
-  function wire(form, say, run, okMsg, check2, after) {
-    const k = form.id.replace(/-[a-z]$/, "");
-    form.onsubmit = async (ev) => {
-      ev.preventDefault();
-      const g = (n) => (form.querySelector(`#${k}-${n}`) || {}).value || "";
-      const f = { p1: g("p1"), p2: g("p2"), cur: g("cur"), cur2: g("cur2") };
-      if (check2) {
-        if (!/^\d{8,12}$/.test(clean(f.p1))) return say(T("الرقم السري 8 إلى 12 رقم.", "The PIN is 8 to 12 digits."), true);
-        if (clean(f.p1) !== clean(f.p2)) return say(T("الرقمين مو متطابقين.", "The two PINs do not match."), true);
-      }
-      const b = form.querySelector("button[type=submit]"); b.disabled = true; say(T("لحظة…", "One moment…"));
-      const r = await run(f).catch(() => ({ ok: false, msg: T("ماكو اتصال.", "No connection.") }));
-      b.disabled = false; form.querySelectorAll("input").forEach((i) => { i.value = ""; });
-      if (!r.ok) return say((r.msg || "") + (r.error === "wait" ? waitMsg(r) : ""), true);
-      say(okMsg); if (after) setTimeout(after, 1200);
-    };
-  }
-  window.PinUI = { mountGate, mountSettings };
-})();
+.pinx .px-card{background:var(--px-card);border:1px solid var(--px-line);border-radius:14px;padding:12px 14px;display:grid;gap:10px}`,document.head.appendChild(t)}const d=(t,a,n)=>`<label for="${t}">${a}</label><div class="px-pw"><input id="${t}" data-pin type="password" inputmode="numeric" pattern="[0-9٠-٩]*" maxlength="16" autocomplete="${n}" dir="ltr" spellcheck="false"><button type="button" class="ghost" data-eye="${t}" aria-pressed="false" aria-label="${e("إظهار الرقم","Show PIN")}">👁</button></div>`,$=(t,a)=>`<label for="${t}">${e("اسمك الثلاثي","Your full (three-part) name")}</label><input id="${t}" autocomplete="${a}" maxlength="120" placeholder="${e("مثال: أحمد علي حسين","e.g. Ahmed Ali Hussein")}">`;function I(t){t.querySelectorAll("[data-eye]").forEach(a=>a.onclick=()=>{const n=t.querySelector("#"+a.dataset.eye),c=n.type==="password";n.type=c?"text":"password",a.setAttribute("aria-pressed",String(c))})}const P=t=>(a,n)=>{t.className="px-msg "+(n?"bad":"ok"),t.textContent=a||""},S=()=>`<p class="px-sub">${e("نسيت رقمك السري؟ راسلنا ونعطيك رقم جديد.","Forgot your PIN? Message us and we will give you a new one.")}</p>`,A=t=>t.minutes?e(` (حوالي ${t.minutes} دقيقة)`,` (about ${t.minutes} min)`):"";function B(t,a={}){N();const n=++k,c=[["save",e("احفظ مساحتك","Save my space")],["in",e("ادخل","Sign in")],["lost",e("نسيت الرقم؟","Forgot PIN?")]];let i=a.tab==="save"||a.tab==="lost"?a.tab:"in";const r=()=>{t.innerHTML=`<div class="pinx" data-noen><h2 id="sd-gt">${e("🔒 مساحتك برقم سري","🔒 Your space with a PIN")}</h2>
+        <div class="px-tabs" role="tablist">${c.map(([u,s])=>`<button type="button" role="tab" id="px${n}-t-${u}" aria-selected="${i===u}" aria-controls="px${n}-p">${C(s)}</button>`).join("")}</div>
+        <form id="px${n}-p" role="tabpanel" novalidate class="pinx">${h()}</form>
+        <p class="px-msg" id="px${n}-m" role="status" aria-live="polite"></p>
+        ${a.back?`<button type="button" class="ghost" id="px${n}-back">${e("‹ رجوع","‹ Back")}</button>`:""}</div>`,c.forEach(([u])=>t.querySelector(`#px${n}-t-${u}`).onclick=()=>{i=u,r(),t.querySelector(`#px${n}-t-${u}`).focus()}),a.back&&(t.querySelector(`#px${n}-back`).onclick=()=>a.back()),I(t);const x=t.querySelector(`#px${n}-p`),o=P(t.querySelector(`#px${n}-m`));x.onsubmit=async u=>{u.preventDefault();const s=v=>(x.querySelector(`#px${n}-${v}`)||{}).value||"",m=s("n").trim().replace(/\s+/g," "),f=p(s("p1")),w=p(s("p2"));if(!T(m))return o(e("اكتب اسمك الثلاثي كامل.","Write your full (three-part) name."),!0);if(!/^\d{8,12}$/.test(f))return o(e("الرقم السري 8 إلى 12 رقم.","The PIN is 8 to 12 digits."),!0);if(i!=="in"&&f!==w)return o(e("الرقمين مو متطابقين.","The two PINs do not match."),!0);if(i==="lost"&&!s("c").trim())return o(e("اكتب رمز الاستعادة اللي وصلك من الإدارة.","Enter the recovery code from the admins."),!0);const E=x.querySelector("button[type=submit]");E.disabled=!0,o(e("لحظة…","One moment…"));let b;try{b=i==="save"?await l().pinCreate(m,f,w):i==="in"?await l().pinLogin(m,f):await l().pinRecover(m,s("c"),f,w)}catch{b={ok:!1,msg:e("ماكو اتصال. جرّب مرة ثانية.","No connection. Try again.")}}if(E.disabled=!1,x.querySelectorAll("input[data-pin]").forEach(v=>{v.value="",v.type="password"}),x.querySelectorAll("[data-eye]").forEach(v=>v.setAttribute("aria-pressed","false")),!b.ok)return o((b.msg||"")+(b.error==="wait"?A(b):""),!0);o(b.recovered?e("✅ تغيّر رقمك، وطلعت كل الأجهزة الثانية.","✅ PIN changed; all other devices were signed out."):b.created?e("✅ انحفظت مساحتك.","✅ Your space is saved."):e("✅ أهلاً بيك.","✅ Welcome back.")),a.done&&setTimeout(()=>a.done(l().state),600)};const g=x.querySelector("input");g&&g.focus()},h=()=>i==="save"?`<p class="px-sub">${e("اختار رقم سري (8 أرقام أو أكثر) حتى ترجع لمساحتك (تقدّمك وأخطاءك وملاحظاتك) من أي جهاز. بلا أكواد.","Choose a PIN (8+ digits) to get back to your space (progress, mistakes, notes) from any device. No codes.")}</p>
+        ${$(`px${n}-n`,"username")}${d(`px${n}-p1`,e("رقمك السري","Your PIN"),"new-password")}${d(`px${n}-p2`,e("اكتب الرقم مرة ثانية","Type the PIN again"),"new-password")}
+        <button type="submit">${e("احفظ مساحتي","Save my space")}</button><p class="px-sub">${e("لا تنطيه لأحد: يفتح ملاحظاتك الخاصة.","Do not share it: it opens your private notes.")}</p>${S()}`:i==="in"?`${$(`px${n}-n`,"username")}${d(`px${n}-p1`,e("رقمك السري","Your PIN"),"current-password")}<button type="submit">${e("ادخل","Sign in")}</button>${S()}`:`<p class="px-sub">${e("تواصل ويّا الإدارة بالواتساب، تنطيك «رمز استعادة» باسمك يشتغل 24 ساعة ومرة وحدة. اكتبه هنا ويّا رقم جديد. كل الأجهزة الثانية تطلع.","Message the admins on WhatsApp; they give you a one-time recovery code for your name, valid 24 hours. Enter it with a new PIN. All other devices are signed out.")}</p>
+        ${$(`px${n}-n`,"username")}<label for="px${n}-c">${e("رمز الاستعادة","Recovery code")}</label><input id="px${n}-c" dir="ltr" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false" maxlength="16" placeholder="XXXXX-XXXXX">
+        ${d(`px${n}-p1`,e("رقمك السري الجديد","New PIN"),"new-password")}${d(`px${n}-p2`,e("اكتب الرقم مرة ثانية","Type the PIN again"),"new-password")}
+        <button type="submit">${e("غيّر الرقم وادخل","Change PIN and sign in")}</button>`;r()}async function q(t){if(N(),!l()||!l().state.session){t.hidden=!0;return}const a=++k;t.innerHTML=`<div class="pinx" data-noen><p class="px-sub" role="status">${e("لحظة…","One moment…")}</p></div>`;const n=await l().pinInfo();if(!n.ok){t.hidden=!0;return}t.hidden=!1;const c=r=>(t.innerHTML=`<div class="pinx" data-noen><div class="px-card">${r}<p class="px-msg" id="px${a}-m" role="status" aria-live="polite"></p></div></div>`,I(t),P(t.querySelector(`#px${a}-m`)));if(!n.has){if(!n.can){c(`<h3>${e("🔒 احفظ مساحتك برقم سري","🔒 Save your space with a PIN")}</h3><p class="px-sub">${n.why==="ambiguous"?e("اسمك مكرر بقائمة القسم؛ الإدارة لازم تثبّته أول.","Your name appears more than once in the list; the admins must confirm it first."):e("اسمك مو مربوط بقائمة القسم. راسل الإدارة.","Your name is not linked to the department list. Contact the admins.")}</p>`);return}const r=c(`<h3>${e("🔒 احفظ مساحتك برقم سري","🔒 Save your space with a PIN")}</h3><p class="px-sub">${e("حتى ترجعلها من أي جهاز باسمك الثلاثي ورقمك.","So you can return from any device with your full name and PIN.")}</p>
+        <form id="px${a}-f" class="pinx" novalidate>${d(`px${a}-p1`,e("رقمك السري (8 أرقام أو أكثر)","Your PIN (8+ digits)"),"new-password")}${d(`px${a}-p2`,e("اكتب الرقم مرة ثانية","Type the PIN again"),"new-password")}
+        <button type="submit">${e("احفظ","Save")}</button><p class="px-sub">${e("لا تنطيه لأحد: يفتح ملاحظاتك الخاصة.","Do not share it: it opens your private notes.")}</p></form>`);y(t.querySelector(`#px${a}-f`),r,h=>l().pinSet(p(h.p1),p(h.p2)),e("✅ انحفظ رقمك. هسه تگدر تدخل من أي جهاز.","✅ PIN saved. You can now sign in from any device."),!0);return}const i=c(`<h3>${n.disabled?e("⚠️ رقمك السري منطفي (محاولات غلط كثيرة). راسل الإدارة لرمز استعادة.","⚠️ Your PIN is disabled (too many wrong attempts). Ask the admins for a recovery code."):e("🔒 مساحتك محفوظة برقم سري ✅","🔒 Your space is saved with a PIN ✅")}</h3>
+      <details><summary>${e("غيّر رقمي السري","Change my PIN")}</summary><div><form id="px${a}-c" class="pinx" novalidate>${d(`px${a}-cur`,e("رقمك الحالي","Current PIN"),"current-password")}${d(`px${a}-p1`,e("الرقم الجديد","New PIN"),"new-password")}${d(`px${a}-p2`,e("الجديد مرة ثانية","New PIN again"),"new-password")}
+        <button type="submit">${e("غيّر (وطلّع الأجهزة الثانية)","Change (signs out other devices)")}</button></form></div></details>
+      <details><summary>${e("امسح رقمي السري","Remove my PIN")}</summary><div><form id="px${a}-x" class="pinx" novalidate><p class="px-sub">${e("بعدها ما تگدر تدخل بالاسم والرقم من جهاز جديد. بياناتك تبقى.","You will no longer be able to sign in by name and PIN on a new device. Your data stays.")}</p>
+        ${d(`px${a}-cur2`,e("رقمك الحالي","Current PIN"),"current-password")}<button type="submit" class="ghost">${e("امسح الرقم","Remove PIN")}</button></form></div></details>`);y(t.querySelector(`#px${a}-c`),i,r=>l().pinSet(p(r.p1),p(r.p2),p(r.cur)),e("✅ تغيّر رقمك، وطلعت الأجهزة الثانية.","✅ PIN changed; other devices were signed out."),!0),y(t.querySelector(`#px${a}-x`),i,r=>l().pinClear(p(r.cur2)),e("✅ انمسح رقمك السري.","✅ PIN removed."),!1,()=>q(t))}function y(t,a,n,c,i,r){const h=t.id.replace(/-[a-z]$/,"");t.onsubmit=async x=>{x.preventDefault();const o=m=>(t.querySelector(`#${h}-${m}`)||{}).value||"",g={p1:o("p1"),p2:o("p2"),cur:o("cur"),cur2:o("cur2")};if(i){if(!/^\d{8,12}$/.test(p(g.p1)))return a(e("الرقم السري 8 إلى 12 رقم.","The PIN is 8 to 12 digits."),!0);if(p(g.p1)!==p(g.p2))return a(e("الرقمين مو متطابقين.","The two PINs do not match."),!0)}const u=t.querySelector("button[type=submit]");u.disabled=!0,a(e("لحظة…","One moment…"));const s=await n(g).catch(()=>({ok:!1,msg:e("ماكو اتصال.","No connection.")}));if(u.disabled=!1,t.querySelectorAll("input").forEach(m=>{m.value=""}),!s.ok)return a((s.msg||"")+(s.error==="wait"?A(s):""),!0);a(c),r&&setTimeout(r,1200)}}window.PinUI={mountGate:B,mountSettings:q}})();
