@@ -7,7 +7,7 @@
 (function () {
   "use strict";
   const C = window.STUDY_CLOUD || {};
-  const SITE = "https://mohammedalmusawy.github.io/anatomy-map/";
+  const SITE = "https://learn.mohammedalmusawy.com/";
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const link = (code) => `${SITE}?code=${encodeURIComponent(code)}`;
   const waText = (name, code) => `أهلاً${name ? " " + name.split(" ")[0] : ""}، هذا كودك لموقع دروس تقنيات الأشعة: ${code} — أو افتح الرابط مباشرة: ${link(code)} (يشتغل على 3 أجهزة بالكثير، لا تشاركه)`;
