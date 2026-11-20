@@ -59,7 +59,7 @@
     g.font = "700 64px 'IBM Plex Sans Arabic', sans-serif"; g.fillText("اختبرت نفسي ✅", 540, 260);
     g.font = "700 200px 'IBM Plex Sans Arabic', sans-serif"; g.fillText(score.replace(/\s+/g, " "), 540, 560);
     g.font = "600 44px 'IBM Plex Sans Arabic', sans-serif"; g.fillText(document.title.replace("اختبار ", ""), 540, 700);
-    g.font = "500 38px 'IBM Plex Sans Arabic', sans-serif"; g.fillText("دروس تقنيات الأشعة · مجاني", 540, 860);
+    g.font = "500 38px 'IBM Plex Sans Arabic', sans-serif"; g.fillText("منصة تعلم الأشعة · مجاني", 540, 860);
     g.direction = "ltr"; g.fillText(root.replace(/^https?:\/\//, "").replace(/\/$/, ""), 540, 920);
     const blob = await new Promise((r) => c.toBlob(r, "image/png"));
     const file = new File([blob], "نتيجتي.png", { type: "image/png" });

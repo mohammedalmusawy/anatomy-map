@@ -539,4 +539,12 @@
       say("انمسح الاسم من هذا الجهاز.", "Name removed from this device.");
     });
   }
+
+  // 📲 (20/11/2026 قرار محمد) «ثبّت المنصة»: install.js ينزل بعد التحميل، من نفس مكان calm.js (‎.min إذا calm مصغّر)
+  try {
+    const me = document.querySelector('script[src*="assets/calm"]');
+    if (me && !document.querySelector('script[src*="assets/install"]')) {
+      const sc = document.createElement("script"); sc.defer = true; sc.src = me.src.replace(/assets\/calm(\.min)?\.js/, (m, mn) => "assets/install" + (mn || "") + ".js"); document.head.appendChild(sc);
+    }
+  } catch (e) {}
 })();

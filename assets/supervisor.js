@@ -109,7 +109,7 @@
     // 🛡️ (فاحص 71 ج2) رقم آمن قبل innerHTML
     const int0 = (v) => (typeof v === "number" && isFinite(v) ? Math.trunc(v) : typeof v === "string" && /^\d{1,4}$/.test(v) ? +v : 0);
     const link = (code) => `${ROOT}?code=${encodeURIComponent(code)}`;
-    const waText = (name, code) => `أهلاً ${String(name).split(" ")[0]}، هذا كودك لموقع دروس تقنيات الأشعة: ${code} — أو افتح الرابط مباشرة: ${link(code)} (يشتغل على 3 أجهزة بالكثير، لا تشاركه)`;
+    const waText = (name, code) => `أهلاً ${String(name).split(" ")[0]}، هذا كودك لمنصة تعلم الأشعة: ${code} — أو افتح الرابط مباشرة: ${link(code)} (يشتغل على 3 أجهزة بالكثير، لا تشاركه)`;
     const copy = async (t, b) => { try { await navigator.clipboard.writeText(t); const o = b.textContent; b.textContent = "✔️"; setTimeout(() => (b.textContent = o), 1200); } catch (e) { prompt("انسخ:", t); } };
     async function codes() {
       const r = await api({ action: "codes" });

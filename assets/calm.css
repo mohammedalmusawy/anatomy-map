@@ -417,6 +417,7 @@ body.calm { --g-normal: var(--ok); --g-fracture: var(--brand); --g-dislocation: 
 .idn { text-align: center; padding: 18px 4px 6px; }
 .idn h1 { font-size: var(--t-xl); line-height: 1.45; margin: 0; }
 .idn .uni { color: var(--muted); font-size: var(--t-sm); margin: 6px 0 0; }
+.idn .brandline { margin: 0 0 4px; font: 700 var(--t-sm)/1.4 var(--title-font); color: var(--accent); letter-spacing: .2px; }   /* 20/11: اسم المنصة فوق القسم */
 .idn .ini { display: inline-block; margin-top: 8px; font: 600 var(--t-xs) var(--title-font); color: var(--accent); background: var(--accent-soft); border: 1px solid var(--line); border-radius: 999px; padding: 2px 12px; }
 .hello { text-align: center; font: 700 var(--t-md) var(--title-font); margin: 12px 0 0; }
 .hello small { display: block; color: var(--muted); font: 400 var(--t-xs) var(--body-font); }
