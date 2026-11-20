@@ -15,7 +15,7 @@
   const C = window.STUDY_CLOUD || {};
   const REF = (() => { try { return new URL(C.url).hostname.split(".")[0]; } catch (e) { return "spjkntrwxfyydniklfxh"; } })();
   const cfgLink = (v) => (/^https:\/\/t\.me\/[A-Za-z0-9_]{3,64}\/?$/.test(v) ? v : "");   // تليغرام بس (مو رقم ولا رابط ثاني)
-  const SUPPORT = cfgLink("https://t.me/m99uhammed");
+  const SUPPORT = cfgLink("__SUPPORT_TG__");
   const LS = {
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* */ } },
@@ -29,6 +29,7 @@
     if (document.getElementById("sd-css")) return;
     const st = document.createElement("style"); st.id = "sd-css";
     st.textContent = `
+.sd-card .sd-sh{margin:6px 0 0;font-size:1rem}.sd-card .sd-row{display:flex;gap:8px;flex-wrap:wrap}.sd-card .sd-row .sd-btn{flex:1 1 120px}
 .sd-card{max-width:440px;margin:12px auto;background:var(--card,#fff);color:var(--ink,#222);border:1px solid var(--line,#ddd);border-radius:22px;padding:20px;display:grid;gap:12px;box-sizing:border-box}
 .sd-card h1,.sd-card h2{margin:0;font-size:1.35rem;line-height:1.4}.sd-sub{margin:0;color:var(--muted,#666);font-size:.95rem}
 .sd-card form{display:grid;gap:8px;margin:0}.sd-card [hidden],.sd-dlg [hidden]{display:none!important}.sd-lab{font-weight:700;font-size:.92rem;color:var(--muted,#666)}
@@ -335,8 +336,78 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     ev.preventDefault(); dialog(u.href);
   }, true);
 
+
+  // ⚙️ (20/11، قرار محمد) زر «الإعدادات» بشريط كل صفحة: الدخول باسمك الثلاثي ورمزك السري (حروف أو أرقام)، اللغة، والوضع الليلي. بسيط: نافذة وحدة.
+  const GEAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>';
+  function gear() {
+    const t = document.querySelector("header .tools, .tools");
+    if (!t || t.querySelector("[data-sd-gear]")) return;
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "tbtn"; b.setAttribute("data-sd-gear", ""); b.setAttribute("aria-label", document.documentElement.lang === "en" ? "Settings" : "الإعدادات"); b.setAttribute("aria-haspopup", "dialog");
+    b.innerHTML = GEAR; b.onclick = () => settings(b);
+    t.appendChild(b);
+  }
+  function settings(opener) {
+    css(); document.querySelectorAll(".sd-dlg").forEach((d) => d.remove());
+    const en = document.documentElement.lang === "en", T = (a, e) => (en ? e : a);
+    const ss = studentSession(), nm = LS.get("t:acct-name") || "";
+    const dark = document.documentElement.dataset.theme === "dark";
+    const d = document.createElement("div");
+    d.className = "sd-dlg"; d.setAttribute("role", "dialog"); d.setAttribute("aria-modal", "true"); d.setAttribute("aria-labelledby", "sd-gt");
+    d.innerHTML = `<div class="sd-card" data-noen>
+      <h2 id="sd-gt">⚙️ ${T("الإعدادات", "Settings")}</h2>
+      <h3 class="sd-sh">${T("حسابي", "My account")}</h3>
+      ${ss ? `<p class="sd-sub">✅ ${T("داخل باسم", "Signed in as")}: <b>${esc(nm || T("طالب", "student"))}</b></p>
+        <a class="sd-btn" href="${ROOT}me/">${T("صفحتي", "My page")}</a>
+        <button type="button" class="sd-btn ghost" data-sd-out>${T("اطلع من هذا الجهاز", "Sign out on this device")}</button>`
+      : PIN.on ? `<p class="sd-sub">${T("اكتب اسمك الثلاثي واختار رمز سري (حروف أو أرقام)، وتصير مساحتك خاصة بيك بأي جهاز.", "Write your full name and choose a secret code (letters or digits); your space becomes yours on any device.")}</p>
+        <button type="button" class="sd-btn" data-sd-pin="save">🔒 ${T("تسجيل جديد", "New sign-up")}</button>
+        <button type="button" class="sd-btn ghost" data-sd-pin="in">${T("عندي حساب: دخول", "I have an account: sign in")}</button>`
+      : `<p class="sd-sub">${T("الدخول بالاسم مو شغّال هسه.", "Name sign-in is not available right now.")}</p>`}
+      <h3 class="sd-sh">${T("اللغة", "Language")}</h3>
+      <div class="sd-row"><button type="button" class="sd-btn ${en ? "ghost" : ""}" data-sd-lang="ar" aria-pressed="${!en}">العربي</button><button type="button" class="sd-btn ${en ? "" : "ghost"}" data-sd-lang="en" aria-pressed="${en}">English</button></div>
+      <h3 class="sd-sh">${T("المظهر", "Appearance")}</h3>
+      <div class="sd-row"><button type="button" class="sd-btn ${dark ? "ghost" : ""}" data-sd-th="light" aria-pressed="${!dark}">☀️ ${T("فاتح", "Light")}</button><button type="button" class="sd-btn ${dark ? "" : "ghost"}" data-sd-th="dark" aria-pressed="${dark}">🌙 ${T("ليلي", "Dark")}</button></div>
+      <p class="sd-msg" id="sd-gm" role="status" aria-live="polite"></p>
+      <button type="button" class="sd-btn ghost" data-sd-close>${T("تمّ", "Done")}</button></div>`;
+    document.body.appendChild(d);
+    const m = d.querySelector("#sd-gm");
+    const close = () => { d.remove(); document.removeEventListener("keydown", onKey); if (opener && opener.isConnected) opener.focus(); };
+    const onKey = (ev) => {
+      if (!d.isConnected) return document.removeEventListener("keydown", onKey);
+      if (ev.key === "Escape") { ev.preventDefault(); close(); }
+      if (ev.key === "Tab") { const f = [...d.querySelectorAll("input,button,a[href]")].filter((x) => x.getClientRects().length); const i = f.indexOf(document.activeElement); ev.preventDefault(); if (f.length) f[(i < 0 ? 0 : i + (ev.shiftKey ? -1 : 1) + f.length) % f.length].focus(); }
+    };
+    document.addEventListener("keydown", onKey);
+    d.addEventListener("click", (ev) => { if (ev.target === d) close(); });
+    d.querySelector("[data-sd-close]").onclick = close;
+    d.querySelectorAll("[data-sd-lang]").forEach((b) => b.onclick = () => {
+      const want = b.dataset.sdLang; const cur = document.documentElement.lang === "en" ? "en" : "ar";
+      if (want !== cur) { const r = document.querySelector(`.lang button[lang="${want}"]`); if (r) r.click(); }
+      settings(opener);
+    });
+    d.querySelectorAll("[data-sd-th]").forEach((b) => b.onclick = () => {
+      const isDark = document.documentElement.dataset.theme === "dark";
+      if ((b.dataset.sdTh === "dark") !== isDark) { const t = document.querySelector("[data-theme-toggle]"); if (t) t.click(); }
+      settings(opener);
+    });
+    const out = d.querySelector("[data-sd-out]");
+    if (out) out.onclick = async () => {
+      out.disabled = true;
+      try { await account(); await window.Account.logout(); } catch (e) { /* */ }
+      try { LS.del("t:acct-session"); LS.del("t:acct-name"); } catch (e) { /* */ }
+      location.reload();
+    };
+    d.querySelectorAll("[data-sd-pin]").forEach((b) => b.onclick = async () => {
+      b.disabled = true; m.className = "sd-msg ok"; m.textContent = T("لحظة…", "One moment…");
+      try { await account(); await pinui(); } catch (e) { b.disabled = false; m.className = "sd-msg bad"; m.textContent = T("ماكو اتصال. تأكد من النت وجرّب مرة ثانية.", "No connection. Check the internet and try again."); return; }
+      window.PinUI.mountGate(d.querySelector(".sd-card"), { tab: b.dataset.sdPin, done: () => { location.href = ROOT + "me/"; }, back: () => settings(opener) });
+    });
+    const first = d.querySelector("button"); if (first) setTimeout(() => first.focus(), 30);
+  }
+
   function start() {
-    mark(); pill();
+    mark(); pill(); gear();
     if (skip || !window.Net || !window.Net.on) return;
     // آخر حالة معروفة ← نخفي المحتوى من أول لحظة (بلا ومضة)، والإعدادات الحقيقية تأكد أو تشيل
     if (LS.get("t:gate-on") === "1" && gated(rel, { open: null, closed: null }) && !allowed()) document.body.classList.add("sd-locked"), css();
@@ -358,5 +429,5 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     dialog(next || location.href.split("#")[0], PIN.on ? { title: "🔒 سجّل دخولك حتى تصير خاصة بيك", sub: "باسمك الثلاثي ورقمك السري، وكل اللي تحفظه يبقى بحسابك وتلگاه بأي جهاز." } : { title: "🔒 سجّل دخولك حتى تصير خاصة بيك", sub: "وكل اللي تحفظه يبقى بحسابك وتلگاه بأي جهاز." });
     const pg = document.querySelector(".sd-dlg #sd-pingo"); if (pg) pg.click();
   }
-  window.StaffDoor = { css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT, gated, askLogin, pinOn: () => PIN.on === true };
+  window.StaffDoor = { settings, css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT, gated, askLogin, pinOn: () => PIN.on === true };
 })();
