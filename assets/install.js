@@ -48,6 +48,14 @@
     ".amins .x{position:absolute;top:4px;inset-inline-end:4px;background:transparent;border:0;color:var(--muted,#5B6478);font-size:22px;padding:0}" +
     ".amins button:focus-visible{outline:3px solid var(--brand,#3B4A8C);outline-offset:2px}" +
     "@media (max-width:360px),(max-height:700px){.amins{padding:10px 10px 8px;padding-inline-end:50px;gap:2px 10px}.amins img{width:32px;height:32px;border-radius:9px}.amins h2{font-size:var(--t-sm,.95rem)}.amins p{font-size:var(--t-xs,.85rem);line-height:1.5}.amins .row{margin-top:4px}}" +
+    ".amins .tabs{grid-column:1/-1;display:flex;gap:6px;margin:8px 0 2px;background:var(--bg,#F5F6FA);border-radius:12px;padding:4px}" +
+    ".amins .tabs button{flex:1;background:transparent;border:0;color:var(--muted,#5B6478);border-radius:9px;min-height:44px}" +
+    ".amins .tabs button[aria-selected=true]{background:var(--card,#fff);color:var(--ink,#1E2433);box-shadow:0 1px 4px rgba(20,24,40,.12)}" +
+    ".amins ol{grid-column:1/-1;margin:6px 0 0;padding:0;list-style:none;display:grid;gap:6px}" +
+    ".amins ol li{display:flex;gap:10px;align-items:flex-start;font-size:var(--t-sm,.95rem);line-height:1.55}" +
+    ".amins ol li i{flex:none;font-style:normal;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--brand-soft,#EEF0F8);color:var(--brand,#3B4A8C);font-weight:700;font-size:.8rem}" +
+    ".amins ol li b{color:var(--brand,#3B4A8C)}.amins .one{grid-column:1/-1;width:100%;margin-top:8px}" +
+    "@media (max-width:360px),(max-height:700px){.amins .sub{display:none}.amins .tabs{margin:4px 0 0}.amins ol{gap:3px;margin-top:4px}.amins ol li{font-size:.82rem;line-height:1.45}.amins ol li i{width:20px;height:20px}.amins .row{margin-top:4px}.amins .one{margin-top:4px}}" +
     "@keyframes aminsIn{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}@media (prefers-reduced-motion:reduce){.amins{animation:none}}";
   var box = null, prevFocus = null;
   function root() { var s = document.querySelector('script[src*="assets/install"]'); return s ? s.src.replace(/assets\/install(\.min)?\.js.*$/, "") : "../"; }
@@ -79,14 +87,34 @@
       box.style.setProperty("--amins-b", off + "px");
     } catch (e) { /* */ }
   }
+  // 📲 (21/11، طلب محمد): أول فتح ← طريقة التنزيل بطريقتين بكل بساطة: «🤖 أندرويد» (أغلب الطلاب) و«🍎 آيفون»، 3 خطوات مرقّمة.
+  //   أندرويد يدعم التثبيت المباشر ← زر «ثبّت بضغطة وحدة» فوق الخطوات. الكمبيوتر: سطر واحد مثل قبل.
+  var tab = ios ? "ios" : "android";
+  var STEPS = {
+    android: [["افتح الموقع من <b>كروم</b>، واضغط <b>⋮</b> فوق", "Open the site in <b>Chrome</b> and tap <b>⋮</b> at the top"],
+              ["اختار <b>«تثبيت التطبيق»</b> أو <b>«إضافة إلى الشاشة الرئيسية»</b>", "Choose <b>“Install app”</b> or <b>“Add to Home screen”</b>"],
+              ["اضغط <b>«تثبيت»</b> ✅ وتطلع أيقونة المنصة بشاشتك", "Tap <b>“Install”</b> ✅ and the icon appears on your screen"]],
+    ios: [["افتح الموقع من <b>سفاري</b> 🧭 (مو من داخل التلگرام)", "Open the site in <b>Safari</b> 🧭 (not inside Telegram)"],
+          ["اضغط زر المشاركة <b>⬆️</b> تحت بالنص", "Tap the Share button <b>⬆️</b> at the bottom"],
+          ["اختار <b>«إضافة إلى الشاشة الرئيسية»</b> ➕ ثم <b>«إضافة»</b>", "Choose <b>“Add to Home Screen”</b> ➕ then <b>“Add”</b>"]]
+  };
   function body() {
-    var s = steps();
-    box.innerHTML = '<img src="' + root() + 'assets/icon-192.png" alt="">' +
-      '<h2 id="amins-h">' + T("ثبّت منصة تعلم الأشعة على جهازك", "Install the Radiology Learning Platform") + '</h2>' +
-      '<p>' + (s || T("تنفتح مثل التطبيق بضغطة من الشاشة الرئيسية، وأسرع.", "Opens like an app from your home screen, faster.")) + '</p>' +
-      '<div class="row">' + (bip ? '<button type="button" class="go">' + T("ثبّت", "Install") + '</button>' : "") +
-      '<button type="button" class="later">' + T(s ? "تمام" : "مو هسه", s ? "Got it" : "Not now") + '</button></div>' +
+    var desk = !mobile, s = desk ? steps() : "";
+    var head = '<img src="' + root() + 'assets/icon-192.png" alt="">' +
+      '<h2 id="amins-h">' + (desk ? T("ثبّت منصة تعلم الأشعة على جهازك", "Install the Radiology Learning Platform") : T("ثبّت منصة تعلم الأشعة على موبايلك", "Install the Radiology Learning Platform on your phone")) + '</h2>' +
+      '<p class="sub">' + T("تنفتح مثل التطبيق بضغطة، وأسرع، وتشتغل بلا نت. تاخذ 10 ثواني:", "Opens like an app, faster, and works offline. Takes 10 seconds:") + '</p>';
+    var one = bip ? '<button type="button" class="go one">📲 ' + T("ثبّت بضغطة وحدة", "Install in one tap") + '</button>' : "";
+    var mid = desk ? '<p style="grid-column:1/-1">' + (s || "") + '</p>' :
+      '<div class="tabs" role="tablist" aria-label="' + T("نوع الموبايل", "Phone type") + '">' +
+        '<button type="button" role="tab" data-tab="android" aria-selected="' + (tab === "android") + '">🤖 ' + T("أندرويد", "Android") + '</button>' +
+        '<button type="button" role="tab" data-tab="ios" aria-selected="' + (tab === "ios") + '">🍎 ' + T("آيفون", "iPhone") + '</button></div>' +
+      '<ol role="tabpanel">' + STEPS[tab].map(function (x, i) { return '<li><i aria-hidden="true">' + (i + 1) + '</i><span>' + T(x[0], x[1]) + '</span></li>'; }).join("") + '</ol>';
+    box.innerHTML = head + (tab === "android" || desk ? one : "") + mid +
+      '<div class="row"><button type="button" class="later">' + T("تمام", "Got it") + '</button></div>' +
       '<button type="button" class="x" aria-label="' + T("إغلاق", "Close") + '">×</button>';
+    Array.prototype.forEach.call(box.querySelectorAll("[data-tab]"), function (b) {
+      b.onclick = function () { tab = b.getAttribute("data-tab"); body(); var n = box.querySelector('[data-tab="' + tab + '"]'); if (n) n.focus(); };
+    });
     var go = box.querySelector(".go");
     if (go) go.onclick = function () {
       var p = bip; bip = null; if (!p) return;
