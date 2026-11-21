@@ -26,6 +26,7 @@ body{background:var(--bg);color:var(--ink);font:500 16px/1.7 "IBM Plex Sans Arab
 .pg canvas{display:block;width:100%;height:auto}
 .st{padding:40px 16px;text-align:center;color:var(--muted)}
 .st .btn{margin:6px}
+.offl{max-width:920px;margin:10px auto 0;padding:8px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line);color:var(--muted);font-size:14px;text-align:center}
 .cnt{position:fixed;bottom:max(14px,env(safe-area-inset-bottom));inset-inline-start:14px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--muted);direction:ltr;z-index:5}
 </style></head><body>
 <div class="bar">
@@ -33,6 +34,7 @@ body{background:var(--bg);color:var(--ink);font:500 16px/1.7 "IBM Plex Sans Arab
   <h1 id="ttl">قراءة الملف</h1>
   <a class="btn pri" id="dl" href="#" download>⬇ تحميل</a>
 </div>
+<div class="offl" id="offl" role="status" hidden>📴 بلا نت: تقرا النسخة المحفوظة بجهازك</div>
 <div id="pages"><div class="st" id="msg">جارٍ فتح الملف…</div></div>
 <div class="cnt" id="cnt" hidden></div>
 <script>
@@ -50,7 +52,11 @@ body{background:var(--bg);color:var(--ink);font:500 16px/1.7 "IBM Plex Sans Arab
   dl.href=url; dl.setAttribute("download",n||f.split("/").pop());
   var back=$("back");
   if(history.length<2){ back.setAttribute("href",base+"lessons/"); }
+  // 📴 (21/11) بلا نت: سطر هادئ يطمّن الطالب إنه يقرا النسخة المحفوظة
+  function net(){ $("offl").hidden=navigator.onLine!==false; }
+  net(); addEventListener("online",net); addEventListener("offline",net);
   function fallback(why){
+    if(navigator.onLine===false) why="هذا الملف بعده ما انحفظ بجهازك. افتحه مرة وحدة بالنت، وبعدها يشتغل بلا نت.";
     $("pages").innerHTML="";
     var d=document.createElement("div"); d.className="st";
     d.appendChild(document.createTextNode(why+" "));

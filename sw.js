@@ -1,5 +1,5 @@
 // 🛰️ sw.js v2 (انطبق 29/10/2026 من sw-v2.js بعد مراجعة مستقلة؛ القديم بـ sw.js.bak-20261029-perf).
-// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261121152915 برقم البناء.
+// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261121165104 برقم البناء.
 // الهدف: أول فتح سريع، وكل صفحة دراسة انفتحت مرة تشتغل بلا نت، وأي تعديل يوصل بسرعة.
 //
 // ⚠️ كل الكاشات تبدي بـ "anatomy-" (أو dars-/audio-v1 القديمة): mohammedalmusawy.github.io أصل مشترك ويّا مواقع ثانية
@@ -12,7 +12,7 @@
 //   anatomy-offline-v1 «احفظ المحاضرة بلا نت» (رسالة warm) — ما يتقلّم وحده.
 //   anatomy-pdf-v1     (21/11) ملفات PDF اللي فتحها الطالب (المحاضرة، MCQ…): الشبكة أول بمهلة، وبلا نت المحفوظ. حد PDF_MAX.
 //   audio-v1           الصوت (نفس اسم sw.js الحالي حتى ما يضيع المحفوظ عند الطلاب).
-const VERSION = "20261121152915";
+const VERSION = "20261121165104";
 const P = "anatomy-";
 const SHELL = P + "shell-" + VERSION, ASSETS = P + "assets-v2", PAGES = P + "pages-v2", DATA = P + "data-v2",
   IMG = P + "img-v1", OFFLINE = P + "offline-v1", FONTS = P + "fonts-v1", AUDIO = "audio-v1", PDFS = P + "pdf-v1", LIB = P + "lib-v1";
@@ -272,9 +272,14 @@ self.addEventListener("message", (e) => {
       if (!mine(url)) return;
       const name = isAudio(url) ? AUDIO : OFFLINE, key = new Request(url.href);
       if (d.type === "unwarm") return caches.open(name).then((c) => c.delete(key));
-      if (await caches.match(key, { cacheName: name })) return;
-      const res = await fetch(key);
-      if (okToCache(res)) await put(name, key, res);
-    })));
+      // (21/11) كل ضغطة تجيب أحدث نسخة (لو الملف انصلّح)؛ النت فشل والقديم محفوظ ← نخليه وينحسب ناجح
+      let res = null;
+      try { res = await fetch(key, { cache: "no-cache" }); } catch (x) {}
+      if (!okToCache(res)) { if (await caches.match(key, { cacheName: name })) return; throw new Error("bad " + (res && res.status)); }
+      await caches.open(name).then((c) => c.put(key, res));   // فشل الحفظ (المساحة) ← ينحسب فشل
+    })).then((r) => {
+      // 📥 (21/11) زر «احفظها بجهازك» ينتظر النتيجة: كم انحفظ وكم فشل
+      if (d.id && e.source) e.source.postMessage({ type: d.type + "-done", id: d.id, ok: r.filter((x) => x.status === "fulfilled").length, fail: r.filter((x) => x.status === "rejected").length });
+    }));
   }
 });
