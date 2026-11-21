@@ -1,5 +1,5 @@
 // 🛰️ sw.js v2 (انطبق 29/10/2026 من sw-v2.js بعد مراجعة مستقلة؛ القديم بـ sw.js.bak-20261029-perf).
-// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261121143615 برقم البناء.
+// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261121152915 برقم البناء.
 // الهدف: أول فتح سريع، وكل صفحة دراسة انفتحت مرة تشتغل بلا نت، وأي تعديل يوصل بسرعة.
 //
 // ⚠️ كل الكاشات تبدي بـ "anatomy-" (أو dars-/audio-v1 القديمة): mohammedalmusawy.github.io أصل مشترك ويّا مواقع ثانية
@@ -10,15 +10,19 @@
 //   anatomy-data-v2    JSON: stale-while-revalidate، عدا quiz/bank.json (أجوبة) = الشبكة أول بمهلة.
 //   anatomy-img-v1     صور: من الكاش أول، حد IMG_MAX.
 //   anatomy-offline-v1 «احفظ المحاضرة بلا نت» (رسالة warm) — ما يتقلّم وحده.
+//   anatomy-pdf-v1     (21/11) ملفات PDF اللي فتحها الطالب (المحاضرة، MCQ…): الشبكة أول بمهلة، وبلا نت المحفوظ. حد PDF_MAX.
 //   audio-v1           الصوت (نفس اسم sw.js الحالي حتى ما يضيع المحفوظ عند الطلاب).
-const VERSION = "20261121143615";
+const VERSION = "20261121152915";
 const P = "anatomy-";
 const SHELL = P + "shell-" + VERSION, ASSETS = P + "assets-v2", PAGES = P + "pages-v2", DATA = P + "data-v2",
-  IMG = P + "img-v1", OFFLINE = P + "offline-v1", FONTS = P + "fonts-v1", AUDIO = "audio-v1";
-const KEEP = [SHELL, ASSETS, PAGES, DATA, IMG, OFFLINE, FONTS, AUDIO];
+  IMG = P + "img-v1", OFFLINE = P + "offline-v1", FONTS = P + "fonts-v1", AUDIO = "audio-v1", PDFS = P + "pdf-v1", LIB = P + "lib-v1";
+const KEEP = [SHELL, ASSETS, PAGES, DATA, IMG, OFFLINE, FONTS, AUDIO, PDFS, LIB];
 const MINE_CACHE = (k) => k.startsWith(P) || k.startsWith("dars-");   // اللي نقدر نمسحه (audio-v1 ما ينمسح)
 // M3 (29/10): الصفحة المحفوظة تنتظر الشبكة 1.2 ث بس (3G) — bank.json يبقى 2.5 ث (الأجوبة لازم أحدث)
 // ⚡ 17/11: المهلة 0.4 ث: الشبكة السريعة تلحق (أحدث نسخة)، والبطيئة ← المحفوظ فوراً والتحديث يكمل بالخلفية (الزيارة الجاية أحدث)
+const PDF_MAX = 40, PDF_TIMEOUT = 4000;   // 📄 (21/11) PDF: آخر 40 ملف (مراجع مستقل: حد أصغر يحمي مساحة الموبايل)
+// مكتبة عارض الـ PDF (pdf.js من cdnjs، نسخة ثابتة والصفحة تفحص بصمتها SRI) ← تنحفظ حتى العارض يشتغل بلا نت
+const LIB_URLS = ["https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js", "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"];
 const PAGES_MAX = 150, IMG_MAX = 1200, ASSETS_MAX = 120, NET_TIMEOUT = 2500, NAV_TIMEOUT = 400;
 const BASE = new URL(self.registration.scope).pathname;
 // الأساس: الرئيسية + ملفات الشكل والسكربت الأساسية (site.write_sw يحط قائمتها بـ ?v=<بصمة المحتوى>، فالملف اللي ما تغيّر
@@ -27,7 +31,8 @@ const CORE = ["assets/app.min.css?v=6487458c02", "assets/cloud-config.min.js?v=c
   "assets/fonts/cairo-600-800.woff2?v=1", "assets/fonts/plex-arabic-400.woff2?v=1", "assets/fonts/plex-arabic-500.woff2?v=1"];
 const SECTIONS = ["lessons", "quiz", "learn", "atlas", "devices", "contrast", "terms", "search", "assistant", "exams", "study", "thanks",
   "offline.html", "دروس", "اختبار", "تعلم", "أطلس",
-  "me", "login", "team", "about", "guide"];   // 🌿 v3 حي (29/10): مساحتي والدخول والفريق وعن المنصة والدليل تنحفظ بلا نت هم
+  "me", "login", "team", "about", "guide",
+  "view", "review", "library", "game"];   // 📄 (21/11) عارض الـ PDF ومركز المراجعة والمكتبة واللعبة: تشتغل بلا نت بعد أول فتح   // 🌿 v3 حي (29/10): مساحتي والدخول والفريق وعن المنصة والدليل تنحفظ بلا نت هم
 const DATA_FILES = ["quiz/bank.json", "assets/audio/terms/lex.json", "study/data.json", "assistant/index.json", "assets/thanks.json"];
 const FRESH_DATA = ["quiz/bank.json"];                  // الأجوبة لازم أحدث نسخة إذا النت موجود
 
@@ -40,6 +45,7 @@ function mine(url) {
 const isAudio = (url) => url.pathname.includes("/assets/audio/") && url.pathname.endsWith(".mp3");
 const isImg = (url) => /\.(jpe?g|png|webp|avif|svg|gif)$/i.test(url.pathname);
 const isFont = (url) => /\.woff2$/i.test(url.pathname);
+const isPdf = (url) => /\.pdf$/i.test(url.pathname);
 const versioned = (url) => url.searchParams.has("v");
 const okToCache = (res) => res && res.ok && res.status === 200 && res.type === "basic";
 const isHtml = (res) => (res.headers.get("content-type") || "").includes("text/html");
@@ -157,6 +163,25 @@ async function cacheFirst(e, name, max, revalidate) {
   }
 }
 
+// 📄 PDF (21/11، «الطالب يطلع بلا نت»): أي ملف فتحه الطالب مرة ينحفظ بجهازه ويشتغل بلا نت.
+// النت موجود ← أحدث نسخة (لو الأستاذ صحّح الملف) بمهلة 4 ث؛ بطيء أو بلا نت ← المحفوظ فوراً. مفتاح الكاش بلا ?query.
+async function pdf(e) {
+  const req = e.request, url = new URL(req.url); url.search = "";
+  const key = new Request(url.href);
+  // ملف محفوظ قبل هالتحديث (بكاش anatomy-assets) يبقى يشتغل بلا نت
+  const cached = (await caches.match(key, { cacheName: PDFS })) || (await caches.match(key, { ignoreSearch: true }));
+  // تنقّل (زر التحميل): نستعمل طلب navigationPreload نفسه حتى الملف ما ينزل مرتين
+  const first = req.mode === "navigate" ? Promise.resolve(e.preloadResponse).catch(() => null) : Promise.resolve(null);
+  const net = first.then((pre) => pre || fetch(key, { cache: "no-cache" })).then((res) => {
+    if (okToCache(res)) e.waitUntil(put(PDFS, key, res.clone()).then(() => trim(PDFS, PDF_MAX)));
+    return res;
+  });
+  if (!cached) return net.catch(async () => (req.mode === "navigate" && (await caches.match("offline.html", { ignoreSearch: true }))) || Response.error());
+  e.waitUntil(net.catch(() => {}));
+  const w = navigator.onLine === false ? null : await Promise.race([net.catch(() => null), new Promise((r) => setTimeout(() => r(null), PDF_TIMEOUT))]);
+  return w && w.ok ? w : cached;
+}
+
 // الصوت: من الكاش أول + Range (آيفون).
 // M2 (29/10): ولا ملف ينزل مرتين. تنزيل كامل (listen.js يجيب الملف كله) ← نفس الرد ينحفظ؛ وطلبات Range بنفس الوقت
 // تنتظر هذا التنزيل وتجاوب منه. Range بلا تنزيل كامل شغّال ← الشبكة بس (بلا تنزيل خلفي ثاني)، والكاش يتعبّى
@@ -214,7 +239,12 @@ self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
-  // تنقّل ما نخزّنه (الخريطة، PDF/zip/mp4 الكبيرة): نستعمل نفس طلب navigationPreload حتى ما ينزل الملف مرتين
+  if (LIB_URLS.includes(url.href)) return e.respondWith(caches.match(req, { cacheName: LIB }).then((hit) => hit || fetch(req).then((res) => {
+    if (res && res.ok && (res.type === "cors" || res.type === "basic")) e.waitUntil(put(LIB, req, res.clone()));
+    return res;
+  })));
+  if (mine(url) && isPdf(url) && !req.headers.get("range")) return e.respondWith(pdf(e));   // 📄 (21/11) الملف نفسه (العارض أو زر التحميل)
+  // تنقّل ما نخزّنه (الخريطة، zip/mp4 الكبيرة): نستعمل نفس طلب navigationPreload حتى ما ينزل الملف مرتين
   if (req.mode === "navigate" && (!mine(url) || /\.(pdf|zip|mp4)$/i.test(url.pathname))) {
     if (url.origin === location.origin) e.respondWith(Promise.resolve(e.preloadResponse).catch(() => null).then((r) => r || fetch(req)));
     return;

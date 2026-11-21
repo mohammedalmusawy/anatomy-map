@@ -19,7 +19,7 @@ button{font:inherit;background:var(--brand);color:#fff;border:0;border-radius:12
 </head>
 <body><main class="w">
 <h1>📴 ماكو إنترنت هسه</h1>
-<p>هاي الصفحة ما انفتحت قبل على هذا الجهاز. الصفحات اللي فتحتها قبل تشتغل بلا نت:</p>
+<p>هاي الصفحة ما انفتحت قبل على هذا الجهاز. الصفحات والملفات اللي فتحتها قبل تشتغل بلا نت:</p>
 <div id="list"><p>…</p></div>
 <button onclick="location.reload()">🔄 حاول مرة ثانية</button>
 </main>
@@ -34,7 +34,21 @@ button{font:inherit;background:var(--brand);color:#fff;border:0;border-radius:12
       rows.push(`<a class="i" href="${u.href}">${(t || "صفحة").replace(/[<>&]/g, "")}<small>${decodeURIComponent(u.pathname)}</small></a>`);
       if (rows.length >= 40) break;
     }
-    box.innerHTML = rows.length ? rows.join("") : "<p>بعد ما فتحت صفحات. افتح المحاضرات مرة وحدة بالنت وبعدها تشتغل بلا نت.</p>";
+    // 📄 (21/11) ملفات PDF المحفوظة بالجهاز ← تنفتح بعارض الموقع بلا نت
+    let files = "";
+    try {
+      const reg = await Promise.race([navigator.serviceWorker.ready, new Promise((_, no) => setTimeout(no, 1500))]);
+      const root = reg.scope, pc = await caches.open("anatomy-pdf-v1"), pk = await pc.keys(), fr = [];
+      for (const r of pk.reverse()) {
+        if (!r.url.startsWith(root)) continue;
+        let rel = r.url.slice(root.length); try { rel = decodeURIComponent(rel); } catch (x) {}
+        const name = rel.split("/").pop();
+        fr.push(`<a class="i" href="${root}view/?f=${encodeURIComponent(rel)}&n=${encodeURIComponent(name)}&t=${encodeURIComponent(name.replace(/\.pdf$/i, ""))}">📄 ${name.replace(/[<>&"]/g, "")}<small>${rel.replace(/[<>&"]/g, "")}</small></a>`);
+        if (fr.length >= 40) break;
+      }
+      if (fr.length) files = `<h2 style="font-size:18px;margin:22px 0 4px">📄 ملفاتك المحفوظة (${fr.length})</h2>` + fr.join("");
+    } catch (x) {}
+    box.innerHTML = (rows.length ? rows.join("") : "<p>بعد ما فتحت صفحات. افتح المحاضرات مرة وحدة بالنت وبعدها تشتغل بلا نت.</p>") + files;
   } catch (e) {
     let base = "../"; try { base = (await Promise.race([navigator.serviceWorker.ready, new Promise((_, no) => setTimeout(no, 1500))])).scope; } catch (x) {}   // الصفحة ممكن تنعرض بأي رابط
     box.innerHTML = `<p><a href="${base}lessons/">الرئيسية</a></p>`;
