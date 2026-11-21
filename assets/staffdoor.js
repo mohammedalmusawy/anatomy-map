@@ -15,7 +15,7 @@
   const C = window.STUDY_CLOUD || {};
   const REF = (() => { try { return new URL(C.url).hostname.split(".")[0]; } catch (e) { return "spjkntrwxfyydniklfxh"; } })();
   const cfgLink = (v) => (/^https:\/\/t\.me\/[A-Za-z0-9_]{3,64}\/?$/.test(v) ? v : "");   // تليغرام بس (مو رقم ولا رابط ثاني)
-  const SUPPORT = cfgLink("https://t.me/m99uhammed");
+  const SUPPORT = cfgLink("__SUPPORT_TG__");
   const LS = {
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* */ } },
@@ -359,6 +359,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
       <h3 class="sd-sh">${T("حسابي", "My account")}</h3>
       ${ss ? `<p class="sd-sub">✅ ${T("داخل باسم", "Signed in as")}: <b>${esc(nm || T("طالب", "student"))}</b></p>
         <a class="sd-btn" href="${ROOT}me/">${T("صفحتي", "My page")}</a>
+        <a class="sd-btn ghost" href="${ROOT}rooms/" data-sd-rooms hidden>🏠 ${T("غرف الدراسة", "Study rooms")}</a>
         <button type="button" class="sd-btn ghost" data-sd-out>${T("اطلع من هذا الجهاز", "Sign out on this device")}</button>`
       : PIN.on ? `<p class="sd-sub">${T("اكتب اسمك الثلاثي واختار رمز سري (حروف أو أرقام)، وتصير مساحتك خاصة بيك بأي جهاز.", "Write your full name and choose a secret code (letters or digits); your space becomes yours on any device.")}</p>
         <button type="button" class="sd-btn" data-sd-pin="save">🔒 ${T("تسجيل جديد", "New sign-up")}</button>
@@ -403,6 +404,21 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
       try { await account(); await pinui(); } catch (e) { b.disabled = false; m.className = "sd-msg bad"; m.textContent = T("ماكو اتصال. تأكد من النت وجرّب مرة ثانية.", "No connection. Check the internet and try again."); return; }
       window.PinUI.mountGate(d.querySelector(".sd-card"), { tab: b.dataset.sdPin, done: () => { location.href = ROOT + "me/"; }, back: () => settings(opener) });
     });
+    // 🏠 غرف الدراسة (21/11): الزر يطلع بس إذا الغرف شغّالة لهالطالب (أو هو من المجرّبين). سؤال واحد للسيرفر ومحفوظ 10 دقايق.
+    const rb = d.querySelector("[data-sd-rooms]");
+    if (rb) {
+      let c = null; try { c = JSON.parse(LS.get("t:rooms-on") || "null"); } catch (e) { /* */ }
+      if (c && Date.now() - (c.t || 0) < 6e5) rb.hidden = !c.on;
+      else (async () => {
+        try {
+          await account(); await window.Account.ready();
+          const C = window.STUDY_CLOUD || {}, s = window.Account.state.session; if (!s) return;
+          const r = await fetch(C.url + "/rest/v1/rpc/room_me", { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + s.access_token, "Content-Type": "application/json" }, body: "{}" });
+          const j = r.ok ? await r.json() : null, on = !!(j && j.on);
+          LS.set("t:rooms-on", JSON.stringify({ on, t: Date.now() })); if (rb.isConnected) rb.hidden = !on;
+        } catch (e) { /* بلا نت ← ما نبين الزر */ }
+      })();
+    }
     const first = d.querySelector("button"); if (first) setTimeout(() => first.focus(), 30);
   }
 

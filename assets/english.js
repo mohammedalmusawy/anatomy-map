@@ -22,7 +22,9 @@
     fill.style.width = Math.round(100 * n / L.length) + "%";
   }
 
+  var G = D.groups || {}, lastG = null;
   L.forEach(function (l, i) {
+    if (l.g && G[l.g] && l.g !== lastG) { root.append(el("h2", "eg-gh", G[l.g])); lastG = l.g; }   // 🌍 (21/11) عنوان كل مجموعة دروس
     var d = el("details", "eg-l"); d.id = "l-" + l.id;
     var sm = el("summary", "noterm");
     var num = el("span", "eg-n", String(i + 1));

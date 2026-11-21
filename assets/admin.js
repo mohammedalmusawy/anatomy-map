@@ -319,6 +319,31 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       (paused ? `<br>⛔ <b>المساعد متوقف مؤقتاً</b> لحد أول الشهر (وصل السقف)` : "") + `<br>` +
       `<b>التوقع لآخر الشهر:</b> ≈ ${fc.toFixed(2)}$ ${fc >= top ? "⚠️ يعبر السقف — المساعد يوگف بلطف لما يوصل" : fc >= cap ? "↗️ الميزانية راح ترتفع وحدها" : "✅ ضمن الميزانية"}`;
   }
+  // 🏠 غرف الدراسة (21/11، هجرة 081): المفاتيح + المجرّبين + البلاغات (room_admin_reports) + إرجاع/حظر
+  async function rooms() {
+    const box = document.getElementById("rmrep"); if (!box) return;
+    const cur = await getSet("rooms");
+    const on = document.getElementById("rmon"), rnd = document.getElementById("rmrnd"), ts = document.getElementById("rmts");
+    on.checked = !!cur.on; rnd.checked = !!cur.random; ts.value = (cur.testers || []).join("\n");
+    const save = async (patch) => { const c = await getSet("rooms"); const { error } = await sb.from("settings").upsert({ key: "rooms", value: { ...c, ...patch }, at: new Date().toISOString() }); if (error) { alert(error.message); return false; } return true; };
+    on.onchange = async () => { const want = on.checked; on.checked = !want; if (!confirm(want ? "تشغّل غرف الدراسة لكل الطلاب؟" : "تطفّي غرف الدراسة؟ الطلاب ما يشوفون غرفهم لحد ما ترجّعها.")) return; if (await save({ on: want })) on.checked = want; };
+    rnd.onchange = async () => { const want = rnd.checked; rnd.checked = !want; if (!confirm(want ? "تشغّل قرعة الزميل العشوائي؟" : "تطفّي القرعة؟")) return; if (await save({ random: want })) rnd.checked = want; };
+    document.getElementById("rmtsv").onclick = async () => { const list = ts.value.split("\n").map((x) => x.trim()).filter(Boolean).slice(0, 20); if (await save({ testers: list })) alert("انحفظ"); };
+    const { data, error } = await sb.rpc("room_admin_reports");
+    if (error) { box.textContent = "التقرير مو متوفر: " + error.message; return; }
+    const st = data.stats || {}, rep = data.reported || [], ban = data.banned || [];
+    box.innerHTML = `<p><b>${st.rooms || 0}</b> غرفة · <b>${st.members || 0}</b> عضو · <b>${st.msgs_today || 0}</b> رسالة اليوم · <b>${st.pool || 0}</b> بالقرعة</p>` +
+      (rep.length ? `<p><b>🚩 رسائل مبلّغ عنها (${rep.length})</b></p>` + rep.map((m) => `<div class="rmr"><p>${m.hidden ? "🙈 مخفية" : "👁️ ظاهرة"} · ${m.reports} بلاغ · ${esc(m.room)} · <b>${esc(m.from)}</b></p><p>«${esc(m.body || "")}»</p>
+        <button class="btn" data-rm-show="${m.id}">رجّعها (ما بيها شي)</button> <button class="btn" data-rm-hide="${m.id}">خليها مخفية</button> <button class="btn" data-rm-ban="${esc(m.sid)}">امنع ${esc(m.from)} من الغرف</button></div>`).join("") : "<p>✅ ماكو بلاغات.</p>") +
+      (ban.length ? `<p><b>⛔ ممنوعين من الغرف</b></p>` + ban.map((b) => `<p>${esc(b.name)} <button class="btn" data-rm-unban="${esc(b.sid)}">رجّعه</button></p>`).join("") : "") +
+      `<p><label>كلمة ممنوعة جديدة <input id="rmw" maxlength="40"></label> <button class="btn" id="rmwa">أضف</button></p>`;
+    const act = async (fn, args, ask) => { if (ask && !confirm(ask)) return; const { error: e } = await sb.rpc(fn, args); if (e) alert(e.message); else rooms(); };
+    box.querySelectorAll("[data-rm-show]").forEach((b) => b.onclick = () => act("room_admin_msg", { p_msg: +b.dataset.rmShow, p_hidden: false }));
+    box.querySelectorAll("[data-rm-hide]").forEach((b) => b.onclick = () => act("room_admin_msg", { p_msg: +b.dataset.rmHide, p_hidden: true }));
+    box.querySelectorAll("[data-rm-ban]").forEach((b) => b.onclick = () => act("room_admin_ban", { p_student: b.dataset.rmBan, p_ban: true }, "تمنعه من كل الغرف؟ يطلع من غرفه ومن القرعة."));
+    box.querySelectorAll("[data-rm-unban]").forEach((b) => b.onclick = () => act("room_admin_ban", { p_student: b.dataset.rmUnban, p_ban: false }));
+    document.getElementById("rmwa").onclick = () => { const w = document.getElementById("rmw").value.trim(); if (w) act("room_admin_word", { p_word: w, p_add: true }); };
+  }
   async function control() {
     const [ann, sec, bud, gate] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget"), getSet("gate")]);   // 🗑️ 70: مفتاح «طلب الكود من البوت» انشال
     pane.innerHTML = `<h2>📣 شريط الإعلان</h2><textarea id="an" rows="2">${esc(ann.text)}</textarea>
@@ -329,10 +354,17 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       <h2>🎓 الموقع للطلاب بالكود</h2>
       <p class="hint">مطفي = كلشي مفتوح مثل هسه. مشغّل = المحاضرات والاختبارات ومصطلحات المحاضرات و«مساحتي» والمساعد الكامل لطلابنا بالكود؛ الأطلس والملوّنة والأجهزة والمصطلحات العامة مفتوحة للكل. (يوصل للطلاب خلال 10 دقائق.)</p>
       <label><input type="checkbox" id="gon" ${gate.on ? "checked" : ""}> 🔒 بوابة الطلاب (settings.gate.on)</label>
+      <h2>🏠 غرف الدراسة</h2>
+      <p class="hint">غرف أصدقاء، ومؤقت مشترك، ورسائل داخل الغرفة (فلتر، وإبلاغ، ومقفولة بالليل ووقت الامتحان). جرّبها أول باسمك من «المجرّبين» وهي مطفية.</p>
+      <label><input type="checkbox" id="rmon"> 🏠 غرف الدراسة شغّالة لكل الطلاب</label>
+      <label><input type="checkbox" id="rmrnd"> 🎲 القرعة (زميل دراسة عشوائي)</label>
+      <label>المجرّبين وهي مطفية (اسم ثلاثي بكل سطر، نفس اسم دخولهم) <textarea id="rmts" rows="2" dir="rtl"></textarea></label><button class="btn" id="rmtsv">حفظ المجرّبين</button>
+      <div id="rmrep" class="hint">…</div>
       <h2>💵 ميزانية المساعد</h2><div id="spend" class="hint">…</div><label>شهرياً ($) <input id="bm" type="number" value="${bud.monthly_usd ?? 50}"></label>
       <label>أسئلة يومياً لكل طالب/جهاز <input id="bd" type="number" value="${bud.daily_per_device ?? 15}"></label>
       <label>تنبيه بالبوت عند (%) <input id="bp" type="number" min="10" max="100" value="${bud.alert_pct ?? 70}"></label><button class="btn" id="bs">حفظ</button>`;
     spend(bud);
+    rooms();
     document.getElementById("ans").onclick = async () => { await sb.from("settings").upsert({ key: "announcement", value: { text: document.getElementById("an").value, on: document.getElementById("anon").checked } }); alert("انحفظ"); };
     // ✋ 59: تشغيل/إطفاء قسم للطلاب ← تأكيد داخل الصفحة أول
     const askSec = (k, onMsg, offMsg) => async (e) => {
