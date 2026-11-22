@@ -445,5 +445,60 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     dialog(next || location.href.split("#")[0], PIN.on ? { title: "🔒 سجّل دخولك حتى تصير خاصة بيك", sub: "باسمك الثلاثي ورقمك السري، وكل اللي تحفظه يبقى بحسابك وتلگاه بأي جهاز." } : { title: "🔒 سجّل دخولك حتى تصير خاصة بيك", sub: "وكل اللي تحفظه يبقى بحسابك وتلگاه بأي جهاز." });
     const pg = document.querySelector(".sd-dlg #sd-pingo"); if (pg) pg.click();
   }
+  // 🔔 (22/11، مقترح منفّذ) «صاحبك بدأ تحدّي»: بس للطالب اللي عنده غرف والغرف شغّالة إله (من الذاكرة)،
+  //   سؤال واحد خفيف للسيرفر مرة كل 3 دقايق كحد أعلى، وبعد ما تخلص الصفحة. الطالب بلا غرف ← صفر طلبات.
+  const KINDS = { quick: "⚡ تحدّي سريع", hard: "🧠 تحدّي صعب", image: "🩻 خمّن الصورة" };
+  function roomAlerts() {
+    try {
+      if (skip || /(^|\/)rooms\//.test(rel) || LS.get("rm:mine") !== "1" || document.hidden) return;
+      const c = LS.json("t:rooms-on"); if (!c || !c.on || Date.now() - (c.t || 0) > 864e5) return;
+      const s = studentSession(); if (!s || !s.access_token || !(s.expires_at * 1000 > Date.now() + 3e4)) return;
+      if (Date.now() - (+LS.get("rm:ping") || 0) < 18e4) return;
+      const C = window.STUDY_CLOUD || {}; if (!C.url || !C.anon) return;
+      LS.set("rm:ping", String(Date.now()));
+      fetch(C.url + "/rest/v1/rpc/room_alerts", { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + s.access_token, "Content-Type": "application/json" }, body: "{}" })
+        .then((r) => (r.ok ? r.json() : [])).then((list) => {
+          const seen = LS.json("rm:seen") || [];
+          const a = (Array.isArray(list) ? list : []).find((x) => x && x.game && seen.indexOf(x.game) < 0);
+          if (!a || document.querySelector(".sd-rmtoast")) return;
+          if (document.querySelector(".amins")) { LS.del("rm:ping"); return; }   // دليل التثبيت مفتوح ← التذكير بالصفحة الجاية (ما يتراكبون)
+          LS.set("rm:seen", JSON.stringify(seen.concat(a.game).slice(-30)));
+          const t = document.createElement("div"); t.className = "sd-rmtoast"; t.setAttribute("role", "status"); t.dir = "rtl";
+          t.style.cssText = "position:fixed;inset-inline:12px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:9999;max-width:460px;margin:0 auto;display:flex;gap:8px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--card,#fff);color:var(--ink,#1B2233);border:1px solid var(--line,#D9DEE8);box-shadow:0 8px 28px rgba(0,0,0,.18);font:600 15px/1.5 system-ui,sans-serif";
+          const en = document.documentElement.lang === "en";
+          t.innerHTML = `<span style="flex:1">🎮 ${en ? esc(a.by || "A friend") + " started a challenge in «" + esc(a.name || "") + "»" : esc(a.by || "صاحبك") + " بدأ " + esc(KINDS[a.kind] || "تحدّي") + " بغرفة «" + esc(a.name || "") + "»"}</span>`
+            + `<a href="${ROOT}rooms/#r=${esc(a.room)}" style="min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:12px;background:var(--brand,#4B5A8A);color:#fff;text-decoration:none">▶️ ${en ? "Play" : "العب"}</a>`
+            + `<button type="button" aria-label="${en ? "Close" : "سدّ"}" style="min-width:44px;min-height:44px;border:0;background:transparent;color:inherit;font-size:18px">✕</button>`;
+          t.querySelector("button").onclick = () => t.remove();
+          document.body.append(t);
+          let held = false; t.addEventListener("pointerenter", () => { held = true; }); t.addEventListener("focusin", () => { held = true; });
+          const bye = () => { if (!t.isConnected) return; if (held) { held = false; setTimeout(bye, 15000); } else t.remove(); }; setTimeout(bye, 20000);
+        }).catch(() => {});
+    } catch (e) { /* */ }
+  }
+  // 🏠 (22/11، مقترح منفّذ) سطر «غرف الدراسة» تحت بطاقات الرئيسية: بس لطالب مسجّل والغرف شغّالة إله. سؤال صح/خطأ محفوظ 10 دقايق، بعد ما تخلص الصفحة.
+  function roomsLine() {
+    try {
+      const T = (x, y) => (document.documentElement.lang === "en" ? y : x);
+      if (skip || !/^(lessons\/)?(index\.html)?$/.test(rel) || document.querySelector(".sd-rmline")) return;
+      const grid = document.querySelector("a.hcard") && document.querySelector("a.hcard").parentElement; if (!grid) return;
+      const show = (on) => {
+        if (!on || document.querySelector(".sd-rmline")) return;
+        const a = document.createElement("a"); a.className = "sd-rmline"; a.href = ROOT + "rooms/";
+        a.style.cssText = "display:flex;align-items:center;gap:10px;min-height:48px;margin:12px 0 0;padding:10px 14px;border-radius:14px;border:1px dashed var(--line,#D9DEE8);color:inherit;text-decoration:none;font:600 15px/1.5 system-ui,sans-serif";
+        a.innerHTML = `<span aria-hidden="true" style="font-size:20px">🏠</span><span style="flex:1"><b>${T("غرف الدراسة", "Study rooms")}</b> · ${T("ادرس ويّا أصحابك بمؤقّت واحد، وتحدّيات 🎮", "Study with friends on one timer, plus challenges 🎮")}</span><span aria-hidden="true">‹</span>`;
+        grid.after(a);
+      };
+      const c = LS.json("t:rooms-on");
+      if (c && Date.now() - (c.t || 0) < (c.on ? 6e5 : 216e5)) return show(c.on);   // (مراجعة) «مطفية» 6 ساعات، حتى ما نسأل السيرفر كل 10 دقايق
+      const s = studentSession(); if (!s || !s.access_token || !(s.expires_at * 1000 > Date.now() + 3e4)) return;
+      const C = window.STUDY_CLOUD || {}; if (!C.url || !C.anon) return;
+      fetch(C.url + "/rest/v1/rpc/room_on", { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + s.access_token, "Content-Type": "application/json" }, body: "{}" })
+        .then((r) => (r.ok ? r.json() : false)).then((on) => { on = on === true; LS.set("t:rooms-on", JSON.stringify({ on, t: Date.now() })); show(on); }).catch(() => {});
+    } catch (e) { /* */ }
+  }
+  window.addEventListener("load", () => setTimeout(roomsLine, 1200));
+  window.addEventListener("load", () => setTimeout(roomAlerts, 2500));
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) setTimeout(roomAlerts, 800); });
   window.StaffDoor = { settings, css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT, gated, askLogin, pinOn: () => PIN.on === true };
 })();

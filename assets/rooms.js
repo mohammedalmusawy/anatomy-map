@@ -67,6 +67,8 @@
     stopPoll();
     return rpc("room_me").then(function (d) {
       ME = d || {}; clear();
+      // 🔔 (22/11) ذاكرة صغيرة للتذكير بباقي الصفحات: عنده غرف + الغرف شغّالة إله
+      try { localStorage.setItem("t:rooms-on", JSON.stringify({ on: !!ME.on, t: Date.now() })); if (ME.on && (ME.rooms || []).length) localStorage.setItem("rm:mine", "1"); else localStorage.removeItem("rm:mine"); } catch (e) { /* */ }
       if (!ME.on) { var c0 = card("🏠 غرف الدراسة"); c0.append(el("p", "", "غرف الدراسة بعدها مو مفعّلة. أول ما تتفعّل تطلع هنا.")); return; }
       if (!ME.gender) genderCard();
       if ((ME.invites || []).length) invitesCard();
@@ -350,11 +352,27 @@
     }).catch(function (e) { LEX = null; throw e; });
     return LEX;
   }
+  // 🩻 (22/11) «خمّن الصورة»: حالات الأطلس الحقيقية [صورة، الاسم، English، الجهاز]
+  var ATL = null;
+  function atlas(fresh) {
+    if (fresh) ATL = null;
+    if (!ATL) ATL = fetch("../assets/room-atlas.json", fresh ? { cache: "reload" } : {}).then(function (r) { return r.json(); })
+      .then(function (d) { return { image: d.filter(function (v) { return v && v[0] && v[1]; }) }; }).catch(function (e) { ATL = null; throw e; });
+    return ATL;
+  }
+  function pools(kind, fresh) { return kind === "image" ? atlas(fresh) : lex(fresh); }
   function rng(seed) { return function () { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
   function questions(pool, kind, seed) {
     var R2 = rng(seed), used = {}, qs = [];
     while (qs.length < 5 && Object.keys(used).length < pool.length) {
       var i = Math.floor(R2() * pool.length); if (used[i]) continue; used[i] = 1;
+      if (kind === "image") {
+        var c = pool[i], same = pool.filter(function (v) { return v[3] === c[3] && v[1] !== c[1]; }), o2 = [c], tr = 0;
+        if (same.length < 3) same = pool.filter(function (v) { return v[1] !== c[1]; });
+        while (o2.length < 4 && tr++ < 80) { var d = same[Math.floor(R2() * same.length)]; if (o2.every(function (x) { return x[1] !== d[1]; })) o2.push(d); }
+        for (var k2 = o2.length - 1; k2 > 0; k2--) { var j2 = Math.floor(R2() * (k2 + 1)); var t2 = o2[k2]; o2[k2] = o2[j2]; o2[j2] = t2; }
+        qs.push({ img: c[0], ar: c[1], en: c[2], opts: o2 }); continue;
+      }
       var q = { en: pool[i][0], ar: pool[i][1] };
       q.alts = pool.filter(function (v) { return v[1] === q.ar; }).map(function (v) { return v[0]; });
       if (kind === "quick") {
@@ -373,7 +391,7 @@
     var i = 0, j = 0, e = 0; while (i < a.length && j < b.length) { if (a[i] === b[j]) { i++; j++; continue; } if (++e > 1) return false; if (a.length > b.length) i++; else if (a.length < b.length) j++; else { i++; j++; } }
     return e + (a.length - i) + (b.length - j) <= 1;
   }
-  var KN = { quick: "⚡ تحدّي سريع", hard: "🧠 تحدّي صعب" };
+  var KN = { quick: "⚡ تحدّي سريع", hard: "🧠 تحدّي صعب", image: "🩻 خمّن الصورة" };
   function gameLine(g) {
     var p = String(g.body || "").split(":");
     if (p[0] === "start") return "🎮 " + (g.me ? "إنت بديت" : g.from + " بدأ") + " " + (KN[p[1]] || "تحدّي") + "، العبوا!";
@@ -396,14 +414,15 @@
       return;
     }
     if (live) { box.append(el("p", "rm-muted", "لعبت ✓ ننتظر أصحابك…")); return; }
-    box.append(el("p", "rm-muted", "5 أسئلة مصطلحات بنفس الوقت للكل، والأسرع والأدق يفوز 🏆"));
+    box.append(el("p", "rm-muted", "5 أسئلة بنفس الوقت للكل، والأسرع والأدق يفوز 🏆"));
     var row = el("div", "rm-row");
     row.append(btn("⚡ تحدّي سريع (اختار المعنى)", "", function () { startGame("quick"); }),
-      btn("🧠 تحدّي صعب (اكتب المصطلح)", "plain", function () { startGame("hard"); }));
+      btn("🧠 تحدّي صعب (اكتب المصطلح)", "plain", function () { startGame("hard"); }),
+      btn("🩻 خمّن الصورة (حالات الأطلس)", "plain", function () { startGame("image"); }));
     box.append(row);
   }
   function startGame(kind) {
-    lex().then(function (L) {
+    pools(kind).then(function (L) {
       return rpc("room_game_start", { p_room: RID, p_kind: kind, p_pool: (L[kind] || L.quick).length }).then(function (x) {
         if (!x || x.ok === false) return toast(msg(x && x.why));
         play({ id: x.id, kind: x.kind, seed: x.seed, pool: x.pool, by: "إنت" });
@@ -414,7 +433,7 @@
     var box = refs.game, run = ++RUN; playing = true; box.textContent = ""; box.append(el("p", "rm-muted", "لحظة…"));
     var alive = function () { return run === RUN && box.isConnected; };
     var size = function (L) { return (L[gm.kind] || L.quick).length; };
-    lex().then(function (L) { return gm.pool && size(L) !== gm.pool ? lex(true) : L; }).then(function (L) {
+    pools(gm.kind).then(function (L) { return gm.pool && size(L) !== gm.pool ? pools(gm.kind, true) : L; }).then(function (L) {
       if (!alive()) return;
       if (gm.pool && size(L) !== gm.pool) { playing = false; box.textContent = ""; box.append(el("p", "", "الأسئلة عندك نسخة ثانية. حدّث الصفحة وارجع العب 🔄")); return; }
       var qs = questions(L[gm.kind] || L.quick, gm.kind, gm.seed), i = 0, score = 0, t0 = Date.now();
@@ -431,7 +450,14 @@
           box.querySelectorAll("button, input").forEach(function (b) { b.disabled = true; });
           setTimeout(function () { i++; next(); }, good ? 650 : 1400);
         };
-        if (gm.kind === "quick") {
+        if (gm.kind === "image") {
+          var im = el("img", "rm-img"); im.src = "../" + q.img; im.alt = "صورة أشعة حقيقية من الأطلس: شنو الحالة؟"; im.decoding = "async"; box.append(im);
+          if (qs[i + 1]) { var pre = new Image(); pre.src = "../" + qs[i + 1].img; }
+          box.append(el("p", "rm-q", "شنو هاي الحالة؟"));
+          var gi = el("div", "rm-opts");
+          q.opts.forEach(function (o) { var b = btn(o[1], "plain", function () { done(o[1] === q.ar, q.ar + " (" + q.en + ")"); }); var sm = el("small", "", o[2]); sm.setAttribute("lang", "en"); b.append(sm); gi.append(b); });
+          box.append(gi, fb);
+        } else if (gm.kind === "quick") {
           var en = el("p", "rm-q", q.en); en.setAttribute("dir", "ltr"); en.setAttribute("lang", "en"); en.tabIndex = -1; box.append(en); setTimeout(function () { if (alive() && i > 0) en.focus(); }, 30);
           var g = el("div", "rm-opts");
           q.opts.forEach(function (o) { g.append(btn(o, "plain", function () { done(o === q.ar, q.ar); })); });
