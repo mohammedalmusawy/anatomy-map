@@ -251,7 +251,7 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
 
   // ───────── المالك ─────────
   // «🙏 الشكر» القديم انشال من التبويبات (29/10): الشكر صار بجدول people ← «🙏 الفريق والشكر» (AdminPeople). الدالة thanks() تبقى بلا تبويب.
-  const tabs = { stats: "📋 الملخص", ...(window.AdminStats ? { insights: "📊 الإحصائيات" } : {}), reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
+  const tabs = { stats: "📋 الملخص", ...(window.AdminStats ? { insights: "📊 الإحصائيات" } : {}), ...(window.AdminAdvisor ? { advisor: "🧭 تقارير المستشار" } : {}), reports: "🚩 البلاغات", control: "🎛️ التحكم", exams: "📅 الامتحانات",
     ...(window.AdminHealth ? { health: "🩺 الصحة" } : {}), ...(window.AdminTeam ? { team: "🔑 المساعدين" } : {}), ...(window.AdminDept ? { dept: "🏛️ رئيس القسم" } : {}),
     ...(window.AdminPeople ? { people: "🙏 الفريق والشكر" } : {}), ...(window.AdminStudents ? { students: "🎓 الطلاب" } : {}), ...(window.AdminNotify ? { notify: "🔔 التنبيهات" } : {}), security: "🔐 الأمان" };
   box.innerHTML = `<div class="tm-hello"><span><b>⚙️ لوحة الإدارة</b> · أهلاً محمد</span><span><span class="sd-asw">👁️ شوف الموقع كـ: <button class="btn ghost" type="button" data-as="student">طالب</button> <button class="btn ghost" type="button" data-as="visitor">زائر</button></span></span></div>
@@ -344,6 +344,29 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
     box.querySelectorAll("[data-rm-unban]").forEach((b) => b.onclick = () => act("room_admin_ban", { p_student: b.dataset.rmUnban, p_ban: false }));
     document.getElementById("rmwa").onclick = () => { const w = document.getElementById("rmw").value.trim(); if (w) act("room_admin_word", { p_word: w, p_add: true }); };
   }
+  // 🔔 (22/11) تنبيهات الموبايل: تشغيل/إطفاء + أرقام + بعث تنبيه للكل (طابور، الدالة تبعثه خلال 10 دقايق)
+  async function pushes() {
+    const on = document.getElementById("pshon"), st = document.getElementById("pshst"); if (!on) return;
+    const cur = await getSet("push"); on.checked = !!cur.on;
+    on.onchange = async () => {
+      const want = on.checked; on.checked = !want;
+      if (!cur.vapid_public) { alert("المفتاح مو مضبوط بعد (supabase/deploy-85)."); return; }
+      if (!confirm(want ? "تشغّل التنبيهات؟ بطاقة «فعّل التنبيهات» تطلع للطلاب بالرئيسية." : "تطفّي التنبيهات؟ ما ينبعث شي لحد ما ترجّعها.")) return;
+      const c = await getSet("push"); const { error } = await sb.from("settings").upsert({ key: "push", value: { ...c, on: want }, at: new Date().toISOString() });
+      if (error) alert(error.message); else { on.checked = want; pushes(); }
+    };
+    const { data, error } = await sb.rpc("push_admin_stats");
+    if (error) { st.textContent = "الأرقام مو متوفرة: " + error.message; }
+    else st.innerHTML = `<p><b>${data.subs || 0}</b> جهاز مفعّل التنبيهات</p>` + (data.queue || []).map((q) => `<p>${q.sent ? "✅" : "⏳"} ${esc(q.title)} · ${new Date(q.at).toLocaleString("ar-IQ")}${q.sent ? ` · وصل ${q.ok ?? 0}` : " · ينبعث خلال 10 دقايق"}</p>`).join("");
+    document.getElementById("pshgo").onclick = async () => {
+      const t = document.getElementById("psht").value.trim(), b = document.getElementById("pshb").value.trim(), u = document.getElementById("pshu").value.trim().replace(/^\/+/, "");
+      if (t.length < 2 || b.length < 2) { alert("اكتب العنوان والنص."); return; }
+      if (!confirm(`تبعث لكل الأجهزة؟\n\n${t}\n${b}`)) return;
+      const { data: r, error: e } = await sb.rpc("push_broadcast", { p_title: t, p_body: b, p_url: u || "lessons/" });
+      if (e) alert(e.message); else if (!r.ok) alert(r.why === "day_limit" ? "3 تنبيهات باليوم بالكثير." : r.why === "bad" ? "العنوان أو النص أو الصفحة مو صالح." : "ما انبعث.");
+      else { alert(cur.on ? "✅ بالطابور: ينبعث خلال 10 دقايق." : "انحفظ، بس التنبيهات مطفية: شغّلها حتى ينبعث."); pushes(); }
+    };
+  }
   async function control() {
     const [ann, sec, bud, gate] = await Promise.all([getSet("announcement"), getSet("sections"), getSet("assistant_budget"), getSet("gate")]);   // 🗑️ 70: مفتاح «طلب الكود من البوت» انشال
     pane.innerHTML = `<h2>📣 شريط الإعلان</h2><textarea id="an" rows="2">${esc(ann.text)}</textarea>
@@ -360,11 +383,20 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
       <label><input type="checkbox" id="rmrnd"> 🎲 القرعة (زميل دراسة عشوائي)</label>
       <label>المجرّبين وهي مطفية (اسم ثلاثي بكل سطر، نفس اسم دخولهم) <textarea id="rmts" rows="2" dir="rtl"></textarea></label><button class="btn" id="rmtsv">حفظ المجرّبين</button>
       <div id="rmrep" class="hint">…</div>
+      <h2>🔔 تنبيهات الموبايل</h2>
+      <p class="hint">لما تشغّلها: بطاقة «فعّل التنبيهات» تطلع للطالب بالرئيسية (بالآيفون بعد تثبيت المنصة). يوصله تنبيه قبل الامتحان بـ 3 أيام وبيوم (5 العصر)، وأي تنبيه تبعثه إنت من هنا. بلا تنبيهات بين 11 بالليل و8 الصبح، وتنبيهين باليوم بالكثير لكل جهاز.</p>
+      <label><input type="checkbox" id="pshon"> 🔔 التنبيهات شغّالة</label>
+      <div id="pshst" class="hint">…</div>
+      <label>عنوان التنبيه <input id="psht" maxlength="60" placeholder="📚 نزلت محاضرة جديدة"></label>
+      <label>النص <input id="pshb" maxlength="160" placeholder="الفيزياء نظري 5: افتحها واسمعها"></label>
+      <label>الصفحة (اختياري) <input id="pshu" maxlength="120" dir="ltr" placeholder="learn/physics/"></label>
+      <button class="btn" id="pshgo">ابعث للكل</button>
       <h2>💵 ميزانية المساعد</h2><div id="spend" class="hint">…</div><label>شهرياً ($) <input id="bm" type="number" value="${bud.monthly_usd ?? 50}"></label>
       <label>أسئلة يومياً لكل طالب/جهاز <input id="bd" type="number" value="${bud.daily_per_device ?? 15}"></label>
       <label>تنبيه بالبوت عند (%) <input id="bp" type="number" min="10" max="100" value="${bud.alert_pct ?? 70}"></label><button class="btn" id="bs">حفظ</button>`;
     spend(bud);
     rooms();
+    pushes();
     document.getElementById("ans").onclick = async () => { await sb.from("settings").upsert({ key: "announcement", value: { text: document.getElementById("an").value, on: document.getElementById("anon").checked } }); alert("انحفظ"); };
     // ✋ 59: تشغيل/إطفاء قسم للطلاب ← تأكيد داخل الصفحة أول
     const askSec = (k, onMsg, offMsg) => async (e) => {
@@ -567,10 +599,12 @@ window.AdminTab = { signal: null, own(ac) { const s = window.AdminTab.signal; if
     const t = (location.hash || "#stats").slice(1); document.querySelectorAll(".dtabs a").forEach((a) => a.classList.toggle("on", a.dataset.t === t)); ({ stats, reports, control, exams, security, health: () => window.AdminHealth ? AdminHealth.mount(pane, sb) : stats(),
     insights: async () => { if (!window.AdminStats) return stats(); const { data: { session: s } } = await sb.auth.getSession(); AdminStats.mount(pane, (b) => fn("owner-stats", b, s && s.access_token)); },
     // 📊 71: insights = طلب owner-stats بس لما يفتح التبويب
+    advisor: () => window.AdminAdvisor ? AdminAdvisor.mount(pane, sb) : stats(),
     team: () => window.AdminTeam ? AdminTeam.mount(pane, sb) : stats(),
     dept: () => window.AdminDept ? AdminDept.mount(pane, sb) : stats(), people: () => window.AdminPeople ? AdminPeople.mount(pane, sb) : stats(), notify: () => window.AdminNotify ? AdminNotify.mount(pane, sb) : stats(),
     students: () => window.AdminStudents ? AdminStudents.mount(pane, sb) : stats() }[t] || stats)(); };
   window.addEventListener("hashchange", show); show();
+  if (window.AdminAdvisor) AdminAdvisor.badge(pane, sb, () => { location.hash = "#advisor"; });   // 🧭 84: إشعار «تقرير جديد» وسط اللوحة (يطلع بس إذا فيه غير مقروء)
 
   function style() {
     if (document.getElementById("adm-auth-css")) return;

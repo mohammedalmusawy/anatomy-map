@@ -427,7 +427,7 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
     if (skip || !window.Net || !window.Net.on) return;
     // آخر حالة معروفة ← نخفي المحتوى من أول لحظة (بلا ومضة)، والإعدادات الحقيقية تأكد أو تشيل
     if (LS.get("t:gate-on") === "1" && gated(rel, { open: null, closed: null }) && !allowed()) document.body.classList.add("sd-locked"), css();
-    Promise.resolve(window.Net.settings()).then((S) => { S = S || {}; NA = S.name_access && S.name_access.on === true ? { on: true } : { on: false }; PIN = S.student_pin && S.student_pin.on === true ? { on: true } : { on: false }; apply(S.gate || { on: false }); })
+    Promise.resolve(window.Net.settings()).then((S) => { S = S || {}; NA = S.name_access && S.name_access.on === true ? { on: true } : { on: false }; PIN = S.student_pin && S.student_pin.on === true ? { on: true } : { on: false }; apply(S.gate || { on: false }); if (S.push && S.push.on === true) setTimeout(() => pushOffer(S.push), 4000); })
       .catch(() => document.body.classList.remove("sd-locked"));
   }
   // 73: حارس الاسم المشترك — طالب مسجّل دخول وما عنده اسم محفوظ (t:acct-name) ← نحمّل account.js مرة، وready() تجيب حسابه؛ إذا بلا اسم تطلع نافذة الاسم (ما تنسد)
@@ -500,5 +500,53 @@ body:has(.sd-pv) .sd-dlg,body:has(.sd-pv) .gatedlg{padding-top:calc(76px + env(s
   window.addEventListener("load", () => setTimeout(roomsLine, 1200));
   window.addEventListener("load", () => setTimeout(roomAlerts, 2500));
   document.addEventListener("visibilitychange", () => { if (!document.hidden) setTimeout(roomAlerts, 800); });
+  // 🔔 (22/11) تنبيهات الموبايل: بطاقة «فعّل التنبيهات» بالرئيسية بس، لما settings.push.on.
+  //   ما تطلع: إذا المتصفح ما يدعمها، أو الطالب قرر (سمح/رفض)، أو قال «مو هسه» خلال 14 يوم، أو دليل التثبيت مفتوح،
+  //   وبالآيفون إلا بعد ما يثبّت المنصة (سفاري يسمح بالتنبيهات للمثبّتة بس). اللي سمح قبل ← يتجدد اشتراكه بهدوء.
+  function pushOK() { return "Notification" in window && "serviceWorker" in navigator && "PushManager" in window; }
+  const iosNotInstalled = () => /iP(hone|ad|od)/.test(navigator.userAgent) && !(navigator.standalone || (window.matchMedia && matchMedia("(display-mode: standalone)").matches));
+  const keyBytes = (k) => { const p = (k + "===".slice((k.length + 3) % 4)).replace(/-/g, "+").replace(/_/g, "/"); return Uint8Array.from(atob(p), (c) => c.charCodeAt(0)); };
+  async function pushSubscribe(cfg) {
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (sub && LS.get("t:push-key") !== cfg.vapid_public) { try { await sub.unsubscribe(); } catch (e) { /* */ } sub = null; }
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(cfg.vapid_public) });
+    const j = sub.toJSON(), C = window.STUDY_CLOUD || {};   // بلا حساب: الجهاز ما ينربط بالطالب
+    const r = await fetch(C.url + "/rest/v1/rpc/push_subscribe", { method: "POST", headers: { apikey: C.anon, Authorization: "Bearer " + C.anon, "Content-Type": "application/json" },
+      body: JSON.stringify({ p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth }) });
+    const x = r.ok ? await r.json() : null;
+    if (x && x.ok) { LS.set("t:push-key", cfg.vapid_public); LS.set("t:push-ok", String(Date.now())); return true; }
+    return false;
+  }
+  function pushOffer(cfg) {
+    try {
+      if (skip || !cfg || !/^[A-Za-z0-9_-]{80,100}$/.test(cfg.vapid_public || "") || !pushOK() || !window.STUDY_CLOUD) return;
+      if (Notification.permission === "granted") {   // سمح قبل ← نجدد بهدوء مرة بالأسبوع (أو إذا المفتاح تغيّر)
+        if (LS.get("t:push-key") !== cfg.vapid_public || Date.now() - (+LS.get("t:push-ok") || 0) > 7 * 864e5) pushSubscribe(cfg).catch(() => {});
+        return;
+      }
+      if (Notification.permission !== "default" || !/^(lessons\/)?(index\.html)?$/.test(rel) || iosNotInstalled()) return;
+      if (Date.now() - (+LS.get("t:push-later") || 0) < 14 * 864e5 || document.querySelector(".amins, .sd-dlg, .sd-push")) return;
+      if (!LS.get("t:install") && !(navigator.standalone || (window.matchMedia && matchMedia("(display-mode: standalone)").matches))) return;   // أول زيارة: دليل التثبيت أول، التنبيهات بالزيارة الجاية
+      const en = document.documentElement.lang === "en", T = (a, b) => (en ? b : a);
+      const c = document.createElement("div"); c.className = "sd-push"; c.setAttribute("role", "dialog"); c.setAttribute("aria-label", T("التنبيهات", "Notifications")); c.dir = en ? "ltr" : "rtl";
+      c.style.cssText = "position:fixed;inset-inline:12px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:9998;max-width:460px;margin:0 auto;padding:14px;border-radius:16px;background:var(--card,#fff);color:var(--ink,#1B2233);border:1px solid var(--line,#D9DEE8);box-shadow:0 10px 30px rgba(0,0,0,.18);font:500 15px/1.6 system-ui,sans-serif";
+      c.innerHTML = `<p style="margin:0 0 4px;font-weight:800">🔔 ${T("خلّي المنصة تنبّهك", "Let the platform remind you")}</p>`
+        + `<p style="margin:0 0 10px;color:var(--muted,#5B6478)">${T("قبل الامتحان بيوم، ولما تنزل محاضرة جديدة. تنبيهين باليوم بالكثير، وبلا إزعاج بالليل.", "A day before each exam and when a new lecture is out. Two a day at most, never at night.")}</p>`
+        + `<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" data-p="yes" style="min-height:44px;padding:0 16px;border-radius:12px;border:0;background:var(--brand,#4B5A8A);color:#fff;font:700 15px system-ui,sans-serif">${T("فعّل التنبيهات", "Turn on")}</button>`
+        + `<button type="button" data-p="later" style="min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line,#D9DEE8);background:transparent;color:inherit;font:600 15px system-ui,sans-serif">${T("مو هسه", "Not now")}</button></div><p data-p="msg" role="status" style="margin:8px 0 0;min-height:0"></p>`;
+      const msg = c.querySelector('[data-p="msg"]');
+      c.querySelector('[data-p="later"]').onclick = () => { LS.set("t:push-later", String(Date.now())); c.remove(); };
+      c.querySelector('[data-p="yes"]').onclick = async (ev) => {
+        const b = ev.currentTarget; b.disabled = true;
+        let p = "default"; try { p = await Notification.requestPermission(); } catch (e) { /* */ }
+        if (p !== "granted") { LS.set("t:push-later", String(Date.now())); msg.textContent = T("ما تفعّلت. تگدر تفعّلها بعدين من إعدادات المتصفح.", "Not enabled. You can allow it later from the browser settings."); setTimeout(() => c.remove(), 3500); return; }
+        try { const ok = await pushSubscribe(cfg); msg.textContent = ok ? T("✅ تمام، راح ننبّهك.", "✅ Done, we'll remind you.") : T("صار خلل، جرّب بعدين.", "Something went wrong, try later."); }
+        catch (e) { msg.textContent = T("صار خلل، جرّب بعدين.", "Something went wrong, try later."); }
+        setTimeout(() => c.remove(), 2500);
+      };
+      document.body.append(c);
+    } catch (e) { /* */ }
+  }
   window.StaffDoor = { settings, css, asStudent, asView, backToAdmin, staffSession, studentSession, ROOT, SUPPORT, gated, askLogin, pinOn: () => PIN.on === true };
 })();
