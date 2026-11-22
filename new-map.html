@@ -577,6 +577,10 @@ function tgInit(){ tg = window.Telegram && Telegram.WebApp; if (!tg || tg.__am) 
 tgInit();
 window.addEventListener("am-tg", () => { tgInit(); tgBack(); });
 const $ = id => document.getElementById(id);
+// 🖼️ 22/11: الصور الثقيلة تنعرض بنسخة WebP خفيفة (نفس الوضوح بالشاشة)، والتكبير يفتح الأصل دائماً؛ إذا الخفيفة فشلت ترجع للأصل وحدها
+const LITE = new Set(["img/extra/abdomen-muscles.jpg", "img/extra/abdomen-organs.jpg", "img/extra/chest-muscles.jpg", "img/extra/head-bones.jpg", "img/extra/head-muscles.jpg", "img/extra/pelvis-bones.jpg", "img/extra/pelvis-muscles.jpg", "img/foot-bones.jpg", "img/foot-muscles.jpg", "img/forearm-muscles.jpg", "img/hand-bones.jpg", "img/hand-muscles.jpg", "img/leg-bones.jpg", "img/leg-muscles.jpg", "img/real/calcaneus.jpg", "img/real/elbow-articulated.jpg", "img/real/extra/clavicles.jpg", "img/real/extra/hip-bone-lat.jpg", "img/real/extra/l4-vert-sup.jpg", "img/real/extra/pelvis-back.jpg", "img/real/extra/pelvis-front.jpg", "img/real/extra/ribs-1-3.jpg", "img/real/extra/ribs-facets.jpg", "img/real/extra/ribs.jpg", "img/real/extra/sacrum-ant.jpg", "img/real/extra/scapula-ant.jpg", "img/real/extra/skull-lat.jpg", "img/real/extra/skull-pterion.jpg", "img/real/femur.jpg", "img/real/foot-lat-real.jpg", "img/real/foot-sup.jpg", "img/real/humerus-ant.jpg", "img/real/humerus-post.jpg", "img/real/patella.jpg", "img/real/radius-ant.jpg", "img/real/radius-post.jpg", "img/real/ulna.jpg", "img/real/wrist-carpals.jpg", "img/spine-muscles.jpg", "img/thigh-bones.jpg", "img/thigh-muscles.jpg", "img/xray/extra/abdomen-erect.jpg", "img/xray/extra/abdomen-supine.jpg", "img/xray/extra/pelvis-ap3.jpg", "img/xray/hd/abdomen-ap.jpg", "img/xray/hd/chest-pa.jpg", "img/xray/hd/cspine-lat.jpg", "img/xray/hd/femur-dist.jpg", "img/xray/hd/femur-lat.jpg", "img/xray/hd/foot-lat.jpg", "img/xray/hd/foot-obl.jpg", "img/xray/hd/hand-obl.jpg", "img/xray/hd/hand-pa.jpg", "img/xray/hd/knee-lat.jpg", "img/xray/hd/skull-lat.jpg", "img/xray/orig/ankle-mortise.jpg", "img/xray/orig/calc-lat.jpg", "img/xray/orig/cspine-odont.jpg", "img/xray/orig/hip-lat.jpg", "img/xray/orig/pelvis-ap.jpg", "img/xray/orig/pelvis-ap2.jpg", "img/xray/orig/shoulder-axial.jpg", "img/xray/src/chest-lat-rp40794.jpg", "img/xray/src/chest-pa-rp247006.jpg", "img/xray/whole-spine.jpg"]);
+function lite(u){ return LITE.has(u) ? u.replace(/\.(jpe?g|png)$/i, ".lite.webp") : u; }
+function setSrc(el,u){ el.dataset.orig=u; el.onerror=function(){ if(el.src.indexOf(".lite.webp")>0){ el.onerror=null; el.src=u; } }; el.src=lite(u); }
 let cur = null, kind = "bones";
 
 function toast(t){ const e=$("toast"); e.textContent=t; e.classList.add("on"); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove("on"),1600); }
@@ -672,7 +676,7 @@ let XRAY=null, xView=null, xNames=true, xTest=null, xSel=null;
 const xrayReady=Promise.all([fetch("data/xray-clean.json").then(r=>r.json()),fetch("data/xray-extra.json").then(r=>r.json()).catch(()=>({views:[],reuse:{}}))])
   .then(([a,b])=>XRAY={...a,views:[...b.views,...a.views],reuse:b.reuse||{}});
 function xShow(v){
-  const img=$("x-img"); img.src=v.img; xSel=null; xTest=null;
+  const img=$("x-img"); setSrc(img,v.img); xSel=null; xTest=null;
   $("xstage").classList.toggle("tall", v.h/v.w>1.6);  // الصور الطويلة (العمود كامل) تاخذ عرض الشاشة وتنسحب للأسفل
   xNames=false;  // أرقام بس على الصورة والأسماء بالقائمة تحتها مثل الأطالس، وزر «الأسماء» يظهرها
   $("x-test").classList.remove("on"); $("x-names").classList.toggle("on",xNames);
@@ -757,7 +761,7 @@ async function lesson(r,k,m){
   show("v-lesson");
 
   if (mode==="fig"){
-    $("l-img").src=L.img; $("l-img").alt=R.en;
+    setSrc($("l-img"),L.img); $("l-img").alt=R.en;
     $("l-credit").innerHTML=`Figure: ${c[0]} · ${c[1]} · <a href="${c[2]}" target="_blank" rel="noopener">source</a>`;
     termList(L.groups.map(([h,items])=>[h,items.map(([en,ar])=>({en,ar}))]));
   } else if (mode==="xray"){
@@ -770,7 +774,7 @@ async function lesson(r,k,m){
     $("l-groups").innerHTML="";
   } else if (mode==="photo"){
     $("p-photo").innerHTML=`<div class="photos">`+PHOTOS[r].map(([f,en,ar,by,src])=>`<div class="photo" data-img="img/real/${f}.jpg">
-      <img src="img/real/${f}.jpg" alt="${en}" loading="lazy"><div class="cap"><b class="en">${en}</b><span>${ar}</span></div>
+      <img src="${lite('img/real/'+f+'.jpg')}" onerror="this.onerror=null;this.src='img/real/${f}.jpg'" alt="${en}" loading="lazy" decoding="async"><div class="cap"><b class="en">${en}</b><span>${ar}</span></div>
       <div class="credit">Photo: ${by} · <a href="https://commons.wikimedia.org/wiki/File:${src}" target="_blank" rel="noopener">source</a></div></div>`).join("")+`</div>`;
     $("p-photo").querySelectorAll(".photo").forEach(e=>e.addEventListener("click",ev=>{ if(ev.target.tagName!=="A") openZoom(e.dataset.img); }));
     $("l-groups").innerHTML=`<div class="note">قارن الصورة الحقيقية بالرسم المؤشّر والمجسّم حتى تثبت المعالم بذهنك.</div>`;
@@ -799,7 +803,7 @@ tgBack();
 let zw=200;
 function setZoom(w){ zw=Math.max(100,Math.min(500,w)); $("z-img").style.width=zw+"%"; }
 function openZoom(src){ $("z-img").src=src; setZoom(200); $("zoom").classList.add("on"); }
-$("fig").addEventListener("click",()=>openZoom($("l-img").src));
+$("fig").addEventListener("click",()=>openZoom($("l-img").dataset.orig||$("l-img").src));
 function closeZoom(){ $("zoom").classList.remove("on"); }
 $("zx").addEventListener("click",closeZoom);
 $("z-in").addEventListener("click",()=>setZoom(zw+60));
