@@ -992,3 +992,7 @@ html[lang="en"] .obw .obgo::after { content: " ›"; }
 .obw .obx { flex: none; min-width: 44px; min-height: 44px; border: 0; background: none; color: var(--muted); font-size: 1.25rem; border-radius: 12px; cursor: pointer; }
 .obw .obx:hover { background: var(--bg); color: var(--ink); }
 .lhead .obhi { margin: 10px 0 0; padding-block: 2px; }
+
+/* 📖 (22/11، ملاحظة محمد) القراءة الهادئة: بالشاشة العريضة (آيباد، الموبايل بالعرض، «عرض سطح المكتب») صف «الرئيسية · المحاضرات · صفحتي»
+   كان يبقى بنص الشريط اللاصق فوق النص طول القراءة. أول ما تنزل يختفي (يبقى الرجوع والأدوات)، ويرجع لما تصعد لأول الصفحة. */
+@media (min-width: 720px) { .cbar.stuck .ndesk { display: none; } }
