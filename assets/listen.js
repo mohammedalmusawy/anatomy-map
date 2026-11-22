@@ -40,9 +40,25 @@
   const pa = (x) => esc(x).replace(/&lt;(\/?)u&gt;/g, "<$1u>");   // (18/11) اللفظ العربي: نسمح بـ <u> (المقطع المشدّد) بس
   const main = new Audio(), word = new Audio();
   let LEX = {}, ready = null;
-  let slow = false;
-  try { slow = localStorage.getItem("t:slow") === "1"; } catch (e) {}
-  const rate = () => (slow ? 0.75 : 1);
+  // ⏩ (22/11، طلب محمد) 3 سرعات لقراءة الإنكليزي: 🐢 0.75 · عادي 1 · ⚡ 1.25 (مثل تطبيقات تعلّم اللغات؛ الفهم يبقى عالي لحد ~1.25–1.5)
+  const SPEEDS = [0.75, 1, 1.25];
+  let speed = 1;
+  try { const v = parseFloat(localStorage.getItem("t:speed")); speed = SPEEDS.indexOf(v) >= 0 ? v : (localStorage.getItem("t:slow") === "1" ? 0.75 : 1); } catch (e) {}
+  const rate = () => speed;
+  const en = () => document.documentElement.lang === "en";
+  function speedUI() {   // زر «🐢 أبطأ» القديم ← 3 أزرار سرعة (نفس المكان، بلا تغيير بالصفحات)
+    const old = box && box.querySelector("#lslow");
+    if (!old) return;
+    const g = document.createElement("span"); g.className = "lspd"; g.setAttribute("role", "group"); g.setAttribute("aria-label", en() ? "Reading speed" : "سرعة القراءة");
+    g.style.cssText = "display:inline-flex;gap:4px;flex-wrap:nowrap";
+    [[0.75, "🐢 0.75×", "أبطأ", "Slower"], [1, "1×", "عادي", "Normal"], [1.25, "⚡ 1.25×", "أسرع", "Faster"]].forEach(([v, lab, ar, eng]) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = old.className; b.dataset.sp = String(v); b.textContent = lab;
+      b.setAttribute("aria-label", (en() ? eng : ar) + " " + v + "×"); b.title = en() ? eng : ar; b.style.minWidth = "44px"; b.style.paddingInline = "10px";
+      g.append(b);
+    });
+    old.replaceWith(g);
+    if (!document.getElementById("lspd-css")) { const st = document.createElement("style"); st.id = "lspd-css"; st.textContent = '.lspd button[aria-pressed="true"]{background:var(--brand,#4B5A8A);color:#fff;border-color:transparent;font-weight:800}'; document.head.append(st); }
+  }
 
   // الملف ينزل كامل مرة وحدة (يمر بالـ service worker ← ينحفظ)، وبعدين يشتغل من الذاكرة (بلا مشاكل range بالآيفون)
   const blobs = new Map();
@@ -223,8 +239,9 @@
   const ctl = (id) => box && box.querySelector("#" + id);
   function marks() {
     if (!box) return;
-    const sb = ctl("lslow"), pb = ctl("lpause"), ab = ctl("lall");
-    if (sb) { sb.classList.toggle("on", slow); sb.setAttribute("aria-pressed", slow); }
+    speedUI();
+    const pb = ctl("lpause"), ab = ctl("lall");
+    box.querySelectorAll(".lspd button").forEach((b) => { const on = +b.dataset.sp === speed; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
     if (pb) { pb.disabled = !cur; pb.textContent = cur && main.paused ? "▶️ متابعة" : "⏸️ إيقاف"; }
     if (ab) ab.classList.toggle("on", mode === "all");
     box.querySelectorAll(".lplay").forEach((b) => b.classList.toggle("on", mode === b.closest(".lsec")));
@@ -283,9 +300,10 @@
     if (!box || !box.contains(t)) return false;
     if (t === ctl("lall")) { mode === "all" ? stop() : play([...box.querySelectorAll(".ls")], "all"); return true; }
     if (t === ctl("lpause")) { if (cur) main.paused ? main.play() : main.pause(); return true; }
-    if (t === ctl("lslow")) {
-      slow = !slow; main.playbackRate = rate(); marks();
-      try { localStorage.setItem("t:slow", slow ? "1" : "0"); } catch (e) {}
+    const sp = t.closest(".lspd button[data-sp]");
+    if (sp) {
+      speed = +sp.dataset.sp; main.playbackRate = main.defaultPlaybackRate = rate(); marks();
+      try { localStorage.setItem("t:speed", String(speed)); localStorage.setItem("t:slow", speed < 1 ? "1" : "0"); } catch (e) {}
       return true;
     }
     const lp = t.closest(".lplay");
@@ -299,7 +317,7 @@
   // capture: الضغطة على مصطلح ما تفتح رابط ولا تختار جواب ولا تسد/تفتح قسم
   document.addEventListener("click", (ev) => {
     if (!(ev.target instanceof Element)) return;
-    if (ev.target.closest(".tm,.say1,.ls,.lbtn,.lplay,#lall,#lpause,#lslow")) unlock();   // الآيفون: قبل أي تشغيل وبنفس الضغطة
+    if (ev.target.closest(".tm,.say1,.ls,.lbtn,.lplay,#lall,#lpause,#lslow,.lspd")) unlock();   // الآيفون: قبل أي تشغيل وبنفس الضغطة
     if (act(ev.target)) { ev.preventDefault(); ev.stopPropagation(); return; }
     if (!pop.contains(ev.target)) hidePop();
   }, true);
