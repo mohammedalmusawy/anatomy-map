@@ -142,7 +142,8 @@ mark.hl.flash{outline:3px solid var(--brand,#446);outline-offset:2px;animation:h
         return;
       }
       if (nfo.canSay) h += `<button type="button" class="pk-say" data-a="say" aria-label="${L("اسمع اللفظ", "Listen")}">🔊 <span>${L("اسمع", "Listen")}</span></button>` +
-        `<button type="button" class="pk-slow" data-a="slow" aria-label="${L("لفظ أبطأ", "Slower")}" title="${L("أبطأ", "Slower")}">🐢</button><i aria-hidden="true"></i>`;
+        `<button type="button" class="pk-slow" data-a="slow" aria-label="${L("لفظ أبطأ", "Slower")}" title="${L("أبطأ", "Slower")}">🐢</button>` +
+        `<button type="button" class="pk-slow" data-a="slow2" aria-label="${L("لفظ أبطأ بعد", "Even slower")}" title="${L("أبطأ بعد", "Even slower")}">🐌</button><i aria-hidden="true"></i>`;   // 🐌 (23/11)
       if (nfo.canSave) h += `<button type="button" class="pk-save${saved ? " on" : ""}" data-a="save" aria-pressed="${saved}" aria-label="${saved ? L("محفوظ بمصطلحاتي — اضغط للإلغاء", "Saved — tap to remove") : L("احفظ بمصطلحاتي", "Save to my terms")}">${saved ? "⭐" : "☆"} <span>${saved ? L("محفوظ", "Saved") : L("احفظ", "Save")}</span></button><i aria-hidden="true"></i>`;
       if (selRange) h += `<button type="button" class="pk-hl${hlId ? " on" : ""}" data-a="hl" aria-label="${L("ظلّل النص", "Highlight")}">🖍️ <span>${L("ظلّل", "Highlight")}</span></button><i aria-hidden="true"></i>`;
       h += `<button type="button" class="pk-find" data-a="find" aria-label="${L("ابحث بالموقع", "Search the site")}">🔍 <span>${L("ابحث", "Search")}</span></button>`;
@@ -199,7 +200,7 @@ mark.hl.flash{outline:3px solid var(--brand,#446);outline-offset:2px;animation:h
       const b = ev.target.closest("button[data-a]"); if (!b || !text) return;
       ev.preventDefault(); ev.stopPropagation();
       const a = b.dataset.a;
-      if (a === "say" || a === "slow") say(text, a === "slow" ? 0.75 : 1, b);
+      if (a === "say" || a === "slow" || a === "slow2") say(text, a === "slow2" ? 0.6 : a === "slow" ? 0.75 : 1, b);
       else if (a === "save") toggleSave();
       else if (a === "hl" || a === "hlback") { view = a === "hl" ? "color" : "main"; render(); if (a === "hl") { const f = m.querySelector(".pk-sw"); if (f) f.focus(); } }
       else if (a === "hlc") applyColor(b.dataset.c);
@@ -423,7 +424,7 @@ mark.hl.flash{outline:3px solid var(--brand,#446);outline-offset:2px;animation:h
       if (!SS || !window.SpeechSynthesisUtterance || (voices.length && !pickV(lang))) { clr(); toast(L("صوت القراءة مو متوفر بهالجهاز. جرّب متصفح Chrome أو Safari المحدّث.", "Speech isn't available on this device. Try an updated Chrome or Safari.")); return; }
       const u = new SpeechSynthesisUtterance(lat ? tx.replace(/[؀-ۿ]+/g, " ") : tx);
       u.lang = lang; const v = pickV(lang); if (v) try { u.voice = v; } catch (e) {}
-      u.rate = rate < 1 ? 0.7 : 0.95;
+      u.rate = rate < 0.7 ? 0.55 : rate < 1 ? 0.7 : 0.95;
       u.onend = clr;
       u.onerror = (e) => { clr(); if (e && e.error !== "interrupted" && e.error !== "canceled") toast(L("ما گدرت أشغّل الصوت. جرّب مرة ثانية.", "Couldn't play the sound. Try again.")); };
       try { SS.speak(u); } catch (e) { clr(); }

@@ -197,7 +197,8 @@
     pop.setAttribute("aria-label", d[0]);
     pop.innerHTML = `<b dir="ltr">${esc(d[0])}</b><span class="ar">${esc(d[1])}</span><span class="pr">${pa(d[2])} <bdi dir="ltr">${esc(d[3])}</bdi></span>` +
       `<span class="pb"><button type="button" class="say1" data-k="${esc(kk)}" aria-label="اسمع لفظ ${esc(d[0])}">🔊</button>` +
-      `<button type="button" class="say1 slow" data-k="${esc(kk)}" data-r="0.75" aria-label="لفظ بطيء ${esc(d[0])}">🐢</button></span>`;
+      `<button type="button" class="say1 slow" data-k="${esc(kk)}" data-r="0.75" aria-label="لفظ بطيء ${esc(d[0])}" title="أبطأ">🐢</button>` +
+      `<button type="button" class="say1 slow2" data-k="${esc(kk)}" data-r="0.6" aria-label="لفظ أبطأ بعد ${esc(d[0])}" title="أبطأ بعد">🐌</button></span>`;   // 🐌 (23/11، طلب محمد) سرعة ثالثة أبطأ شوية للمصطلح
     // الموبايل (29/10، ملاحظة محمد): ورقة صغيرة بأسفل الشاشة، ما تغطي العنوان ولا الأزرار؛ والكلمة تبقى ظاهرة فوقها
     const sheet = SHEET.matches;
     pop.classList.toggle("sheet", sheet);

@@ -303,6 +303,11 @@ bdi { direction: ltr; unicode-bidi: isolate; }
 @media (prefers-color-scheme: dark) { .rev-only { background: #3A2A12; color: #FFD9A0; } }
 .rsum, .rq { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; margin: 6px 0; }
 .rsum summary, .rq summary { cursor: pointer; font-weight: 600; }
+/* 22/11: سهم «رشّحلي» كان بسطر لحاله فوق أول حرف من السؤال ← سهم صغير بجنب السؤال */
+.rq summary { list-style: none; position: relative; padding-inline-start: 20px; }
+.rq summary::-webkit-details-marker { display: none; }
+.rq summary::before { content: "‹"; position: absolute; inset-inline-start: 0; top: 0; font-size: 18px; line-height: 1.3; color: var(--muted, #888); transition: transform .2s; }
+.rq[open] > summary::before { transform: rotate(90deg); }
 .rsum li, .rq p, .hintl { line-height: 1.7; }
 .rsum .en, .rq .en, .key .en, .hintl .en, .exam .en { display: block; direction: ltr; text-align: left; font-weight: 500; }
 .rq .rate { font-style: normal; font-size: 12px; color: #E5484D; }
