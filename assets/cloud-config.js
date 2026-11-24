@@ -5,7 +5,9 @@ window.STUDY_CLOUD = { hl: true, url: "https://spjkntrwxfyydniklfxh.supabase.co"
 //   AM_BLOCK(table): events و answers ممنوعة دائماً بوضع الاختبار؛ question_stats كذلك إلا إذا am_test_stats=1 (اختبار يزيّف الجدول نفسه بـ route).
 (function () {
   var t = /(^|\/)(quiz\/_[^/]*|preview)\//.test(location.pathname), s = false;
-  try { var ls = window.localStorage; t = t || ls.getItem("am_test") === "1" || /^00000000-/.test(ls.getItem("t:device") || ""); s = ls.getItem("am_test_stats") === "1"; } catch (e) { /* */ }
+  var q = /[?&]am_test=1(&|$)/.test(location.search || "");   // 23/11: «?am_test=1» بالرابط (اختبارات e2e) ← وضع اختبار للإحصائيات بس، لحد ما تنسد الجلسة (sessionStorage، مو للأبد)
+  try { var ss = window.sessionStorage; if (q) ss.setItem("am_test", "1"); else q = ss.getItem("am_test") === "1"; } catch (e) { /* */ }
+  try { var ls = window.localStorage; t = t || q || ls.getItem("am_test") === "1" || /^00000000-/.test(ls.getItem("t:device") || ""); s = ls.getItem("am_test_stats") === "1"; } catch (e) { /* */ }
   window.AM_TEST = t;
   window.AM_BLOCK = function (table) { return t && (table === "events" || table === "answers" || (table === "question_stats" && !s)); };
 })();
