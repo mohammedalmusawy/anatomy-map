@@ -2,7 +2,7 @@
 (() => {
   const data = JSON.parse(document.getElementById("quiz-data").textContent);
   const $ = (id) => document.getElementById(id);
-  const LETTERS = ["A", "B", "C", "D"];
+  const LETTERS = ["A", "B", "C", "D", "E", "F"];   // (25/11) أسئلة الأعوام السابقة بيها 5–6 خيارات
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   // 🖼️ صورة بالسؤال (31/10): img.src من جذر الموقع؛ img.after = تطلع بعد الجواب بس (إذا الصورة تكشفه)
   const ROOT = ((document.currentScript && document.currentScript.src) || "").replace(/assets\/quiz(\.min)?\.js(\?.*)?$/, "");
@@ -33,7 +33,7 @@
   let round = [], pos = 0, wrong = [], wrongInfo = [];   // wrongInfo: {q, picked} لملخص الأخطاء بالنهاية (76)
 
   function start(questions) {
-    round = shuffle(questions).map((q) => ({ q, order: shuffle([0, 1, 2, 3]) }));
+    round = shuffle(questions).map((q) => { const ix = q.options.map((_, i) => i); return { q, order: q.fixed ? ix : shuffle(ix) }; });   // (25/11) fixed: ترتيب الورقة الأصلي («both b&c»، «none of the above»)
     pos = 0;
     wrong = [];
     wrongInfo = [];
@@ -50,6 +50,7 @@
     $("qen").textContent = q.q_en;
     document.querySelectorAll("#play .xbadge").forEach((f) => f.remove());   // (8/11) سؤال «إضافي»: شارة صغيرة فوق السؤال
     if (q.extra) $("qen").insertAdjacentHTML("beforebegin", '<div class="xbadge">إضافي · Extra</div>');
+    if (q.tag) $("qen").insertAdjacentHTML("beforebegin", `<div class="xbadge">${esc(q.tag)}</div>`);   // (25/11) أسئلة الأعوام السابقة: «داخلة بامتحانكم / غير داخلة»
     $("qar").textContent = q.q_ar;
     document.querySelectorAll("#play .qimg").forEach((f) => f.remove());
     if (q.img && !q.img.after) $("opts").insertAdjacentHTML("beforebegin", qimg(q.img));

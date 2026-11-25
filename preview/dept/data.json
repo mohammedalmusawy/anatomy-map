@@ -169,19 +169,19 @@
      "readers_week": 68
     },
     {
-     "lecture_id": "examinations_p03",
-     "title_ar": "وجبة الباريوم",
-     "title_en": "Barium meal",
-     "kind": "practical",
-     "num": 3,
+     "lecture_id": "examinations_t08",
+     "title_ar": "الرنين للجهاز الهضمي",
+     "title_en": "Lecture 8: MRI of the GI tract",
+     "kind": "theory",
+     "num": 8,
      "readers_week": 68
     },
     {
-     "lecture_id": "examinations_p02",
-     "title_ar": "بلع الباريوم",
-     "title_en": "Barium swallow",
-     "kind": "practical",
-     "num": 2,
+     "lecture_id": "examinations_t07",
+     "title_ar": "المفراس للجهاز الهضمي",
+     "title_en": "Lecture 7: Computed tomography of the GI tract",
+     "kind": "theory",
+     "num": 7,
      "readers_week": 61
     }
    ]
@@ -196,7 +196,7 @@
      "title_en": "Introduction to Computed Tomography & Limitations of Conventional Radiography",
      "kind": "practical",
      "num": 1,
-     "readers_week": 61
+     "readers_week": 52
     }
    ]
   },
@@ -205,12 +205,12 @@
    "subject_ar": "الأجهزة",
    "items": [
     {
-     "lecture_id": "equipment_p01",
-     "title_ar": "منظومة جهاز الأشعة السينية (التجربتان 1 و2)",
-     "title_en": "X-Ray Machine System — Experiments 1 & 2 in Practice",
+     "lecture_id": "equipment_p02",
+     "title_ar": "أنبوب الأشعة السينية (التجربة 3)",
+     "title_en": "X-ray Tube — Third Experiment in Practice",
      "kind": "practical",
-     "num": 1,
-     "readers_week": 61
+     "num": 2,
+     "readers_week": 66
     },
     {
      "lecture_id": "equipment_t01",
@@ -218,15 +218,15 @@
      "title_en": "X-Ray Machine System & the Operating Console",
      "kind": "theory",
      "num": 1,
-     "readers_week": 54
+     "readers_week": 61
     },
     {
-     "lecture_id": "equipment_t04",
-     "title_ar": "الفيلم الشعاعي والشاشات المقوّية والكاسيت وتحميض الصورة الكامنة",
-     "title_en": "Film, Intensifying Screens, Cassette & Processing the Latent Image",
-     "kind": "theory",
-     "num": 4,
-     "readers_week": 52
+     "lecture_id": "equipment_p01",
+     "title_ar": "منظومة جهاز الأشعة السينية (التجربتان 1 و2)",
+     "title_en": "X-Ray Machine System — Experiments 1 & 2 in Practice",
+     "kind": "practical",
+     "num": 1,
+     "readers_week": 50
     }
    ]
   },
@@ -235,26 +235,26 @@
    "subject_ar": "الفيزياء",
    "items": [
     {
-     "lecture_id": "physics_p01",
-     "title_ar": "مقدمة في الإشعاع وأنواعه",
-     "title_en": "Conventional Radiological Equipment Technology — First Experiment in practice: Introduction",
-     "kind": "practical",
+     "lecture_id": "physics_t01",
+     "title_ar": "مقدمة في الإشعاع",
+     "title_en": "Introduction",
+     "kind": "theory",
      "num": 1,
      "readers_week": 70
-    },
-    {
-     "lecture_id": "physics_p03",
-     "title_ar": "محدِّدات أنبوب الأشعة السينية",
-     "title_en": "Experiment (3): Limitation of the x-ray tube (Line focus, Rotation anode tube and Heat rating)",
-     "kind": "practical",
-     "num": 3,
-     "readers_week": 68
     },
     {
      "lecture_id": "physics_t03",
      "title_ar": "محدِّدات أنبوب الأشعة",
      "title_en": "Limitation of the X-ray Tube (Line Focus, Rotation Anode Tube and Heat Rating)",
      "kind": "theory",
+     "num": 3,
+     "readers_week": 68
+    },
+    {
+     "lecture_id": "physics_p03",
+     "title_ar": "محدِّدات أنبوب الأشعة السينية",
+     "title_en": "Experiment (3): Limitation of the x-ray tube (Line focus, Rotation anode tube and Heat rating)",
+     "kind": "practical",
      "num": 3,
      "readers_week": 66
     }
@@ -265,20 +265,12 @@
    "subject_ar": "الحاسوب",
    "items": [
     {
-     "lecture_id": "computer_t04",
-     "title_ar": "الذكاء الاصطناعي والمجتمع والأخلاقيات",
-     "title_en": "Artificial Intelligence, Society and Ethics",
-     "kind": "theory",
-     "num": 4,
-     "readers_week": 66
-    },
-    {
      "lecture_id": "computer_t01",
      "title_ar": "مفهوم الذكاء الاصطناعي",
      "title_en": "The Concept of Artificial Intelligence",
      "kind": "theory",
      "num": 1,
-     "readers_week": 51
+     "readers_week": 66
     },
     {
      "lecture_id": "computer_p01",
@@ -286,7 +278,15 @@
      "title_en": "Microsoft Excel 2010",
      "kind": "practical",
      "num": 1,
-     "readers_week": 37
+     "readers_week": 63
+    },
+    {
+     "lecture_id": "computer_t04",
+     "title_ar": "الذكاء الاصطناعي والمجتمع والأخلاقيات",
+     "title_en": "Artificial Intelligence, Society and Ethics",
+     "kind": "theory",
+     "num": 4,
+     "readers_week": 55
     }
    ]
   },
@@ -300,85 +300,85 @@
      "title_en": "Crimes of the Baath Regime in Iraq — Summary 1",
      "kind": "theory",
      "num": 1,
-     "readers_week": 66
+     "readers_week": 59
     }
    ]
   }
  ],
  "hard_topics": [
   {
-   "topic_en": "The Exposure Time",
-   "topic_ar": "زمن التعرّض والمؤقّتات",
-   "lecture_id": "physics_t02",
+   "topic_en": "Key Benefits of a Rotating Anode Tube",
+   "topic_ar": "الفوائد الرئيسية لأنبوب الأنود الدوّار",
+   "lecture_id": "physics_p03",
    "subject_ar": "الفيزياء",
-   "error_rate": 0.56,
-   "attempts": 60
-  },
-  {
-   "topic_en": "CONTRAST MEAL",
-   "topic_ar": "وجبة التباين والتشريح",
-   "lecture_id": "examinations_t03",
-   "subject_ar": "الفحوصات",
    "error_rate": 0.56,
    "attempts": 77
   },
   {
-   "topic_en": "Radiation",
-   "topic_ar": "الإشعاع",
-   "lecture_id": "protection_t01",
-   "subject_ar": "الوقاية",
+   "topic_en": "Indications",
+   "topic_ar": "الدواعي وأنواع الدراسة",
+   "lecture_id": "examinations_t03",
+   "subject_ar": "الفحوصات",
    "error_rate": 0.54,
    "attempts": 71
   },
   {
-   "topic_en": "The Principles of Radiological Protection",
-   "topic_ar": "مبادئ الوقاية من الإشعاع",
-   "lecture_id": "protection_p03",
-   "subject_ar": "الوقاية",
+   "topic_en": "Introduction & Cathode",
+   "topic_ar": "مقدمة: الكاثود",
+   "lecture_id": "physics_t02",
+   "subject_ar": "الفيزياء",
    "error_rate": 0.51,
    "attempts": 30
   },
   {
-   "topic_en": "Milliamperage & X-ray Circuits",
-   "topic_ar": "الملي أمبير ودوائر الجهاز",
-   "lecture_id": "equipment_p01",
-   "subject_ar": "الأجهزة",
+   "topic_en": "Radiograph examples",
+   "topic_ar": "أمثلة على الصور الشعاعية",
+   "lecture_id": "examinations_p04",
+   "subject_ar": "الفحوصات",
    "error_rate": 0.49,
    "attempts": 50
+  },
+  {
+   "topic_en": "Dose Limitation",
+   "topic_ar": "تحديد الجرعة",
+   "lecture_id": "protection_p03",
+   "subject_ar": "الوقاية",
+   "error_rate": 0.46,
+   "attempts": 32
   }
  ],
  "missed_questions": [
   {
-   "q_en": "How is the image created in radiography?",
-   "q_ar": "كيف تتكوّن الصورة في التصوير الشعاعي؟",
-   "lecture_id": "equipment_p01",
-   "subject_ar": "الأجهزة",
+   "q_en": "Barium enema studies which organ?",
+   "q_ar": "حقنة الباريوم الشرجية تدرس أي عضو؟",
+   "lecture_id": "examinations_p04",
+   "subject_ar": "الفحوصات",
    "error_rate": 0.65,
    "attempts": 13
   },
   {
-   "q_en": "During busy hours, the hospital supply to the X-ray room drops from 220 V to about 205 V. Which device keeps the X-ray output consistent?",
-   "q_ar": "في ساعات الذروة ينخفض جهد تغذية المستشفى لغرفة الأشعة من 220 V إلى نحو 205 V. أيّ جهاز يحافظ على ثبات إنتاج الأشعة؟",
-   "lecture_id": "equipment_t01",
-   "subject_ar": "الأجهزة",
-   "error_rate": 0.56,
-   "attempts": 39
+   "q_en": "Why were they named X-rays?",
+   "q_ar": "لماذا سُمّيت الأشعة السينية ({{X-rays}})؟",
+   "lecture_id": "physics_p01",
+   "subject_ar": "الفيزياء",
+   "error_rate": 0.57,
+   "attempts": 32
   },
   {
-   "q_en": "If perforation is suspected, which contrast should be used?",
-   "q_ar": "إذا اشتُبه بوجود انثقاب، أي مادة تباين تُستعمل؟",
-   "lecture_id": "examinations_t03",
-   "subject_ar": "الفحوصات",
-   "error_rate": 0.51,
-   "attempts": 30
-  },
-  {
-   "q_en": "During fluoroscopy, a radiographer steps away from the table and stands behind a lead-glass screen. Which ALARA methods is she using?",
-   "q_ar": "في أثناء التنظير، يبتعد المصوّر الشعاعي عن السرير ويقف خلف حاجز زجاج رصاصي. أي طرق ALARA يستعمل؟",
+   "q_en": "The ALARA principle is also known as:",
+   "q_ar": "مبدأ ALARA يُعرف أيضاً بـ:",
    "lecture_id": "protection_p03",
    "subject_ar": "الوقاية",
-   "error_rate": 0.48,
-   "attempts": 12
+   "error_rate": 0.51,
+   "attempts": 53
+  },
+  {
+   "q_en": "When electrons strike the focal spot, most of the energy (> 99%) becomes:",
+   "q_ar": "عندما تضرب الإلكترونات البؤرة، معظم الطاقة (أكثر من 99%) يصبح:",
+   "lecture_id": "physics_p03",
+   "subject_ar": "الفيزياء",
+   "error_rate": 0.51,
+   "attempts": 30
   }
  ],
  "exam_period": {
