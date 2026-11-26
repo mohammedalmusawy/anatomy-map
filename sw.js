@@ -1,5 +1,5 @@
 // 🛰️ sw.js v2 (انطبق 29/10/2026 من sw-v2.js بعد مراجعة مستقلة؛ القديم بـ sw.js.bak-20261029-perf).
-// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261126221021 برقم البناء.
+// نفس اسم الملف sw.js (الصفحات تسجّل "sw.js"). site.write_sw() يبدّل 20261126232807 برقم البناء.
 // الهدف: أول فتح سريع، وكل صفحة دراسة انفتحت مرة تشتغل بلا نت، وأي تعديل يوصل بسرعة.
 //
 // ⚠️ كل الكاشات تبدي بـ "anatomy-" (أو dars-/audio-v1 القديمة): mohammedalmusawy.github.io أصل مشترك ويّا مواقع ثانية
@@ -12,7 +12,7 @@
 //   anatomy-offline-v1 «احفظ المحاضرة بلا نت» (رسالة warm) — ما يتقلّم وحده.
 //   anatomy-pdf-v1     (21/11) ملفات PDF اللي فتحها الطالب (المحاضرة، MCQ…): الشبكة أول بمهلة، وبلا نت المحفوظ. حد PDF_MAX.
 //   audio-v1           الصوت (نفس اسم sw.js الحالي حتى ما يضيع المحفوظ عند الطلاب).
-const VERSION = "20261126221021";
+const VERSION = "20261126232807";
 const P = "anatomy-";
 const SHELL = P + "shell-" + VERSION, ASSETS = P + "assets-v2", PAGES = P + "pages-v2", DATA = P + "data-v2",
   IMG = P + "img-v1", OFFLINE = P + "offline-v1", FONTS = P + "fonts-v1", AUDIO = "audio-v1", PDFS = P + "pdf-v1", LIB = P + "lib-v1";
